@@ -1,4 +1,4 @@
-package com.d204.rumeet.data;
+package com.d204.rumeet.demo.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,8 @@ public class RespData<T> {
     String msg;
     T data;
 
-    public ResponseEntity<?> builder(){
+    public ResponseEntity<?> builder() {
         return new ResponseEntity<RespData>(this, HttpStatus.OK);
     }
+
 }

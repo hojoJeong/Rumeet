@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.d204.rummet.board.model.mapper.BoardMapper">
+    <!-- List<Object> listBoard(HashMap<String, Object> map) throws SQLException; -->
+    <select id="listBoard" parameterType="map" resultType="board">
+        select id, userId, nickName, subject, title, content, regDate, hit
+        from board_view
+        <include refid="search"></include>
+        order by id desc
+        limit #{start}, #{listsize}
+    </select>
+</mapper>
