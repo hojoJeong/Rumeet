@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
-class LoginActivity() : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
+class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     override val layoutResourceId: Int = R.layout.activity_login
     override val viewModel: LoginViewModel by viewModels()
 

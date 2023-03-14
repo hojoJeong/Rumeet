@@ -20,7 +20,7 @@ class KeyHashActivity : AppCompatActivity(){
             for (signature in signatures) {
                 val md: MessageDigest = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
-                var hashcode = String(Base64.encode(md.digest(), 0))
+                val hashcode = String(Base64.encode(md.digest(), 0))
                 Log.d("hashcode", "" + hashcode)
             }
         } catch (e: Exception) {
