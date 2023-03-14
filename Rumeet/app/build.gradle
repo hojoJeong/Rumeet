@@ -53,12 +53,16 @@ dependencies {
     implementation libs.bundles.navigation
     implementation libs.bundles.androidx
     implementation libs.android.material
-    implementation libs.hilt
     implementation libs.databinding
+
+    implementation libs.hilt
+
     implementation libs.glide
     annotationProcessor libs.glide.compiler
-    testImplementation libs.junit
 
+    implementation libs.kakao.sdk
+
+    testImplementation libs.junit
     androidTestImplementation libs.android.test.junit
     androidTestImplementation libs.android.test.espresso
 

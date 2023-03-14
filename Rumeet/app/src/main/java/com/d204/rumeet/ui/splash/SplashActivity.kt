@@ -1,4 +1,4 @@
-package com.d204.rumeet
+package com.d204.rumeet.ui.splash
 
 import android.annotation.SuppressLint
 import android.os.Bundle
