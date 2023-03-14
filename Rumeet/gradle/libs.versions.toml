@@ -46,8 +46,9 @@ circle_image_view_version = "3.1.0"
 # google
 google_auth_version = "20.4.1"
 google_service_version = "4.3.15"
-firebase_version = "31.2.0"
+firebase_version = "31.2.3"
 firebase_cloud_storage_version = "20.1.0"
+firebase_crashlytics_version = "18.3.5"
 
 
 glide_version = "4.13.0"
@@ -56,8 +57,8 @@ glide_version = "4.13.0"
 [libraries]
 google_firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_version" }
 google_firebase_analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
-google_firebase_storage = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebase_cloud_storage_version"}
-firebase_messaging = {module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebase_version"}
+google_firebase_storage = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebase_cloud_storage_version" }
+firebase_messaging = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebase_version" }
 androidx_core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx_appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 android_material = { module = "com.google.android.material:material", version.ref = "android-material" }
@@ -76,7 +77,7 @@ androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx_navigation_version" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx_fragment_version" }
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "androidx_lifecycle_extension_version" }
-androidx-core-splashscreen = {module = "androidx.core:core-splashscreen", version.ref = "androidx-splash"}
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splash" }
 circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-gson-converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
@@ -89,9 +90,12 @@ shawnlin013-numberpicker = { module = "io.github.ShawnLin013:number-picker", ver
 skydoves-balloon = { module = "com.github.skydoves:balloon", version.ref = "skydoves_balloon_version" }
 google-gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
 google_auth = { module = "com.google.android.gms:play-services-auth", version.ref = "google_auth_version" }
-circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circle_image_view_version"}
-glide = {module = "com.github.bumptech.glide:glide", version.ref = "glide_version"}
-glide-compiler = {module = "com.github.bumptech.glide:compiler", version.ref = "glide_version"}
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circle_image_view_version" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide_version" }
+glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide_version" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_version" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebase_crashlytics_version"}
 
 [bundles]
 androidx = ["androidx_core", "androidx_appcompat", "androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-common", "androidx-navigation-dynamic-features-fragment", "androidx-navigation-testing",
