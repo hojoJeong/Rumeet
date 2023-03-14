@@ -13,4 +13,61 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <!-- base type -->
+    <style name="base_font_bold">
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="base_font_medium">
+        <item name="android:fontFamily">@font/notosanskr_medium</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- bold size -->
+    <style name="base_font_bold_12" parent="base_font_bold">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="base_font_bold_14" parent="base_font_bold">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="base_font_bold_16" parent="base_font_bold">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="base_font_bold_20" parent="base_font_bold">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="base_font_bold_26" parent="base_font_bold">
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="base_font_bold_32" parent="base_font_bold">
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <!-- medium size -->
+    <style name="base_font_medium_12" parent="base_font_medium">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="base_font_medium_14" parent="base_font_medium">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="base_font_medium_15" parent="base_font_medium">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="base_font_medium_16" parent="base_font_medium">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="base_font_medium_18" parent="base_font_medium">
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>
