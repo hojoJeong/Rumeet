@@ -1,6 +1,7 @@
 [versions]
 # androidx
 androidx-core = "1.7.0"
+androidx-splash = "1.0.0"
 androidx-appcompat = "1.5.1"
 androidx-test-junit = "1.1.4"
 androidx-test-espresso = "3.5.0"
@@ -13,6 +14,7 @@ navigation_safe_args_version = "2.4.2"
 android-material = "1.7.0"
 android-library = "7.3.0"
 android-application = "7.3.0"
+
 
 # junit
 junit = "4.13.2"
@@ -74,6 +76,7 @@ androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx_navigation_version" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx_fragment_version" }
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "androidx_lifecycle_extension_version" }
+androidx-core-splashscreen = {module = "androidx.core:core-splashscreen", version.ref = "androidx-splash"}
 circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-gson-converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
@@ -92,7 +95,7 @@ glide-compiler = {module = "com.github.bumptech.glide:compiler", version.ref = "
 
 [bundles]
 androidx = ["androidx_core", "androidx_appcompat", "androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-common", "androidx-navigation-dynamic-features-fragment", "androidx-navigation-testing",
-    "androidx-fragment-ktx", "androidx-lifecycle-extensions"]
+    "androidx-fragment-ktx", "androidx-lifecycle-extensions", "androidx-core-splashscreen"]
 navigation = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-common", "androidx-navigation-dynamic-features-fragment", "androidx-navigation-testing"]
 retrofit-bundles = ["retrofit", "retrofit-gson-converter", "retrofit-rxjava"]
 okhttp3-bundles = ["okhttp3", "okhttp3-interceptor", "okhttp3-urlconnection", "okhttp3-logging"]

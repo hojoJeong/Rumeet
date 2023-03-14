@@ -5,6 +5,9 @@ plugins {
     id 'kotlin-kapt'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     namespace 'com.d204.rumeet'
     compileSdk 32
@@ -15,6 +18,9 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+
+        resValue "string", "KAKAO_NATIVE_KEY", properties['kakao.native.key']
+        resValue "string", "KAKAO_MANIFEST_KEY", properties['kakao.manifest.key']
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
