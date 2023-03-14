@@ -1,5 +1,7 @@
 package com.d204.rumeet.data.remote.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class ErrorResponseImpl(
     @SerializedName("status")
     override val status: Int?,

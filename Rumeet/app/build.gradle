@@ -50,6 +50,7 @@ dependencies {
     implementation libs.hilt
     implementation libs.databinding
     implementation libs.glide
+    implementation libs.circleimageview
     annotationProcessor libs.glide.compiler
     testImplementation libs.junit
 

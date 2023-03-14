@@ -70,4 +70,32 @@
     <style name="base_font_medium_18" parent="base_font_medium">
         <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="base_font_bold_16_black" parent="base_font_bold_16">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="base_font_bold_16_dim_gray" parent="base_font_bold_16">
+        <item name="android:textColor">@color/dim_gray</item>
+    </style>
+
+    <style name="base_font_bold_14_black" parent="base_font_bold_14">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="base_font_medium_14_dim_gray" parent="base_font_medium_14">
+        <item name="android:textColor">@color/dim_gray</item>
+    </style>
+
+    <style name="base_font_medium_12_dim_gray" parent="base_font_medium_12">
+        <item name="android:textColor">@color/dim_gray</item>
+    </style>
+
+    <style name="base_font_medium_14_black" parent="base_font_medium_14">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="base_font_medium_14_nobel" parent="base_font_medium_14">
+        <item name="android:textColor">@color/nobel</item>
+    </style>
 </resources>
