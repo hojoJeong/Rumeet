@@ -1,4 +1,5 @@
 package com.d204.rumeet.data.local.sharedpreference
 
-class AuthPreference {
+class AuthDataStorePreferences {
+
 }

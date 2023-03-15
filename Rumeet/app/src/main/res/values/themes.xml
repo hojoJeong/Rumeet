@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
+
     <!-- base type -->
     <style name="base_font_bold">
         <item name="android:fontFamily">@font/notosanskr_bold</item>

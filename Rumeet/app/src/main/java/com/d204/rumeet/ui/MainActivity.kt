@@ -1,7 +1,8 @@
-package com.d204.rumeet
+package com.d204.rumeet.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.d204.rumeet.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
