@@ -1,4 +1,4 @@
-package com.d204.rumeet.home.adapter
+package com.d204.rumeet.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,33 +8,34 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemContentBestrecordBinding
-import com.d204.rumeet.home.model.HomeUiModel
+import com.d204.rumeet.ui.home.model.HomeUiModel
 
-class ItemBadgeAdapter : ListAdapter<HomeUiModel, ItemBadgeAdapter.ItemBadgeHolder>(BadgeDiffUtil) {
+class ItemBestRecordAdapter :
+    ListAdapter<HomeUiModel, ItemBestRecordAdapter.ItemBestRecordHolder>(BestRecordDiffUtil) {
 
-    class ItemBadgeHolder(val binding: ItemContentBestrecordBinding) :
+    class ItemBestRecordHolder(val binding: ItemContentBestrecordBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeUiModel) {
 
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBadgeHolder =
-        ItemBadgeHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBestRecordHolder =
+        ItemBestRecordHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_content_badge,
+                R.layout.item_content_bestrecord,
                 parent,
                 false
             )
         )
 
-    override fun onBindViewHolder(holder: ItemBadgeHolder, position: Int) {
+
+    override fun onBindViewHolder(holder: ItemBestRecordHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-
-    object BadgeDiffUtil : DiffUtil.ItemCallback<HomeUiModel>() {
+    object BestRecordDiffUtil : DiffUtil.ItemCallback<HomeUiModel>() {
         override fun areItemsTheSame(
             oldItem: HomeUiModel,
             newItem: HomeUiModel

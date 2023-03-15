@@ -66,6 +66,7 @@ dependencies {
 
     implementation libs.glide
     implementation libs.circleimageview
+    implementation 'com.google.android.gms:play-services-measurement-api:21.2.0'
     annotationProcessor libs.glide.compiler
 
     implementation libs.kakao.sdk

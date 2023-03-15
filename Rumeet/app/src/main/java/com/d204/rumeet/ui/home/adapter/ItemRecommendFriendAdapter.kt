@@ -1,4 +1,4 @@
-package com.d204.rumeet.home.adapter
+package com.d204.rumeet.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemContentRecommendFriendBinding
-import com.d204.rumeet.home.model.HomeUiModel
+import com.d204.rumeet.ui.home.model.HomeUiModel
 
-class ItemRecommendFriendAdapter : ListAdapter<HomeUiModel, ItemRecommendFriendAdapter.ItemRecommendFriendHolder>(RecommendFriendDiffUtil){
+class ItemRecommendFriendAdapter : ListAdapter<HomeUiModel, ItemRecommendFriendAdapter.ItemRecommendFriendHolder>(
+    RecommendFriendDiffUtil
+){
 
     class ItemRecommendFriendHolder(val binding: ItemContentRecommendFriendBinding) :
         RecyclerView.ViewHolder(binding.root) {

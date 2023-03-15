@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:padding="@dimen/base_horizontal_margin"
         android:orientation="vertical"
-        tools:context=".running.RunningOptionDifficultyFragment">
+        tools:context=".ui.running.RunningOptionDifficultyFragment">
 
         <include
             android:id="@+id/content_running_option_team_difficulty"

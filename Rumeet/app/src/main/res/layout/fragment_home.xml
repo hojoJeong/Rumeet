@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="name"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,6 +35,7 @@
                     android:layout_marginStart="@dimen/base_horizontal_margin"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:setWelcomeMessage="@{name}"
                     tools:text="@string/content_welcome_message" />
 
                 <include

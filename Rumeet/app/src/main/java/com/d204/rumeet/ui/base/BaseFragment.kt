@@ -1,7 +1,6 @@
 package com.d204.rumeet.ui.base
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
@@ -26,7 +24,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel>(layoutId: Int) : Fragment(layoutId) {
+abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment() {
 
     private var _binding: T? = null
     val binding get()= requireNotNull(_binding)
@@ -43,7 +41,7 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel>(layoutId: In
     abstract val viewModel: R
 
     /**
-     * 두번째로 호출.
+     * 첫번째로 호출.
      * 데이터 바인딩 및 Coroutine 설정.
      * ex) lifecyelScope.launch{}, lifecycleScope.launchWhenStarted{] ..
      */
@@ -57,9 +55,8 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel>(layoutId: In
     abstract fun initDataBinding()
 
     /**
-     * 바인딩 이후에 할 일을 여기에 구현.
-     * 그 외에 설정할 것이 있으면 이곳에서 설정.
-     * 클릭 리스너도 이곳에서 설정.
+     * 바인딩 후 작업
+     * ex) viewmodel에서 함수실행
      */
     abstract fun initAfterBinding()
 
@@ -144,10 +141,14 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel>(layoutId: In
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        initStartView()
         initDataBinding()
-        initAfterBinding()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initStartView()
+        initAfterBinding()
     }
 
     override fun onDestroy() {
@@ -217,4 +218,3 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel>(layoutId: In
 //            if (result.resultCode == 0) navigateToHomeFragment(null)
         }
 }
-
