@@ -8,7 +8,7 @@
     android:paddingHorizontal="@dimen/base_horizontal_margin">
 
     <TextView
-        android:id="@+id/tv_content_home_title_best_record"
+        android:id="@+id/tv_content_home_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:drawableRight="@drawable/ic_arrow_right"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_content_home_title_best_record"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_content_home_title_best_record"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_content_home_title"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_content_home_title"
         android:text="@string/title_see_more"
         style="@style/base_font_medium_14_dim_gray"/>
 
@@ -33,13 +33,14 @@
         android:layout_marginTop="@dimen/base_vertical_title_to_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content_home_title_best_record"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content_home_title"
         android:layout_marginHorizontal="@dimen/base_horizontal_margin"
         android:elevation="10dp">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_content_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="24dp"

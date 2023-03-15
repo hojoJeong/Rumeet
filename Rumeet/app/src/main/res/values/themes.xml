@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Rumeet" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Rumeet" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -97,5 +97,38 @@
 
     <style name="base_font_medium_14_nobel" parent="base_font_medium_14">
         <item name="android:textColor">@color/nobel</item>
+    </style>
+
+    <style name="base_font_bold_16_white" parent="base_font_bold_16">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- custom toggle btn -->
+    <style name="toggleButtonCustom" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyEasy" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_easy</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyNormal" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_normal</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyHard" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_hard</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
     </style>
 </resources>

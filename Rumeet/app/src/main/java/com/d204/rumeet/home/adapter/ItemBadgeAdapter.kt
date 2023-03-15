@@ -10,32 +10,31 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemContentBestrecordBinding
 import com.d204.rumeet.home.model.HomeUiModel
 
-class ItemBestRecordAdapter :
-    ListAdapter<HomeUiModel, ItemBestRecordAdapter.ItemBestRecordHolder>(BestRecordDiffUtil) {
+class ItemBadgeAdapter : ListAdapter<HomeUiModel, ItemBadgeAdapter.ItemBadgeHolder>(BadgeDiffUtil) {
 
-    class ItemBestRecordHolder(val binding: ItemContentBestrecordBinding) :
+    class ItemBadgeHolder(val binding: ItemContentBestrecordBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeUiModel) {
 
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBestRecordHolder =
-        ItemBestRecordHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBadgeHolder =
+        ItemBadgeHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_content_bestrecord,
+                R.layout.item_content_badge,
                 parent,
                 false
             )
         )
 
-
-    override fun onBindViewHolder(holder: ItemBestRecordHolder, position: Int) {
+    override fun onBindViewHolder(holder: ItemBadgeHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    object BestRecordDiffUtil : DiffUtil.ItemCallback<HomeUiModel>() {
+
+    object BadgeDiffUtil : DiffUtil.ItemCallback<HomeUiModel>() {
         override fun areItemsTheSame(
             oldItem: HomeUiModel,
             newItem: HomeUiModel
