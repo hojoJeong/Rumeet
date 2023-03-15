@@ -53,26 +53,33 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
+    // android
     implementation libs.bundles.navigation
     implementation libs.bundles.androidx
     implementation libs.android.material
     implementation libs.databinding
 
+    // firebase
     implementation platform(libs.firebase.bom)
     implementation libs.firebase.analytics
     implementation libs.firebase.crashlytics
 
+    // official library
     implementation libs.hilt
-
+    kapt libs.hilt.compiler
     implementation libs.glide
-    implementation libs.circleimageview
     annotationProcessor libs.glide.compiler
 
+    // kakao
     implementation libs.kakao.sdk
 
+    // custom view
+    implementation libs.circleimageview
+    implementation libs.circleindicator
+
+    // junit
     testImplementation libs.junit
     androidTestImplementation libs.android.test.junit
     androidTestImplementation libs.android.test.espresso
 
-    kapt libs.hilt.compiler
 }

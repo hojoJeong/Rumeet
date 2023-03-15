@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel>(layoutId: Int) : Fragment(layoutId) {
+abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment() {
 
     private var _binding: T? = null
     val binding get()= requireNotNull(_binding)
