@@ -2,8 +2,13 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
 }
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
     namespace 'com.d204.rumeet'
@@ -15,6 +20,9 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+
+        resValue "string", "KAKAO_NATIVE_KEY", properties['kakao.native.key']
+        resValue "string", "KAKAO_MANIFEST_KEY", properties['kakao.manifest.key']
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,17 +51,26 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation libs.bundles.navigation
     implementation libs.bundles.androidx
     implementation libs.android.material
-    implementation libs.hilt
     implementation libs.databinding
+
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.analytics
+    implementation libs.firebase.crashlytics
+
+    implementation libs.hilt
+
     implementation libs.glide
     implementation libs.circleimageview
     annotationProcessor libs.glide.compiler
-    testImplementation libs.junit
 
+    implementation libs.kakao.sdk
+
+    testImplementation libs.junit
     androidTestImplementation libs.android.test.junit
     androidTestImplementation libs.android.test.espresso
 
