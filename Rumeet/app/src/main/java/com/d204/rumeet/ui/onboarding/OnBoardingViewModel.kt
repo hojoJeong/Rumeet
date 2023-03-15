@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-@HiltViewModel
 class OnBoardingViewModel : BaseViewModel() {
     private val _firstRunCheck : MutableStateFlow<Boolean> = MutableStateFlow(false)
     val firstRunCheck : StateFlow<Boolean> = _firstRunCheck.asStateFlow()

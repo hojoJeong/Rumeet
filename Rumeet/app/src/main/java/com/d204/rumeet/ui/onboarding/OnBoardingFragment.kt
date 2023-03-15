@@ -8,7 +8,6 @@ import com.d204.rumeet.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class OnBoardingFragment: BaseFragment<FragmentOnboardingBinding, OnBoardingViewModel>() {
     override val layoutResourceId: Int = R.layout.fragment_onboarding
     override val viewModel: OnBoardingViewModel by viewModels()
@@ -33,7 +32,7 @@ class OnBoardingFragment: BaseFragment<FragmentOnboardingBinding, OnBoardingView
             setContent("계속하기")
             setState(true)
             setButtonClickEvent {
-
+                viewModel
             }
         }
     }
