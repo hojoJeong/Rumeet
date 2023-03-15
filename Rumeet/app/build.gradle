@@ -65,6 +65,7 @@ dependencies {
     implementation libs.hilt
 
     implementation libs.glide
+    implementation libs.circleimageview
     annotationProcessor libs.glide.compiler
 
     implementation libs.kakao.sdk

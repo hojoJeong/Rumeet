@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_item_content_recommend_friend_profile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_launcher_background"/>
+
+        <TextView
+            android:id="@+id/tv_item_content_recommend_friend_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/iv_item_content_recommend_friend_profile"
+            app:layout_constraintTop_toTopOf="@+id/iv_item_content_recommend_friend_profile"
+            app:layout_constraintBottom_toBottomOf="@id/iv_item_content_recommend_friend_profile"
+            android:text="닉네임"
+            android:maxLength="4"
+            android:ellipsize="end"
+            style="@style/base_font_bold_14_black"
+            android:layout_marginStart="16dp"/>
+        <TextView
+            android:id="@+id/tv_item_content_recommend_friend_pace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/btn_item_content_see_friend_info_detail"
+            app:layout_constraintTop_toTopOf="@+id/tv_item_content_recommend_friend_name"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_item_content_recommend_friend_name"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_content_recommend_friend_name"
+            android:layout_marginEnd="40dp"
+            android:text="7'30"
+            style="@style/base_font_medium_14_dim_gray"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_item_content_see_friend_info_detail"
+            android:layout_width="48dp"
+            android:layout_height="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/bg_rect_navyblue_round8_stroke0"
+            android:text="@string/content_see_friend_info_detail"
+            android:textColor="@color/white"
+            android:textSize="6sp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
