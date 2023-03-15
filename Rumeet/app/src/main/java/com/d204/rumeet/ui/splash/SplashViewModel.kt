@@ -29,8 +29,9 @@ class SplashViewModel : BaseViewModel() {
         }
     }
 
+    //토큰 갱신
     fun setDeviceToken(token : String){
-        // coroutineErrorHandler + viewModelScope, 에러처리가 나면 coroutineErrorHandler에 있는 block이 실행된다.
+        // baseViewModelScope = coroutineErrorHandler + viewModelScope, 에러처리가 나면 coroutineErrorHandler에 있는 block이 실행된다.
         baseViewModelScope.launch {
 /*            launch {
                 val token = getAccessToken()?.let{
