@@ -8,9 +8,8 @@ import com.d204.rumeet.ui.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
+class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     override val layoutResourceId: Int = R.layout.activity_login
-    override val viewModel: LoginViewModel by viewModels()
 
     override fun initStartView() {
 

@@ -2,14 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation_main"
-    app:startDestination="@id/splashFragment">
+    android:id="@+id/navigation_main">
 
-
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.d204.rumeet.ui.splash.SplashFragment"
-        android:label="SplashFragment"
-        tools:layout="@layout/fragment_splash"/>
 
 </navigation>

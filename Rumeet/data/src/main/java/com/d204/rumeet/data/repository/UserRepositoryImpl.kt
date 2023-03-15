@@ -11,4 +11,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun setUserFirstRunCheck() {
         userDataStorePreferences.setFirstRun(false)
     }
+
+    override suspend fun getUserFirstRunCheck(): Boolean {
+        return userDataStorePreferences.getFirstRun()
+    }
 }

@@ -37,8 +37,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
-
     implementation libs.bundles.navigation
     implementation libs.bundles.androidx
     implementation libs.android.material

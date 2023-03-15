@@ -4,8 +4,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentOnboardingBinding
+import com.d204.rumeet.ui.activities.LoginActivity
 import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.util.startActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class OnBoardingFragment: BaseFragment<FragmentOnboardingBinding, OnBoardingViewModel>() {
@@ -20,8 +23,10 @@ class OnBoardingFragment: BaseFragment<FragmentOnboardingBinding, OnBoardingView
     // 뷰모델 초기 설정
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            launch {
-
+            viewModel.navigateToLogin.collectLatest {
+                launch {
+                    requireContext().startActivity(LoginActivity::class.java)
+                }
             }
         }
     }
@@ -32,7 +37,7 @@ class OnBoardingFragment: BaseFragment<FragmentOnboardingBinding, OnBoardingView
             setContent("계속하기")
             setState(true)
             setButtonClickEvent {
-                viewModel
+                viewModel.setVisitCheck()
             }
         }
     }
