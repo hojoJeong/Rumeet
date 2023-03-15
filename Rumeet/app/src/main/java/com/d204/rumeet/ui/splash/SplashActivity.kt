@@ -10,9 +10,8 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ActivitySplashBinding
-import com.d204.rumeet.ui.MainActivity
+import com.d204.rumeet.ui.activities.MainActivity
 import com.d204.rumeet.ui.base.BaseActivity
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

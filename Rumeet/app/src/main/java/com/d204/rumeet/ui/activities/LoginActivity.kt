@@ -1,11 +1,11 @@
-package com.d204.rumeet.ui.login
+package com.d204.rumeet.ui.activities
 
 import androidx.activity.viewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ActivityLoginBinding
 import com.d204.rumeet.ui.base.BaseActivity
+import com.d204.rumeet.ui.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {

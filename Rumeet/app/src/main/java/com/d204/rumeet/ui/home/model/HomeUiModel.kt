@@ -1,4 +1,4 @@
-package com.d204.rumeet.home.model
+package com.d204.rumeet.ui.home.model
 
 data class HomeUiModel(
     val id: Int,

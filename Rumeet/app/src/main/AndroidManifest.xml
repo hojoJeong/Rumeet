@@ -45,8 +45,8 @@
                     android:scheme="@string/KAKAO_MANIFEST_KEY" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.login.LoginActivity"/>
-        <activity android:name=".ui.MainActivity"/>
+        <activity android:name=".ui.activities.LoginActivity"/>
+        <activity android:name=".ui.activities.MainActivity"/>
     </application>
 
 </manifest>

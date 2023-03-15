@@ -1,7 +1,6 @@
 package com.d204.rumeet.ui.base
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +12,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import com.d204.rumeet.data.remote.dto.InternalServerErrorException
 import com.d204.rumeet.data.remote.dto.ServerNotFoundException
-import com.d204.rumeet.ui.login.LoginActivity
+import com.d204.rumeet.ui.activities.LoginActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.flow.SharedFlow
