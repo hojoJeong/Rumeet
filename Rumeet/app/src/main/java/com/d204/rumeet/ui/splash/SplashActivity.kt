@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @SuppressLint("CustomSplashScreen")
-@AndroidEntryPoint
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
 
     override val layoutResourceId: Int = R.layout.activity_splash

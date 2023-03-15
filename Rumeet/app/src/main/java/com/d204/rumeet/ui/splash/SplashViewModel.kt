@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-@HiltViewModel
+
 class SplashViewModel : BaseViewModel() {
     private val _splashScreenGone : MutableStateFlow<Boolean> = MutableStateFlow(false)
     val splashScreenGone : StateFlow<Boolean> = _splashScreenGone.asStateFlow()

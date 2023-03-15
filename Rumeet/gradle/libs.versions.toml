@@ -49,6 +49,7 @@ google_service_version = "4.3.15"
 firebase_version = "31.2.3"
 firebase_cloud_storage_version = "20.1.0"
 firebase_crashlytics_version = "18.3.5"
+firebase_crashlytics_gradle_version = "2.9.4"
 
 
 glide_version = "4.13.0"
@@ -111,3 +112,4 @@ android_application = { id = "com.android.application", version.ref = "android-a
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 navigation_safe_args_plugin = { id = "androidx.navigation.safeargs", version.ref = "navigation_safe_args_version" }
 google_service = { id = "com.google.gms.google-services", version.ref = "google_service_version" }
+firebase_crashlytics = {id = "com.google.firebase.crashlytics", version.ref = "firebase_crashlytics_gradle_version"}
