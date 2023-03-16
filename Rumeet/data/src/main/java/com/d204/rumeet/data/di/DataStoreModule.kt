@@ -1,7 +1,7 @@
 package com.d204.rumeet.data.di
 
 import android.content.Context
-import com.d204.rumeet.data.local.sharedpreference.UserDataStorePreferences
+import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

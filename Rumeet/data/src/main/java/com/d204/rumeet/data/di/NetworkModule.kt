@@ -2,7 +2,7 @@ package com.d204.rumeet.data.di
 
 import android.content.Context
 import com.d204.rumeet.common.Constants.BASE_URL
-import com.d204.rumeet.data.local.sharedpreference.UserDataStorePreferences
+import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides

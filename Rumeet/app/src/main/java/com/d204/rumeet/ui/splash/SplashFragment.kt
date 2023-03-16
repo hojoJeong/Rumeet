@@ -1,21 +1,17 @@
 package com.d204.rumeet.ui.splash
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentSplashBinding
-import com.d204.rumeet.ui.activities.LoginActivity
 import com.d204.rumeet.ui.activities.MainActivity
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.util.startActivity
+import com.d204.rumeet.util.startActivityAfterClearBackStack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,26 +33,26 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
     }
 
     override fun initStartView() {
-        viewModel.checkVersion()
+        viewModel.checkAppState()
     }
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
             launch {
-                viewModel.appVersion.collectLatest {
-                    // if(it == 0) getToken()
+                viewModel.navigateToLogin.collectLatest { state ->
+                    if(state) requireContext().startActivityAfterClearBackStack(MainActivity::class.java)
                 }
             }
 
             launch {
-                viewModel.navigateToHome.collectLatest {
-                    requireContext().startActivity(MainActivity::class.java)
+                viewModel.navigateToHome.collectLatest { state ->
+                    if(state) requireContext().startActivityAfterClearBackStack(MainActivity::class.java)
                 }
             }
 
             launch {
-                viewModel.navigateToLogin.collectLatest {
-                    requireContext().startActivity(LoginActivity::class.java)
+                viewModel.navigateToOnBoarding.collectLatest { state ->
+                    if(state) navigate(SplashFragmentDirections.actionSplashFragmentToOnBoardingFragment())
                 }
             }
         }

@@ -12,6 +12,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
@@ -197,15 +198,12 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     }
 
     // Home 화면으로 이동
-//    protected fun navigateToHomeFragment(navOptions: NavOptions? = null) {
-//        val mainFragmentId = com.dida.android.R.id.homeFragment
-//        if (findNavController().currentDestination?.id != mainFragmentId) {
-//            val result = findNavController().popBackStack(mainFragmentId, false)
-//            if (!result) {
-//                findNavController().navigate(NavigationGraphDirections.actionMainFragment(), navOptions)
-//            }
-//        }
-//    }
+    protected fun navigateToHomeFragment(navOptions: NavOptions? = null) {
+        val mainFragmentId = com.d204.rumeet.R.id.homeFragment
+        if (findNavController().currentDestination?.id != mainFragmentId) {
+             findNavController().popBackStack(mainFragmentId, false)
+        }
+    }
 
     // 미 로그인시 로그인 로직
     private fun loginCheck() {

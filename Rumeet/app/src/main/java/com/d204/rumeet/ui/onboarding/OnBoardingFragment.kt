@@ -6,8 +6,7 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentOnboardingBinding
 import com.d204.rumeet.ui.activities.LoginActivity
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.util.startActivity
-import dagger.hilt.android.AndroidEntryPoint
+import com.d204.rumeet.util.startActivityAfterClearBackStack
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -23,9 +22,9 @@ class OnBoardingFragment: BaseFragment<FragmentOnboardingBinding, OnBoardingView
     // 뷰모델 초기 설정
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            viewModel.navigateToLogin.collectLatest {
-                launch {
-                    requireContext().startActivity(LoginActivity::class.java)
+            launch{
+                viewModel.startToLogin.collectLatest { state ->
+                    if(state) requireContext().startActivityAfterClearBackStack(LoginActivity::class.java)
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.d204.rumeet.data.local.sharedpreference
+package com.d204.rumeet.data.local.datastore
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey

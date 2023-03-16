@@ -1,6 +1,6 @@
 package com.d204.rumeet.data.remote.interceptor
 
-import com.d204.rumeet.data.local.sharedpreference.UserDataStorePreferences
+import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
