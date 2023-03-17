@@ -31,12 +31,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
 
     override fun initAfterBinding() {
         binding.name = "배달전문 박정은"
+        initBestRecord()
+        initBadgeAdapter()
+        initRecommendFriendAdpater()
     }
 
     private fun initBestRecord() {
         val contentBestRecord = binding.contentHomeBestRecord
         val bestRecordAdapter = ItemBestRecordAdapter().apply {
-            //TODO(서버통신 후 체력 데이터 입력)
+
         }
 
         with(binding.contentHomeBestRecord){
@@ -54,4 +57,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
 
     }
 
+    private fun initViewIfUserFirstTime(){
+        with(binding){
+            contentHomeRecommendFriend.btnContentHome.visibility = View.GONE
+
+            contentHomeBadge.tvContentHomeMessage.text = resources.getString(R.string.content_no_badge)
+            contentHomeBadge.tvContentHomeMessage.visibility = View.VISIBLE
+
+            contentHomeRecommendFriend.tvContentHomeMessage.text = resources.getString(R.string.content_no_pace)
+            contentHomeRecommendFriend.tvContentHomeMessage.visibility = View.VISIBLE
+            contentHomeRecommendFriend.btnContentHome.text = resources.getString(R.string.title_refresh)
+            contentHomeRecommendFriend.btnContentHome.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0, R.drawable.ic_refresh, 0)
+        }
+    }
 }

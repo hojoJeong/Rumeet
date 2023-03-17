@@ -33,7 +33,6 @@ class ItemBadgeAdapter : ListAdapter<HomeUiModel, ItemBadgeAdapter.ItemBadgeHold
         holder.bind(getItem(position))
     }
 
-
     object BadgeDiffUtil : DiffUtil.ItemCallback<HomeUiModel>() {
         override fun areItemsTheSame(
             oldItem: HomeUiModel,
