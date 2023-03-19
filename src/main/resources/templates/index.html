@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function seletedColor(color_name) {
+      var url = 'http://localhost:8000/api/select?color='
+              + color_name
+              + '&user='
+              + $("#user_name").val();
+      $.get(url);
+      console.log(url);
+    }
+  </script>
+</head>
+<body>
+<div>
+  <h1>이름을 입력하세요</h1>
+  <label for="user_name">Name:</label>
+  <input type="text" id="user_name">
+  <h1>마음에 드는 색상을 고르세요.</h1>
+  <ul>
+    <li>
+      <button type="button" onclick="seletedColor('red')">red</button></li>
+      <button type="button" onclick="seletedColor('yellow')">yellow</button></li>
+      <button type="button" onclick="seletedColor('blue')">blue</button></li>
+  </ul>
+
+
+
+</div>
+
+
+</body>
+</html>
