@@ -24,4 +24,8 @@
         SELECT * FROM user WHERE email = #{email} and password = #{password}
     </select>
 
+    <select id="getUserById" parameterType="int" resultMap="user">
+        SELECT * FROM user WHERE id = #{id};
+    </select>
+
 </mapper>
