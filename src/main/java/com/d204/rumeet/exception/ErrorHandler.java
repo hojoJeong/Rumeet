@@ -1,0 +1,44 @@
+package com.d204.rumeet.exception;
+
+import com.d204.rumeet.data.RespData;
+import io.jsonwebtoken.JwtException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
+import java.util.ArrayList;
+
+@RestControllerAdvice
+public class ErrorHandler {
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<?> SqlException(SQLException ex) {
+        RespData<Void> data = new RespData(ErrorEnum.SQL_ERROR);
+        if(ex instanceof SQLSyntaxErrorException) {
+            data = new RespData(ErrorEnum.SQL_SYNTAX_ERROR);
+        }
+        return data.builder();
+    }
+
+    @ExceptionHandler(CustomJwtException.class)
+    public ResponseEntity<?> JwtException() {
+        RespData<Void> data = new RespData(ErrorEnum.JWT_ERROR);
+        return data.builder();
+    }
+
+    @ExceptionHandler(NoObjectDataException.class)
+    public ResponseEntity<?> NoObjectDataException() {
+        RespData<Void> data = new RespData(ErrorEnum.NO_DATA_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
+
+    @ExceptionHandler(NoListDataException.class)
+    public ResponseEntity<?> NoListDataException() {
+        RespData<ArrayList> data = new RespData(ErrorEnum.NO_DATA_ERROR);
+        data.setData(new ArrayList<>());
+        return data.builder();
+    }
+}
