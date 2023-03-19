@@ -20,10 +20,9 @@ class OnBoardingViewModel @Inject constructor(
     private val _startToLogin: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val startToLogin: SharedFlow<Boolean> = _startToLogin
 
-    fun setVisitCheck() : Boolean {
+    fun setVisitCheck() {
         viewModelScope.launch {
-            _startToLogin.emit(setUserFirstCheckUseCase())
+            setUserFirstCheckUseCase()
         }
-        return false
     }
-}   
+}

@@ -9,10 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentSplashBinding
+import com.d204.rumeet.ui.activities.LoginActivity
 import com.d204.rumeet.ui.activities.MainActivity
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.util.startActivityAfterClearBackStack
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -40,7 +42,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
         lifecycleScope.launchWhenResumed {
             launch {
                 viewModel.navigateToLogin.collectLatest { state ->
-                    if(state) requireContext().startActivityAfterClearBackStack(MainActivity::class.java)
+                    if(state) requireContext().startActivityAfterClearBackStack(LoginActivity::class.java)
                 }
             }
 
