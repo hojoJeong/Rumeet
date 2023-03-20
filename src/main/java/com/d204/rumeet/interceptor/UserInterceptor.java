@@ -20,7 +20,8 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
-        if(!jwtTool.validateToken(token)) {
+
+        if(!jwtTool.validateToken(token.split(" ")[1])) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"JWT 만료");
             return false;
         }
