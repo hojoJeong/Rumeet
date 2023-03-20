@@ -41,4 +41,10 @@ public class ErrorHandler {
         data.setData(new ArrayList<>());
         return data.builder();
     }
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<?> DuplicateException() {
+        RespData<Void> data = new RespData(ErrorEnum.DUPLICATE_USER);
+        data.setData(null);
+        return data.builder();
+    }
 }

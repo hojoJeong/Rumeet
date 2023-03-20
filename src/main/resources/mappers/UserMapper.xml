@@ -11,7 +11,7 @@
         <result column="nickname" property="nickname"/>
         <result column="age" property="age"/>
         <result column="gender" property="gender"/>
-        <result column="profile_img" property="profile_img"/>
+        <result column="profile_img" property="profileImg"/>
         <result column="height" property="height"/>
         <result column="weight" property="weight"/>
         <result column="oauth" property="oauth"/>
@@ -35,4 +35,21 @@
     <update id="delUser" parameterType="int">
         UPDATE user SET state = -1 WHERE (id = #{id});
     </update>
+
+    <insert id="joinUser" parameterType="JoinUserDto">
+        INSERT user (email, password, nickname, profile_img) VALUES(#{email},#{password},#{nickname},#{profile});
+    </insert>
+    
+    <select id="checkDuplication" parameterType="CheckDto" resultType="int">
+        SELECT COUNT(*) FROM user
+        <where>
+            <if test="type == 1">
+                nickname like #{value}
+            </if>
+            <if test="type == 2">
+                email like #{value}
+            </if>
+        </where>
+    </select>
+    
 </mapper>
