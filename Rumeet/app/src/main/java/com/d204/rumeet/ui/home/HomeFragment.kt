@@ -2,15 +2,19 @@ package com.d204.rumeet.ui.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentHomeBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.home.adapter.ItemBestRecordAdapter
+import com.d204.rumeet.ui.home.model.BestRecordUiModel
+import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
+    private val homeViewModel by activityViewModels<HomeViewModel>()
     override val layoutResourceId: Int
         get() = R.layout.fragment_home
     override val viewModel: BaseViewModel
@@ -24,22 +28,47 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
     }
 
     override fun initStartView() {
+
+        lifecycleScope.launchWhenResumed {
+            homeViewModel.userName.collect{ userName ->
+                binding.userName = userName
+            }
+
+            homeViewModel.bestRecord.collect{ bestRecordList ->
+                initBestRecord(bestRecordList)
+            }
+
+            homeViewModel.badgeList.collect{
+                initBadgeAdapter(it)
+            }
+
+            homeViewModel.recommendFriendList.collect{
+                initRecommendFriendAdpater(it)
+            }
+            homeViewModel.getHomeData()
+
+        }
     }
 
     override fun initDataBinding() {
     }
 
     override fun initAfterBinding() {
-        binding.name = "배달전문 박정은"
-        initBestRecord()
-        initBadgeAdapter()
-        initRecommendFriendAdpater()
     }
 
-    private fun initBestRecord() {
-        val contentBestRecord = binding.contentHomeBestRecord
+    private fun initBestRecord(bestRecordList: List<BestRecordUiModel>) {
         val bestRecordAdapter = ItemBestRecordAdapter().apply {
-
+            //TODO("임시 예외처리")
+            if(bestRecordList.isEmpty()){
+                val list = mutableListOf<Int>()
+                list.add(0)
+                list.add(0)
+                list.add(0)
+                list.add(0)
+                submitList(list)
+            } else {
+                submitList(bestRecordList)
+            }
         }
 
         with(binding.contentHomeBestRecord){
@@ -49,11 +78,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
         }
     }
 
-    private fun initBadgeAdapter() {
+    private fun initBadgeAdapter(badgeList: List<String>) {
+        if(badgeList.isEmpty()){
+            with(binding.contentHomeBadge.tvContentHomeMessage){
 
+            }
+        }
     }
 
-    private fun initRecommendFriendAdpater() {
+    private fun initRecommendFriendAdpater(recommendFriendList: List<RecommendFriendUiModel>) {
 
     }
 

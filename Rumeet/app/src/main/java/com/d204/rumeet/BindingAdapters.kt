@@ -34,5 +34,8 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("segt")
+    @BindingAdapter("setBestRecord")
+    fun TextView.setBestRecordInitMessage(intValue: Int?, longValue: Long?){
+
+    }
 }

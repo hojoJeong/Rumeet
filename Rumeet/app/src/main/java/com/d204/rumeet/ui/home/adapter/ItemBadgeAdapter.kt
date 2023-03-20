@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemContentBestrecordBinding
-import com.d204.rumeet.ui.home.model.HomeUiModel
 
 class ItemBadgeAdapter : ListAdapter<HomeUiModel, ItemBadgeAdapter.ItemBadgeHolder>(BadgeDiffUtil) {
 

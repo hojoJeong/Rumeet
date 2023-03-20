@@ -5,8 +5,20 @@
 
     <data>
         <variable
-            name="name"
+            name="vm"
+            type="com.d204.rumeet.ui.home.HomeViewModel"/>
+        <variable
+            name="userName"
             type="String" />
+        <variable
+            name="bestRecord"
+            type="com.d204.rumeet.ui.home.model.BestRecordUiModel" />
+        <variable
+            name="badge"
+            type="String" />
+        <variable
+            name="recommendFriend"
+            type="com.d204.rumeet.ui.home.model.RecommendFriendUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +47,7 @@
                     android:layout_marginStart="@dimen/base_horizontal_margin"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:setWelcomeMessage="@{name}"
+                    app:setWelcomeMessage="@{}"
                     tools:text="@string/content_welcome_message" />
 
                 <include
