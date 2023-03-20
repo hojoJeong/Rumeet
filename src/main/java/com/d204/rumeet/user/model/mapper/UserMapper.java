@@ -1,8 +1,6 @@
 package com.d204.rumeet.user.model.mapper;
 
-import com.d204.rumeet.user.model.dto.LoginDto;
-import com.d204.rumeet.user.model.dto.ModifyUserDto;
-import com.d204.rumeet.user.model.dto.UserDto;
+import com.d204.rumeet.user.model.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
@@ -16,4 +14,8 @@ public interface UserMapper {
     int modifyUser(ModifyUserDto user);
 
     int delUser(int id);
+
+    void joinUser(JoinUserDto user);
+
+    int checkDuplication(CheckDto checkDto);
 }

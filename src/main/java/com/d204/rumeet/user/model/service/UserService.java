@@ -1,9 +1,7 @@
 package com.d204.rumeet.user.model.service;
 
-import com.d204.rumeet.user.model.dto.LoginDto;
-import com.d204.rumeet.user.model.dto.LoginUserDto;
-import com.d204.rumeet.user.model.dto.ModifyUserDto;
-import com.d204.rumeet.user.model.dto.UserDto;
+import com.d204.rumeet.user.model.dto.*;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     LoginUserDto doLogin(LoginDto loginDto);
@@ -15,4 +13,10 @@ public interface UserService {
     void modifyUser(ModifyUserDto user);
 
     void delUser(int id);
+
+    void joinUser(JoinUserDto user, MultipartFile profile);
+
+    void checkDuplication(int type, String value);
+
+    String sendSimpleMessage(String email);
 }
