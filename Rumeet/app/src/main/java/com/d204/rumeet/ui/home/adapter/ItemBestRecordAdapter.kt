@@ -1,4 +1,4 @@
-package com.d204.rumeet.home.adapter
+package com.d204.rumeet.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemContentBestrecordBinding
-import com.d204.rumeet.home.model.HomeUiModel
+import com.d204.rumeet.ui.home.model.HomeUiModel
 
 class ItemBestRecordAdapter :
     ListAdapter<HomeUiModel, ItemBestRecordAdapter.ItemBestRecordHolder>(HomeDiffUtil) {
