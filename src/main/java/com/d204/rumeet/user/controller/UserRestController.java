@@ -46,7 +46,9 @@ public class UserRestController {
     // 리프레시 토큰 재발급
     @PostMapping("/refresh")
     public ResponseEntity<?> reToken(@RequestBody ReTokenDto token) {
-        if(!jwtTool.validateToken(token.getRefreshToken().split(" ")[1])) {
+        if(token.getRefreshToken() == null
+                || token.getRefreshToken().split(" ").length != 2
+                || !jwtTool.validateToken(token.getRefreshToken().split(" ")[1])) {
             throw new CustomJwtException();
         }
 
