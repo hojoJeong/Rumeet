@@ -7,11 +7,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentHomeBinding
+import com.d204.rumeet.home.adapter.ItemBestRecordAdapter
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
-import com.d204.rumeet.ui.home.adapter.ItemBestRecordAdapter
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
     private val homeViewModel by activityViewModels<HomeViewModel>()
@@ -28,29 +30,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
     }
 
     override fun initStartView() {
-
-        lifecycleScope.launchWhenResumed {
-            homeViewModel.userName.collect{ userName ->
-                binding.userName = userName
-            }
-
-            homeViewModel.bestRecord.collect{ bestRecordList ->
-                initBestRecord(bestRecordList)
-            }
-
-            homeViewModel.badgeList.collect{
-                initBadgeAdapter(it)
-            }
-
-            homeViewModel.recommendFriendList.collect{
-                initRecommendFriendAdpater(it)
-            }
-            homeViewModel.getHomeData()
-
+        with(homeViewModel){
+            getUserName()
+            getBestRecordList()
+            getBadgeList()
+            getRecommendFriendList()
         }
     }
 
     override fun initDataBinding() {
+        lifecycleScope.launchWhenResumed {
+                homeViewModel.userName.collectLatest {
+
+                }
+            homeViewModel.bestRecord.collectLatest {
+
+            }
+
+        }
     }
 
     override fun initAfterBinding() {
@@ -60,12 +57,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
         val bestRecordAdapter = ItemBestRecordAdapter().apply {
             //TODO("임시 예외처리")
             if(bestRecordList.isEmpty()){
-                val list = mutableListOf<Int>()
-                list.add(0)
-                list.add(0)
-                list.add(0)
-                list.add(0)
-                submitList(list)
+
             } else {
                 submitList(bestRecordList)
             }

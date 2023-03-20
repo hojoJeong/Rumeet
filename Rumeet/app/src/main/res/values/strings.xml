@@ -15,6 +15,7 @@
     <string name="title_recommend_random_friend">비슷한 페이스! 같이 뛰어요!</string>
     <string name="content_see_friend_info_detail">친구 보기</string>
     <string name="title_refresh">다시 찾기  </string>
+    <string name="content_no_best_record">입력된 체력 데이터가 없습니다.</string>
     <string name="content_no_badge">아직 획득한 뱃지가 없어요 :(\n싱글 모드 달리기를 하면\nWelcome뱃지를 받을 수 있어요!</string>
     <string name="content_no_pace">아직 페이스가 입력되지 않았아요\n열심히 달려서 비슷한\n체력의 친구를 추천 받아보세요!</string>
 

@@ -9,6 +9,8 @@ androidx_navigation_version = "2.5.0"
 androidx_fragment_version = "1.5.0"
 androidx_lifecycle_extension_version = "2.2.0"
 navigation_safe_args_version = "2.4.2"
+databinding = "7.3.1"
+datastore_version = "1.0.0"
 
 # android
 android-material = "1.7.0"
@@ -31,7 +33,7 @@ kotlin = "1.7.10"
 
 kakao_sdk_version = "2.11.2"
 
-databinding = "7.3.1"
+
 
 
 # gson
@@ -97,10 +99,14 @@ glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_version" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebase_crashlytics_version"}
+datastore-preferences = {module = "androidx.datastore:datastore-preferences", version.ref = "datastore-version"}
+datastore-preferences-core = {module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore-version"}
+
+
 
 [bundles]
 androidx = ["androidx_core", "androidx_appcompat", "androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-common", "androidx-navigation-dynamic-features-fragment", "androidx-navigation-testing",
-    "androidx-fragment-ktx", "androidx-lifecycle-extensions", "androidx-core-splashscreen"]
+    "androidx-fragment-ktx", "androidx-lifecycle-extensions", "androidx-core-splashscreen", "datastore-preferences", "datastore-preferences-core"]
 navigation = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-common", "androidx-navigation-dynamic-features-fragment", "androidx-navigation-testing"]
 retrofit-bundles = ["retrofit", "retrofit-gson-converter", "retrofit-rxjava"]
 okhttp3-bundles = ["okhttp3", "okhttp3-interceptor", "okhttp3-urlconnection", "okhttp3-logging"]

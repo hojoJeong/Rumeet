@@ -34,11 +34,14 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":common"))
     implementation libs.bundles.androidx
     implementation libs.bundles.retrofit.bundles
     implementation libs.bundles.okhttp3.bundles
     implementation libs.hilt
     implementation libs.google.gson
+
+
 
     testImplementation libs.junit
     androidTestImplementation libs.android.test.junit

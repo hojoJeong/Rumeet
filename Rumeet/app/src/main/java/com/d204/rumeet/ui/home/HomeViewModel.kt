@@ -1,43 +1,77 @@
 package com.d204.rumeet.ui.home
 
+import android.util.Log
 import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.base.UiState
+import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class HomeViewModel : BaseViewModel() {
-    private val _userName = MutableSharedFlow<String>()
-    val userName: SharedFlow<String>
-        get() = _userName.asSharedFlow()
+    private val _userName: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Loading)
+    val userName: StateFlow<UiState<String>>
+        get() = _userName.asStateFlow()
 
-    private val _bestRecord = MutableSharedFlow<List<BestRecordUiModel>>()
-    val bestRecord: SharedFlow<List<BestRecordUiModel>>
-        get() = _bestRecord.asSharedFlow()
+    private val _bestRecord: MutableStateFlow<UiState<List<BestRecordUiModel>>> =
+        MutableStateFlow(UiState.Loading)
+    val bestRecord: StateFlow<UiState<List<BestRecordUiModel>>>
+        get() = _bestRecord.asStateFlow()
 
-    private val _badgeList = MutableSharedFlow<List<String>>()
-    val badgeList: SharedFlow<List<String>>
-        get() = _badgeList.asSharedFlow()
+    private val _badgeList: MutableStateFlow<UiState<List<String>>> =
+        MutableStateFlow(UiState.Loading)
+    val badgeList: StateFlow<UiState<List<String>>>
+        get() = _badgeList.asStateFlow()
 
-    private val _recommendFriendList = MutableSharedFlow<List<RecommendFriendUiModel>>()
-    val recommendFriendList: SharedFlow<List<RecommendFriendUiModel>>
-        get() = _recommendFriendList.asSharedFlow()
+    private val _recommendFriendList: MutableStateFlow<UiState<List<RecommendFriendUiModel>>> =
+        MutableStateFlow(UiState.Loading)
+    val recommendFriendList: StateFlow<UiState<List<RecommendFriendUiModel>>>
+        get() = _recommendFriendList.asStateFlow()
 
-    suspend fun getHomeData() {
+    fun getUserName() {
         baseViewModelScope.launch {
-            // 친구 추천은 갱신이 필요하므로 홈 전체 데이터를 갱신할 필요가 없음. 따로 데이터바인딩 해주는 게 맞는지?
-//            val homeUiData = HomeUiModel(
-//                "배달전문 박정은",
-//                emptyList(),    //UseCase 호출
-//                emptyList(),
-//                emptyList()
-//            )
+            //TODO(서버 통신)
+            try {
+                val response = "배달전문 박정은"
+                _userName.emit(UiState.Success(response))
+            } catch (e: Exception) {
+                _userName.emit(UiState.Error(e.cause))
+            }
+        }
+    }
 
-            _userName.emit("배달전문 박정은")
-            _bestRecord.emit(emptyList())
-            _badgeList.emit(emptyList())
-            _recommendFriendList.emit(emptyList())
+    fun getBestRecordList() {
+        baseViewModelScope.launch {
+            try {
+                //TODO(서버 통신, 초기 상태로 임시 처리, 체력데이터가 있다면 data layer mapper에서 형식에 맞게 변환해서 도메인 레이어로 가져올 것)
+                val response = emptyList<BestRecordUiModel>()
+                _bestRecord.emit(UiState.Success(response))
+            } catch (e: Exception) {
+                _bestRecord.emit(UiState.Error(e.cause))
+            }
+        }
+    }
 
+    fun getBadgeList() {
+        baseViewModelScope.launch {
+            try {
+                val response = emptyList<String>()
+                _badgeList.emit(UiState.Success(response))
+            } catch (e: Exception) {
+                _badgeList.emit(UiState.Error(e.cause))
+            }
+        }
+    }
+
+    fun getRecommendFriendList() {
+        baseViewModelScope.launch {
+            try {
+                val response = emptyList<RecommendFriendUiModel>()
+                _recommendFriendList.emit(UiState.Success(response))
+            } catch (e: Exception) {
+                _recommendFriendList.emit(UiState.Error(e.cause))
+            }
         }
     }
 }

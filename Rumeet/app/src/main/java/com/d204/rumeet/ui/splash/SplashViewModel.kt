@@ -1,54 +1,56 @@
 package com.d204.rumeet.ui.splash
 
-import androidx.lifecycle.viewModelScope
+import com.d204.rumeet.domain.usecase.user.GetUserAutoLoginUseCase
+import com.d204.rumeet.domain.usecase.user.GetUserFirstAccessCheckUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@HiltViewModel
+class SplashViewModel @Inject constructor(
+    private val getUserFirstAccessCheckUseCase: GetUserFirstAccessCheckUseCase,
+    private val getUserAutoLoginUseCase: GetUserAutoLoginUseCase
+) : BaseViewModel() {
 
-class SplashViewModel : BaseViewModel() {
-    private val _splashScreenGone : MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val splashScreenGone : StateFlow<Boolean> = _splashScreenGone.asStateFlow()
+    // StateFlow는 상태값, 대신 초기값이 필요(로그인 유무 등..)
+    private val _splashScreenGone: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val splashScreenGone: StateFlow<Boolean> get() = _splashScreenGone.asStateFlow()
 
-    private val _appVersion : MutableStateFlow<Int> = MutableStateFlow(0)
-    val appVersion : StateFlow<Int> = _appVersion.asStateFlow()
+    // SharedFlow는 이벤트에 대한 결과, 초기값 필요없음()
+    private val _navigateToHome: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val navigateToHome: SharedFlow<Boolean> get() = _navigateToHome.asSharedFlow()
 
-    private val _navigateToHome : MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val navigateToHome : StateFlow<Boolean> = _navigateToHome.asStateFlow()
+    private val _navigateToOnBoarding: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val navigateToOnBoarding: SharedFlow<Boolean> get() = _navigateToOnBoarding.asSharedFlow()
+
+    private val _navigateToLogin: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val navigateToLogin: SharedFlow<Boolean> get() = _navigateToLogin.asSharedFlow()
+
+    var onBoardingState: Boolean = false
 
     // 앱 버전 체크(토큰)
-    fun checkVersion(){
-        viewModelScope.launch {
-            // TODO API가 나온다면 바로 처리
-/*            versionAPI()
-                .onSuccess { _appVersion.emit(it.version) }
-                .onError { e -> catchError(e) }*/
-        }
-    }
-
-    //토큰 갱신
-    fun setDeviceToken(token : String){
-        // baseViewModelScope = coroutineErrorHandler + viewModelScope, 에러처리가 나면 coroutineErrorHandler에 있는 block이 실행된다.
+    fun checkAppState() {
         baseViewModelScope.launch {
-/*            launch {
-                val token = getAccessToken()?.let{
-                    if(it != ""){
-                        usecase(token)
-                            .onSuccess{save token}
-                            .onError {e -> catchError(e)}
-                    }
+            // 첫 실행인지 state를 가져온다.
+            // 첫 실행이라면 onBoarding이 켜진다.
+            withContext(Dispatchers.Default) {
+                onBoardingState = !getUserFirstAccessCheckUseCase()
+                _navigateToOnBoarding.emit(onBoardingState)
+            }
+
+            // 자동 로그인이 체크됐는지 파악한다.
+            // 자동로그인이면 자동으로 리프레시를 가져와 갱신이 된다.
+            // 아니라면 LoginActivity로 이동한다.
+            if (!onBoardingState) {
+                launch {
+                    if (getUserAutoLoginUseCase()) _navigateToHome.emit(true)
+                    else _navigateToLogin.emit(true)
                 }
             }
-            // etc...
-            launch {
-
-            }*/
-
-            _navigateToHome.emit(true)
-            _splashScreenGone.emit(true)
         }
     }
 }
