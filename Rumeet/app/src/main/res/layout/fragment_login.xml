@@ -13,12 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="login"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+       <ImageView
+           android:id="@+id/iv_login_logo"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           android:src="@drawable/ic_app_main_logo"
+           android:layout_marginTop="38dp"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
