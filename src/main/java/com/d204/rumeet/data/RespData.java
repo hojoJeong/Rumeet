@@ -9,16 +9,23 @@ import org.springframework.http.ResponseEntity;
 
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class RespData<T> {
     String flag;
     String msg;
+    int code = 0;
     T data;
+
+    public RespData() {
+        this.flag = "success";
+        this.msg = "";
+        this.code = 0;
+    }
 
     public RespData(ErrorEnum error) {
         this.flag = error.flag;
         this.msg = error.msg;
+        this.code = error.code;
         this.data = null;
     }
 

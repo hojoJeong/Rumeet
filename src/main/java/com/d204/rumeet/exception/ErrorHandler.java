@@ -28,9 +28,9 @@ public class ErrorHandler {
         return data.builder();
     }
 
-    @ExceptionHandler(NoObjectDataException.class)
+    @ExceptionHandler(NoUserDataException.class)
     public ResponseEntity<?> NoObjectDataException() {
-        RespData<Void> data = new RespData(ErrorEnum.NO_DATA_ERROR);
+        RespData<Void> data = new RespData(ErrorEnum.NO_USER_ERROR);
         data.setData(null);
         return data.builder();
     }
