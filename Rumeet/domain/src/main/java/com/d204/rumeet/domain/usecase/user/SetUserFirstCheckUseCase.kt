@@ -6,5 +6,5 @@ import javax.inject.Inject
 class SetUserFirstCheckUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke() = userRepository.setUserFirstRunCheck()
+    suspend operator fun invoke() : Boolean = userRepository.setUserFirstRunCheck()
 }

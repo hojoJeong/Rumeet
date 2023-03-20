@@ -6,5 +6,5 @@ import javax.inject.Inject
 class SetUserAutoLoginCheck @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke() = userRepository.setUserAutoLoginCheck()
+    suspend operator fun invoke(state : Boolean) = userRepository.setUserAutoLoginCheck(state)
 }

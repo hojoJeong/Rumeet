@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,22 +31,26 @@ class SplashViewModel @Inject constructor(
     private val _navigateToLogin: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val navigateToLogin: SharedFlow<Boolean> get() = _navigateToLogin.asSharedFlow()
 
+    var onBoardingState: Boolean = false
+
     // 앱 버전 체크(토큰)
     fun checkAppState() {
-        viewModelScope.launch {
+        baseViewModelScope.launch {
             // 첫 실행인지 state를 가져온다.
             // 첫 실행이라면 onBoarding이 켜진다.
-            launch(Dispatchers.Main) {
-
-                _navigateToOnBoarding.emit(!getUserFirstCheckUseCase())
+            withContext(Dispatchers.Default) {
+                onBoardingState = !getUserFirstCheckUseCase()
+                _navigateToOnBoarding.emit(onBoardingState)
             }
 
             // 자동 로그인이 체크됐는지 파악한다.
             // 자동로그인이면 자동으로 리프레시를 가져와 갱신이 된다.
             // 아니라면 LoginActivity로 이동한다.
-            launch {
-                if (getUserAutoLoginUseCase()) _navigateToHome.emit(true)
-                else _navigateToLogin.emit(true)
+            if (!onBoardingState) {
+                launch {
+                    if (getUserAutoLoginUseCase()) _navigateToHome.emit(true)
+                    else _navigateToLogin.emit(true)
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.onboarding
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
@@ -13,19 +14,26 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OnBoardingFragment : BaseFragment<FragmentOnboardingBinding, OnBoardingViewModel>() {
+
     override val layoutResourceId: Int = R.layout.fragment_onboarding
     override val viewModel: OnBoardingViewModel by viewModels()
 
     // 뷰모델 실행
     override fun initStartView() {
-
+        binding.apply {
+            this.vm = viewModel
+            this.lifecycleOwner = viewLifecycleOwner
+        }
+        exception = viewModel.errorEvent
     }
 
     // 뷰모델 초기 설정
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
             viewModel.startToLogin.collectLatest { state ->
-                if (state) requireContext().startActivityAfterClearBackStack(LoginActivity::class.java)
+                if (state) {
+                    requireContext().startActivityAfterClearBackStack(LoginActivity::class.java)
+                }
             }
         }
     }
@@ -35,9 +43,10 @@ class OnBoardingFragment : BaseFragment<FragmentOnboardingBinding, OnBoardingVie
         binding.btnOnboardingContinue.apply {
             setContent("계속하기")
             setState(true)
-            setButtonClickEvent {
-                viewModel.setVisitCheck()
-            }
         }
+    }
+
+    companion object{
+        private const val TAG = "OnBoardingFragment"
     }
 }
