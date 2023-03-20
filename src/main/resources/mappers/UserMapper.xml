@@ -21,11 +21,18 @@
     </resultMap>
 
     <select id="doLogin" parameterType="LoginDto" resultMap="user">
-        SELECT * FROM user WHERE email = #{email} and password = #{password}
+        SELECT * FROM user_view WHERE email = #{email} and password = #{password}
     </select>
 
     <select id="getUserById" parameterType="int" resultMap="user">
-        SELECT * FROM user WHERE id = #{id};
+        SELECT * FROM user_view WHERE id = #{id};
     </select>
 
+    <update id="modifyUser" parameterType="ModifyUserDto">
+        UPDATE user SET age = #{age}, gender = #{gender}, height = #{height}, weight = #{weight} WHERE (id = #{id});
+    </update>
+
+    <update id="delUser" parameterType="int">
+        UPDATE user SET state = -1 WHERE (id = #{id});
+    </update>
 </mapper>

@@ -24,13 +24,6 @@ public class UserInterceptor implements HandlerInterceptor {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"JWT 만료");
             return false;
         }
-//        boolean check  = jwtTool.checkExpire(token);
-//        if (check) {
-//            return true;
-//        } else {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"access token 만료");
-//            return false;
-//        }
         return true;
     }
 }
