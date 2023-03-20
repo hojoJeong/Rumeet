@@ -23,9 +23,6 @@ abstract class BaseDialogFragment<T : ViewDataBinding>(layoutId: Int) : DialogFr
 
     abstract fun initAfterBinding()
 
-    private var isSetBackButtonValid = false
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

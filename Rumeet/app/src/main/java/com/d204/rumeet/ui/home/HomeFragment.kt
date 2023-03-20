@@ -1,4 +1,4 @@
-package com.d204.rumeet.home
+package com.d204.rumeet.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
-abstract class BaseActivity<T : ViewDataBinding, R : BaseViewModel> : AppCompatActivity() {
+abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     private var _binding: T? = null
     val binding get() = requireNotNull(_binding)
@@ -15,11 +15,6 @@ abstract class BaseActivity<T : ViewDataBinding, R : BaseViewModel> : AppCompatA
      * ex) R.layout.activity_main
      */
     abstract val layoutResourceId: Int
-
-    /**
-     * viewModel 로 쓰일 변수.
-     */
-    abstract val viewModel: R
 
     /**
      * 레이아웃을 띄운 직후 호출.

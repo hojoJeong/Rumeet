@@ -25,7 +25,7 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    private val _needLoginEvent: MutableSharedFlow<Boolean> = MutableSharedFlow<Boolean>()
+    private val _needLoginEvent: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val needLoginEvent: SharedFlow<Boolean> = _needLoginEvent
 
     fun catchError(e: Throwable?) {

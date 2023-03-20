@@ -8,7 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import com.d204.rumeet.common.databinding.FragmentLoadingBinding
+import com.d204.rumeet.databinding.FragmentLoadingBinding
+
 
 class LoadingDialogFragment : DialogFragment() {
 
