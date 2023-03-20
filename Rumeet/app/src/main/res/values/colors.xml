@@ -12,4 +12,6 @@
     <color name="navy_blue">#0072C6</color>
     <color name="nobel">#9F9F9F</color>
     <color name="light_grey">#D2D2D2</color>
+    <color name="white_smoke">#F1F1F1</color>
+    <color name="dark_gray">#AEAEAE</color>
 </resources>

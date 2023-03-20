@@ -8,7 +8,31 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edit_input"
+            style="@style/base_font_medium_16_black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_rect_transparent_white_smoke_round5_stroke0"
+            android:maxEms="30"
+            android:maxLines="1"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_additional"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:background="null"
+            app:layout_constraintBottom_toBottomOf="@id/edit_input"
+            app:layout_constraintEnd_toEndOf="@id/edit_input"
+            app:layout_constraintTop_toTopOf="@id/edit_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
