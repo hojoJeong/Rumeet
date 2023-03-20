@@ -33,7 +33,7 @@ public class PipelineServiceImpl implements PipelineService {
             String jsonColorLog = gson.toJson(userEventVO);
             System.out.println(jsonColorLog);
 
-            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send("hello.kafka", jsonColorLog);
+            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send("select-color", jsonColorLog);
             future.whenComplete((result, ex) -> {
                 if (ex != null) {
                     System.err.println("Failed to send Msg" + ex.getMessage());

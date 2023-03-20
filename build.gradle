@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compileOnly 'com.google.code.gson:gson:2.8.6'
+
+// hadoop 연결
+    implementation 'org.apache.hadoop:hadoop-client:3.3.0'
 }
 
 tasks.named('test') {
