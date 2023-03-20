@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.first
 class UserDataStorePreferences(val context: Context) {
     private val Context.datastore by preferencesDataStore(name = context.getString(R.string.prefs_key))
 
-    private val firstRun = booleanPreferencesKey("FIRST_RUN")
+    private val firstAccess = booleanPreferencesKey("FIRST_ACCESS")
     private val autoLogin = booleanPreferencesKey("AUTO_LOGIN")
     private val accessToken = stringPreferencesKey("ACCESS_TOKEN")
     private val refreshToken = stringPreferencesKey("REFRESH_TOKEN")
@@ -20,13 +20,13 @@ class UserDataStorePreferences(val context: Context) {
     // dataStore는 비동기 기반
     suspend fun setFirstRun(firstRunState: Boolean) {
         context.datastore.edit { preference ->
-            preference[firstRun] = firstRunState
+            preference[firstAccess] = firstRunState
         }
     }
 
     suspend fun getFirstRun() : Boolean{
         return context.datastore.data.first().let {
-            it[firstRun] ?: false
+            it[firstAccess] ?: false
         }
     }
 

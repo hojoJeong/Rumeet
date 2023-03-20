@@ -40,9 +40,9 @@ class OnBoardingFragment : BaseFragment<FragmentOnboardingBinding, OnBoardingVie
 
     // view 설정
     override fun initAfterBinding() {
-        binding.btnOnboardingContinue.apply {
-            setContent("계속하기")
-            setState(true)
+        binding.btnOnboardingContinue.also {
+            it.setContent("계속하기")
+            it.setState(true)
         }
     }
 

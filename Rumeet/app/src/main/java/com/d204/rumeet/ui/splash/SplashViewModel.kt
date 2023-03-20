@@ -1,8 +1,7 @@
 package com.d204.rumeet.ui.splash
 
-import androidx.lifecycle.viewModelScope
 import com.d204.rumeet.domain.usecase.user.GetUserAutoLoginUseCase
-import com.d204.rumeet.domain.usecase.user.GetUserFirstCheckUseCase
+import com.d204.rumeet.domain.usecase.user.GetUserFirstAccessCheckUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val getUserFirstCheckUseCase: GetUserFirstCheckUseCase,
+    private val getUserFirstAccessCheckUseCase: GetUserFirstAccessCheckUseCase,
     private val getUserAutoLoginUseCase: GetUserAutoLoginUseCase
 ) : BaseViewModel() {
 
@@ -39,7 +38,7 @@ class SplashViewModel @Inject constructor(
             // 첫 실행인지 state를 가져온다.
             // 첫 실행이라면 onBoarding이 켜진다.
             withContext(Dispatchers.Default) {
-                onBoardingState = !getUserFirstCheckUseCase()
+                onBoardingState = !getUserFirstAccessCheckUseCase()
                 _navigateToOnBoarding.emit(onBoardingState)
             }
 

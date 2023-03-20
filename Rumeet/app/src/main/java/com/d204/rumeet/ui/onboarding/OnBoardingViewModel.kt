@@ -1,7 +1,6 @@
 package com.d204.rumeet.ui.onboarding
 
-import androidx.lifecycle.viewModelScope
-import com.d204.rumeet.domain.usecase.user.SetUserFirstCheckUseCase
+import com.d204.rumeet.domain.usecase.user.SetUserFirstAccessCheckUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
-    private val setUserFirstCheckUseCase: SetUserFirstCheckUseCase
+    private val setUserFirstAccessCheckUseCase: SetUserFirstAccessCheckUseCase
 ) : BaseViewModel() {
 
     private val _startToLogin: MutableSharedFlow<Boolean> = MutableSharedFlow()
@@ -21,7 +20,7 @@ class OnBoardingViewModel @Inject constructor(
     fun setVisitCheck() {
         baseViewModelScope.launch {
             // firstCheck를 true로만들기 (한번 방문 처리)
-            _startToLogin.emit(setUserFirstCheckUseCase())
+            _startToLogin.emit(setUserFirstAccessCheckUseCase())
         }
     }
 }
