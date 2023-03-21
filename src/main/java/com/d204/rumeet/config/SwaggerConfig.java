@@ -42,8 +42,15 @@ public class SwaggerConfig {
     public GroupedOpenApi group1() {
         return GroupedOpenApi.builder()
                 .group("user")
-            //    .pathsToMatch("/group1/**")
                 .packagesToScan("com.d204.rumeet.user") // package 필터 설정
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi group2() {
+        return GroupedOpenApi.builder()
+                .group("friend")
+                .packagesToScan("com.d204.rumeet.friend") // package 필터 설정
                 .build();
     }
 

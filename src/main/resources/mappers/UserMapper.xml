@@ -20,12 +20,27 @@
         <result column="state" property="state"/>
     </resultMap>
 
+    <resultMap id="simple_user" type="simpleUserDto">
+        <result column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="nickname" property="nickname"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <result column="profile_img" property="profileImg"/>
+        <result column="date" property="date"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
     <select id="doLogin" parameterType="LoginDto" resultMap="user">
         SELECT * FROM user_view WHERE email = #{email} and password = #{password}
     </select>
 
     <select id="getUserById" parameterType="int" resultMap="user">
         SELECT * FROM user_view WHERE id = #{id};
+    </select>
+
+    <select id="searchUsersByNickname" parameterType="String" resultMap="simple_user">
+        SELECT * FROM user_view WHERE nickname LIKE #{nickname};
     </select>
 
     <update id="modifyUser" parameterType="ModifyUserDto">
