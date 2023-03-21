@@ -73,6 +73,14 @@ public class UserRestController {
         return data.builder();
     }
 
+    @PostMapping("/modify/profile")
+    public ResponseEntity<?> modifyUserProfile(@RequestPart(value = "user") ProfileUserDto user,
+                                      @RequestPart(value = "profile_img") MultipartFile profile) {
+        RespData<Void> data = new RespData<>();
+        userService.modifyUserProfile(user, profile);
+        return data.builder();
+    }
+
     @PostMapping("/join")
     public ResponseEntity<?> joinUser(@RequestPart(value = "user") JoinUserDto user,
                                       @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {
@@ -118,8 +126,23 @@ public class UserRestController {
         data.setData(userService.generateUser(user.getId()));
         return data.builder();
     }
+    @GetMapping("/oauth/naver")
+    public ResponseEntity<?> naverOauth(@RequestParam String code) {
+        NaverUserDto naverUserDto = userService.naverOauth(code);
+        UserDto user = userService.getUserOauth(naverUserDto.getResponse().getId());
+        if(user == null) {
+            RespData<KakaoUserJoinDto> data = new RespData<>();
+            data.setFlag("fail");
+            data.setCode(1);
+            data.setData(new KakaoUserJoinDto(naverUserDto.getResponse().getId(), naverUserDto.getResponse().getProfile_image()));
+            return data.builder();
+        }
+        RespData<LoginUserDto> data = new RespData<>();
+        data.setData(userService.generateUser(user.getId()));
+        return data.builder();
+    }
 
-    @PostMapping("/oauth/kakao/join")
+    @PostMapping("/oauth/join")
     public ResponseEntity<?> kakaoOauth(@RequestPart(value = "user") JoinKakaoUserDto user,
                                         @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {
         RespData<Void> data = new RespData<>();
