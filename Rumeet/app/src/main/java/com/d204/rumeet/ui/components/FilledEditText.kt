@@ -2,7 +2,6 @@ package com.d204.rumeet.ui.components
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.provider.Telephony.Carriers.PASSWORD
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -15,7 +14,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentFilledEditTextBinding
-import java.lang.reflect.Field
 
 class FilledEditText @JvmOverloads constructor(
     context: Context,
@@ -50,7 +48,7 @@ class FilledEditText @JvmOverloads constructor(
             }
             FilledEditTextType.PASSWORD -> {
                 addTextWatcher()
-                addPasswordVisibilityButton()
+                setPasswordInput()
             }
             FilledEditTextType.NORMAL -> {
 
@@ -64,13 +62,18 @@ class FilledEditText @JvmOverloads constructor(
     }
 
     private fun addTextDeleteButton() {
+        binding.btnAdditional.setBackgroundResource(R.drawable.ic_edit_text_delete_btn)
         binding.btnAdditional.setOnClickListener {
             binding.editInput.setText("")
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    fun addPasswordVisibilityButton() {
+    private fun setPasswordInput() {
+        binding.btnAdditional.setBackgroundResource(R.drawable.ic_edit_text_visibilty_btn)
+        binding.editInput.inputType =
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
         binding.btnAdditional.setOnTouchListener { _, motionEvent ->
             when (motionEvent.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {

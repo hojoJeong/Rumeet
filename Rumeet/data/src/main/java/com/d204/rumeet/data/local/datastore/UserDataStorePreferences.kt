@@ -8,7 +8,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.d204.rumeet.data.R
 import kotlinx.coroutines.flow.first
 
-class UserDataStorePreferences(val context: Context) {
+internal class UserDataStorePreferences(val context: Context) {
     private val Context.datastore by preferencesDataStore(name = context.getString(R.string.prefs_key))
 
     private val firstAccess = booleanPreferencesKey("FIRST_ACCESS")
@@ -39,6 +39,28 @@ class UserDataStorePreferences(val context: Context) {
     suspend fun getAutoLogin() : Boolean{
         return context.datastore.data.first().let {
             it[autoLogin] ?: false
+        }
+    }
+
+    suspend fun setToken(newAccessToken : String, newRefreshToken : String){
+        context.datastore.edit { preference ->
+            preference[accessToken] = newAccessToken
+        }
+
+        context.datastore.edit { preference ->
+            preference[refreshToken] = newRefreshToken
+        }
+    }
+
+    suspend fun getAccessToken() : String?{
+        return context.datastore.data.first().let {
+            it[accessToken]
+        }
+    }
+
+    suspend fun getRefreshToken() : String?{
+        return context.datastore.data.first().let {
+            it[refreshToken]
         }
     }
 }
