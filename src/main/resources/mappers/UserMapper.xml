@@ -19,7 +19,6 @@
         <result column="date" property="date"/>
         <result column="state" property="state"/>
     </resultMap>
-
     <resultMap id="simple_user" type="simpleUserDto">
         <result column="id" property="id"/>
         <result column="email" property="email"/>
@@ -36,11 +35,12 @@
     </select>
 
     <select id="getUserById" parameterType="int" resultMap="user">
-        SELECT * FROM user_view WHERE id = #{id};
+        SELECT  FROM user_view WHERE id = #{id};
     </select>
 
     <select id="searchUsersByNickname" parameterType="String" resultMap="simple_user">
-        SELECT * FROM user_view WHERE nickname LIKE #{nickname};
+        SELECT id, email, nickname, age, gender, profile_img, date, state
+        FROM user_view WHERE nickname LIKE #{nickname};
     </select>
 
     <update id="modifyUser" parameterType="ModifyUserDto">
