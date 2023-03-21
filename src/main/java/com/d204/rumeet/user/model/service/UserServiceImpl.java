@@ -77,10 +77,9 @@ public class UserServiceImpl implements UserService{
             throw new NoUserDataException();
         }
     }
+    public String uploadFile(MultipartFile profile, String baseUrl) {
+        String url = baseUrl;
 
-    @Override
-    public void joinUser(JoinUserDto user, MultipartFile profile) {
-        String url = "https://kr.object.ncloudstorage.com/rumeet/base_profile.png";
         if(profile != null && !profile.isEmpty()) {
             String [] formats = {".jpeg", ".png", ".bmp", ".jpg", ".PNG", ".JPEG"};
             // 원래 파일 이름 추출
@@ -93,8 +92,6 @@ public class UserServiceImpl implements UserService{
             for(int i = 0; i < formats.length; i++) {
                 if (extension.equals(formats[i])){
                     // user email과 확장자 결합
-                    String savedName = user.getEmail() + extension;
-
                     File uploadFile = null;
                     try {
                         uploadFile = osUpload.convert(profile)        // 파일 생성
@@ -109,45 +106,19 @@ public class UserServiceImpl implements UserService{
                     break;
                 }
             }
-
         }
+        return url;
+    }
+    @Override
+    public void joinUser(JoinUserDto user, MultipartFile profile) {
+        String url = this.uploadFile(profile,"https://kr.object.ncloudstorage.com/rumeet/base_profile.png");
         user.setProfile(url);
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
     }
     @Override
     public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {
-        String url = user.getProfile();
-        if(profile != null && !profile.isEmpty()) {
-            String [] formats = {".jpeg", ".png", ".bmp", ".jpg", ".PNG", ".JPEG"};
-            // 원래 파일 이름 추출
-            String origName = profile.getOriginalFilename();
-
-            // 확장자 추출(ex : .png)
-            String extension = origName.substring(origName.lastIndexOf("."));
-
-            String folderName = "profile";
-            for(int i = 0; i < formats.length; i++) {
-                if (extension.equals(formats[i])){
-                    // user email과 확장자 결합
-                    String savedName = user.getEmail() + extension;
-
-                    File uploadFile = null;
-                    try {
-                        uploadFile = osUpload.convert(profile)        // 파일 생성
-                                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File convert fail"));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    String fileName = folderName + "/" + System.nanoTime() + extension;
-                    osUpload.put(bucketName, fileName, uploadFile);
-
-                    url = "https://kr.object.ncloudstorage.com/"+bucketName+"/"+fileName;
-                    break;
-                }
-            }
-
-        }
+        String url = this.uploadFile(profile, user.getProfile());
         user.setProfile(url);
         String email = createKey();
         String pwd = createKey();
@@ -201,6 +172,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto getUserOauth(String tokenId) {
         return userMapper.getUserOauth(tokenId);
+    }
+
+    @Override
+    public void modifyUserProfile(ProfileUserDto user, MultipartFile profile) {
+        String url = this.uploadFile(profile, user.getProfile());
+        user.setProfile(url);
+        int cnt = userMapper.modifyUserProfile(user);
+        if(cnt == 0) {
+            throw new NoUserDataException();
+        }
     }
 
     @Override
@@ -261,6 +242,56 @@ public class UserServiceImpl implements UserService{
 
         KakaoUserDto kakaoUser = new Gson().fromJson(responseBody, KakaoUserDto.class);
         return kakaoUser;
+    }
+//
+    @Override
+    public NaverUserDto naverOauth(String code) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://nid.naver.com/oauth2.0/token?client_id=swueBQKH3TyR0BispyA3&client_secret=c_360FcNCo&grant_type=authorization_code&state=rumeet&code="+code)
+                .get()
+                .build();
+        Call call = client.newCall(request);
+        Response response = null;
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String responseBody = "";
+        if (response.isSuccessful()) {
+            try {
+                responseBody = response.body().string();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Gson gson = new Gson();
+        AccessTokenResponse accessTokenResponse = gson.fromJson(responseBody,AccessTokenResponse.class);
+        String access_token = accessTokenResponse.access_token;
+        System.out.println(accessTokenResponse.id_token);
+        request = new Request.Builder()
+                .url("https://openapi.naver.com/v1/nid/me")
+                .header("Authorization", "Bearer " + access_token)
+                .get()
+                .build();
+
+        call = client.newCall(request);
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        responseBody = "";
+        if (response.isSuccessful()) {
+            try {
+                responseBody = response.body().string();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        NaverUserDto naverUserDto = new Gson().fromJson(responseBody, NaverUserDto.class);
+        return naverUserDto;
     }
 
     private MimeMessage createMessage(String to, String ePw)throws Exception{
