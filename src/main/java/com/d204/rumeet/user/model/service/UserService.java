@@ -19,4 +19,12 @@ public interface UserService {
     void checkDuplication(int type, String value);
 
     String sendSimpleMessage(String email);
+
+    void modifyPwd(ModifyPwdDto dto);
+
+    KakaoUserDto kakaoOauth(String code);
+
+    UserDto getUserOauth(String tokenId);
+
+    void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile);
 }
