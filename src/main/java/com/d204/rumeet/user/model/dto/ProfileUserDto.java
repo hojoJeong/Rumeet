@@ -7,18 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class ProfileUserDto {
     int id;
-    String email;
-    String password;
-    String nickname;
-    int age;
-    int gender;
     String profile;
-    float height;
-    float weight;
-    String Oauth;
-    Long date;
-    int state;
-
 }

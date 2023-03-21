@@ -11,7 +11,7 @@
         <result column="nickname" property="nickname"/>
         <result column="age" property="age"/>
         <result column="gender" property="gender"/>
-        <result column="profile_img" property="profileImg"/>
+        <result column="profile_img" property="profile"/>
         <result column="height" property="height"/>
         <result column="weight" property="weight"/>
         <result column="oauth" property="oauth"/>
@@ -64,5 +64,9 @@
         INSERT user (email, password, nickname, profile_img, gender, age, height, weight , oauth, date)
             VALUES(#{email},#{password},#{nickname},#{profile}, #{gender}, #{age},#{height},#{weight}, #{oauth} , #{date});
     </insert>
+
+    <update id="modifyUserProfile" parameterType="ProfileUserDto">
+        UPDATE user SET profile_img = #{profile} WHERE id = #{id};
+    </update>
 
 </mapper>

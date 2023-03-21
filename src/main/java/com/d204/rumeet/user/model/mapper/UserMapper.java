@@ -25,4 +25,6 @@ public interface UserMapper {
     UserDto getUserOauth(String tokenId);
 
     void joinKakaoUser(JoinKakaoUserDto user);
+
+    int modifyUserProfile(ProfileUserDto user);
 }
