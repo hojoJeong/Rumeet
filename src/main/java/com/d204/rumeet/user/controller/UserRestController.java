@@ -109,6 +109,7 @@ public class UserRestController {
         UserDto user = userService.getUserOauth(kakaoUser.getId());
         if(user == null) {
             RespData<KakaoUserJoinDto> data = new RespData<>();
+            data.setFlag("fail");
             data.setCode(1);
             data.setData(new KakaoUserJoinDto(kakaoUser.getId(), kakaoUser.getProperties().get("profile_image")));
             return data.builder();
