@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class JoinUserDto {
+public class JoinKakaoUserDto {
     String email;
     String password;
     String nickname;
@@ -14,5 +14,6 @@ public class JoinUserDto {
     float height;
     float weight;
     String profile;
+    String oauth;
     long date;
 }

@@ -9,6 +9,7 @@ import java.sql.SQLSyntaxErrorException;
 @Mapper
 public interface UserMapper {
     UserDto doLogin(LoginDto loginInfo);
+
     UserDto getUserById(int id);
 
     int modifyUser(ModifyUserDto user);
@@ -18,4 +19,10 @@ public interface UserMapper {
     void joinUser(JoinUserDto user);
 
     int checkDuplication(CheckDto checkDto);
+
+    int modifyPwd(ModifyPwdDto modifyPwdDto);
+
+    UserDto getUserOauth(String tokenId);
+
+    void joinKakaoUser(JoinKakaoUserDto user);
 }

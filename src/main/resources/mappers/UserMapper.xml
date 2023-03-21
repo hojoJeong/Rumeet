@@ -15,7 +15,6 @@
         <result column="height" property="height"/>
         <result column="weight" property="weight"/>
         <result column="oauth" property="oauth"/>
-        <result column="refresh_token" property="refreshToken"/>
         <result column="date" property="date"/>
         <result column="state" property="state"/>
     </resultMap>
@@ -35,10 +34,6 @@
     <update id="delUser" parameterType="int">
         UPDATE user SET state = -1 WHERE (id = #{id});
     </update>
-
-    <insert id="joinUser" parameterType="JoinUserDto">
-        INSERT user (email, password, nickname, profile_img) VALUES(#{email},#{password},#{nickname},#{profile});
-    </insert>
     
     <select id="checkDuplication" parameterType="CheckDto" resultType="int">
         SELECT COUNT(*) FROM user
@@ -51,5 +46,23 @@
             </if>
         </where>
     </select>
-    
+
+    <update id="modifyPwd" parameterType="ModifyPwdDto">
+        UPDATE user SET password = #{password} WHERE id = #{id};
+    </update>
+
+    <select id="getUserOauth" parameterType="string" resultMap="user">
+        SELECT * FROM user WHERE (oauth like #{tokenId});
+    </select>
+
+    <insert id="joinUser" parameterType="JoinUserDto">
+        INSERT user (email, password, nickname, profile_img, gender, age, height, weight, date)
+            VALUES(#{email},#{password},#{nickname},#{profile}, #{gender}, #{age},#{height},#{weight}, #{date});
+    </insert>
+
+    <insert id="joinKakaoUser" parameterType="JoinKakaoUserDto">
+        INSERT user (email, password, nickname, profile_img, gender, age, height, weight , oauth, date)
+            VALUES(#{email},#{password},#{nickname},#{profile}, #{gender}, #{age},#{height},#{weight}, #{oauth} , #{date});
+    </insert>
+
 </mapper>

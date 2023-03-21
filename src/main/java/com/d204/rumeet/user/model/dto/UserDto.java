@@ -18,7 +18,6 @@ public class UserDto {
     float height;
     float weight;
     String Oauth;
-    String refreshToken;
     Long date;
     int state;
 
