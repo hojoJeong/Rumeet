@@ -52,7 +52,7 @@ public class RabbitConfig {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory();
-        factory.setHost("13.125.45.74");
+        factory.setHost("j8d204.p.ssafy.io");
         factory.setUsername("guest");
         factory.setPassword("guest");
         return factory;

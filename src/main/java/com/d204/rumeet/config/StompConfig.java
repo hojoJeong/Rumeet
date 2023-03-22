@@ -15,8 +15,8 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //"/stomp/chat" 엔드포인트를 등록하고 SockJS를 사용하도록 설정
-        registry.addEndpoint("/stomp/chat")
-                .setAllowedOriginPatterns("http://*.*.*.*:8081", "http://*:8081") //안해도 무관
+        registry.addEndpoint("/chat")
+                .setAllowedOriginPatterns("*") //안해도 무관
                 .withSockJS();
     }
 

@@ -3,17 +3,13 @@ package com.d204.rumeet.user.controller;
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.CustomJwtException;
 import com.d204.rumeet.tools.JwtTool;
-import com.d204.rumeet.tools.SHA256;
 import com.d204.rumeet.user.model.dto.*;
 import com.d204.rumeet.user.model.service.UserService;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.HashMap;
 
 @RequestMapping("/users")
 @RequiredArgsConstructor

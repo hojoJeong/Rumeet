@@ -1,7 +1,6 @@
 package com.d204.rumeet.exception;
 
 import com.d204.rumeet.data.RespData;
-import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
