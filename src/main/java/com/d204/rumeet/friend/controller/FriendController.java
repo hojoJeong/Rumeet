@@ -27,17 +27,11 @@ public class FriendController {
     private final MongoTemplate mongoTemplate;
     private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<?> selectAll() {
-        RespData<List> data = new RespData<>();
-        List<FriendDao> list = mongoTemplate.findAll(FriendDao.class,"friend");
-        data.setData(list);
-        return data.builder();
-    }
+
 
     // 친구 조회 (전체 (닉네임순), 최근 같이 뛴 친구, 함께 많이 달린 친구)
     // 달리기 한 뒤에 정렬 추가하기
-    @GetMapping("/{userId}")
+    @GetMapping("/list/{userId}")
     public ResponseEntity<?> searchByUserId(@PathVariable int userId) {
         RespData<List> data = new RespData<>();
         Query query = new Query();
