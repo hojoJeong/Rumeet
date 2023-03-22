@@ -145,12 +145,6 @@ public class FriendController {
 
 
     // 닉네임으로 유저 검색
-    @GetMapping("/search")
-    public ResponseEntity<?> searchFriend(@RequestParam("nickname") String nickname) {
-        List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
-        RespData<List> data = new RespData<>();
-        data.setData(users);
-        return data.builder();
-    }
+
 
 }

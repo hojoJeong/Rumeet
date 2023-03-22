@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -95,6 +96,15 @@ public class UserRestController {
         String confirm = userService.sendSimpleMessage(email);
         RespData<String> data = new RespData<>();
         data.setData(confirm);
+        return data.builder();
+    }
+
+    // 닉네임으로 유저 검색
+    @GetMapping("/search")
+    public ResponseEntity<?> searchFriend(@RequestParam("nickname") String nickname) {
+        List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
+        RespData<List> data = new RespData<>();
+        data.setData(users);
         return data.builder();
     }
 
