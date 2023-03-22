@@ -14,7 +14,6 @@ import com.d204.rumeet.ui.activities.MainActivity
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.util.startActivityAfterClearBackStack
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -40,21 +39,11 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            launch {
-                viewModel.navigateToLogin.collectLatest { state ->
-                    if(state) requireContext().startActivityAfterClearBackStack(LoginActivity::class.java)
-                }
-            }
-
-            launch {
-                viewModel.navigateToHome.collectLatest { state ->
-                    if(state) requireContext().startActivityAfterClearBackStack(MainActivity::class.java)
-                }
-            }
-
-            launch {
-                viewModel.navigateToOnBoarding.collectLatest { state ->
-                    if(state) navigate(SplashFragmentDirections.actionSplashFragmentToOnBoardingFragment())
+            viewModel.navigationEvent.collectLatest { state ->
+                when(state){
+                    is SplashNavigationAction.NavigateOnBoarding -> navigate(SplashFragmentDirections.actionSplashFragmentToOnBoardingFragment())
+                    is SplashNavigationAction.StartLoginActivity -> requireContext().startActivityAfterClearBackStack(LoginActivity::class.java)
+                    is SplashNavigationAction.StartMainActivity -> requireContext().startActivityAfterClearBackStack(MainActivity::class.java)
                 }
             }
         }

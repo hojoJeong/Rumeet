@@ -47,7 +47,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@drawable/bg_rect_navyblue_round8_stroke0"
+            android:background="@drawable/bg_rect_navyblue_round20_stroke0"
             android:text="@string/content_see_friend_info_detail"
             android:textColor="@color/white"
             android:textSize="6sp"/>

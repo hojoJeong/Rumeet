@@ -11,7 +11,7 @@ import javax.inject.Inject
 * 토큰 사용 시, accessToken이 유효한지 확인
 * 토큰 만료 시, refreshToken으로 재발급 요청
 * */
-class AuthInterceptor @Inject constructor(
+internal class AuthInterceptor @Inject constructor(
     private val userDataStorePreferences: UserDataStorePreferences
 ) : Interceptor {
     // 어노테이션을 통해 예외처리 해야함을 알림
