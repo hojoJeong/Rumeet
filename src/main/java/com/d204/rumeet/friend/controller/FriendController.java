@@ -5,10 +5,8 @@ import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
-import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -152,12 +150,21 @@ public class FriendController {
     public ResponseEntity<?> rejectFriendRequest(@RequestBody FriendRequestDto friendRequestDto) {
         int fromId = friendRequestDto.getFromUserId();
         int toId = friendRequestDto.getToUserId();
+        RespData<List> data = new RespData<>();
 
         Query query = new Query(Criteria.where("fromUserId").is(fromId)
                 .and("toUserId").is(toId));
-        mongoTemplate.remove(query, FriendRequestDao.class);
 
-        RespData<List> data = new RespData<>();
+        // 요청이 없을떄
+        FriendRequestDao existingRequest = mongoTemplate.findOne(query, FriendRequestDao.class);
+
+        if (existingRequest == null) {
+            data.setMsg("친구요청이 없습니다.");
+            data.setFlag("fail");
+            return data.builder();}
+
+        // 친구요청 삭제
+        mongoTemplate.remove(query, FriendRequestDao.class);
         data.setMsg("친구 요청 거절");
         return data.builder();
     }
