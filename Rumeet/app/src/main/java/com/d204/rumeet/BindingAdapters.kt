@@ -1,20 +1,20 @@
 package com.d204.rumeet
 
+import android.annotation.SuppressLint
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.d204.rumeet.home.adapter.BestRecordAdapter
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
+import com.d204.rumeet.ui.components.CardViewHome
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
+import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
 
 object BindingAdapters {
     @JvmStatic
@@ -64,22 +64,39 @@ object BindingAdapters {
             }
         }
     }
-
+    
     @JvmStatic
-    @BindingAdapter("setBestRecordState")
-    fun View.setBestRecordState(uiState: UiState<List<BestRecordUiModel>>){
-        rootView.findViewById<TextView>(R.id.tv_content_home_title).text = context.getString(R.string.title_best_record)
+    @BindingAdapter("setBestRecordView")
+    fun CardViewHome.setBestRecordView(uiState: UiState<List<BestRecordUiModel>>){
+        val title = context.getString(R.string.title_best_record)
         if(uiState.successOrNull()!!.isEmpty()){
-            with(rootView.findViewById<TextView>(R.id.tv_content_home_message)){
-                text = context.getString(R.string.content_no_best_record)
-                visibility = View.VISIBLE
-            }
-            rootView.findViewById<TextView>(R.id.btn_content_home).visibility = View.GONE
+            setViewWhenEmptyData(title, context.getString(R.string.content_no_best_record))
         } else {
-            rootView.findViewById<RecyclerView>(R.id.rv_content_home).adapter
+            setViewContent(title, null)
         }
     }
 
+    @JvmStatic
+    @BindingAdapter("setBadgeView")
+    fun CardViewHome.setBadgeView(uiState: UiState<List<String>>){
+        val title = context.getString(R.string.title_my_badge)
+        if(uiState.successOrNull()!!.isEmpty()){
+            setViewWhenEmptyData(title, context.getString(R.string.content_no_badge))
+        } else {
+            setViewContent(title, context.getDrawable(R.drawable.ic_arrow_right)!!)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("setRecommendFriendView")
+    fun CardViewHome.setRecommendFriendView(uiState: UiState<List<RecommendFriendUiModel>>){
+        val title = context.getString(R.string.title_recommend_random_friend)
+        if(uiState.successOrNull()!!.isEmpty()){
+            setViewWhenEmptyData(title, context.getString(R.string.content_no_pace))
+        } else {
+            setViewContent(title, context.getDrawable(R.drawable.ic_refresh)!!)
+        }
+    }
 
     @JvmStatic
     @BindingAdapter("setImageByGlide")
