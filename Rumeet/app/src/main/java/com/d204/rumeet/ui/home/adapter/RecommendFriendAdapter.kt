@@ -8,37 +8,39 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemContentRecommendFriendBinding
+import com.d204.rumeet.ui.home.model.HomeUiModel
+import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
 
-class ItemRecommendFriendAdapter : ListAdapter<HomeUiModel, ItemRecommendFriendAdapter.ItemRecommendFriendHolder>(
+class RecommendFriendAdapter : ListAdapter<RecommendFriendUiModel, RecommendFriendAdapter.RecommendFriendHolder>(
     RecommendFriendDiffUtil
 ){
 
-    class ItemRecommendFriendHolder(val binding: ItemContentRecommendFriendBinding) :
+    class RecommendFriendHolder(val binding: ItemContentRecommendFriendBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: HomeUiModel) {
+        fun bind(item: RecommendFriendUiModel) {
 
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemRecommendFriendHolder = ItemRecommendFriendHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendFriendHolder = RecommendFriendHolder(
         DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_content_recommend_friend, parent, false)
     )
 
-    override fun onBindViewHolder(holder: ItemRecommendFriendHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecommendFriendHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    object RecommendFriendDiffUtil : DiffUtil.ItemCallback<HomeUiModel>() {
+    object RecommendFriendDiffUtil : DiffUtil.ItemCallback<RecommendFriendUiModel>() {
         override fun areItemsTheSame(
-            oldItem: HomeUiModel,
-            newItem: HomeUiModel
+            oldItem: RecommendFriendUiModel,
+            newItem: RecommendFriendUiModel
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: HomeUiModel,
-            newItem: HomeUiModel
+            oldItem: RecommendFriendUiModel,
+            newItem: RecommendFriendUiModel
         ): Boolean {
             return oldItem == newItem
         }

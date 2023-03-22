@@ -1,9 +1,7 @@
 package com.d204.rumeet.ui.home
 
-import android.util.Log
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
-import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
 import kotlinx.coroutines.flow.*
@@ -29,14 +27,14 @@ class HomeViewModel : BaseViewModel() {
     val recommendFriendList: StateFlow<UiState<List<RecommendFriendUiModel>>>
         get() = _recommendFriendList.asStateFlow()
 
-    fun getUserName() {
+    fun getUserNameForWelcomeMessage() {
         baseViewModelScope.launch {
             //TODO(서버 통신)
             try {
                 val response = "배달전문 박정은"
-                _userName.emit(UiState.Success(response))
+                _userName.value = UiState.Success(response)
             } catch (e: Exception) {
-                _userName.emit(UiState.Error(e.cause))
+                _userName.value = UiState.Error(e.cause)
             }
         }
     }
@@ -46,9 +44,9 @@ class HomeViewModel : BaseViewModel() {
             try {
                 //TODO(서버 통신, 초기 상태로 임시 처리, 체력데이터가 있다면 data layer mapper에서 형식에 맞게 변환해서 도메인 레이어로 가져올 것)
                 val response = emptyList<BestRecordUiModel>()
-                _bestRecord.emit(UiState.Success(response))
+                _bestRecord.value = UiState.Success(response)
             } catch (e: Exception) {
-                _bestRecord.emit(UiState.Error(e.cause))
+                _bestRecord.value = UiState.Error(e.cause)
             }
         }
     }
@@ -56,10 +54,14 @@ class HomeViewModel : BaseViewModel() {
     fun getBadgeList() {
         baseViewModelScope.launch {
             try {
-                val response = emptyList<String>()
-                _badgeList.emit(UiState.Success(response))
+                val list = mutableListOf<String>()
+                list.add("http://k.kakaocdn.net/dn/w6Z90/btr2giRz3IZ/VY50KEe8k967kjif2z728k/img_110x110.jpg")
+                list.add("http://k.kakaocdn.net/dn/w6Z90/btr2giRz3IZ/VY50KEe8k967kjif2z728k/img_110x110.jpg")
+                list.add("http://k.kakaocdn.net/dn/w6Z90/btr2giRz3IZ/VY50KEe8k967kjif2z728k/img_110x110.jpg")
+
+                _badgeList.value = UiState.Success(list)
             } catch (e: Exception) {
-                _badgeList.emit(UiState.Error(e.cause))
+                _badgeList.value = UiState.Error(e.cause)
             }
         }
     }
@@ -68,9 +70,9 @@ class HomeViewModel : BaseViewModel() {
         baseViewModelScope.launch {
             try {
                 val response = emptyList<RecommendFriendUiModel>()
-                _recommendFriendList.emit(UiState.Success(response))
+                _recommendFriendList.value = UiState.Success(response)
             } catch (e: Exception) {
-                _recommendFriendList.emit(UiState.Error(e.cause))
+                _recommendFriendList.value = UiState.Error(e.cause)
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.d204.rumeet.ui.onboarding
 
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
@@ -20,6 +22,7 @@ class OnBoardingFragment : BaseFragment<FragmentOnboardingBinding, OnBoardingVie
 
     // 뷰모델 실행
     override fun initStartView() {
+        Log.d(TAG, "initStartView: onboarding")
         binding.apply {
             this.vm = viewModel
             this.lifecycleOwner = viewLifecycleOwner

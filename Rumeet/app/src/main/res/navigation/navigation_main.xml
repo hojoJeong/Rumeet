@@ -8,5 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.d204.rumeet.ui.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home"/>
+
 </navigation>

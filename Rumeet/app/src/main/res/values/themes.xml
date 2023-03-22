@@ -111,10 +111,6 @@
         <item name="android:textColor">@color/nobel</item>
     </style>
 
-    <style name="base_font_bold_16_white" parent="base_font_bold_16">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
     <!-- custom toggle btn -->
     <style name="toggleButtonCustom" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/tv_toggle</item>

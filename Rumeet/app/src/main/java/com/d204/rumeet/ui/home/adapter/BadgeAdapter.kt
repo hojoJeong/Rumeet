@@ -7,19 +7,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
-import com.d204.rumeet.databinding.ItemContentBestrecordBinding
+import com.d204.rumeet.databinding.ItemContentBadgeBinding
 
-class ItemBadgeAdapter : ListAdapter<HomeUiModel, ItemBadgeAdapter.ItemBadgeHolder>(BadgeDiffUtil) {
+class BadgeAdapter : ListAdapter<String, BadgeAdapter.BadgeHolder>(BadgeDiffUtil) {
 
-    class ItemBadgeHolder(val binding: ItemContentBestrecordBinding) :
+    class BadgeHolder(val binding: ItemContentBadgeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: HomeUiModel) {
-
+        fun bind(imgUrl: String) {
+            binding.url = imgUrl
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBadgeHolder =
-        ItemBadgeHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BadgeHolder =
+        BadgeHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
                 R.layout.item_content_badge,
@@ -28,21 +28,21 @@ class ItemBadgeAdapter : ListAdapter<HomeUiModel, ItemBadgeAdapter.ItemBadgeHold
             )
         )
 
-    override fun onBindViewHolder(holder: ItemBadgeHolder, position: Int) {
+    override fun onBindViewHolder(holder: BadgeHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    object BadgeDiffUtil : DiffUtil.ItemCallback<HomeUiModel>() {
+    object BadgeDiffUtil : DiffUtil.ItemCallback<String>() {
         override fun areItemsTheSame(
-            oldItem: HomeUiModel,
-            newItem: HomeUiModel
+            oldItem: String,
+            newItem: String
         ): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: HomeUiModel,
-            newItem: HomeUiModel
+            oldItem: String,
+            newItem: String
         ): Boolean {
             return oldItem == newItem
         }

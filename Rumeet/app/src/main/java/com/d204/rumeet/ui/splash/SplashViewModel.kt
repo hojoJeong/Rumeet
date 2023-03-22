@@ -16,39 +16,28 @@ class SplashViewModel @Inject constructor(
     private val getUserAutoLoginUseCase: GetUserAutoLoginUseCase
 ) : BaseViewModel() {
 
-    // StateFlow는 상태값, 대신 초기값이 필요(로그인 유무 등..)
+    // StateFlow는 상태값, 대신 초기값이 필요(데이터에 대한 값들)
     private val _splashScreenGone: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val splashScreenGone: StateFlow<Boolean> get() = _splashScreenGone.asStateFlow()
 
-    // SharedFlow는 이벤트에 대한 결과, 초기값 필요없음()
-    private val _navigateToHome: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val navigateToHome: SharedFlow<Boolean> get() = _navigateToHome.asSharedFlow()
+    // SharedFlow는 이벤트에 대한 처리 (화면이동, 다이얼로그 표시)
+    private val _navigationEvent: MutableSharedFlow<SplashNavigationAction> = MutableSharedFlow()
+    val navigationEvent: SharedFlow<SplashNavigationAction> get() = _navigationEvent.asSharedFlow()
 
-    private val _navigateToOnBoarding: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val navigateToOnBoarding: SharedFlow<Boolean> get() = _navigateToOnBoarding.asSharedFlow()
-
-    private val _navigateToLogin: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val navigateToLogin: SharedFlow<Boolean> get() = _navigateToLogin.asSharedFlow()
-
-    var onBoardingState: Boolean = false
-
-    // 앱 버전 체크(토큰)
+    /**
+     * 첫 실행인지 state를 가져온다. true면 이미 방문했던 것
+     * 자동 로그인 체크를 확인하고 LoginActivity로 갈지, MainActivity로 갈지 정한다.
+     * RefreshToken이 살아있다면 갱신, 죽었으면 Login으로 간다.(BaseViewModel에 존재함)
+     * */
     fun checkAppState() {
         baseViewModelScope.launch {
-            // 첫 실행인지 state를 가져온다.
-            // 첫 실행이라면 onBoarding이 켜진다.
-            withContext(Dispatchers.Default) {
-                onBoardingState = !getUserFirstAccessCheckUseCase()
-                _navigateToOnBoarding.emit(onBoardingState)
-            }
-
-            // 자동 로그인이 체크됐는지 파악한다.
-            // 자동로그인이면 자동으로 리프레시를 가져와 갱신이 된다.
-            // 아니라면 LoginActivity로 이동한다.
-            if (!onBoardingState) {
-                launch {
-                    if (getUserAutoLoginUseCase()) _navigateToHome.emit(true)
-                    else _navigateToLogin.emit(true)
+            launch {
+                // true -> 방문했음
+                if (getUserFirstAccessCheckUseCase()) {
+                    if (getUserAutoLoginUseCase()) _navigationEvent.emit(SplashNavigationAction.StartMainActivity)
+                    else _navigationEvent.emit(SplashNavigationAction.StartLoginActivity)
+                } else {
+                    _navigationEvent.emit(SplashNavigationAction.NavigateOnBoarding)
                 }
             }
         }
