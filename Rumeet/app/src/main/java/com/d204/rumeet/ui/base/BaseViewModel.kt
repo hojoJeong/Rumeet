@@ -28,6 +28,10 @@ abstract class BaseViewModel : ViewModel() {
     private val _needLoginEvent: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val needLoginEvent: SharedFlow<Boolean> = _needLoginEvent
 
+    /**
+     * api 호출시 필요함, 실패하면 해당 로직으로 이동
+     * 만약 로그인 오류라면 로그인 액티비티로 이동
+     * */
     fun catchError(e: Throwable?) {
         viewModelScope.launch(errorHandler) {
             e?.let { exception ->

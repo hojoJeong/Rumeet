@@ -112,8 +112,8 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     // FirebaseCrashlytics Exception 보내기
     private fun sendException(throwable: Throwable) {
         val exception = when (throwable) {
-            is ServerNotFoundException -> Exception("url -> ${throwable.url}", throwable)
-            is InternalServerErrorException -> Exception("url -> ${throwable.url}", throwable)
+            is ServerNotFoundException -> Exception("msg -> ${throwable.message}", throwable)
+            is InternalServerErrorException -> Exception("msg -> ${throwable.message}", throwable)
             else -> Exception(throwable)
         }
         FirebaseCrashlytics.getInstance().recordException(exception)
@@ -142,13 +142,13 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        initStartView()
         initDataBinding()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initStartView()
         initAfterBinding()
     }
 

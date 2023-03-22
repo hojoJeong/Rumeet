@@ -5,7 +5,7 @@ import com.d204.rumeet.domain.repository.UserRepository
 import java.io.IOException
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(
+internal class UserRepositoryImpl @Inject constructor(
     private val userDataStorePreferences: UserDataStorePreferences
 ) : UserRepository {
 
@@ -21,18 +21,5 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getUserFirstRunCheck(): Boolean {
         return userDataStorePreferences.getFirstRun()
-    }
-
-    override suspend fun getUserAutoLoginCheck(): Boolean {
-        return userDataStorePreferences.getAutoLogin()
-    }
-
-    override suspend fun setUserAutoLoginCheck(state: Boolean): Boolean {
-        try {
-            userDataStorePreferences.setAutoLogin(state)
-        } catch (e: IOException) {
-            return false
-        }
-        return true
     }
 }

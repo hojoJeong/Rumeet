@@ -77,6 +77,14 @@
     </style>
 
     <!-- bold color -->
+    <style name="base_font_bold_12_neon_blue" parent="base_font_bold_12">
+        <item name="android:textColor">@color/neon_blue</item>
+    </style>
+
+    <style name="base_font_bold_14_black" parent="base_font_bold_14">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="base_font_bold_16_black" parent="base_font_bold_16">
         <item name="android:textColor">@color/black</item>
     </style>
@@ -85,12 +93,12 @@
         <item name="android:textColor">@color/dim_gray</item>
     </style>
 
-    <style name="base_font_bold_14_black" parent="base_font_bold_14">
-        <item name="android:textColor">@color/black</item>
-    </style>
-
     <style name="base_font_bold_16_white" parent="base_font_bold_16">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="base_font_bold_16_maire" parent="base_font_bold_16">
+        <item name="android:textColor">@color/maire</item>
     </style>
 
 
@@ -110,6 +118,11 @@
     <style name="base_font_medium_14_nobel" parent="base_font_medium_14">
         <item name="android:textColor">@color/nobel</item>
     </style>
+
+    <style name="base_font_medium_16_black" parent="base_font_medium_16">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 
     <!-- custom toggle btn -->
     <style name="toggleButtonCustom" parent="Widget.MaterialComponents.Button">
