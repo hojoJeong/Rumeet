@@ -14,7 +14,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +40,7 @@ public class FriendController {
     // 친구 조회 (전체 (닉네임순), 최근 같이 뛴 친구, 함께 많이 달린 친구)
     // 달리기 한 뒤에 정렬 추가하기
     @GetMapping("/{userId}")
-    public ResponseEntity<?> selectByUserId(@PathVariable int userId) {
+    public ResponseEntity<?> searchByUserId(@PathVariable int userId) {
         RespData<List> data = new RespData<>();
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
@@ -123,6 +127,13 @@ public class FriendController {
                 .build();
         mongoTemplate.insert(friend);
 
+        FriendDao friend2 = FriendDao.builder()
+                .userId(fromId)
+                .friendId(toId)
+                .date(System.currentTimeMillis())
+                .build();
+        mongoTemplate.insert(friend2);
+
         RespData<List> data = new RespData<>();
         data.setMsg("친구 요청 수락");
         return data.builder();
@@ -144,7 +155,32 @@ public class FriendController {
     }
 
 
-    // 닉네임으로 유저 검색
+    // 친구목록에서 닉네임 검색
+    @GetMapping("/search")
+    public ResponseEntity<?> searchFriend(@RequestParam("userId") int userId, @RequestParam("nickname") String nickname) {
+        List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
 
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        List<FriendDao> friends = mongoTemplate.find(query, FriendDao.class, "friend");
+
+        Set<Integer> friendId = new HashSet<>();
+        for (FriendDao friend : friends) {
+            friendId.add(friend.getFriendId());
+        }
+        System.out.println(friendId);
+
+        List<SimpleUserDto> filteredFriends = new ArrayList<>();
+        for (SimpleUserDto user : users) {
+            if (friendId.contains(user.getId())) {
+                filteredFriends.add(user);
+            }
+        }
+        System.out.println(filteredFriends);
+
+        RespData<List> data = new RespData<>();
+        data.setData(filteredFriends);
+        return data.builder();
+    }
 
 }

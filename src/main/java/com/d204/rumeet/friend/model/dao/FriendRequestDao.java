@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Document(collection = "friend_request")
+@Document(collection = "friendRequest")
 @ToString
 public class FriendRequestDao {
 
