@@ -1,0 +1,155 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Rumeet" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+
+    <!-- base type -->
+    <style name="base_font_bold">
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="base_font_medium">
+        <item name="android:fontFamily">@font/notosanskr_medium</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- bold size -->
+    <style name="base_font_bold_12" parent="base_font_bold">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="base_font_bold_14" parent="base_font_bold">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="base_font_bold_16" parent="base_font_bold">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="base_font_bold_20" parent="base_font_bold">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="base_font_bold_26" parent="base_font_bold">
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="base_font_bold_32" parent="base_font_bold">
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <!-- medium size -->
+    <style name="base_font_medium_12" parent="base_font_medium">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="base_font_medium_14" parent="base_font_medium">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="base_font_medium_15" parent="base_font_medium">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="base_font_medium_16" parent="base_font_medium">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="base_font_medium_16_white" parent="base_font_medium_16">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="base_font_medium_18" parent="base_font_medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- bold color -->
+    <style name="base_font_bold_12_neon_blue" parent="base_font_bold_12">
+        <item name="android:textColor">@color/neon_blue</item>
+    </style>
+
+    <style name="base_font_bold_14_black" parent="base_font_bold_14">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="base_font_bold_16_black" parent="base_font_bold_16">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="base_font_bold_16_dim_gray" parent="base_font_bold_16">
+        <item name="android:textColor">@color/dim_gray</item>
+    </style>
+
+    <style name="base_font_bold_16_white" parent="base_font_bold_16">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="base_font_bold_16_maire" parent="base_font_bold_16">
+        <item name="android:textColor">@color/maire</item>
+    </style>
+
+
+    <!-- medium color -->
+    <style name="base_font_medium_14_dim_gray" parent="base_font_medium_14">
+        <item name="android:textColor">@color/dim_gray</item>
+    </style>
+
+    <style name="base_font_medium_12_dim_gray" parent="base_font_medium_12">
+        <item name="android:textColor">@color/dim_gray</item>
+    </style>
+
+    <style name="base_font_medium_14_black" parent="base_font_medium_14">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="base_font_medium_14_nobel" parent="base_font_medium_14">
+        <item name="android:textColor">@color/nobel</item>
+    </style>
+
+    <style name="base_font_medium_16_black" parent="base_font_medium_16">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
+    <!-- custom toggle btn -->
+    <style name="toggleButtonCustom" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyEasy" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_easy</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyNormal" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_normal</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyHard" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_hard</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+</resources>

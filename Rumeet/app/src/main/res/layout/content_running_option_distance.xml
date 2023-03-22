@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tv_running_option_competition_distance_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/title_option_distance"
+        style="@style/base_font_bold_16_dim_gray"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cdv_running_option_competition_distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_vertical_title_to_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_running_option_competition_distance_title"
+        android:elevation="10dp">
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:checkedButton="@+id/btn_competition_1km"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_competition_1km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/content_distance"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/navy_blue"
+                style="@style/toggleButtonCustom"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_competition_2km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/content_distance"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/navy_blue"
+                style="@style/toggleButtonCustom"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_competition_3km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/content_distance"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/navy_blue"
+                style="@style/toggleButtonCustom"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_competition_5km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/content_distance"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/navy_blue"
+                style="@style/toggleButtonCustom"/>
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
