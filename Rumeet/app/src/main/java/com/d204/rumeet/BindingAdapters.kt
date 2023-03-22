@@ -42,7 +42,7 @@ object BindingAdapters {
             "km" -> {
                 SpannableStringBuilder(value).apply {
                     setSpan(
-                        RelativeSizeSpan(0.7f),
+                        RelativeSizeSpan(0.6f),
                         value.length - 2,
                         value.length,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -52,7 +52,7 @@ object BindingAdapters {
             "al" -> {
                 SpannableStringBuilder(value).apply {
                     setSpan(
-                        RelativeSizeSpan(0.7f),
+                        RelativeSizeSpan(0.6f),
                         value.length - 4,
                         value.length,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE

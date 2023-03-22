@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="@dimen/base_horizontal_margin"
-        tools:context=".ui.running.RunningOptionRelayFragment">
+        tools:context=".ui.running.fragment.RunningOptionRelayFragment">
 
         <include
             android:id="@+id/content_running_option_relay_distance"

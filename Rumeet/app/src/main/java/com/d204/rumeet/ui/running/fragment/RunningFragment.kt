@@ -1,4 +1,4 @@
-package com.d204.rumeet.ui.running
+package com.d204.rumeet.ui.running.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,10 +14,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [RunningOptionDifficultyFragment.newInstance] factory method to
+ * Use the [RunningFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RunningOptionDifficultyFragment : Fragment() {
+class RunningFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -35,7 +35,7 @@ class RunningOptionDifficultyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_running_option_team_play, container, false)
+        return inflater.inflate(R.layout.fragment_running, container, false)
     }
 
     companion object {
@@ -45,12 +45,12 @@ class RunningOptionDifficultyFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment RunningOptionDifficultyFragment.
+         * @return A new instance of fragment RunningFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            RunningOptionDifficultyFragment().apply {
+            RunningFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

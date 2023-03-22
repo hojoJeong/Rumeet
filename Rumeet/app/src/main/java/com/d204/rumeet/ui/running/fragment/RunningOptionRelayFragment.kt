@@ -1,4 +1,4 @@
-package com.d204.rumeet.ui.running
+package com.d204.rumeet.ui.running.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
