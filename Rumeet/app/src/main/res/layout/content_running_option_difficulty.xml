@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:id="@+id/tv_running_option_competition_with_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
+        android:text="@string/title_option_with"
+        style="@style/base_font_bold_16_dim_gray"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cdv_running_option_competition_with"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_running_option_competition_with_title"
+        android:layout_marginTop="@dimen/base_vertical_title_to_content">
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            android:layout_margin="16dp"
+            app:checkedButton="@+id/btn_running_option_difficulty_easy">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_running_option_difficulty_easy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/content_option_difficulty_easy"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/navy_blue"
+                style="@style/toggleButtonCustomDifficultyEasy"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_running_option_difficulty_normal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/content_option_difficulty_normal"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/navy_blue"
+                style="@style/toggleButtonCustomDifficultyNormal"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_running_option_difficulty_hard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/content_option_difficulty_hard"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/navy_blue"
+                style="@style/toggleButtonCustomDifficultyHard"/>
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

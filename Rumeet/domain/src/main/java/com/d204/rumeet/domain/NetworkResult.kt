@@ -1,12 +1,12 @@
 package com.d204.rumeet.domain
 
 sealed class NetworkResult<out R> {
-    data class Success<out T>(val data : T) : NetworkResult<T>()
+    data class Success<out T>(val data: T) : NetworkResult<T>()
     data class Error(val exception: Exception) : NetworkResult<Nothing>()
     object Loading : NetworkResult<Nothing>()
 
     override fun toString(): String {
-        return when(this) {
+        return when (this) {
             is Success<*> -> "Success[data=$data]"
             is Error -> "Error[exception=$exception]"
             Loading -> "Loading"
@@ -17,7 +17,12 @@ sealed class NetworkResult<out R> {
 val NetworkResult<*>.succeeded
     get() = this is NetworkResult.Success
 
-fun <T> NetworkResult<T>.successOr(fallback : T) : T{
+fun <DATA, DOMAIN> NetworkResult<*>.toDomainResult(mapper: (DATA) -> DOMAIN): NetworkResult<DOMAIN> {
+    val response = (this as? NetworkResult.Success)?.data as DATA
+    return NetworkResult.Success(mapper(response))
+}
+
+fun <T> NetworkResult<T>.successOr(fallback: T): T {
     return (this as? NetworkResult.Success<T>)?.data ?: fallback
 }
 
@@ -145,7 +150,10 @@ inline fun <R, T : R> NetworkResult<T>.getOrElse(onError: (exception: Throwable)
     }
 }
 
-suspend fun <T, U> Pair<NetworkResult<T>, NetworkResult<U>>.combine(onSuccess: suspend (Pair<T, U>) -> Unit, onError: suspend (exception: Exception) -> Unit) {
+suspend fun <T, U> Pair<NetworkResult<T>, NetworkResult<U>>.combine(
+    onSuccess: suspend (Pair<T, U>) -> Unit,
+    onError: suspend (exception: Exception) -> Unit
+) {
     first.onSuccess { t ->
         second.onSuccess { u ->
             onSuccess(Pair(t, u))
@@ -153,7 +161,10 @@ suspend fun <T, U> Pair<NetworkResult<T>, NetworkResult<U>>.combine(onSuccess: s
     }.onError { onError(it) }
 }
 
-suspend fun <T, U, V> Triple<NetworkResult<T>, NetworkResult<U>, NetworkResult<V>>.combine(onSuccess: suspend (Triple<T, U, V>) -> Unit, onError: suspend (exception: Exception) -> Unit) {
+suspend fun <T, U, V> Triple<NetworkResult<T>, NetworkResult<U>, NetworkResult<V>>.combine(
+    onSuccess: suspend (Triple<T, U, V>) -> Unit,
+    onError: suspend (exception: Exception) -> Unit
+) {
     first.onSuccess { t ->
         second.onSuccess { u ->
             third.onSuccess { v ->
