@@ -27,13 +27,13 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
 
         registry.setApplicationDestinationPrefixes("/pub"); //클라이언트가 메시지를 보내기 위한 prefix를 설정
 
-        registry.enableStompBrokerRelay("/queue", "/topic", "/exchange", "/amq/queue")
-                .setRelayHost("13.125.45.74")
-                .setRelayPort(61613)
-                .setSystemLogin("guest")
-                .setSystemPasscode("guest")
-                .setClientLogin("guest")
-                .setClientPasscode("guest");;
+//        registry.enableStompBrokerRelay("/queue", "/topic", "/exchange", "/amq/queue")
+//                .setRelayHost("j8d204.p.ssafy.io")
+//                .setRelayPort(5672)
+//                .setSystemLogin("guest")
+//                .setSystemPasscode("guest")
+//                .setClientLogin("guest")
+//                .setClientPasscode("guest");
         //메시지를 중계할 브로커를 설정
         //"/queue", "/topic", "/exchange", "/amq/queue" 등의 목적지로 메시지를 중계할 수 있음
 
