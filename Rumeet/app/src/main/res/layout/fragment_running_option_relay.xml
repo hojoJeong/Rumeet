@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+
+    </data>
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/base_horizontal_margin"
+        tools:context=".ui.running.RunningOptionRelayFragment">
+
+        <include
+            android:id="@+id/content_running_option_relay_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/content_running_option_distance"/>
+
+        <include
+            android:id="@+id/content_running_option_relay_with"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
+            layout="@layout/content_running_option_with"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
