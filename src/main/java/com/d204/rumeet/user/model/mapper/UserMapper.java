@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     UserDto doLogin(LoginDto loginInfo);
+
     UserDto getUserById(int id);
 
     int modifyUser(ModifyUserDto user);
@@ -21,4 +22,12 @@ public interface UserMapper {
     int checkDuplication(CheckDto checkDto);
 
     List<SimpleUserDto> searchUsersByNickname(String nickname);
+
+    int modifyPwd(ModifyPwdDto modifyPwdDto);
+
+    UserDto getUserOauth(String tokenId);
+
+    void joinKakaoUser(JoinKakaoUserDto user);
+
+    int modifyUserProfile(ProfileUserDto user);
 }

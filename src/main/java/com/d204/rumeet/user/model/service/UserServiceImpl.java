@@ -1,16 +1,19 @@
 package com.d204.rumeet.user.model.service;
 
 import com.d204.rumeet.exception.DuplicateException;
-import com.d204.rumeet.exception.NoObjectDataException;
 import com.d204.rumeet.exception.NoUserDataException;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.tools.OSUpload;
+import com.d204.rumeet.tools.OkhttpUtils;
 import com.d204.rumeet.tools.SHA256;
 import com.d204.rumeet.user.model.dto.*;
 import com.d204.rumeet.user.model.mapper.UserMapper;
+import com.google.gson.Gson;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import okhttp3.*;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -32,7 +35,7 @@ public class UserServiceImpl implements UserService{
     private final OSUpload osUpload;
     private final JavaMailSender emailSender;
     private final SHA256 sha256;
-
+    private final OkhttpUtils okhttpUtils;
     final String bucketName = "rumeet";
 
     @Override
@@ -76,10 +79,9 @@ public class UserServiceImpl implements UserService{
             throw new NoUserDataException();
         }
     }
+    public String uploadFile(MultipartFile profile, String baseUrl) {
+        String url = baseUrl;
 
-    @Override
-    public void joinUser(JoinUserDto user, MultipartFile profile) {
-        String url = "https://kr.object.ncloudstorage.com/rumeet/base_profile.png";
         if(profile != null && !profile.isEmpty()) {
             String [] formats = {".jpeg", ".png", ".bmp", ".jpg", ".PNG", ".JPEG"};
             // 원래 파일 이름 추출
@@ -92,8 +94,6 @@ public class UserServiceImpl implements UserService{
             for(int i = 0; i < formats.length; i++) {
                 if (extension.equals(formats[i])){
                     // user email과 확장자 결합
-                    String savedName = user.getEmail() + extension;
-
                     File uploadFile = null;
                     try {
                         uploadFile = osUpload.convert(profile)        // 파일 생성
@@ -108,10 +108,32 @@ public class UserServiceImpl implements UserService{
                     break;
                 }
             }
-
         }
+        return url;
+    }
+    @Override
+    public void joinUser(JoinUserDto user, MultipartFile profile) {
+        String url = this.uploadFile(profile,"https://kr.object.ncloudstorage.com/rumeet/base_profile.png");
         user.setProfile(url);
+        user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
+    }
+    @Override
+    public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {
+        String url = this.uploadFile(profile, user.getProfile());
+        user.setProfile(url);
+        String email = createKey();
+        String pwd = createKey();
+        try {
+            email = sha256.encrypt(email);
+            pwd = sha256.encrypt(pwd);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        user.setEmail(email);
+        user.setPassword(pwd);
+        user.setDate(System.currentTimeMillis());
+        userMapper.joinKakaoUser(user);
     }
 
     @Override
@@ -147,6 +169,138 @@ public class UserServiceImpl implements UserService{
         return users;
     }
 
+    @Override
+    public void modifyPwd(ModifyPwdDto dto) {
+        int count = userMapper.modifyPwd(dto);
+        if(count == 0) {
+            throw new NoUserDataException();
+        }
+    }
+
+    @Override
+    public UserDto getUserOauth(String tokenId) {
+        return userMapper.getUserOauth(tokenId);
+    }
+
+    @Override
+    public void modifyUserProfile(ProfileUserDto user, MultipartFile profile) {
+        String url = this.uploadFile(profile, user.getProfile());
+        user.setProfile(url);
+        int cnt = userMapper.modifyUserProfile(user);
+        if(cnt == 0) {
+            throw new NoUserDataException();
+        }
+    }
+
+    @Override
+    public KakaoUserDto kakaoOauth(String code) {
+        String REST_API_KEY = "b653f0b908ff838fb24e6e7cce632a38";
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("grant_type", "authorization_code")
+                .add("client_id", REST_API_KEY)
+                .add("redirect_uri", "http://localhost:8080/rumeet/users/oauth/kakao")
+                .add("code", code)
+                .build();
+        Request request = new Request.Builder()
+                .url("https://kauth.kakao.com/oauth/token")
+                .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+                .post(requestBody)
+                .build();
+        Call call = client.newCall(request);
+        Response response = null;
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String responseBody = "";
+        if (response.isSuccessful()) {
+            try {
+                responseBody = response.body().string();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Gson gson = new Gson();
+        AccessTokenResponse accessTokenResponse = gson.fromJson(responseBody,AccessTokenResponse.class);
+        String access_token = accessTokenResponse.access_token;
+        System.out.println(accessTokenResponse.id_token);
+        request = new Request.Builder()
+                .url("https://kapi.kakao.com/v2/user/me")
+                .header("Authorization", "Bearer " + access_token)
+                .get()
+                .build();
+
+        call = client.newCall(request);
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        responseBody = "";
+        if (response.isSuccessful()) {
+            try {
+                responseBody = response.body().string();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        KakaoUserDto kakaoUser = new Gson().fromJson(responseBody, KakaoUserDto.class);
+        return kakaoUser;
+    }
+//
+    @Override
+    public NaverUserDto naverOauth(String code) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://nid.naver.com/oauth2.0/token?client_id=swueBQKH3TyR0BispyA3&client_secret=c_360FcNCo&grant_type=authorization_code&state=rumeet&code="+code)
+                .get()
+                .build();
+        Call call = client.newCall(request);
+        Response response = null;
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String responseBody = "";
+        if (response.isSuccessful()) {
+            try {
+                responseBody = response.body().string();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Gson gson = new Gson();
+        AccessTokenResponse accessTokenResponse = gson.fromJson(responseBody,AccessTokenResponse.class);
+        String access_token = accessTokenResponse.access_token;
+        System.out.println(accessTokenResponse.id_token);
+        request = new Request.Builder()
+                .url("https://openapi.naver.com/v1/nid/me")
+                .header("Authorization", "Bearer " + access_token)
+                .get()
+                .build();
+
+        call = client.newCall(request);
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        responseBody = "";
+        if (response.isSuccessful()) {
+            try {
+                responseBody = response.body().string();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        NaverUserDto naverUserDto = new Gson().fromJson(responseBody, NaverUserDto.class);
+        return naverUserDto;
+    }
 
     private MimeMessage createMessage(String to, String ePw)throws Exception{
         MimeMessage  message = emailSender.createMimeMessage();
@@ -174,7 +328,7 @@ public class UserServiceImpl implements UserService{
         return message;
     }
 
-    public static String createKey() {
+    public String createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
@@ -197,6 +351,28 @@ public class UserServiceImpl implements UserService{
             }
         }
         return key.toString();
+    }
+
+    @Data
+    public class AccessTokenResponse {
+        private String access_token;
+        private String token_type;
+        private String refresh_token;
+        private String id_token;
+        private int expires_in;
+        private String scope;
+        private int refresh_token_expires_in;
+
+        // getters and setters
+    }
+
+    @Data
+    public class KakaoUser {
+        private long expiresInMillis;
+        private String id;
+        private int expires_in;
+        private int app_id;
+        private int appId;
     }
 
 }

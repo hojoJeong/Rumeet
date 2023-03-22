@@ -22,6 +22,19 @@ public interface UserService {
 
     String sendSimpleMessage(String email);
 
+    void modifyPwd(ModifyPwdDto dto);
+
+    KakaoUserDto kakaoOauth(String code);
+
+    NaverUserDto naverOauth(String code);
+
+
+    UserDto getUserOauth(String tokenId);
+
+    void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile);
+
+    void modifyUserProfile(ProfileUserDto user, MultipartFile profile);
+
     List<SimpleUserDto> searchUsersByNickname(String nickname);
 
 }

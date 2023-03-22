@@ -24,8 +24,6 @@ public class UserRestController {
     private final UserService userService;
     private final JwtTool jwtTool;
 
-    //TODO LIST : 회원가입
-
     // 유저 정보 불러오기
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id){
@@ -76,6 +74,14 @@ public class UserRestController {
         return data.builder();
     }
 
+    @PostMapping("/modify/profile")
+    public ResponseEntity<?> modifyUserProfile(@RequestPart(value = "user") ProfileUserDto user,
+                                      @RequestPart(value = "profile_img") MultipartFile profile) {
+        RespData<Void> data = new RespData<>();
+        userService.modifyUserProfile(user, profile);
+        return data.builder();
+    }
+
     @PostMapping("/join")
     public ResponseEntity<?> joinUser(@RequestPart(value = "user") JoinUserDto user,
                                       @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {
@@ -92,7 +98,7 @@ public class UserRestController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<?> emailConfirm(@RequestParam String email) throws Exception {
+    public ResponseEntity<?> emailConfirm(@RequestParam String email) {
         String confirm = userService.sendSimpleMessage(email);
         RespData<String> data = new RespData<>();
         data.setData(confirm);
@@ -105,6 +111,52 @@ public class UserRestController {
         List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
         RespData<List> data = new RespData<>();
         data.setData(users);
+        return data.builder();
+    }
+
+    @PostMapping("/modify/pwd")
+    public ResponseEntity<?> modifyPwd(@RequestBody ModifyPwdDto dto) {
+        RespData<Void> data = new RespData<>();
+        userService.modifyPwd(dto);
+        return data.builder();
+    }
+
+    @GetMapping("/oauth/kakao")
+    public ResponseEntity<?> kakaoOauth(@RequestParam String code) {
+        KakaoUserDto kakaoUser = userService.kakaoOauth(code);
+        UserDto user = userService.getUserOauth(kakaoUser.getId());
+        if(user == null) {
+            RespData<KakaoUserJoinDto> data = new RespData<>();
+            data.setFlag("fail");
+            data.setCode(1);
+            data.setData(new KakaoUserJoinDto(kakaoUser.getId(), kakaoUser.getProperties().get("profile_image")));
+            return data.builder();
+        }
+        RespData<LoginUserDto> data = new RespData<>();
+        data.setData(userService.generateUser(user.getId()));
+        return data.builder();
+    }
+    @GetMapping("/oauth/naver")
+    public ResponseEntity<?> naverOauth(@RequestParam String code) {
+        NaverUserDto naverUserDto = userService.naverOauth(code);
+        UserDto user = userService.getUserOauth(naverUserDto.getResponse().getId());
+        if(user == null) {
+            RespData<KakaoUserJoinDto> data = new RespData<>();
+            data.setFlag("fail");
+            data.setCode(1);
+            data.setData(new KakaoUserJoinDto(naverUserDto.getResponse().getId(), naverUserDto.getResponse().getProfile_image()));
+            return data.builder();
+        }
+        RespData<LoginUserDto> data = new RespData<>();
+        data.setData(userService.generateUser(user.getId()));
+        return data.builder();
+    }
+
+    @PostMapping("/oauth/join")
+    public ResponseEntity<?> kakaoOauth(@RequestPart(value = "user") JoinKakaoUserDto user,
+                                        @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {
+        RespData<Void> data = new RespData<>();
+        userService.joinKakaoUser(user, profile);
         return data.builder();
     }
 
