@@ -113,10 +113,19 @@ public class FriendController {
     public ResponseEntity<?> acceptFriendRequest(@RequestBody FriendRequestDto friendRequestDto) {
         int fromId = friendRequestDto.getFromUserId();
         int toId = friendRequestDto.getToUserId();
+        RespData<List> data = new RespData<>();
 
-        // 요청 삭제
+        // 요청이 없을떄
         Query query = new Query(Criteria.where("fromUserId").is(fromId)
                 .and("toUserId").is(toId));
+        FriendRequestDao existingRequest = mongoTemplate.findOne(query, FriendRequestDao.class);
+
+        if (existingRequest == null) {
+            data.setMsg("친구요청이 없습니다.");
+            data.setFlag("fail");
+            return data.builder();}
+
+        // 요청 삭제
         mongoTemplate.remove(query, FriendRequestDao.class);
 
         // 친구 추가
@@ -134,7 +143,6 @@ public class FriendController {
                 .build();
         mongoTemplate.insert(friend2);
 
-        RespData<List> data = new RespData<>();
         data.setMsg("친구 요청 수락");
         return data.builder();
     }
