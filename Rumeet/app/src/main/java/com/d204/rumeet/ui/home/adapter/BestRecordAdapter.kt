@@ -1,4 +1,4 @@
-package com.d204.rumeet.ui.home.adapter
+package com.d204.rumeet.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,20 +8,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemContentBestrecordBinding
-import com.d204.rumeet.ui.home.model.HomeUiModel
+import com.d204.rumeet.ui.home.model.BestRecordUiModel
 
-class ItemBestRecordAdapter :
-    ListAdapter<HomeUiModel, ItemBestRecordAdapter.ItemBestRecordHolder>(HomeDiffUtil) {
+class BestRecordAdapter :
+    ListAdapter<BestRecordUiModel, BestRecordAdapter.BestRecordHolder>(BestRecordDiffUtil) {
 
-    class ItemBestRecordHolder(val binding: ItemContentBestrecordBinding) :
+    class BestRecordHolder(val binding: ItemContentBestrecordBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: HomeUiModel) {
+        fun bind(item: BestRecordUiModel) {
 
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemBestRecordHolder =
-        ItemBestRecordHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BestRecordHolder =
+        BestRecordHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
                 R.layout.item_content_bestrecord,
@@ -31,21 +31,21 @@ class ItemBestRecordAdapter :
         )
 
 
-    override fun onBindViewHolder(holder: ItemBestRecordHolder, position: Int) {
+    override fun onBindViewHolder(holder: BestRecordHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    object HomeDiffUtil : DiffUtil.ItemCallback<HomeUiModel>() {
+    object BestRecordDiffUtil : DiffUtil.ItemCallback<BestRecordUiModel>() {
         override fun areItemsTheSame(
-            oldItem: HomeUiModel,
-            newItem: HomeUiModel
+            oldItem: BestRecordUiModel,
+            newItem: BestRecordUiModel
         ): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.value == newItem.value
         }
 
         override fun areContentsTheSame(
-            oldItem: HomeUiModel,
-            newItem: HomeUiModel
+            oldItem: BestRecordUiModel,
+            newItem: BestRecordUiModel
         ): Boolean {
             return oldItem == newItem
         }

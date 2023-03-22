@@ -68,6 +68,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="base_font_medium_16_white" parent="base_font_medium_16">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="base_font_medium_18" parent="base_font_medium">
         <item name="android:textSize">18sp</item>
     </style>
@@ -119,4 +123,33 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+
+    <!-- custom toggle btn -->
+    <style name="toggleButtonCustom" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyEasy" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_easy</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyNormal" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_normal</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="toggleButtonCustomDifficultyHard" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/tv_toggle</item>
+        <item name="backgroundTint">@color/bg_toggle_difficulty_hard</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
 </resources>

@@ -24,7 +24,26 @@
     <string name="title_recommend_random_friend">비슷한 페이스! 같이 뛰어요!</string>
     <string name="content_see_friend_info_detail">친구 보기</string>
     <string name="title_refresh">다시 찾기  </string>
+    <string name="content_no_best_record">입력된 체력 데이터가 없습니다.</string>
     <string name="content_no_badge">아직 획득한 뱃지가 없어요 :(\n싱글 모드 달리기를 하면\nWelcome뱃지를 받을 수 있어요!</string>
     <string name="content_no_pace">아직 페이스가 입력되지 않았아요\n열심히 달려서 비슷한\n체력의 친구를 추천 받아보세요!</string>
 
+    <!-- running -->
+    <string name="content_option_competition">경쟁 모드</string>
+    <string name="content_option_team_play">협동 모드</string>
+    <string name="content_option_relay">이어달리기</string>
+    <string name="title_option_distance">얼마나 달려볼까요?</string>
+    <string name="title_option_with">누구와 달려볼까요?</string>
+    <string name="title_option_difficulty">난이도를 선택해주세요</string>
+    <string name="content_option_with_friend">친구</string>
+    <string name="content_option_with_random">랜덤</string>
+    <string name="content_option_difficulty_easy">EASY</string>
+    <string name="content_option_difficulty_normal">NORMAL</string>
+    <string name="content_option_difficulty_hard">hard</string>
+    <string name="content_message_selected_random">랜덤 매칭 실패 시 고스트 모드로 자동 전환됩니다.</string>
+    <string name="content_message_selected_friend">운동 시작 후 함께할 친구를 선택할 수 있습니다.</string>
+    <string name="content_btn_start_running">운동 시작</string>
+    <string name="title_running_total_time">운동 시간</string>
+    <string name="title_running_height">고도</string>
+    <string name="title_running_heartbeat">평균 심박수</string>
 </resources>
