@@ -1,21 +1,22 @@
 package com.d204.rumeet.ui.join.id
 
-import android.util.Log
 import android.view.WindowManager
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentJoinIdBinding
 import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.ui.components.SingUpEditText
+import com.d204.rumeet.ui.join.JoinViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
-class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinIdViewModel>() {
+class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_join_id
 
-    override val viewModel: JoinIdViewModel by viewModels()
+    override val viewModel: JoinViewModel by activityViewModels()
 
     override fun initStartView() {
         with(binding){
@@ -40,7 +41,7 @@ class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinIdViewModel>() {
                         if(binding.editId.idValidate) viewModel.idValidation(binding.editId.keyword)
                     }
                     is JoinIdAction.NavigateNicknameFragment -> {
-                        navigate(JoinIdFragmentDirections.actionJoinIdFragmentToJoinNickNameFragment(it.id))
+                        navigate(JoinIdFragmentDirections.actionJoinIdFragmentToJoinNickNameFragment())
                     }
                 }
             }
@@ -49,5 +50,6 @@ class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinIdViewModel>() {
 
     override fun initAfterBinding() {
         binding.btnNext.setContent("계속하기")
+        binding.editId.setEditTextType(SingUpEditText.SingleLineEditTextType.ID, getString(R.string.title_id_input))
     }
 }

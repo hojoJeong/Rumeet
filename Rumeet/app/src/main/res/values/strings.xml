@@ -17,6 +17,7 @@
     <string name="title_id_input">사용하실 아이디를 입력해주세요 :)</string>
     <string name="content_duplicated_id">이미 사용중인 아이디 입니다</string>
     <string name="content_id_email_error">이메일 형식에 맞춰주세요</string>
+    <string name="content_nickname_hint">사용하실 닉네임을 입력해주세요 :)</string>
     <string name="content_duplicated_nickname">이미 사용중인 닉네임 입니다</string>
     <string name="content_nickname_size_error">닉네임은 최대 12글자까지 가능합니다</string>
     <string name="content_agree_app_terms_of_uses">계속하기를 누른다면 이용약관 동의로 간주합니다</string>

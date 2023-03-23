@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentSingleLineEditTextBinding
+import com.d204.rumeet.util.getColorWithNoTheme
 import com.d204.rumeet.util.setTextColorWithNoTheme
 
 class SingUpEditText @JvmOverloads constructor(
@@ -26,9 +27,9 @@ class SingUpEditText @JvmOverloads constructor(
     val binding: ContentSingleLineEditTextBinding get() = _binding!!
 
     val keyword: String get() = binding.editInput.text.toString()
-    val idValidate : Boolean get() = checkIdValidation()
-    val passwordValidate : Boolean get() = checkPasswordValidate()
-    val nicknameValidate : Boolean get() = checkNickNameValidate()
+    val idValidate: Boolean get() = checkIdValidation()
+    val passwordValidate: Boolean get() = checkPasswordValidate()
+    val nicknameValidate: Boolean get() = checkNickNameValidate()
 
     enum class SingleLineEditTextType {
         ID, PASSWORD, NORMAL
@@ -61,55 +62,62 @@ class SingUpEditText @JvmOverloads constructor(
         setHint(hintText)
     }
 
-    private fun checkIdValidation() : Boolean{
+    private fun checkIdValidation(): Boolean {
         val pattern = android.util.Patterns.EMAIL_ADDRESS
         return if (pattern.matcher(keyword).matches()) {
             true
         } else {
-            setStateMessage(context.getString(R.string.content_id_email_error),false)
+            setStateMessage(context.getString(R.string.content_id_email_error), false)
             false
         }
     }
 
-    private fun checkNickNameValidate() : Boolean{
-        return if(binding.editInput.text.length < 13) {
-            setStateMessage(context.getString(R.string.content_nickname_size_error),false)
+    private fun checkNickNameValidate(): Boolean {
+        return if (binding.editInput.text.length > 12) {
+            setStateMessage(context.getString(R.string.content_nickname_size_error), false)
             false
-        }else{
+        } else {
             true
         }
     }
 
-    private fun checkPasswordValidate() : Boolean{
-        val regexComplexPassword = Regex("^.*(?=^.{8,15}\$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#\$%^&+=]).*\$")
-        return if(keyword.matches(regexComplexPassword)){
+    private fun checkPasswordValidate(): Boolean {
+        val regexComplexPassword =
+            Regex("^.*(?=^.{8,15}\$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#\$%^&+=]).*\$")
+        return if (keyword.matches(regexComplexPassword)) {
             setStateMessage(context.getString(R.string.content_password_validate_pass), true)
             true
-        }else{
+        } else {
             setStateMessage(context.getString(R.string.content_password_validate_error), false)
             false
         }
     }
 
-    fun checkPasswordMatch(password : String) : Boolean{
-        return if(passwordValidate && keyword == password){
+    fun checkPasswordMatch(password: String): Boolean {
+        return if (passwordValidate && keyword == password) {
             setStateMessage(context.getString(R.string.content_password_check), true)
             true
-        } else{
-            setStateMessage(context.getString(R.string.content_password_check_error),false)
+        } else {
+            setStateMessage(context.getString(R.string.content_password_check_error), false)
             false
         }
     }
 
     fun setStateMessage(message: String, state: Boolean) {
         if (state) {
-            binding.tvEditState.setTextColorWithNoTheme(R.color.kelly_green)
-            binding.tvEditState.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_validate_pass, 0,0,0)
-            binding.tvEditState.text = message
+            with(binding.tvEditState) {
+                setTextColorWithNoTheme(R.color.kelly_green)
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_validate_pass, 0, 0, 0)
+                text = message
+            }
+            binding.divEdit.setBackgroundColor(context.getColorWithNoTheme(R.color.kelly_green))
         } else {
-            binding.tvEditState.setTextColorWithNoTheme(R.color.red)
-            binding.tvEditState.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_validate_error, 0,0,0)
-            binding.tvEditState.text = message
+            with(binding.tvEditState) {
+                setTextColorWithNoTheme(R.color.red)
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_validate_error, 0, 0, 0)
+                text = message
+            }
+            binding.divEdit.setBackgroundColor(context.getColorWithNoTheme(R.color.red))
         }
     }
 

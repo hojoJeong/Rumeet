@@ -48,8 +48,8 @@
 
         <argument
             android:name="profileImg"
-            app:argType="string"
-            app:nullable="true" />
+            android:defaultValue=""
+            app:argType="string" />
 
     </fragment>
 

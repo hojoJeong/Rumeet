@@ -22,3 +22,5 @@ fun Button.setTextColorWithNoTheme(colorRes: Int) {
 fun TextView.setTextColorWithNoTheme(colorRes : Int){
     setTextColor(ResourcesCompat.getColor(resources, colorRes, null))
 }
+
+fun Context.getColorWithNoTheme(colorRes : Int) = ResourcesCompat.getColor(resources, colorRes, null)
