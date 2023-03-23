@@ -51,6 +51,7 @@
             android:background="@drawable/sc_checked_auto_login"
             android:button="@null"
             android:minWidth="0dp"
+            android:layout_marginTop="2dp"
             android:minHeight="0dp"
             app:layout_constraintBottom_toBottomOf="@id/tv_login_auto_title"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="17dp"
+            android:minHeight="0dp"
             android:text="@string/content_auto_login"
             app:layout_constraintStart_toEndOf="@id/btn_login_auto"
             app:layout_constraintTop_toBottomOf="@+id/edit_login_password" />
@@ -107,6 +109,7 @@
                 android:layout_marginTop="11dp"
                 android:background="@drawable/bg_rect_transparent_golden_yellow_round8_stroke0"
                 android:paddingVertical="14dp"
+                app:onSingleClick="@{() -> vm.kakaoLogin()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_login">

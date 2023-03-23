@@ -1,13 +1,17 @@
 package com.d204.rumeet.data.repository
 
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.api.handleApi
+import com.d204.rumeet.data.remote.dto.KakaoLoginErrorException
 import com.d204.rumeet.data.remote.dto.request.auth.EmailLoginRequest
 import com.d204.rumeet.data.remote.dto.response.auth.JWTResponse
+import com.d204.rumeet.data.remote.dto.response.auth.KakaoOAuthResponse
 import com.d204.rumeet.data.remote.mapper.toDomain
 import com.d204.rumeet.domain.*
 import com.d204.rumeet.domain.model.auth.JWTModel
+import com.d204.rumeet.domain.model.auth.KakaoOAuthModel
 import com.d204.rumeet.domain.repository.AuthRepository
 import java.io.IOException
 import javax.inject.Inject
@@ -30,14 +34,13 @@ internal class AuthRepositoryImpl @Inject constructor(
     }
     override suspend fun doEmailLogin(email: String, password: String, autoLoginState: Boolean) : NetworkResult<JWTModel> {
         val request = EmailLoginRequest(email, password)
-        userDataStorePreferences.setAutoLogin(autoLoginState)
 
          return handleApi { authApiService.login(request) }
-            .toDomainResult<JWTResponse, JWTModel> { it.toDomain() }
+             .toDomainResult<JWTResponse, JWTModel> { it.toDomain() }
     }
 
     override suspend fun doKakaoLogin(accessToken: String) : NetworkResult<JWTModel> {
-        TODO("Not yet implemented")
+        return handleApi { authApiService.kakaoLogin(accessToken) }.toDomainResult<JWTResponse, JWTModel> { it.toDomain() }
     }
 
     override suspend fun setUserToken(accessToken: String, refreshToken: String) : Boolean {
@@ -47,5 +50,9 @@ internal class AuthRepositoryImpl @Inject constructor(
             return false
         }
         return true
+    }
+
+    override suspend fun redirectKakaoLogin(accessToken: String): NetworkResult<KakaoOAuthModel> {
+        return handleApi { authApiService.getKakaoOauthInfo(accessToken) }.toDomainResult<KakaoOAuthResponse, KakaoOAuthModel> { it.toDomain() }
     }
 }

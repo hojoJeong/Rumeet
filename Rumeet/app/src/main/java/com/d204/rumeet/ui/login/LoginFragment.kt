@@ -1,15 +1,21 @@
 package com.d204.rumeet.ui.login
 
 import android.util.Log
+import androidx.core.content.ContentProviderCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentLoginBinding
+import com.d204.rumeet.ui.activities.MainActivity
 import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.DefaultAlertDialog
-import com.d204.rumeet.ui.base.LoadingDialogFragment
 import com.d204.rumeet.ui.components.FilledEditText
+import com.d204.rumeet.util.startActivityAfterClearBackStack
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.AuthErrorCause
+import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -30,13 +36,23 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
         lifecycleScope.launchWhenResumed {
             viewModel.navigationEvent.collectLatest {
                 when (it) {
-                    is LoginNavigationAction.EmailLogin -> if(emailLoginValidation()) viewModel.login(
+                    is LoginNavigationAction.EmailLogin -> if(emailLoginValidation()) viewModel.doEmailLogin(
                         binding.editLoginId.inputText,
                         binding.editLoginPassword.inputText,
                         binding.btnLoginAuto.isChecked
                     )
                     is LoginNavigationAction.LoginFailed -> showLoginFailedDialog()
-                    else -> Log.d(TAG, "initDataBinding: else")
+                    is LoginNavigationAction.LoginSuccess -> requireActivity().startActivityAfterClearBackStack(MainActivity::class.java)
+                    is LoginNavigationAction.KakaoLogin -> kakaoLogin()
+                    is LoginNavigationAction.NavigateJoin ->
+                        navigate(LoginFragmentDirections.actionLoginFragmentToJoinIdFragment())
+                    // oauth는 Long 타입이지만 safe args가 long을 지원하지 못함 -> string으로 변환
+                    is LoginNavigationAction.NeedJoinFirst ->
+                        navigate(LoginFragmentDirections.actionLoginFragmentToJoinNickNameFragment(it.oauth.toString(), it.profileImg))
+                    is LoginNavigationAction.NavigateFindAccount -> {  }
+
+                    // Todo Naver api 승인 후 작업
+                    is LoginNavigationAction.NaverLogin -> { }
                 }
             }
         }
@@ -58,7 +74,33 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 
-    companion object {
-        private const val TAG = "LoginFragment..."
+    private fun kakaoLogin(){
+        val kakaoCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+            // 로그인 실패
+            if (error != null) {
+                when {
+                    error.toString() == AuthErrorCause.AccessDenied.toString() -> toastMessage("접근이 거부 됨(동의 취소)")
+                    error.toString() == AuthErrorCause.InvalidClient.toString() -> toastMessage("유효하지 않은 앱")
+                    error.toString() == AuthErrorCause.InvalidGrant.toString() -> toastMessage("인증 수단이 유효하지 않아 인증할 수 없는 상태")
+                    error.toString() == AuthErrorCause.InvalidRequest.toString() -> toastMessage("요청 파라미터 오류")
+                    error.toString() == AuthErrorCause.InvalidScope.toString() -> toastMessage("유효하지 않은 scope ID")
+                    error.toString() == AuthErrorCause.Misconfigured.toString() -> toastMessage("설정이 올바르지 않음(android key hash)")
+                    error.toString() == AuthErrorCause.ServerError.toString() -> toastMessage("서버 내부 에러")
+                    error.toString() == AuthErrorCause.Unauthorized.toString() -> toastMessage("앱이 요청 권한이 없음")
+                    else -> toastMessage("카카오톡의 미로그인")
+                }
+            }
+            //로그인 성공
+            else if (token != null) {
+                viewModel.doKakaoLogin(token.accessToken)
+            }
+        }
+
+        // 카카오톡 설치여부 확인
+        if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
+            UserApiClient.instance.loginWithKakaoTalk(requireContext(), callback = kakaoCallback)
+        } else {
+            UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = kakaoCallback)
+        }
     }
 }

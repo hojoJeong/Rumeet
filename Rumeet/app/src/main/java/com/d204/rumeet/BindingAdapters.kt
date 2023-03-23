@@ -10,11 +10,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.d204.rumeet.ui.base.UiState
-import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.components.CardViewHome
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
+import com.d204.rumeet.util.UiState
+import com.d204.rumeet.util.successOrNull
 
 object BindingAdapters {
     @JvmStatic
