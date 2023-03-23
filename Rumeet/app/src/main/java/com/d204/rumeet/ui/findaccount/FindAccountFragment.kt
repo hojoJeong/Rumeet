@@ -9,7 +9,7 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding, FindAccount
     override val layoutResourceId: Int
         get() = R.layout.fragment_find_account
 
-    override val viewModel: FindAccountViewModel by navGraphViewModels(R.id.joinNavigation)
+    override val viewModel: FindAccountViewModel by navGraphViewModels(R.id.navigation_join)
 
     override fun initStartView() {
 

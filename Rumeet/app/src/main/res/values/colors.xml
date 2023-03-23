@@ -24,4 +24,8 @@
     <color name="neon_blue">#5E5BFF</color>
     <color name="transparent">#00000000</color>
     <color name="whisper">#E9E9E9</color>
+    <color name="dandelion">#FFD065</color>
+    <color name="china_ivory">#FFF4CF</color>
+    <color name="fuzzy_wuzzy_brown">#B95555</color>
+    <color name="trans40_dim_gray">#80656565</color>
 </resources>

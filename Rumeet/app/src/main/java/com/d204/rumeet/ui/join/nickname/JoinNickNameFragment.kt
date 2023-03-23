@@ -1,6 +1,5 @@
 package com.d204.rumeet.ui.join.nickname
 
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.navGraphViewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentJoinNicknameBinding
@@ -11,7 +10,7 @@ class JoinNickNameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
     override val layoutResourceId: Int
         get() = R.layout.fragment_join_nickname
 
-    override val viewModel: JoinViewModel by navGraphViewModels(R.id.joinNavigation)
+    override val viewModel: JoinViewModel by navGraphViewModels(R.id.navigation_join)
 
     override fun initStartView() {
 

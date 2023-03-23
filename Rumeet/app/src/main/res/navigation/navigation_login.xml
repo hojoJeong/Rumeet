@@ -11,15 +11,15 @@
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_joinIdFragment"
-            app:destination="@id/joinIdFragment" />
+            android:id="@+id/action_loginFragment_to_joinGraph"
+            app:destination="@id/navigation_join" />
         <action
             android:id="@+id/action_loginFragment_to_joinNickNameFragment"
-            app:destination="@id/joinNickNameFragment" />
+            app:destination="@id/navigation_join" />
     </fragment>
 
     <navigation
-        android:id="@+id/joinNavigation"
+        android:id="@+id/navigation_join"
         app:startDestination="@id/joinIdFragment">
 
         <fragment
@@ -36,6 +36,10 @@
             android:name="com.d204.rumeet.ui.join.nickname.JoinNickNameFragment"
             android:label="JoinNickNameFragment">
 
+            <action
+                android:id="@+id/action_joinNickNameFragment_to_joinPasswordFragment"
+                app:destination="@id/joinPasswordFragment" />
+
             <argument
                 android:name="oauth"
                 app:argType="string"
@@ -45,9 +49,6 @@
                 android:name="profileImg"
                 app:argType="string"
                 app:nullable="true" />
-            <action
-                android:id="@+id/action_joinNickNameFragment_to_joinPasswordFragment"
-                app:destination="@id/joinPasswordFragment" />
 
         </fragment>
 
