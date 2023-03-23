@@ -3,7 +3,6 @@ package com.d204.rumeet.data;
 import com.d204.rumeet.exception.ErrorEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

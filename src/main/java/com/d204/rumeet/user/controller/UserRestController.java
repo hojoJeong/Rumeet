@@ -3,10 +3,8 @@ package com.d204.rumeet.user.controller;
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.CustomJwtException;
 import com.d204.rumeet.tools.JwtTool;
-import com.d204.rumeet.tools.SHA256;
 import com.d204.rumeet.user.model.dto.*;
 import com.d204.rumeet.user.model.service.UserService;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -128,7 +126,8 @@ public class UserRestController {
         if(user == null) {
             RespData<KakaoUserJoinDto> data = new RespData<>();
             data.setFlag("fail");
-            data.setCode(1);
+            data.setCode(2);
+            data.setMsg("회원가입");
             data.setData(new KakaoUserJoinDto(kakaoUser.getId(), kakaoUser.getProperties().get("profile_image")));
             return data.builder();
         }
@@ -143,7 +142,8 @@ public class UserRestController {
         if(user == null) {
             RespData<KakaoUserJoinDto> data = new RespData<>();
             data.setFlag("fail");
-            data.setCode(1);
+            data.setCode(2);
+            data.setMsg("회원가입");
             data.setData(new KakaoUserJoinDto(naverUserDto.getResponse().getId(), naverUserDto.getResponse().getProfile_image()));
             return data.builder();
         }
