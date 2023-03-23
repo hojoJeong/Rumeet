@@ -63,7 +63,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi group3() {
         return GroupedOpenApi.builder()
-                .group("friend")
+                .group("chat")
                 .packagesToScan("com.d204.rumeet.chat") // package 필터 설정
                 .build();
     }
@@ -71,7 +71,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi group4() {
         return GroupedOpenApi.builder()
-                .group("friend")
+                .group("game")
                 .packagesToScan("com.d204.rumeet.game") // package 필터 설정
                 .build();
     }
