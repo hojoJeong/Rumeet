@@ -37,7 +37,13 @@ public class SwaggerConfig {
                 .components(components);
     }
 
-
+    @Bean
+    public GroupedOpenApi group() {
+        return GroupedOpenApi.builder()
+                .group("전체")
+                .packagesToScan("com.d204.rumeet") // package 필터 설정
+                .build();
+    }
     @Bean
     public GroupedOpenApi group1() {
         return GroupedOpenApi.builder()
@@ -51,6 +57,22 @@ public class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("friend")
                 .packagesToScan("com.d204.rumeet.friend") // package 필터 설정
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi group3() {
+        return GroupedOpenApi.builder()
+                .group("friend")
+                .packagesToScan("com.d204.rumeet.chat") // package 필터 설정
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi group4() {
+        return GroupedOpenApi.builder()
+                .group("friend")
+                .packagesToScan("com.d204.rumeet.game") // package 필터 설정
                 .build();
     }
 
