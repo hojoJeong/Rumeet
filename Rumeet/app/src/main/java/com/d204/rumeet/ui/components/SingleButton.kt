@@ -1,17 +1,13 @@
 package com.d204.rumeet.ui.components
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import androidx.annotation.AttrRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentSingleTextButtonBinding
-import com.d204.rumeet.util.setTextColorWithNoTheme
 
 class SingleButton @JvmOverloads constructor(
     context: Context,
@@ -40,7 +36,7 @@ class SingleButton @JvmOverloads constructor(
         with(binding.btnSingleText) {
             if (state) {
                 isEnabled = true
-                setBackgroundResource(R.drawable.bg_rect_navyblue_round8_stroke0)
+                setBackgroundResource(R.drawable.bg_rect_transparent_navyblue_round8_stroke0)
             } else {
                 isEnabled = false
                 setBackgroundResource(R.drawable.bg_rect_transparent_light_grey_round8_stroke0)
