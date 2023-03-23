@@ -114,7 +114,8 @@ public class UserRestController {
         if(user == null) {
             RespData<KakaoUserJoinDto> data = new RespData<>();
             data.setFlag("fail");
-            data.setCode(1);
+            data.setCode(2);
+            data.setMsg("회원가입");
             data.setData(new KakaoUserJoinDto(kakaoUser.getId(), kakaoUser.getProperties().get("profile_image")));
             return data.builder();
         }
@@ -129,7 +130,8 @@ public class UserRestController {
         if(user == null) {
             RespData<KakaoUserJoinDto> data = new RespData<>();
             data.setFlag("fail");
-            data.setCode(1);
+            data.setCode(2);
+            data.setMsg("회원가입");
             data.setData(new KakaoUserJoinDto(naverUserDto.getResponse().getId(), naverUserDto.getResponse().getProfile_image()));
             return data.builder();
         }
