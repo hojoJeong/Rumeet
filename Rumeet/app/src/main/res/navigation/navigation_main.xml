@@ -16,5 +16,15 @@
     <fragment
         android:id="@+id/runningOptionContainerFragment"
         android:name="com.d204.rumeet.ui.running.fragment.RunningOptionContainerFragment"
-        android:label="RunningOptionContainerFragment" />
+        android:label="RunningOptionContainerFragment" >
+        <action
+            android:id="@+id/action_runningOptionContainerFragment_to_runningFragment"
+            app:destination="@id/runningFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/runningFragment"
+        android:name="com.d204.rumeet.ui.running.fragment.RunningFragment"
+        android:label="RunningFragment" />
+
+
 </navigation>

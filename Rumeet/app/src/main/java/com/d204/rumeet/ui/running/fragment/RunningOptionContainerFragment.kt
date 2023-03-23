@@ -25,6 +25,7 @@ class RunningOptionContainerFragment: BaseFragment<FragmentRunningOptionContaine
     override fun initStartView() {
         //TODO(싱글/멀티 분기 처리)
         initMutiModeView()
+        setRunningStartBtnClickListener()
     }
 
     override fun initDataBinding() {
@@ -54,10 +55,13 @@ class RunningOptionContainerFragment: BaseFragment<FragmentRunningOptionContaine
         TabLayoutMediator(binding.tblyRunningOption, binding.vpgRunningOption){ tab, position ->
             tab.text = tabList[position]
         }.attach()
-
-
     }
 
+    private fun setRunningStartBtnClickListener(){
+        binding.btnRunningOptionStartRunning.setOnClickListener{
+            navigate(RunningOptionContainerFragmentDirections.actionRunningOptionContainerFragmentToRunningFragment())
+        }
+    }
 
 
 
