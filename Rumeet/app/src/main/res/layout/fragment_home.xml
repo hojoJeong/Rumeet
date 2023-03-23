@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.d204.rumeet.ui.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,50 +26,48 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/base_vertical_margin">
+                android:clipToPadding="false"
+                android:padding="@dimen/base_vertical_margin">
 
                 <TextView
                     android:id="@+id/tv_home_welcome_message"
                     style="@style/base_font_bold_16_dim_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/base_horizontal_margin"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:setWelcomeMessage='@{vm.userName}'
                     tools:text="@string/content_welcome_message" />
 
-                <include
+                <com.d204.rumeet.ui.components.CardViewHome
                     android:id="@+id/content_home_best_record"
-                    layout="@layout/content_home_cardview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_welcome_message"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_welcome_message"
+                    app:setBestRecordView="@{vm.bestRecord}" />
 
-                <include
+                <com.d204.rumeet.ui.components.CardViewHome
                     android:id="@+id/content_home_badge"
-                    layout="@layout/content_home_cardview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/content_home_best_record"
-                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"/>
+                    app:setBadgeView="@{vm.badgeList}" />
 
-                <include
+                <com.d204.rumeet.ui.components.CardViewHome
                     android:id="@+id/content_home_recommend_friend"
-                    layout="@layout/content_home_cardview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/content_home_badge"
-                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"/>
-
-
-
+                    app:setRecommendFriendView="@{vm.recommendFriendList}" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
