@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.d204.rumeet.user.model.mapper.UserMapper">
+
+    <resultMap id="user" type="userDto">
+        <result column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <result column="profile_img" property="profileImg"/>
+        <result column="height" property="height"/>
+        <result column="weight" property="weight"/>
+        <result column="oauth" property="oauth"/>
+        <result column="refresh_token" property="refreshToken"/>
+        <result column="date" property="date"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <select id="doLogin" parameterType="LoginDto" resultMap="user">
+        SELECT * FROM user_view WHERE email = #{email} and password = #{password}
+    </select>
+
+    <select id="getUserById" parameterType="int" resultMap="user">
+        SELECT * FROM user_view WHERE id = #{id};
+    </select>
+
+    <update id="modifyUser" parameterType="ModifyUserDto">
+        UPDATE user SET age = #{age}, gender = #{gender}, height = #{height}, weight = #{weight} WHERE (id = #{id});
+    </update>
+
+    <update id="delUser" parameterType="int">
+        UPDATE user SET state = -1 WHERE (id = #{id});
+    </update>
+
+    <insert id="joinUser" parameterType="JoinUserDto">
+        INSERT user (email, password, nickname, profile_img) VALUES(#{email},#{password},#{nickname},#{profile});
+    </insert>
+    
+    <select id="checkDuplication" parameterType="CheckDto" resultType="int">
+        SELECT COUNT(*) FROM user
+        <where>
+            <if test="type == 1">
+                nickname like #{value}
+            </if>
+            <if test="type == 2">
+                email like #{value}
+            </if>
+        </where>
+    </select>
+    
+</mapper>
