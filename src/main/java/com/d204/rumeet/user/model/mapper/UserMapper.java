@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -19,6 +20,8 @@ public interface UserMapper {
     void joinUser(JoinUserDto user);
 
     int checkDuplication(CheckDto checkDto);
+
+    List<SimpleUserDto> searchUsersByNickname(String nickname);
 
     int modifyPwd(ModifyPwdDto modifyPwdDto);
 
