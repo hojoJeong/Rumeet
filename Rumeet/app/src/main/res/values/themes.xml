@@ -152,4 +152,11 @@
         <item name="fontFamily">@font/notosanskr_bold</item>
         <item name="android:textSize">16dp</item>
     </style>
+    
+    <style name="tablayoutCustom" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabTextColor">@color/dim_gray</item>
+        <item name="tabSelectedTextColor">@color/black</item>
+        <item name="colorPrimary">@color/navy_blue</item>
+        <item name="tabIndicatorColor">@color/navy_blue</item>
+    </style>
 </resources>
