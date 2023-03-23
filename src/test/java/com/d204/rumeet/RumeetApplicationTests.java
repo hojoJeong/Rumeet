@@ -1,10 +1,6 @@
 package com.d204.rumeet;
 
-import com.d204.rumeet.data.RespData;
-import com.d204.rumeet.user.model.dto.LoginDto;
-import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.mapper.UserMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
