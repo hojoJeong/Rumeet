@@ -10,7 +10,8 @@
         android:orientation="vertical"
         tools:context=".ui.running.fragment.RunningOptionTeamPlayFragment">
 
-        <com.d204.rumeet.ui.components.CardViewRunningOptionDifficulty
+        <include
+            layout="@layout/content_running_option_difficulty"
             android:id="@+id/content_running_option_team_difficulty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
