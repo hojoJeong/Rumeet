@@ -4,31 +4,19 @@
 
     </data>
     <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/base_horizontal_margin"
-        tools:context=".ui.running.fragment.RunningOptionRelayFragment">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Coming Soon..."
-            style="@style/base_font_bold_16_black"
-            android:textSize="40sp"
-            android:gravity="center"/>
+        android:padding="@dimen/base_horizontal_margin">
 
         <include
-            android:visibility="gone"
-            android:id="@+id/content_running_option_relay_distance"
+            layout="@layout/content_running_option_distance"
+            android:id="@+id/content_running_option_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/content_running_option_distance"/>
-
+            />
         <include
-            android:visibility="gone"
-            android:id="@+id/content_running_option_relay_with"
+            android:id="@+id/content_running_option_with"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
