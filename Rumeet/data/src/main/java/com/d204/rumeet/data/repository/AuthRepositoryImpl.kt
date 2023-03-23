@@ -30,12 +30,10 @@ internal class AuthRepositoryImpl @Inject constructor(
     }
     override suspend fun doEmailLogin(email: String, password: String, autoLoginState: Boolean) : NetworkResult<JWTModel> {
         val request = EmailLoginRequest(email, password)
-        val response = handleApi { authApiService.login(request) }
-            .toDomainResult<JWTResponse, JWTModel> { it.toDomain() }
-
-        // 예외가 발생한다면 setAutoLogin은 동작하지 않도록
         userDataStorePreferences.setAutoLogin(autoLoginState)
-        return response
+
+         return handleApi { authApiService.login(request) }
+            .toDomainResult<JWTResponse, JWTModel> { it.toDomain() }
     }
 
     override suspend fun doKakaoLogin(accessToken: String) : NetworkResult<JWTModel> {

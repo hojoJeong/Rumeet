@@ -1,5 +1,7 @@
 package com.d204.rumeet.ui.login
 
+import com.d204.rumeet.data.remote.dto.InternalServerErrorException
+import com.d204.rumeet.data.remote.dto.NoUserFindErrorException
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.auth.DoEmailLoginUseCase
@@ -49,7 +51,10 @@ class LoginViewModel @Inject constructor(
                     _navigationEvent.emit(LoginNavigationAction.StartMainActivity)
                     setUserTokenUseCase.invoke(it.accessToken, it.refreshToken)
                 }
-                .onError { e -> catchError(e) }
+                .onError { e ->
+                    if (e is InternalServerErrorException || e is NoUserFindErrorException) _navigationEvent.emit(LoginNavigationAction.LoginFailed)
+                    else catchError(e)
+                }
         }
     }
 

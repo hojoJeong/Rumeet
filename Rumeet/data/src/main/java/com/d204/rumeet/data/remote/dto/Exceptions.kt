@@ -5,8 +5,6 @@ import java.io.IOException
 
 class ServerNotFoundException(e: Throwable?, msg: String?) : IOException(e) // 서버 못찾음
 class InternalServerErrorException(e: Throwable?, msg: String?) : IOException(e) // 서버 내부 에러
-class MapperCastingErrorException(e: Throwable?, msg: String?)
-
 class NoUserFindErrorException(e: Throwable?, msg: String?) : IOException(e) // 로그인 유저 찾을 수 없음
 
 

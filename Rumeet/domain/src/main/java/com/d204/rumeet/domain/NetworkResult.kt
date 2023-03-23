@@ -18,8 +18,14 @@ val NetworkResult<*>.succeeded
     get() = this is NetworkResult.Success
 
 fun <DATA, DOMAIN> NetworkResult<*>.toDomainResult(mapper: (DATA) -> DOMAIN): NetworkResult<DOMAIN> {
-    val response = (this as? NetworkResult.Success)?.data as DATA
-    return NetworkResult.Success(mapper(response))
+    return when (this) {
+        is NetworkResult.Success -> {
+            val response = (this as? NetworkResult.Success)?.data as DATA
+            NetworkResult.Success(mapper(response))
+        }
+        is NetworkResult.Error -> NetworkResult.Error(this.exception)
+        is NetworkResult.Loading -> NetworkResult.Loading
+    }
 }
 
 fun <T> NetworkResult<T>.successOr(fallback: T): T {
