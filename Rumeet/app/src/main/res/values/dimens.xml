@@ -5,4 +5,8 @@
     <dimen name="base_vertical_margin">28dp</dimen>
     <dimen name="base_vertical_contents_to_contents">22dp</dimen>
     <dimen name="base_vertical_title_to_content">14dp</dimen>
+    <dimen name="size_btn_running">80dp</dimen>
+    <dimen name="size_progress_running_height">14dp</dimen>
+    <dimen name="size_profile_running">50dp</dimen>
+    <dimen name="size_tv_running_record">28dp</dimen>
 </resources>

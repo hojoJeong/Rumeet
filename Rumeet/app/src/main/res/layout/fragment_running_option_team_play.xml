@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
 
     </data>
@@ -7,21 +7,24 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/base_horizontal_margin"
         android:orientation="vertical"
-        tools:context=".ui.running.RunningOptionDifficultyFragment">
+        tools:context=".ui.running.fragment.RunningOptionTeamPlayFragment">
 
         <include
-            android:id="@+id/content_running_option_team_difficulty"
             layout="@layout/content_running_option_difficulty"
+            android:id="@+id/content_running_option_team_difficulty"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginTop="@dimen/base_vertical_margin"/>
 
         <include
             android:id="@+id/content_running_option_team_with"
             layout="@layout/content_running_option_with"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
             android:layout_marginTop="@dimen/base_vertical_contents_to_contents"/>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

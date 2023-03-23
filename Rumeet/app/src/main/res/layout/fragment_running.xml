@@ -3,163 +3,271 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.d204.rumeet.ui.running.RunningViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.running.RunningFragment"
         android:background="@color/prussian_blue"
-        android:paddingVertical="@dimen/base_vertical_margin">
+        tools:context=".ui.running.fragment.RunningFragment">
 
         <TextView
             android:id="@+id/tv_running_mode"
+            style="@style/base_font_bold_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/base_vertical_margin"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="싱글 5km"
-            style="@style/base_font_bold_16_white"/>
+            tools:text="싱글 5km" />
 
         <CheckBox
             android:id="@+id/btn_running_sound"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginEnd="@dimen/base_horizontal_margin"
             android:button="@drawable/bg_btn_sound"
-            android:buttonTint="@color/white"/>
+            android:buttonTint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/tv_running_time"
+            style="@style/base_font_bold_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_running_distance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_running_mode"
-            app:layout_constraintEnd_toStartOf="@+id/tv_running_distance"
-            android:layout_marginStart="@dimen/base_horizontal_margin"
-            tools:text="15:20"
-            style="@style/base_font_bold_16_white"
-            android:textSize="50sp"/>
+            tools:text="15:20" />
 
         <TextView
             android:id="@+id/tv_running_distance"
+            style="@style/base_font_bold_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/base_horizontal_margin"
+            android:textSize="50sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_time"
             app:layout_constraintBottom_toBottomOf="@+id/tv_running_time"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_time"
             app:layout_constraintStart_toEndOf="@+id/tv_running_time"
-            tools:text="10km"
-            android:layout_marginEnd="@dimen/base_horizontal_margin"
-            style="@style/base_font_bold_16_white"
-            android:textSize="50sp"/>
+            tools:text="10km" />
 
         <TextView
             android:id="@+id/tv_running_time_title"
+            style="@style/base_font_medium_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/tv_running_time"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_time"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_time"
             android:text="@string/title_running_total_time"
-            style="@style/base_font_medium_16_white"/>
+            app:layout_constraintEnd_toEndOf="@+id/tv_running_time"
+            app:layout_constraintStart_toStartOf="@+id/tv_running_time"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_time" />
+
         <TextView
             android:id="@+id/tv_running_distance_title"
+            style="@style/base_font_medium_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/tv_running_distance"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_distance"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_distance"
             android:text="@string/title_distance"
-            style="@style/base_font_medium_16_white"/>
+            app:layout_constraintEnd_toEndOf="@+id/tv_running_distance"
+            app:layout_constraintStart_toStartOf="@+id/tv_running_distance"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_distance" />
 
         <TextView
             android:id="@+id/tv_running_pace"
+            style="@style/base_font_bold_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textSize="@dimen/size_tv_running_record"
+            app:layout_constraintEnd_toStartOf="@+id/tv_running_calorie"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_running_time_title"
-            app:layout_constraintEnd_toStartOf="@+id/tv_running_calorie"
-            style="@style/base_font_bold_16_white"
-            android:textSize="30sp"
-            tools:text="5'13''"/>
+            tools:text="5'13''" />
+
         <TextView
             android:id="@+id/tv_running_calorie"
+            style="@style/base_font_bold_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/tv_running_pace"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_running_pace"
+            android:textSize="@dimen/size_tv_running_record"
             app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_pace"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_running_pace"
             app:layout_constraintEnd_toStartOf="@+id/tv_running_height"
-            tools:text="230kcal"
-            style="@style/base_font_bold_16_white"
-            android:textSize="30sp"/>
+            app:layout_constraintStart_toEndOf="@+id/tv_running_pace"
+            tools:text="230kcal" />
+
         <TextView
             android:id="@+id/tv_running_height"
+            style="@style/base_font_bold_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/tv_running_calorie"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_running_calorie"
+            android:textSize="@dimen/size_tv_running_record"
             app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_calorie"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_running_calorie"
             app:layout_constraintEnd_toStartOf="@+id/tv_running_heartbeat"
-            tools:text="9m"
-            style="@style/base_font_bold_16_white"
-            android:textSize="30sp"/>
+            app:layout_constraintStart_toEndOf="@+id/tv_running_calorie"
+            tools:text="9m" />
+
         <TextView
             android:id="@+id/tv_running_heartbeat"
+            style="@style/base_font_bold_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/size_tv_running_record"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_height"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_running_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_running_height"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_running_height"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_height"
-            tools:text="112bpm"
-            style="@style/base_font_bold_16_white"
-            android:textSize="30sp"/>
+            tools:text="112bpm" />
 
         <TextView
             android:id="@+id/tv_running_pace_title"
+            style="@style/base_font_medium_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/tv_running_pace"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_pace"
             android:text="@string/title_pace"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_pace"
-            style="@style/base_font_medium_16_white"/>
+            app:layout_constraintEnd_toEndOf="@+id/tv_running_pace"
+            app:layout_constraintStart_toStartOf="@id/tv_running_pace"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_pace" />
+
         <TextView
             android:id="@+id/tv_running_calorie_title"
+            style="@style/base_font_medium_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/tv_running_calorie"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_calorie"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_calorie"
             android:text="@string/title_calorie"
-            style="@style/base_font_medium_16_white"/>
+            app:layout_constraintEnd_toEndOf="@+id/tv_running_calorie"
+            app:layout_constraintStart_toStartOf="@id/tv_running_calorie"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_calorie" />
 
         <TextView
             android:id="@+id/tv_running_height_title"
+            style="@style/base_font_medium_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/tv_running_height"
+            android:text="@string/title_running_height"
             app:layout_constraintEnd_toEndOf="@+id/tv_running_height"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_height"
-            style="@style/base_font_medium_16_white"
-            android:text="@string/title_running_height"/>
+            app:layout_constraintStart_toStartOf="@+id/tv_running_height"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_height" />
 
         <TextView
             android:id="@+id/tv_running_heartbeat_title"
+            style="@style/base_font_medium_16_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/tv_running_heartbeat"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_heartbeat"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_heartbeat"
             android:text="@string/title_running_heartbeat"
-            style="@style/base_font_medium_16_white"/>
+            app:layout_constraintEnd_toEndOf="@+id/tv_running_heartbeat"
+            app:layout_constraintStart_toStartOf="@+id/tv_running_heartbeat"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_heartbeat" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_running_pause"
+            android:layout_width="@dimen/size_btn_running"
+            android:layout_height="@dimen/size_btn_running"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/bg_layerlist_pause_oval_dandelion_stroke0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_heartbeat_title" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_running_stop"
+            android:layout_width="@dimen/size_btn_running"
+            android:layout_height="@dimen/size_btn_running"
+            android:background="@drawable/bg_layerlist_stop_oval_darkgray_stroke0"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_running_pause"
+            app:layout_constraintEnd_toStartOf="@+id/btn_running_pause"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_running_pause" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_running_play"
+            android:layout_width="@dimen/size_btn_running"
+            android:layout_height="@dimen/size_btn_running"
+            android:background="@drawable/bg_layerlist_play_oval_dandelion_stroke0"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_running_pause"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_running_pause"
+            app:layout_constraintTop_toTopOf="@+id/btn_running_pause" />
+
+        <ImageView
+            android:id="@+id/iv_running_progress_total"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_progress_running_height"
+            android:src="@drawable/bg_rect_chinaivory_round0_stroke0"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_running_profile_my"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_running_profile_my" />
+
+        <ImageView
+            android:id="@+id/iv_running_progress_other"
+            android:layout_width="180dp"
+            android:layout_height="@dimen/size_progress_running_height"
+            android:src="@drawable/bg_rect_fuzzywuzzybrown_round0_stroke0"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_running_profile_my"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_running_profile_my" />
+
+        <ImageView
+            android:id="@+id/iv_running_progress_my"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/size_progress_running_height"
+            android:src="@drawable/bg_rect_navyblue_round0_stroke0"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_running_profile_my"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_running_profile_my" />
+
+        <ImageView
+            android:id="@+id/iv_running_shark"
+            android:layout_width="46dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_shark"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_running_progress_my"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_running_ghost"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_running_progress_my"
+            app:layout_constraintTop_toTopOf="@+id/iv_running_progress_my"
+            android:src="@drawable/ic_ghost"
+            tools:layout_marginStart="20dp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_running_profile_other"
+            android:layout_width="@dimen/size_profile_running"
+            android:layout_height="@dimen/size_profile_running"
+            android:layout_marginBottom="@dimen/base_vertical_margin"
+            android:elevation="10dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/iv_running_progress_other"
+            app:layout_constraintStart_toEndOf="@+id/iv_running_progress_other" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_running_profile_my"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/base_vertical_margin"
+            android:elevation="10dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/iv_running_progress_my"
+            app:layout_constraintStart_toEndOf="@+id/iv_running_progress_my" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
