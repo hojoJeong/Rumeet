@@ -197,43 +197,18 @@ public class UserServiceImpl implements UserService{
         String REST_API_KEY = "b653f0b908ff838fb24e6e7cce632a38";
         OkHttpClient client = new OkHttpClient();
 
-        RequestBody requestBody = new FormBody.Builder()
-                .add("grant_type", "authorization_code")
-                .add("client_id", REST_API_KEY)
-                .add("redirect_uri", "http://localhost:8080/rumeet/users/oauth/kakao")
-                .add("code", code)
-                .build();
-        Request request = new Request.Builder()
-                .url("https://kauth.kakao.com/oauth/token")
-                .header("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
-                .post(requestBody)
-                .build();
-        Call call = client.newCall(request);
+        RequestBody requestBody = null;
         Response response = null;
-        try {
-            response = call.execute();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         String responseBody = "";
-        if (response.isSuccessful()) {
-            try {
-                responseBody = response.body().string();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        Gson gson = new Gson();
-        AccessTokenResponse accessTokenResponse = gson.fromJson(responseBody,AccessTokenResponse.class);
-        String access_token = accessTokenResponse.access_token;
-        System.out.println(accessTokenResponse.id_token);
-        request = new Request.Builder()
+
+        String access_token = code;
+        Request request = new Request.Builder()
                 .url("https://kapi.kakao.com/v2/user/me")
                 .header("Authorization", "Bearer " + access_token)
                 .get()
                 .build();
 
-        call = client.newCall(request);
+        Call call = client.newCall(request);
         try {
             response = call.execute();
         } catch (IOException e) {
