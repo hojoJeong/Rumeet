@@ -21,10 +21,12 @@ internal class AuthInterceptor @Inject constructor(
         val request = chain.request()
         val response = chain.proceed(request)
 
+        // 보안오류 관련 물어보고 작성
         if(response.code == 400 || response.code == 403){
             val requestUrl = request.url.toString()
             val errorResponse = response.body?.string().let{}
         }
+
         return response
     }
 }

@@ -12,6 +12,21 @@
     <string name="content_join">회원가입</string>
     <string name="content_login">로그인</string>
 
+    <!-- join(id) -->
+    <string name="title_join">러밋과 함께\n뛰어볼까요?</string>
+    <string name="title_id_input">사용하실 아이디를 입력해주세요 :)</string>
+    <string name="content_duplicated_id">이미 사용중인 아이디 입니다</string>
+    <string name="content_id_email_error">이메일 형식에 맞춰주세요</string>
+    <string name="content_duplicated_nickname">이미 사용중인 닉네임 입니다</string>
+    <string name="content_nickname_size_error">닉네임은 최대 12글자까지 가능합니다</string>
+    <string name="content_agree_app_terms_of_uses">계속하기를 누른다면 이용약관 동의로 간주합니다</string>
+    <string name="content_password_hint">영어, 숫자, 특수문자를 활용한 8글자 이상</string>
+    <string name="content_password_check_hint">위의 비밀번호를 다시 입력해주세요</string>
+    <string name="content_password_validate_error">영어, 숫자, 특수문자를 8글자 입력해주세요</string>
+    <string name="content_password_validate_pass">사용가능한 비밀번호 입니다:)</string>
+    <string name="content_password_check_error">두 비밀번호가 드랍니다. 확인해 보시겠어요?</string>
+    <string name="content_password_check">비밀번호가 일치합니다.</string>
+    
     <!-- home -->
     <string name="content_welcome_message">%1$s님!\n오늘도 열심히 달려볼까요?</string>
     <string name="title_best_record">최고기록</string>

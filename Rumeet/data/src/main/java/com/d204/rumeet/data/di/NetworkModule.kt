@@ -36,9 +36,8 @@ internal object NetworkModule {
     @Singleton
     @Named("AuthHttpClient")
     fun provideAuthHttpClient(
-        @ApplicationContext context: Context
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
-        val authInterceptor = AuthInterceptor(UserDataStorePreferences(context))
         return OkHttpClient.Builder()
             .readTimeout(5, TimeUnit.SECONDS)
             .connectTimeout(5, TimeUnit.SECONDS)
@@ -46,6 +45,14 @@ internal object NetworkModule {
             .addInterceptor(getLoggingInterceptor())
             .addInterceptor(authInterceptor)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(
+        userDataStorePreferences: UserDataStorePreferences
+    ) : AuthInterceptor{
+        return AuthInterceptor(userDataStorePreferences)
     }
 
 

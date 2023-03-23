@@ -5,6 +5,8 @@ import androidx.core.content.ContentProviderCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentLoginBinding
@@ -46,10 +48,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
                     is LoginNavigationAction.LoginSuccess -> requireActivity().startActivityAfterClearBackStack(MainActivity::class.java)
                     is LoginNavigationAction.KakaoLogin -> kakaoLogin()
                     is LoginNavigationAction.NavigateJoin ->
-                        navigate(LoginFragmentDirections.actionLoginFragmentToJoinGraph())
-                    // oauth는 Long 타입이지만 safe args가 long을 지원하지 못함 -> string으로 변환
-                    is LoginNavigationAction.NeedJoinFirst -> { }
-                    is LoginNavigationAction.NavigateFindAccount -> {  }
+                        navigate(LoginFragmentDirections.actionLoginFragmentToJoinIdFragment())
+                    is LoginNavigationAction.NeedJoinFirst -> { navigate(LoginFragmentDirections.actionLoginFragmentToJoinNickNameFragment(oauth = it.oauth, profileImg = it.profileImg)) }
+                    is LoginNavigationAction.NavigateFindAccount -> { navigate(LoginFragmentDirections.actionLoginFragmentToFindAccountFragment()) }
 
                     // Todo Naver api 승인 후 작업
                     is LoginNavigationAction.NaverLogin -> {  }

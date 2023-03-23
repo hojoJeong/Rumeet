@@ -1,16 +1,15 @@
 package com.d204.rumeet.ui.join.password
 
-import androidx.navigation.navGraphViewModels
+import androidx.fragment.app.viewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentJoinPasswordBinding
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.join.JoinViewModel
 
-class JoinPasswordFragment : BaseFragment<FragmentJoinPasswordBinding, JoinViewModel>(){
+class JoinPasswordFragment : BaseFragment<FragmentJoinPasswordBinding, JoinPasswordViewModel>(){
     override val layoutResourceId: Int
         get() = R.layout.fragment_join_password
 
-    override val viewModel: JoinViewModel by navGraphViewModels(R.id.navigation_join)
+    override val viewModel: JoinPasswordViewModel by viewModels()
 
     override fun initStartView() {
 

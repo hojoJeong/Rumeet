@@ -1,7 +1,6 @@
 package com.d204.rumeet.ui.login
 
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.d204.rumeet.data.remote.dto.KakaoLoginErrorException
+import com.d204.rumeet.data.remote.dto.SocialLoginErrorException
 import com.d204.rumeet.data.remote.dto.NoUserFindErrorException
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
@@ -11,9 +10,6 @@ import com.d204.rumeet.domain.usecase.auth.RedirectKakaoLoginUseCase
 import com.d204.rumeet.domain.usecase.auth.SetUserAutoLoginCheck
 import com.d204.rumeet.domain.usecase.user.SetUserTokenUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.AuthErrorCause
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -50,7 +46,8 @@ class LoginViewModel @Inject constructor(
                     setUserAutoLoginCheck(true)
                 }
                 .onError { e ->
-                    if(e is KakaoLoginErrorException) redirectKakaoLogin(accessToken)
+                    if(e is SocialLoginErrorException) redirectKakaoLogin(accessToken)
+                    else catchError(e)
                 }
         }
     }
@@ -60,7 +57,7 @@ class LoginViewModel @Inject constructor(
      * 자동 로그인은 true로 설정
      * @param accessToken - 카카오 OAuthToken에서 받은 AccessToken
      * */
-    fun redirectKakaoLogin(accessToken: String){
+     private fun redirectKakaoLogin(accessToken: String){
         baseViewModelScope.launch {
             redirectKakaoLoginUseCase(accessToken)
                 .onSuccess { oauthInfo ->
@@ -95,14 +92,14 @@ class LoginViewModel @Inject constructor(
     }
 
     // 이메일 로그인
-    fun emailLogin() {
+    fun navigateEmailLogin() {
         baseViewModelScope.launch {
             _navigationEvent.emit(LoginNavigationAction.EmailLogin)
         }
     }
 
     // 카카오 로그인
-    fun kakaoLogin() {
+    fun navigateKakaoLogin() {
         baseViewModelScope.launch {
             _navigationEvent.emit(LoginNavigationAction.KakaoLogin)
         }

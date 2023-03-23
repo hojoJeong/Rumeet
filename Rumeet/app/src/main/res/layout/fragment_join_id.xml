@@ -4,11 +4,57 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.d204.rumeet.ui.join.id.JoinIdViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_join_id_title"
+            style="@style/base_font_bold_22_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="60dp"
+            android:text="@string/title_join"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_input_id_title"
+            style="@style/base_font_medium_12_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="81dp"
+            android:text="@string/title_id_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_join_id_title" />
+
+        <com.d204.rumeet.ui.components.SingUpEditText
+            android:id="@+id/edit_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_input_id_title" />
+
+        <com.d204.rumeet.ui.components.SingleButton
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:onSingleButtonClick="@{() -> vm.checkIdValidation()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

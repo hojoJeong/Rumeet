@@ -18,3 +18,7 @@ fun Context.startActivityAfterClearBackStack(classType: Class<out Activity>) {
 fun Button.setTextColorWithNoTheme(colorRes: Int) {
     setTextColor(ResourcesCompat.getColor(resources, colorRes, null))
 }
+
+fun TextView.setTextColorWithNoTheme(colorRes : Int){
+    setTextColor(ResourcesCompat.getColor(resources, colorRes, null))
+}

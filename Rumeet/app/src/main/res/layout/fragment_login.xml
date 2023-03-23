@@ -48,10 +48,10 @@
             android:layout_width="@dimen/check_box_size"
             android:layout_height="@dimen/check_box_size"
             android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="2dp"
             android:background="@drawable/sc_checked_auto_login"
             android:button="@null"
             android:minWidth="0dp"
-            android:layout_marginTop="2dp"
             android:minHeight="0dp"
             app:layout_constraintBottom_toBottomOf="@id/tv_login_auto_title"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +77,8 @@
             android:text="@string/content_find_account"
             app:layout_constraintBottom_toBottomOf="@id/tv_login_auto_title"
             app:layout_constraintEnd_toEndOf="@id/edit_login_password"
-            app:layout_constraintTop_toTopOf="@id/tv_login_auto_title" />
+            app:layout_constraintTop_toTopOf="@id/tv_login_auto_title"
+            app:onSingleClick="@{() -> vm.navigateFindAccount()}" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,7 +101,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:onSingleClick="@{() -> vm.emailLogin()}" />
+                app:onSingleClick="@{() -> vm.navigateEmailLogin()}" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ly_kakao_login"
@@ -109,10 +110,10 @@
                 android:layout_marginTop="11dp"
                 android:background="@drawable/bg_rect_transparent_golden_yellow_round8_stroke0"
                 android:paddingVertical="14dp"
-                app:onSingleClick="@{() -> vm.kakaoLogin()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_login">
+                app:layout_constraintTop_toBottomOf="@id/btn_login"
+                app:onSingleClick="@{() -> vm.navigateKakaoLogin()}">
 
                 <ImageView
                     android:id="@+id/iv_kakao_logo"
@@ -134,8 +135,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -198,7 +197,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="13dp"
-                    android:text="@string/content_join" />
+                    android:text="@string/content_join"
+                    app:onSingleClick="@{() -> vm.navigateJoin()}" />
 
             </LinearLayout>
 
