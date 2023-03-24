@@ -29,6 +29,6 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
     }
 
     override fun initAfterBinding() {
-
+        
     }
 }

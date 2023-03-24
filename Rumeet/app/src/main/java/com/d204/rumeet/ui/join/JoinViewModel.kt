@@ -5,6 +5,7 @@ import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.user.CheckDuplicateInfoUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.join.addtional_info.AdditionalInfoAction
 import com.d204.rumeet.ui.join.id.JoinIdAction
 import com.d204.rumeet.ui.join.nickname.JoinNicknameAction
 import com.d204.rumeet.ui.join.password.JoinPasswordAction
@@ -26,6 +27,9 @@ class JoinViewModel @Inject constructor(
 
     private val _joinPasswordAction : MutableSharedFlow<JoinPasswordAction> = MutableSharedFlow()
     val joinPasswordAction : SharedFlow<JoinPasswordAction> get() = _joinPasswordAction.asSharedFlow()
+
+    private val _additionalInfoAction : MutableSharedFlow<AdditionalInfoAction> = MutableSharedFlow()
+    val additionalInfoAction : SharedFlow<AdditionalInfoAction> get() = _additionalInfoAction.asSharedFlow()
 
     val joinInfo: JoinModel = JoinModel()
 

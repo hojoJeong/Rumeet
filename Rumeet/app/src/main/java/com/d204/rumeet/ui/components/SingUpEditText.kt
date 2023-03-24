@@ -12,6 +12,7 @@ import android.view.View
 import androidx.annotation.AttrRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
+import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentSignUpEditTextBinding
 import com.d204.rumeet.util.getColorWithNoTheme
 import com.d204.rumeet.util.setTextColorWithNoTheme
