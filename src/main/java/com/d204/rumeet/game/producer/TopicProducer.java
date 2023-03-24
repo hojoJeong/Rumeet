@@ -1,13 +1,25 @@
 package com.d204.rumeet.game.producer;
 
+import com.d204.rumeet.game.model.GameService;
+import com.d204.rumeet.user.model.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
+@Component
+@RequiredArgsConstructor
 public class TopicProducer {
+
+    private final GameService gameService;
+    public void createUserTopic(int userId) {
+        String userTopic = "user" + "." + userId;
+        gameService.createTopic(userTopic);
+    }
 
     public void sendMessage(String topic, String message) {
         Properties props = new Properties();
