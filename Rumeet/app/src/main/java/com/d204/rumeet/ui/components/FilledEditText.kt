@@ -40,15 +40,15 @@ class FilledEditText @JvmOverloads constructor(
         addView(binding.root)
     }
 
-    fun setEditTextType(type: FilledEditTextType, hintText: String) {
+    fun setEditTextType(type: FilledEditTextType, hintText: String = "") {
         when (type) {
             FilledEditTextType.ID -> {
+                setIdInput()
                 addTextWatcher()
-                addTextDeleteButton()
             }
             FilledEditTextType.PASSWORD -> {
-                addTextWatcher()
                 setPasswordInput()
+                addTextWatcher()
             }
             FilledEditTextType.NORMAL -> {
 
@@ -57,11 +57,21 @@ class FilledEditText @JvmOverloads constructor(
         setHint(hintText)
     }
 
+
+    private fun setSingleLineInput(){
+        with(binding.editInput){
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL
+            maxLines = 1
+            maxEms = 30
+        }
+    }
+
     private fun setHint(hintText: String) {
         binding.editInput.hint = hintText
     }
 
-    private fun addTextDeleteButton() {
+    private fun setIdInput() {
+        setSingleLineInput()
         binding.btnAdditional.setBackgroundResource(R.drawable.ic_edit_text_delete_btn)
         binding.btnAdditional.setOnClickListener {
             binding.editInput.setText("")
@@ -70,20 +80,26 @@ class FilledEditText @JvmOverloads constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setPasswordInput() {
+        setSingleLineInput()
         binding.btnAdditional.setBackgroundResource(R.drawable.ic_edit_text_visibilty_btn)
         binding.editInput.inputType =
             InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
         binding.btnAdditional.setOnTouchListener { _, motionEvent ->
+            // return value가 false면 추가 작업 종료, true면 추가 작업 존재함
             when (motionEvent.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
                     binding.editInput.inputType =
                         InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL
+                    // 커서고정
+                    binding.editInput.setSelection(binding.editInput.text.toString().length)
                     true
                 }
                 MotionEvent.ACTION_UP -> {
                     binding.editInput.inputType =
                         InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    // 커서이동
+                    binding.editInput.setSelection(binding.editInput.text.toString().length)
                     false
                 }
                 else -> false

@@ -5,10 +5,58 @@
     android:id="@+id/navigation_login"
     app:startDestination="@id/loginFragment">
 
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.d204.rumeet.ui.login.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/fragment_login"/>
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_joinGraph"
+            app:destination="@id/navigation_join" />
+        <action
+            android:id="@+id/action_loginFragment_to_joinNickNameFragment"
+            app:destination="@id/navigation_join" />
+    </fragment>
+
+    <navigation
+        android:id="@+id/navigation_join"
+        app:startDestination="@id/joinIdFragment">
+
+        <fragment
+            android:id="@+id/joinIdFragment"
+            android:name="com.d204.rumeet.ui.join.id.JoinIdFragment"
+            android:label="JoinIdFragment">
+            <action
+                android:id="@+id/action_joinIdFragment_to_joinNickNameFragment"
+                app:destination="@id/joinNickNameFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/joinNickNameFragment"
+            android:name="com.d204.rumeet.ui.join.nickname.JoinNickNameFragment"
+            android:label="JoinNickNameFragment">
+
+            <action
+                android:id="@+id/action_joinNickNameFragment_to_joinPasswordFragment"
+                app:destination="@id/joinPasswordFragment" />
+
+            <argument
+                android:name="oauth"
+                app:argType="string"
+                app:nullable="true" />
+
+            <argument
+                android:name="profileImg"
+                app:argType="string"
+                app:nullable="true" />
+
+        </fragment>
+
+        <fragment
+            android:id="@+id/joinPasswordFragment"
+            android:name="com.d204.rumeet.ui.join.password.JoinPasswordFragment"
+            android:label="JoinPasswordFragment" />
+    </navigation>
+
+
 </navigation>
