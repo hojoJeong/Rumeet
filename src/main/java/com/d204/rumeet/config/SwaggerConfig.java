@@ -40,7 +40,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi group() {
         return GroupedOpenApi.builder()
-                .group("전체")
+                .group("all")
                 .packagesToScan("com.d204.rumeet") // package 필터 설정
                 .build();
     }
