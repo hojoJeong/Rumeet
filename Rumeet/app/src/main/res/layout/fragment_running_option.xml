@@ -9,7 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.running.fragment.RunningOptionContainerFragment">
+        tools:context=".ui.running.fragment.RunningOptionFragment">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tbly_running_option"
@@ -36,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="@dimen/base_horizontal_margin"
-            android:background="@drawable/bg_rect_navyblue_round8_stroke0"
+            android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
             android:text="@string/content_btn_start_running"
             style="@style/base_font_bold_16_white"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

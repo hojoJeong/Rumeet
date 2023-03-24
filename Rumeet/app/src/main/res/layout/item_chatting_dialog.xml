@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/base_horizontal_margin"
+        tools:background="@color/nobel">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_item_chatting_profile_other"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:civ_circle_background_color="@color/whisper"
+            android:src="@drawable/ic_app_main_logo"/>
+        <TextView
+            android:id="@+id/tv_item_chatting_dialog_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/iv_item_chatting_profile_other"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_item_chatting_profile_other"
+            android:layout_marginStart="10dp"
+            tools:text="채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅"
+            android:background="@drawable/bg_rect_transparent_white_round20_stroke0"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="10dp"
+            style="@style/base_font_medium_14_black"
+            android:gravity="center"
+            android:maxEms="12"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_item_chatting_profile_my"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/iv_item_chatting_profile_other"
+            android:src="@drawable/ic_app_main_logo"
+            app:civ_circle_background_color="@color/whisper"/>
+
+        <TextView
+            android:id="@+id/tv_item_chatting_dialog_my"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/iv_item_chatting_profile_my"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_item_chatting_profile_my"
+            android:background="@drawable/bg_rect_transparent_navyblue_round20_stroke0"
+            tools:text="채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="10dp"
+            android:maxEms="12"
+            android:layout_marginEnd="10dp"
+            style="@style/base_font_medium_14"
+            android:textColor="@color/white"
+            android:textAlignment="viewStart"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

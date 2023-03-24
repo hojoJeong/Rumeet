@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/base_vertical_margin">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_item_notification_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_item_notification_reject"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:src="@drawable/ic_app_main_logo"
+            app:civ_circle_background_color="@color/whisper"
+            android:scaleType="centerCrop"/>
+        <TextView
+            android:id="@+id/tv_item_notification_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/iv_item_notification_profile"
+            app:layout_constraintTop_toTopOf="@+id/iv_item_notification_profile"
+            tools:text="닉네임 닉네임"
+            style="@style/base_font_medium_14_black"
+            android:layout_marginStart="@dimen/base_horizontal_margin"/>
+        <TextView
+            android:id="@+id/tv_item_notification_pace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/tv_item_notification_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_notification_name"
+            tools:text="평균 페이스 : 5'05''"
+            style="@style/base_font_medium_12_dim_gray"/>
+
+        <TextView
+            android:id="@+id/tv_item_notification_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_item_notification_name"
+            tools:text="협동"
+            style="@style/base_font_bold_14_black"/>
+        <TextView
+            android:id="@+id/tv_item_notification_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_notification_mode"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_item_notification_pace"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_notification_pace"
+            tools:text="EASY"
+            style="@style/base_font_bold_12"
+            android:textColor="@color/dim_gray"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_item_notification_reject"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_item_notification_profile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_item_notification_accept"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_rect_transparent_light_grey_round8_stroke0"
+            android:layout_marginTop="10dp"
+            android:text="@string/content_btn_reject"
+            style="@style/base_font_medium_14"
+            android:textColor="@color/white"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_item_notification_accept"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_item_notification_reject"
+            app:layout_constraintStart_toEndOf="@+id/btn_item_notification_reject"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_item_notification_reject"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
+            android:text="@string/content_btn_accept"
+            style="@style/base_font_medium_14"
+            android:textColor="@color/white"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
