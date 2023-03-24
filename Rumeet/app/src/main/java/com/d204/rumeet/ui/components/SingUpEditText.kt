@@ -12,7 +12,6 @@ import android.view.View
 import androidx.annotation.AttrRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
-import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentSignUpEditTextBinding
 import com.d204.rumeet.util.getColorWithNoTheme
 import com.d204.rumeet.util.setTextColorWithNoTheme
@@ -75,6 +74,9 @@ class SingUpEditText @JvmOverloads constructor(
     private fun checkNickNameValidate(): Boolean {
         return if (binding.editInput.text.length > 12) {
             setStateMessage(context.getString(R.string.content_nickname_size_error), false)
+            false
+        } else if (binding.editInput.text.length < 2) {
+            setStateMessage(context.getString(R.string.content_nickname_size_min_error), false)
             false
         } else {
             true

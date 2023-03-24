@@ -41,8 +41,8 @@ class JoinPasswordFragment : BaseFragment<FragmentJoinPasswordBinding, JoinViewM
     }
 
     override fun initAfterBinding() {
-        binding.editPassword.setEditTextType(SingUpEditText.SingUpEditTextType.PASSWORD)
-        binding.editPasswordCheck.setEditTextType(SingUpEditText.SingUpEditTextType.PASSWORD)
+        binding.editPassword.setEditTextType(SingUpEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_hint))
+        binding.editPasswordCheck.setEditTextType(SingUpEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_check_hint))
         binding.btnSignUp.setContent("계속하기")
     }
 }

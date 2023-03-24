@@ -71,7 +71,7 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
                     }
                     is JoinNicknameAction.PassNicknameValidation -> {
                         viewModel.joinInfo.profileImg = imageFile
-                        if(socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
+                        if(!socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
                         else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
                     }
                     is JoinNicknameAction.NavigateGallery -> { navigateGallery() }

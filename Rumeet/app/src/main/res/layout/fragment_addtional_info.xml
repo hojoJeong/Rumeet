@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="vm"
             type="com.d204.rumeet.ui.join.JoinViewModel" />
@@ -12,5 +13,86 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tv_additional_info_title"
+            style="@style/base_font_bold_22_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_horizontal_margin"
+            android:text="@string/title_join_additional"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_additional_info_description"
+            style="@style/base_font_medium_14_nobel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="18dp"
+            android:text="@string/content_join_additional_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_additional_info_title" />
+
+        <TextView
+            android:id="@+id/tv_gender"
+            style="@style/base_font_bold_16_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="48dp"
+            android:text="@string/title_gender"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_additional_info_description" />
+
+        <RadioGroup
+            android:id="@+id/rg_gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginTop="13dp"
+            android:padding="1dp"
+            android:background="@drawable/bg_rect_navyblue_tranparent_round8_stroke1"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_gender">
+
+            <RadioButton
+                android:id="@+id/btn_male"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/sc_left_check_box_background"
+                android:button="@null"
+                android:checked="true"
+                android:fontFamily="@font/notosanskr_bold"
+                android:gravity="center"
+                android:text="@string/category_male"
+                android:textColor="@color/sc_checked_color_white_black" />
+
+            <RadioButton
+                android:id="@+id/btn_female"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/sc_right_check_box_background"
+                android:button="@null"
+                android:checked="true"
+                android:fontFamily="@font/notosanskr_bold"
+                android:gravity="center"
+                android:text="@string/category_female"
+                android:textColor="@color/sc_checked_color_white_black" />
+        </RadioGroup>
+
+        <View
+            android:id="@+id/div_gender"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/navy_blue"
+            app:layout_constraintBottom_toBottomOf="@id/rg_gender"
+            app:layout_constraintEnd_toEndOf="@id/rg_gender"
+            app:layout_constraintStart_toStartOf="@id/rg_gender"
+            app:layout_constraintTop_toTopOf="@id/rg_gender" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
