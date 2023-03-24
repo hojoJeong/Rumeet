@@ -61,6 +61,17 @@
         <item>서비스 이용 약관</item>
         <item>로그아웃</item>
     </string-array>
+    <string-array name="title_user_info_content">
+        <item>이메일</item>
+        <item>닉네임</item>
+        <item>나이</item>
+        <item>성별</item>
+        <item>신장/체중</item>
+        <item>SNS 연동</item>
+        <item>부가정보 수정</item>
+        <item>비밀번호 재설정</item>
+        <item>회원탈퇴</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
