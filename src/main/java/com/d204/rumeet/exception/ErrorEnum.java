@@ -15,7 +15,8 @@ public enum ErrorEnum {
     NO_DATA_ERROR("success","데이터가 없습니다." , 0),
     SQL_ERROR("fail","SQL 오류입니다.",1),
     DUPLICATE_REQUEST_ERROR("fail","이미 친구요청을 보낸 상태입니다.",1),
-    NO_REQUEST_ERROR("fail", "해당 친구요청이 존재하지 않습니다." , 1 );
+    NO_REQUEST_ERROR("fail", "해당 친구요청이 존재하지 않습니다." , 1 ),
+    NO_FRIEND_ERROR("fail", "친구가 아닙니다.", 1);
 
     public String flag;
     public String msg;

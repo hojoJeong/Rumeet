@@ -1,5 +1,6 @@
 package com.d204.rumeet.friend.model.service;
 import com.d204.rumeet.data.RespData;
+import com.d204.rumeet.exception.NoFriendDataException;
 import com.d204.rumeet.exception.NoRequestException;
 import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
@@ -41,9 +42,15 @@ public class FriendServiceImpl implements FriendService {
                 .and("friendId").is(friendId));
         Query query2 = new Query(Criteria.where("userId").is(friendId)
                 .and("friendId").is(userId));
-
-        mongoTemplate.remove(query1, FriendDao.class);
-        mongoTemplate.remove(query2, FriendDao.class);
+        FriendDao existingFriend = mongoTemplate.findOne(query1, FriendDao.class);
+        FriendDao existingFriend2 = mongoTemplate.findOne(query1, FriendDao.class);
+        if (existingFriend ==null && existingFriend2 == null){
+            throw new NoFriendDataException();
+        }
+        else{
+            mongoTemplate.remove(query1, FriendDao.class);
+            mongoTemplate.remove(query2, FriendDao.class);
+        }
     }
 
     @Override

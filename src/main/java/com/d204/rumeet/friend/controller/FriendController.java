@@ -30,7 +30,7 @@ public class FriendController {
 
 
     // 달리기 한 뒤에 정렬 추가하기
-    @Operation(summary = "내 친구 조회", description = "친구 조회 (전체 (닉네임순), 최근 같이 뛴 친구, 함께 많이 달린 친구) ... 아직 전체로 조회만 됨")
+    @Operation(summary = "내 친구 전체 조회", description = "친구 전체 조회 (전체 (닉네임순), 최근 같이 뛴 친구, 함께 많이 달린 친구) ... 아직 전체로 조회만 됨")
     @GetMapping("/list/{userId}")
     public ResponseEntity<?> searchByUserId(@PathVariable int userId) {
         List<FriendDao> list = friendService.getFriendsByUserId(userId);

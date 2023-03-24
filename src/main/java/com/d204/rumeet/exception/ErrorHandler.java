@@ -60,4 +60,11 @@ public class ErrorHandler {
         data.setData(null);
         return data.builder();
     }
+
+    @ExceptionHandler(NoFriendDataException.class)
+    public ResponseEntity<?> NoFriendDataException() {
+        RespData<Void> data = new RespData(ErrorEnum.NO_FRIEND_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
 }
