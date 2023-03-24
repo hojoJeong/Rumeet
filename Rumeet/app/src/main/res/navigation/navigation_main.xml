@@ -11,11 +11,11 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_runningOptionContainerFragment"
-            app:destination="@id/runningOptionContainerFragment" />
+            app:destination="@id/runningOptionFragment" />
     </fragment>
     <fragment
-        android:id="@+id/runningOptionContainerFragment"
-        android:name="com.d204.rumeet.ui.running.fragment.RunningOptionContainerFragment"
+        android:id="@+id/runningOptionFragment"
+        android:name="com.d204.rumeet.ui.running.fragment.RunningOptionFragment"
         android:label="RunningOptionContainerFragment" >
         <action
             android:id="@+id/action_runningOptionContainerFragment_to_runningFragment"
