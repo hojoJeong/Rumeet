@@ -46,4 +46,18 @@ public class ErrorHandler {
         data.setData(null);
         return data.builder();
     }
+
+    @ExceptionHandler(DuplicateRequestException.class)
+    public ResponseEntity<?> DuplicateRequestException() {
+        RespData<Void> data = new RespData(ErrorEnum.DUPLICATE_REQUEST_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
+
+    @ExceptionHandler(NoRequestException.class)
+    public ResponseEntity<?> NoRequestException() {
+        RespData<Void> data = new RespData(ErrorEnum.NO_REQUEST_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
 }
