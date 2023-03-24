@@ -8,25 +8,25 @@ import com.d204.rumeet.friend.model.dto.FriendRequestDto;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
 import com.d204.rumeet.user.model.service.UserService;
 import com.sun.jdi.request.DuplicateRequestException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+@Service
+@RequiredArgsConstructor
 public class FriendServiceImpl implements FriendService {
 
     private final MongoTemplate mongoTemplate;
 
     private final UserService userService;
-
-    public FriendServiceImpl(MongoTemplate mongoTemplate, UserService userService) {
-        this.mongoTemplate = mongoTemplate;
-        this.userService = userService;
-    }
 
     @Override
     public List<FriendDao> getFriendsByUserId(int userId) {

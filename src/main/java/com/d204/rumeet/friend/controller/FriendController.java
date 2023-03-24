@@ -25,9 +25,6 @@ import java.util.Set;
 @RequestMapping("/friends")
 public class FriendController {
 
-
-    private final MongoTemplate mongoTemplate;
-    private final UserService userService;
     private final FriendService friendService;
 
 
