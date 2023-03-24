@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class KakaoUserJoinDto {
+    int id;
     String oauth;
     String profile;
 }
