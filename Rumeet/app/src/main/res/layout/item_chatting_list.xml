@@ -12,7 +12,7 @@
         android:paddingHorizontal="@dimen/base_horizontal_margin">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_item_chatting_profile"
+            android:id="@+id/iv_item_chatting_list_profile"
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +26,8 @@
             android:id="@+id/tv_item_chatting_list_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/iv_item_chatting_profile"
-            app:layout_constraintTop_toTopOf="@+id/iv_item_chatting_profile"
+            app:layout_constraintStart_toEndOf="@+id/iv_item_chatting_list_profile"
+            app:layout_constraintTop_toTopOf="@+id/iv_item_chatting_list_profile"
             android:layout_marginStart="@dimen/base_horizontal_margin"
             style="@style/base_font_bold_14_black"
             tools:text="다이어트는너무싫어요"/>
