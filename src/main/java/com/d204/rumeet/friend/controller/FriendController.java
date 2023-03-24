@@ -91,23 +91,8 @@ public class FriendController {
     @Operation(summary = "친구 요청 거절", description = "요청이 삭제됩니다.")
     @PostMapping("/reject")
     public ResponseEntity<?> rejectFriendRequest(@RequestBody FriendRequestDto friendRequestDto) {
-        int fromId = friendRequestDto.getFromUserId();
-        int toId = friendRequestDto.getToUserId();
-        RespData<List> data = new RespData<>();
-
-        Query query = new Query(Criteria.where("fromUserId").is(fromId)
-                .and("toUserId").is(toId));
-
-        // 요청이 없을떄
-        FriendRequestDao existingRequest = mongoTemplate.findOne(query, FriendRequestDao.class);
-
-        if (existingRequest == null) {
-            data.setMsg("친구요청이 없습니다.");
-            data.setFlag("fail");
-            return data.builder();}
-
-        // 친구요청 삭제
-        mongoTemplate.remove(query, FriendRequestDao.class);
+        friendService.rejectRequests(friendRequestDto);
+        RespData<Void> data = new RespData<>();
         data.setMsg("친구 요청 거절");
         return data.builder();
     }

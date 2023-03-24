@@ -110,5 +110,25 @@ public class FriendServiceImpl implements FriendService {
             mongoTemplate.insert(friend2);
             }
         }
+
+    @Override
+    public void rejectRequests(FriendRequestDto friendRequestDto) {
+        int fromId = friendRequestDto.getFromUserId();
+        int toId = friendRequestDto.getToUserId();
+        RespData<List> data = new RespData<>();
+
+        Query query = new Query(Criteria.where("fromUserId").is(fromId)
+                .and("toUserId").is(toId));
+
+        FriendRequestDao existingRequest = mongoTemplate.findOne(query, FriendRequestDao.class);
+
+        if (existingRequest == null) {
+            throw new NoRequestException();}
+        else {
+            mongoTemplate.remove(query, FriendRequestDao.class);
+        }
     }
+
+
+}
 

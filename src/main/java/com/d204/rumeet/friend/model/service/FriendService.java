@@ -19,4 +19,6 @@ public interface FriendService {
     List<FriendRequestDao> getSendRequests(int fromUserId);
 
     void acceptRequests(FriendRequestDto friendRequestDto);
+
+    void rejectRequests(FriendRequestDto friendRequestDto);
 }
