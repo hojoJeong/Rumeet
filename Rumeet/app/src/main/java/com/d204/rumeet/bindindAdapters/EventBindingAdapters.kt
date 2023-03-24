@@ -1,7 +1,6 @@
 package com.d204.rumeet.bindindAdapters
 
 import android.view.View
-import android.widget.CompoundButton
 import androidx.databinding.BindingAdapter
 import com.d204.rumeet.ui.components.SingleButton
 import com.d204.rumeet.util.OnSingleClickListener

@@ -1,4 +1,7 @@
 [versions]
+
+kotlin = "1.7.10"
+
 # androidx
 androidx-core = "1.7.0"
 androidx-splash = "1.0.0"
@@ -17,7 +20,6 @@ android-material = "1.7.0"
 android-library = "7.3.0"
 android-application = "7.3.0"
 
-
 # junit
 junit = "4.13.2"
 
@@ -28,13 +30,8 @@ hilt = "2.44"
 retrofit = "2.9.0"
 okhttp3 = "4.10.0"
 
-
-kotlin = "1.7.10"
-
+# kakao
 kakao_sdk_version = "2.11.2"
-
-
-
 
 # gson
 gson_version = "2.9.1"
@@ -52,9 +49,10 @@ firebase_version = "31.2.3"
 firebase_cloud_storage_version = "20.1.0"
 firebase_crashlytics_version = "18.3.5"
 firebase_crashlytics_gradle_version = "2.9.4"
-
-
 glide_version = "4.13.0"
+
+# rabbitmq
+rabbitmq_version = "5.17.0"
 
 
 [libraries]
@@ -98,9 +96,10 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide_versi
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide_version" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_version" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebase_crashlytics_version"}
-datastore-preferences = {module = "androidx.datastore:datastore-preferences", version.ref = "datastore-version"}
-datastore-preferences-core = {module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore-version"}
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebase_crashlytics_version" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-version" }
+datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore-version" }
+rabbitmq_client = { module = "com.rabbitmq:amqp-client", version = "rabbitmq_version" }
 
 
 
@@ -118,4 +117,4 @@ android_application = { id = "com.android.application", version.ref = "android-a
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 navigation_safe_args_plugin = { id = "androidx.navigation.safeargs", version.ref = "navigation_safe_args_version" }
 google_service = { id = "com.google.gms.google-services", version.ref = "google_service_version" }
-firebase_crashlytics = {id = "com.google.firebase.crashlytics", version.ref = "firebase_crashlytics_gradle_version"}
+firebase_crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase_crashlytics_gradle_version" }
