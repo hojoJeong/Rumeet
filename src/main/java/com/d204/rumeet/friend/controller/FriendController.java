@@ -102,28 +102,9 @@ public class FriendController {
     @Operation(summary = "내 친구 목록에서 닉네임으로 조회", description = "친구 닉네임 조회")
     @GetMapping("/search")
     public ResponseEntity<?> searchFriend(@RequestParam("userId") int userId, @RequestParam("nickname") String nickname) {
-        List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("userId").is(userId));
-        List<FriendDao> friends = mongoTemplate.find(query, FriendDao.class, "friend");
-
-        Set<Integer> friendId = new HashSet<>();
-        for (FriendDao friend : friends) {
-            friendId.add(friend.getFriendId());
-        }
-        System.out.println(friendId);
-
-        List<SimpleUserDto> filteredFriends = new ArrayList<>();
-        for (SimpleUserDto user : users) {
-            if (friendId.contains(user.getId())) {
-                filteredFriends.add(user);
-            }
-        }
-        System.out.println(filteredFriends);
-
+        List<SimpleUserDto> friends = friendService.searchFriend(userId, nickname);
         RespData<List> data = new RespData<>();
-        data.setData(filteredFriends);
+        data.setData(friends);
         return data.builder();
     }
 

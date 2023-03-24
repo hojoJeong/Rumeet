@@ -3,20 +3,29 @@ import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.NoRequestException;
 import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
+import com.d204.rumeet.friend.model.dto.FriendDto;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
+import com.d204.rumeet.user.model.dto.SimpleUserDto;
+import com.d204.rumeet.user.model.service.UserService;
 import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FriendServiceImpl implements FriendService {
 
     private final MongoTemplate mongoTemplate;
 
-    public FriendServiceImpl(MongoTemplate mongoTemplate) {
+    private final UserService userService;
+
+    public FriendServiceImpl(MongoTemplate mongoTemplate, UserService userService) {
         this.mongoTemplate = mongoTemplate;
+        this.userService = userService;
     }
 
     @Override
@@ -83,9 +92,7 @@ public class FriendServiceImpl implements FriendService {
     public void acceptRequests(FriendRequestDto friendRequestDto) {
         int fromId = friendRequestDto.getFromUserId();
         int toId = friendRequestDto.getToUserId();
-        RespData<List> data = new RespData<>();
 
-        // 요청이 없을떄
         Query query = new Query(Criteria.where("fromUserId").is(fromId)
                 .and("toUserId").is(toId));
         FriendRequestDao existingRequest = mongoTemplate.findOne(query, FriendRequestDao.class);
@@ -115,7 +122,6 @@ public class FriendServiceImpl implements FriendService {
     public void rejectRequests(FriendRequestDto friendRequestDto) {
         int fromId = friendRequestDto.getFromUserId();
         int toId = friendRequestDto.getToUserId();
-        RespData<List> data = new RespData<>();
 
         Query query = new Query(Criteria.where("fromUserId").is(fromId)
                 .and("toUserId").is(toId));
@@ -129,6 +135,27 @@ public class FriendServiceImpl implements FriendService {
         }
     }
 
+    @Override
+    public List<SimpleUserDto> searchFriend(int userId, String nickname) {
+        List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
 
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        List<FriendDao> friends = mongoTemplate.find(query, FriendDao.class, "friend");
+
+        Set<Integer> friendId = new HashSet<>();
+        for (FriendDao friend : friends) {
+            friendId.add(friend.getFriendId());
+        }
+
+        List<SimpleUserDto> filteredFriends = new ArrayList<>();
+        for (SimpleUserDto user : users) {
+            if (friendId.contains(user.getId())) {
+                filteredFriends.add(user);
+            }
+        }
+        return filteredFriends;
+
+    }
 }
 
