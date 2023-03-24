@@ -53,8 +53,8 @@ class JoinViewModel @Inject constructor(
         baseViewModelScope.launch {
             checkDuplicateInfoUseCase(1, nickname)
                 .onSuccess {
-                    _joinNicknameAction.emit(JoinNicknameAction.NavigateJoinPassword)
                     joinInfo.nickname = nickname
+                    _joinNicknameAction.emit(JoinNicknameAction.NavigateJoinPassword)
                 }
                 .onError { e ->
                     if (e is DuplicateInfoException) _joinIdAction.emit(JoinIdAction.IdDuplicate)
@@ -74,6 +74,13 @@ class JoinViewModel @Inject constructor(
     fun checkIdValidation() {
         baseViewModelScope.launch {
             _joinIdAction.emit(JoinIdAction.CheckIdDuplicate)
+        }
+    }
+
+    // 갤러리 불러오기
+    fun navigationToGallery(){
+        baseViewModelScope.launch {
+            _joinNicknameAction.emit(JoinNicknameAction.NavigateGallery)
         }
     }
 }

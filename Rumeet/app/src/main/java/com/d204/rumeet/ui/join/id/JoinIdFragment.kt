@@ -50,6 +50,6 @@ class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinViewModel>() {
 
     override fun initAfterBinding() {
         binding.btnNext.setContent("계속하기")
-        binding.editId.setEditTextType(SingUpEditText.SingleLineEditTextType.ID, getString(R.string.title_id_input))
+        binding.editId.setEditTextType(SingUpEditText.SingUpEditTextType.ID, getString(R.string.title_id_input))
     }
 }

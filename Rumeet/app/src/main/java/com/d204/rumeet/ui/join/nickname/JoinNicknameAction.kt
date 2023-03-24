@@ -6,4 +6,5 @@ sealed class JoinNicknameAction {
     object CheckNicknameValidation : JoinNicknameAction()
     object NavigateJoinPassword : JoinNicknameAction()
     object DuplicateNickname : JoinNicknameAction()
+    object NavigateGallery : JoinNicknameAction()
 }

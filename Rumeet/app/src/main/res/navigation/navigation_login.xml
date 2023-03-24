@@ -43,7 +43,7 @@
 
         <argument
             android:name="oauth"
-            android:defaultValue="0L"
+            android:defaultValue="1L"
             app:argType="long" />
 
         <argument

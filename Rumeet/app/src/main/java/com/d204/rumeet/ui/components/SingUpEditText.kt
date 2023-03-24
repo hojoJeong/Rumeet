@@ -13,7 +13,7 @@ import androidx.annotation.AttrRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import com.d204.rumeet.R
-import com.d204.rumeet.databinding.ContentSingleLineEditTextBinding
+import com.d204.rumeet.databinding.ContentSignUpEditTextBinding
 import com.d204.rumeet.util.getColorWithNoTheme
 import com.d204.rumeet.util.setTextColorWithNoTheme
 
@@ -23,39 +23,39 @@ class SingUpEditText @JvmOverloads constructor(
     @AttrRes defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attributeSet, defStyleAttr) {
 
-    private var _binding: ContentSingleLineEditTextBinding? = null
-    val binding: ContentSingleLineEditTextBinding get() = _binding!!
+    private var _binding: ContentSignUpEditTextBinding? = null
+    val binding: ContentSignUpEditTextBinding get() = _binding!!
 
     val keyword: String get() = binding.editInput.text.toString()
     val idValidate: Boolean get() = checkIdValidation()
     val passwordValidate: Boolean get() = checkPasswordValidate()
     val nicknameValidate: Boolean get() = checkNickNameValidate()
 
-    enum class SingleLineEditTextType {
+    enum class SingUpEditTextType {
         ID, PASSWORD, NORMAL
     }
 
     init {
         _binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.content_single_line_edit_text,
+            R.layout.content_sign_up_edit_text,
             this,
             false
         )
         addView(binding.root)
     }
 
-    fun setEditTextType(type: SingleLineEditTextType, hintText: String = "") {
+    fun setEditTextType(type: SingUpEditTextType, hintText: String = "") {
         when (type) {
-            SingleLineEditTextType.ID -> {
+            SingUpEditTextType.ID -> {
                 setIdInput()
                 addTextWatcher()
             }
-            SingleLineEditTextType.PASSWORD -> {
+            SingUpEditTextType.PASSWORD -> {
                 setPasswordInput()
                 addTextWatcher()
             }
-            SingleLineEditTextType.NORMAL -> {
+            SingUpEditTextType.NORMAL -> {
 
             }
         }
