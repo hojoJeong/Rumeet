@@ -1,24 +1,22 @@
 package com.d204.rumeet.ui.running.fragment
 
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.d204.rumeet.R
-import com.d204.rumeet.databinding.FragmentRunningOptionContainerBinding
+import com.d204.rumeet.databinding.FragmentRunningOptionBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.ui.running.adapter.RunningOptionViewPagerAdapter
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayoutMediator
 
-class RunningOptionContainerFragment: BaseFragment<FragmentRunningOptionContainerBinding, BaseViewModel>() {
+class RunningOptionFragment: BaseFragment<FragmentRunningOptionBinding, BaseViewModel>() {
 
     private val runningViewModel by viewModels<RunningViewModel>()
     private lateinit var tabList: List<String>
     private lateinit var vpFragmentList: List<Fragment>
     override val layoutResourceId: Int
-        get() = R.layout.fragment_running_option_container
+        get() = R.layout.fragment_running_option
     override val viewModel: BaseViewModel
         get() = runningViewModel
 
@@ -59,7 +57,7 @@ class RunningOptionContainerFragment: BaseFragment<FragmentRunningOptionContaine
 
     private fun setRunningStartBtnClickListener(){
         binding.btnRunningOptionStartRunning.setOnClickListener{
-            navigate(RunningOptionContainerFragmentDirections.actionRunningOptionContainerFragmentToRunningFragment())
+            navigate(RunningOptionFragmentDirections.actionRunningOptionContainerFragmentToRunningFragment())
         }
     }
 
