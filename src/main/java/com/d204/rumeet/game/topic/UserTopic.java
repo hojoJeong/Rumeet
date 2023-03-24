@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 public class UserTopic {
     @KafkaListener(topics = "rumeet.userlist", groupId = "userlist")
     public void listenGroupA(String message) {
-        System.out.println("userTopic" + " : " + message);
+        System.out.println("userListTopic" + " : " + message);
     }
 }

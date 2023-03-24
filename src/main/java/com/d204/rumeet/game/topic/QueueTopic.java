@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class QueueTopic {
-    @KafkaListener(topics = "rumeet.queue", groupId = "queue")
+    @KafkaListener(topics = "rumeet.startqueue", groupId = "startqueue")
     public void listenGroupA(String message) {
-        System.out.println("queue" + " : " + message);
+        System.out.println("startqueue" + " : " + message);
     }
 }
