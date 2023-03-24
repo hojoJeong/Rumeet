@@ -71,7 +71,7 @@ dependencies {
     implementation libs.hilt
     kapt libs.hilt.compiler
     implementation libs.glide
-    annotationProcessor libs.glide.compiler
+    kapt libs.glide.compiler
 
     // kakao
     implementation libs.kakao.sdk

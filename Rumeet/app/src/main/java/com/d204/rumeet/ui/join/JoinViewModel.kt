@@ -7,6 +7,7 @@ import com.d204.rumeet.domain.usecase.user.CheckDuplicateInfoUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.join.id.JoinIdAction
 import com.d204.rumeet.ui.join.nickname.JoinNicknameAction
+import com.d204.rumeet.ui.join.password.JoinPasswordAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JoinViewModel @Inject constructor(
-    private val checkDuplicateInfoUseCase: CheckDuplicateInfoUseCase
+    private val checkDuplicateInfoUseCase: CheckDuplicateInfoUseCase,
 ) : BaseViewModel() {
 
     private val _joinIdAction: MutableSharedFlow<JoinIdAction> = MutableSharedFlow()
@@ -22,6 +23,9 @@ class JoinViewModel @Inject constructor(
 
     private val _joinNicknameAction: MutableSharedFlow<JoinNicknameAction> = MutableSharedFlow()
     val joinNicknameAction: SharedFlow<JoinNicknameAction> get() = _joinNicknameAction.asSharedFlow()
+
+    private val _joinPasswordAction : MutableSharedFlow<JoinPasswordAction> = MutableSharedFlow()
+    val joinPasswordAction : SharedFlow<JoinPasswordAction> get() = _joinPasswordAction.asSharedFlow()
 
     val joinInfo: JoinModel = JoinModel()
 
@@ -54,10 +58,10 @@ class JoinViewModel @Inject constructor(
             checkDuplicateInfoUseCase(1, nickname)
                 .onSuccess {
                     joinInfo.nickname = nickname
-                    _joinNicknameAction.emit(JoinNicknameAction.NavigateJoinPassword)
+                    _joinNicknameAction.emit(JoinNicknameAction.PassNicknameValidation)
                 }
                 .onError { e ->
-                    if (e is DuplicateInfoException) _joinIdAction.emit(JoinIdAction.IdDuplicate)
+                    if (e is DuplicateInfoException) _joinNicknameAction.emit(JoinNicknameAction.DuplicateNickname)
                     else catchError(e)
                 }
         }
@@ -81,6 +85,13 @@ class JoinViewModel @Inject constructor(
     fun navigationToGallery(){
         baseViewModelScope.launch {
             _joinNicknameAction.emit(JoinNicknameAction.NavigateGallery)
+        }
+    }
+
+    // 회원가입, 비밀번호 유효성 검증
+    fun checkPasswordValidation(){
+        baseViewModelScope.launch {
+            _joinPasswordAction.emit(JoinPasswordAction.CheckPasswordValidation)
         }
     }
 }

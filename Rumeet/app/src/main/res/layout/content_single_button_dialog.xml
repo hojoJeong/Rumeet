@@ -57,7 +57,7 @@
             android:layout_marginHorizontal="@dimen/base_horizontal_margin"
             android:layout_marginTop="48dp"
             android:layout_marginBottom="34dp"
-            android:background="@drawable/bg_rect_navyblue_round8_stroke0"
+            android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
             android:elevation="0dp"
             android:text="@{alertModel.buttonText}"
             app:layout_constraintBottom_toBottomOf="parent"

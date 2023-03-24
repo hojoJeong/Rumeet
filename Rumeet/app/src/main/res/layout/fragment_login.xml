@@ -96,7 +96,7 @@
                 style="@style/base_font_bold_16_white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_rect_navyblue_round8_stroke0"
+                android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
                 android:text="@string/content_login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

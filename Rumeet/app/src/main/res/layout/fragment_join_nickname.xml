@@ -19,6 +19,8 @@
             android:layout_height="@dimen/profile_img_size"
             android:layout_margin="@dimen/base_vertical_margin"
             android:src="@color/dark_gray"
+            app:civ_border_color="@color/dark_gray"
+            app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

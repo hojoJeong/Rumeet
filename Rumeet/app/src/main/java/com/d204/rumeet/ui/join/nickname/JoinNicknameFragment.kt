@@ -2,12 +2,12 @@ package com.d204.rumeet.ui.join.nickname
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentJoinNicknameBinding
 import com.d204.rumeet.ui.base.BaseFragment
@@ -15,8 +15,8 @@ import com.d204.rumeet.ui.components.SingUpEditText
 import com.d204.rumeet.ui.join.JoinViewModel
 import com.d204.rumeet.ui.join.SocialJoinModel
 import com.d204.rumeet.util.getAbsolutePath
-import com.d204.rumeet.util.getMultipartData
 import kotlinx.coroutines.flow.collectLatest
+import java.io.File
 
 class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewModel>() {
     override val layoutResourceId: Int
@@ -24,14 +24,15 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
 
     override val viewModel: JoinViewModel by activityViewModels()
     private val args: JoinNicknameFragmentArgs by navArgs()
-    private var imageUri : Uri? = null
-
+    private var imageFile : File? = null
+    private var socialLogin = false
 
     private val galleryLauncher =
         registerForActivityResult((ActivityResultContracts.StartActivityForResult())) { result ->
             if (result.resultCode == RESULT_OK) {
-                imageUri = result.data?.data
-                binding.ivProfileImg.setImageURI(imageUri)
+                val uri = result.data?.data!!
+                imageFile = File(requireContext().getAbsolutePath(uri, requireContext()))
+                binding.ivProfileImg.setImageURI(uri)
             }
         }
 
@@ -44,7 +45,12 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
 
         // args의 profile img가 null이면 아이디, 아니면 소셜로그인의 회원가입
         if (args.oauth != 1L) {
+            socialLogin = true
             viewModel.joinInfo.socialJoinModel = SocialJoinModel(args.oauth, args.profileImg)
+
+            Glide.with(requireContext())
+                .load(args.profileImg)
+                .into(binding.ivProfileImg)
         }
     }
 
@@ -63,9 +69,10 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
                             false
                         )
                     }
-                    is JoinNicknameAction.NavigateJoinPassword -> {
-                        viewModel.joinInfo.profileImg = requireContext().getMultipartData(imageUri)
-                        navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
+                    is JoinNicknameAction.PassNicknameValidation -> {
+                        viewModel.joinInfo.profileImg = imageFile
+                        if(socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
+                        else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
                     }
                     is JoinNicknameAction.NavigateGallery -> { navigateGallery() }
                 }

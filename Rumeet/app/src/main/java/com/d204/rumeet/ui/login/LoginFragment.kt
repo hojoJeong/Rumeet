@@ -94,6 +94,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
             //로그인 성공
             else if (token != null) {
                 viewModel.doKakaoLogin(token.accessToken)
+            } else {
+                Log.d("TAG", "kakaoLogin: error")
             }
         }
 

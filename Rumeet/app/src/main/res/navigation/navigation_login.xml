@@ -50,6 +50,9 @@
             android:name="profileImg"
             android:defaultValue=""
             app:argType="string" />
+        <action
+            android:id="@+id/action_joinNickNameFragment_to_additionalInfoFragment"
+            app:destination="@id/additionalInfoFragment" />
 
     </fragment>
 
@@ -57,13 +60,24 @@
         android:id="@+id/joinPasswordFragment"
         android:name="com.d204.rumeet.ui.join.password.JoinPasswordFragment"
         android:label="JoinPasswordFragment"
-        tools:layout="@layout/fragment_join_password" />
+        tools:layout="@layout/fragment_join_password" >
+        <action
+            android:id="@+id/action_joinPasswordFragment_to_additionalInfoFragment"
+            app:destination="@id/additionalInfoFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/findAccountFragment"
-        android:name="com.d204.rumeet.ui.findaccount.FindAccountFragment"
+        android:name="com.d204.rumeet.ui.find_account.FindAccountFragment"
         android:label="FindAccountFragment"
         tools:layout="@layout/fragment_find_account"/>
+
+
+    <fragment
+        android:id="@+id/additionalInfoFragment"
+        android:name="com.d204.rumeet.ui.join.addtional_info.AdditionalInfoFragment"
+        android:label="AdditionalInfoFragment"
+        tools:layout="@layout/fragment_addtional_info"/>
 
 
 </navigation>
