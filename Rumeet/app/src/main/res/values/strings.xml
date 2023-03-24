@@ -67,6 +67,10 @@
     <string name="title_running_total_time">운동 시간</string>
     <string name="title_running_height">고도</string>
     <string name="title_running_heartbeat">평균 심박수</string>
+    <string name="content_btn_reject">거절</string>
+    <string name="content_btn_accept">수락</string>
+    <string name="title_request_friend">친구 요청</string>
+    <string name="title_request_running">러닝 요청</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
