@@ -6,6 +6,8 @@ import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
 import com.d204.rumeet.user.model.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -29,8 +31,8 @@ public class FriendController {
 
 
 
-    // 친구 조회 (전체 (닉네임순), 최근 같이 뛴 친구, 함께 많이 달린 친구)
     // 달리기 한 뒤에 정렬 추가하기
+    @Operation(summary = "내 친구 조회", description = "친구 조회 (전체 (닉네임순), 최근 같이 뛴 친구, 함께 많이 달린 친구) ... 아직 전체로 조회만 됨")
     @GetMapping("/list/{userId}")
     public ResponseEntity<?> searchByUserId(@PathVariable int userId) {
         RespData<List> data = new RespData<>();
@@ -41,7 +43,7 @@ public class FriendController {
         return data.builder();
     }
 
-    // 친구 삭제
+    @Operation(summary = "친구 삭제", description = "userId = 내 id, friendId = 삭제할 친구의 id")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteFriend(@RequestParam("userId") int userId, @RequestParam("friendId") int friendId) {
         Query query1 = new Query(Criteria.where("userId").is(userId)
@@ -57,7 +59,7 @@ public class FriendController {
         return data.builder();
     }
 
-    //친구요청
+    @Operation(summary = "친구 요청")
     @PostMapping("/request")
     public ResponseEntity<?> requestFriend(@RequestBody FriendRequestDto friendRequestDto) {
         int fromId = friendRequestDto.getFromUserId();
@@ -88,6 +90,7 @@ public class FriendController {
     }
 
     // 친구요청 조회
+    @Operation(summary = "친구 요청 조회", description = "나에게 친구요청한 목록 조회")
     @GetMapping("/request")
     public ResponseEntity<?> getFriendRequests(@RequestParam("userId") int toUserId) {
         List<FriendRequestDao> requests = mongoTemplate.find(
@@ -101,6 +104,7 @@ public class FriendController {
     }
 
     //친구요청 수락
+    @Operation(summary = "친구 요청 수락")
     @PostMapping("/accept")
     public ResponseEntity<?> acceptFriendRequest(@RequestBody FriendRequestDto friendRequestDto) {
         int fromId = friendRequestDto.getFromUserId();
@@ -140,6 +144,7 @@ public class FriendController {
     }
 
     // 친구요청 거절
+    @Operation(summary = "친구 요청 거절", description = "요청이 삭제됩니다.")
     @PostMapping("/reject")
     public ResponseEntity<?> rejectFriendRequest(@RequestBody FriendRequestDto friendRequestDto) {
         int fromId = friendRequestDto.getFromUserId();
@@ -165,6 +170,7 @@ public class FriendController {
 
 
     // 친구목록에서 닉네임 검색
+    @Operation(summary = "내 친구 목록에서 닉네임으로 조회", description = "친구 닉네임 조회")
     @GetMapping("/search")
     public ResponseEntity<?> searchFriend(@RequestParam("userId") int userId, @RequestParam("nickname") String nickname) {
         List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
