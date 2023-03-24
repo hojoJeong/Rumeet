@@ -8,7 +8,11 @@ data class JoinModel(
     var socialJoinModel: SocialJoinModel? = null,
     var profileImg: File? = null,
     var nickname: String = "",
-    var password: String = ""
+    var password: String = "",
+    var weight : Float = 0f,
+    var height : Float = 0f,
+    var gender : Int = -1,
+    var age : Int = -1
 )
 
 data class SocialJoinModel(

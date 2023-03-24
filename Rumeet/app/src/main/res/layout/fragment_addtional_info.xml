@@ -7,6 +7,10 @@
         <variable
             name="vm"
             type="com.d204.rumeet.ui.join.JoinViewModel" />
+
+        <variable
+            name="socialType"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,6 +158,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginHorizontal="@dimen/base_horizontal_margin"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="@dimen/base_horizontal_margin"/>
+            android:layout_marginBottom="@dimen/base_horizontal_margin"
+            app:onSingleButtonClick="@{() -> vm.signUp(socialType)}"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

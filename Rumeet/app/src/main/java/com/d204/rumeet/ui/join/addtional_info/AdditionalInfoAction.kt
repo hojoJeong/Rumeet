@@ -4,4 +4,5 @@ sealed class AdditionalInfoAction {
     object ShowBodyStateDialog : AdditionalInfoAction()
     object EmailSignUp : AdditionalInfoAction()
     object SocialSignUp : AdditionalInfoAction()
+    object SignUpSuccess : AdditionalInfoAction()
 }

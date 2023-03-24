@@ -4,11 +4,14 @@ import com.d204.rumeet.data.remote.dto.DuplicateInfoException
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.user.CheckDuplicateInfoUseCase
+import com.d204.rumeet.domain.usecase.user.EmailSignUpUseCase
+import com.d204.rumeet.domain.usecase.user.SocialSignUpUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.join.addtional_info.AdditionalInfoAction
 import com.d204.rumeet.ui.join.id.JoinIdAction
 import com.d204.rumeet.ui.join.nickname.JoinNicknameAction
 import com.d204.rumeet.ui.join.password.JoinPasswordAction
+import com.kakao.sdk.common.KakaoSdk.type
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,6 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class JoinViewModel @Inject constructor(
     private val checkDuplicateInfoUseCase: CheckDuplicateInfoUseCase,
+    private val emailSignUpUseCase: EmailSignUpUseCase,
+    private val socialSignUpUseCase: SocialSignUpUseCase
 ) : BaseViewModel() {
 
     private val _joinIdAction: MutableSharedFlow<JoinIdAction> = MutableSharedFlow()
@@ -25,11 +30,11 @@ class JoinViewModel @Inject constructor(
     private val _joinNicknameAction: MutableSharedFlow<JoinNicknameAction> = MutableSharedFlow()
     val joinNicknameAction: SharedFlow<JoinNicknameAction> get() = _joinNicknameAction.asSharedFlow()
 
-    private val _joinPasswordAction : MutableSharedFlow<JoinPasswordAction> = MutableSharedFlow()
-    val joinPasswordAction : SharedFlow<JoinPasswordAction> get() = _joinPasswordAction.asSharedFlow()
+    private val _joinPasswordAction: MutableSharedFlow<JoinPasswordAction> = MutableSharedFlow()
+    val joinPasswordAction: SharedFlow<JoinPasswordAction> get() = _joinPasswordAction.asSharedFlow()
 
-    private val _additionalInfoAction : MutableSharedFlow<AdditionalInfoAction> = MutableSharedFlow()
-    val additionalInfoAction : SharedFlow<AdditionalInfoAction> get() = _additionalInfoAction.asSharedFlow()
+    private val _additionalInfoAction: MutableSharedFlow<AdditionalInfoAction> = MutableSharedFlow()
+    val additionalInfoAction: SharedFlow<AdditionalInfoAction> get() = _additionalInfoAction.asSharedFlow()
 
     val joinInfo: JoinModel = JoinModel()
 
@@ -71,6 +76,48 @@ class JoinViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 소셜로그인
+     * oauth로 id, password를 생성
+     * profile img는 null로 넣어도 상관없음 -> 서버 내부 로직 처리
+     * */
+    fun socialSignUp() {
+        baseViewModelScope.launch {
+            socialSignUpUseCase.invoke(
+                joinInfo.socialJoinModel?.oauth!!,
+                joinInfo.nickname,
+                joinInfo.socialJoinModel?.profileImgUrl!!,
+                joinInfo.weight,
+                joinInfo.height,
+                joinInfo.gender,
+                joinInfo.age
+            ).onSuccess {
+                _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
+            }.onError { e -> catchError(e) }
+        }
+    }
+
+    /**
+     * 이메일로그인
+     * profile img는 File로 전달
+     * */
+    fun emailSignUp() {
+        baseViewModelScope.launch {
+            emailSignUpUseCase.invoke(
+                joinInfo.id,
+                joinInfo.password,
+                joinInfo.nickname,
+                joinInfo.weight,
+                joinInfo.height,
+                joinInfo.gender,
+                joinInfo.age,
+                joinInfo.profileImg
+            ).onSuccess {
+                _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
+            }.onError { e -> catchError(e) }
+        }
+    }
+
     // 닉네임 중복검사
     fun checkNicknameValidation() {
         baseViewModelScope.launch {
@@ -86,16 +133,27 @@ class JoinViewModel @Inject constructor(
     }
 
     // 갤러리 불러오기
-    fun navigationToGallery(){
+    fun navigationToGallery() {
         baseViewModelScope.launch {
             _joinNicknameAction.emit(JoinNicknameAction.NavigateGallery)
         }
     }
 
-    // 회원가입, 비밀번호 유효성 검증
-    fun checkPasswordValidation(){
+    // 비밀번호 유효성 검증
+    fun checkPasswordValidation() {
         baseViewModelScope.launch {
             _joinPasswordAction.emit(JoinPasswordAction.CheckPasswordValidation)
+        }
+    }
+
+    /**
+     * 회원가입 실행
+     * @param socialType - 이메일(false), 소셜(true)
+     * */
+    fun signUp(socialType: Boolean) {
+        baseViewModelScope.launch {
+            if (socialType) _additionalInfoAction.emit(AdditionalInfoAction.SocialSignUp)
+            else _additionalInfoAction.emit(AdditionalInfoAction.EmailSignUp)
         }
     }
 }
