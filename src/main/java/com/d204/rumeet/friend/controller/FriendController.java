@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Tag(name = "친구 API", description = "friends API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/friends")
