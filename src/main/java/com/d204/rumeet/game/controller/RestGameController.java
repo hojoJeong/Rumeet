@@ -1,7 +1,7 @@
 package com.d204.rumeet.game.controller;
 
 import com.d204.rumeet.game.producer.GameProducer;
-import com.d204.rumeet.game.producer.TopicProducer;
+import com.d204.rumeet.kafka.model.KafkaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 public class RestGameController {
 
-    private final TopicProducer topicProducer;
+    private KafkaService kafkaService;
     @PostMapping("/run")
     @CrossOrigin()
     public void run(@RequestParam(value = "roomId") int roomId, @RequestParam(value = "userAId") int userAId, @RequestParam(value = "userBId") int userBId) {
@@ -36,6 +36,6 @@ public class RestGameController {
     @PostMapping("/send/message")
     @CrossOrigin()
     public void sendMessage(@RequestParam(value = "topic") String topic, @RequestParam(value = "message") String message) {
-        topicProducer.sendMessage(topic, message);
+        kafkaService.sendMessage(topic, message);
     }
 }
