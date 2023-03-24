@@ -1,5 +1,7 @@
 package com.d204.rumeet.friend.model.service;
 import com.d204.rumeet.data.RespData;
+import com.d204.rumeet.exception.DuplicateFriendRequestException;
+import com.d204.rumeet.exception.ExistingFriendException;
 import com.d204.rumeet.exception.NoFriendDataException;
 import com.d204.rumeet.exception.NoRequestException;
 import com.d204.rumeet.friend.model.dao.FriendDao;
@@ -62,10 +64,13 @@ public class FriendServiceImpl implements FriendService {
                 .and("toUserId").is(toId));
         FriendRequestDao existingRequest = mongoTemplate.findOne(query, FriendRequestDao.class);
 
-        if (existingRequest != null) {
-            throw new DuplicateRequestException();
+        FriendDao existingFriend = mongoTemplate.findOne(query, FriendDao.class);
 
-        } else {
+        if (existingRequest != null) {
+            throw new DuplicateFriendRequestException();
+        } else if (existingFriend!=null){
+            throw new ExistingFriendException();
+        }else {
             FriendRequestDao friendRequest = FriendRequestDao.builder()
                     .fromUserId(fromId)
                     .toUserId(toId)

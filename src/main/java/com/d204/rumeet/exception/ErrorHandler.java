@@ -47,8 +47,8 @@ public class ErrorHandler {
         return data.builder();
     }
 
-    @ExceptionHandler(DuplicateRequestException.class)
-    public ResponseEntity<?> DuplicateRequestException() {
+    @ExceptionHandler(DuplicateFriendRequestException.class)
+    public ResponseEntity<?> DuplicateFriendRequestException() {
         RespData<Void> data = new RespData(ErrorEnum.DUPLICATE_REQUEST_ERROR);
         data.setData(null);
         return data.builder();
@@ -64,6 +64,13 @@ public class ErrorHandler {
     @ExceptionHandler(NoFriendDataException.class)
     public ResponseEntity<?> NoFriendDataException() {
         RespData<Void> data = new RespData(ErrorEnum.NO_FRIEND_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
+
+    @ExceptionHandler(ExistingFriendException.class)
+    public ResponseEntity<?> ExistingFriendException() {
+        RespData<Void> data = new RespData(ErrorEnum.ALREADY_FRIEND_ERROR);
         data.setData(null);
         return data.builder();
     }
