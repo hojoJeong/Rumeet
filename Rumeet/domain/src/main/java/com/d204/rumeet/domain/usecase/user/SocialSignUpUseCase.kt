@@ -1,6 +1,7 @@
 package com.d204.rumeet.domain.usecase.user
 
 import com.d204.rumeet.domain.repository.UserRepository
+import java.io.File
 import javax.inject.Inject
 
 class SocialSignUpUseCase @Inject constructor(
@@ -13,6 +14,7 @@ class SocialSignUpUseCase @Inject constructor(
         weight: Float,
         height: Float,
         gender: Int,
-        age: Int
-    ) = userRepository.signUpSocialLogin(oAuth, nickname, profileImgUrl, weight, height, gender, age)
+        age: Int,
+        image : File?
+    ) = userRepository.signUpSocialLogin(oAuth, nickname, profileImgUrl, weight, height, gender, age, image)
 }

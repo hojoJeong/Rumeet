@@ -13,6 +13,7 @@
         <EditText
             android:id="@+id/edit_input"
             style="@style/base_font_medium_14_black"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/transparent"

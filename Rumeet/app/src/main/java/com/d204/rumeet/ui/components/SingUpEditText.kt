@@ -46,6 +46,8 @@ class SingUpEditText @JvmOverloads constructor(
     }
 
     fun setEditTextType(type: SingUpEditTextType, hintText: String = "") {
+        setHint(hintText)
+        setSingleLineInput()
         when (type) {
             SingUpEditTextType.ID -> {
                 setIdInput()
@@ -59,7 +61,6 @@ class SingUpEditText @JvmOverloads constructor(
 
             }
         }
-        setHint(hintText)
     }
 
     private fun checkIdValidation(): Boolean {
@@ -137,7 +138,6 @@ class SingUpEditText @JvmOverloads constructor(
     }
 
     private fun setIdInput() {
-        setSingleLineInput()
         binding.btnAdditional.setBackgroundResource(R.drawable.ic_edit_text_delete_btn)
         binding.btnAdditional.setOnClickListener {
             binding.editInput.setText("")
@@ -146,7 +146,6 @@ class SingUpEditText @JvmOverloads constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setPasswordInput() {
-        setSingleLineInput()
         binding.btnAdditional.setBackgroundResource(R.drawable.ic_edit_text_visibilty_btn)
         binding.editInput.inputType =
             InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD

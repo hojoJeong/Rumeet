@@ -90,7 +90,8 @@ class JoinViewModel @Inject constructor(
                 joinInfo.weight,
                 joinInfo.height,
                 joinInfo.gender,
-                joinInfo.age
+                joinInfo.age,
+                joinInfo.profileImg
             ).onSuccess {
                 _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
             }.onError { e -> catchError(e) }

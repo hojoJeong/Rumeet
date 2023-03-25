@@ -8,5 +8,5 @@ interface UserRepository {
     suspend fun getUserFirstRunCheck(): Boolean
     suspend fun checkDuplicateInfo(type: Int, value: String): NetworkResult<Unit?>
     suspend fun signUpEmail(id: String, password: String, nickname: String, weight: Float, height: Float, gender: Int, age: Int, imageUri: File?): NetworkResult<Unit?>
-    suspend fun signUpSocialLogin(oAuth: Long, nickname: String, profileImgUrl: String, weight: Float, height: Float, gender: Int, age: Int): NetworkResult<Unit?>
+    suspend fun signUpSocialLogin(oAuth: Long, nickname: String, profileImgUrl: String, weight: Float, height: Float, gender: Int, age: Int, imageUri : File?): NetworkResult<Unit?>
 }

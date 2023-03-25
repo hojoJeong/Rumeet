@@ -99,4 +99,12 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
         }
         galleryLauncher.launch(chooserIntent)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        with(viewModel.joinInfo){
+            nickname = ""
+            profileImg = null
+        }
+    }
 }

@@ -52,4 +52,12 @@ class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinViewModel>() {
         binding.btnNext.setContent("계속하기")
         binding.editId.setEditTextType(SingUpEditText.SingUpEditTextType.ID, getString(R.string.title_id_input))
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        with(viewModel.joinInfo){
+            id = ""
+            password = ""
+        }
+    }
 }

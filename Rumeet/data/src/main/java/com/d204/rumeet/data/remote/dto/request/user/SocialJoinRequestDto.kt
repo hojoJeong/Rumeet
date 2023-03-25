@@ -2,7 +2,7 @@ package com.d204.rumeet.data.remote.dto.request.user
 
 import com.google.gson.annotations.SerializedName
 
-data class JoinRequestDto(
+data class SocialJoinRequestDto(
     @SerializedName("email")
     val email: String,
     @SerializedName("password")
@@ -17,6 +17,8 @@ data class JoinRequestDto(
     val height: Float,
     @SerializedName("weight")
     val weight: Float,
+    @SerializedName("oauth")
+    val oauth : String,
     @SerializedName("date")
     val currentTime : Long
 )

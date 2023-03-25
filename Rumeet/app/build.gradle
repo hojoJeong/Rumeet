@@ -79,6 +79,7 @@ dependencies {
     // custom view
     implementation libs.circleimageview
     implementation libs.circleindicator
+    implementation libs.shawnlin013.numberpicker
 
     // junit
     testImplementation libs.junit
