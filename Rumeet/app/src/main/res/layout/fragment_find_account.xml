@@ -1,14 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="vm"
+            type="com.d204.rumeet.ui.find_account.FindAccountViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_additional_info_title"
+            style="@style/base_font_bold_22_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_horizontal_margin"
+            android:text="@string/title_find_account"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_additional_info_description"
+            style="@style/base_font_medium_14_nobel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="18dp"
+            android:text="@string/content_find_account_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_additional_info_title" />
+
+        <TextView
+            android:id="@+id/tv_find_account_title"
+            style="@style/base_font_bold_16_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="40dp"
+            android:text="@string/title_find_account_id_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_additional_info_description" />
+
+        <com.d204.rumeet.ui.components.FilledEditText
+            android:id="@+id/edit_id"
+            style="@style/base_font_medium_14_black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_find_account_title" />
+
+        <com.d204.rumeet.ui.components.FilledEditText
+            android:id="@+id/edit_authentication_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="13dp"
+            app:layout_constraintEnd_toStartOf="@id/btn_code_check"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_id" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_code_check"
+            style="@style/base_font_medium_14_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="@dimen/base_horizontal_margin"
+            android:background="@drawable/bg_rect_light_grey_transparent_round8_stroke1"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="10dp"
+            app:onSingleClick="@{() -> vm.clickAuthenticationCode(vm.authenticationState)}"
+            android:text="@string/content_request_authentication_code"
+            app:layout_constraintBottom_toBottomOf="@id/edit_authentication_code"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/edit_authentication_code"
+            app:layout_constraintTop_toTopOf="@id/edit_authentication_code" />
+
+        <TextView
+            android:id="@+id/tv_authentication_time"
+            style="@style/base_font_bold_12_neon_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_authentication_code"
+            tools:text="03:00" />
+
+        <TextView
+            style="@style/base_font_medium_14_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="6dp"
+            tools:text="@string/content_time_limit"
+            app:layout_constraintBottom_toBottomOf="@id/tv_authentication_time"
+            app:layout_constraintStart_toEndOf="@id/tv_authentication_time"
+            app:layout_constraintTop_toTopOf="@id/tv_authentication_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

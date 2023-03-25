@@ -4,15 +4,13 @@ import com.d204.rumeet.data.remote.dto.request.user.JoinRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.SocialJoinRequestDto
 import com.d204.rumeet.data.remote.dto.response.BaseResponse
 import okhttp3.MultipartBody
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
-import retrofit2.http.PartMap
 import retrofit2.http.Query
 
-internal interface UserApiService {
+internal interface SignApiService {
     @GET("users/check")
     suspend fun checkDuplicateInfo(
         @Query("type") type: Int,
@@ -32,4 +30,9 @@ internal interface UserApiService {
         @Part("user") request : SocialJoinRequestDto,
         @Part file : MultipartBody.Part?,
     ) : BaseResponse<Unit?>
+
+    @GET("users/email")
+    suspend fun requestAuthenticationCode(
+        @Query("email") email : String
+    ) : BaseResponse<String?>
 }

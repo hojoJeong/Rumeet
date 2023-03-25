@@ -1,11 +1,13 @@
-package com.d204.rumeet.domain.usecase.user
+package com.d204.rumeet.domain.usecase.sign
 
+import com.d204.rumeet.domain.repository.SignRepository
 import com.d204.rumeet.domain.repository.UserRepository
 import java.io.File
 import javax.inject.Inject
+import kotlin.math.sign
 
 class SocialSignUpUseCase @Inject constructor(
-    private val userRepository: UserRepository
+    private val signRepository: SignRepository
 ) {
     suspend operator fun invoke(
         oAuth: Long,
@@ -16,5 +18,5 @@ class SocialSignUpUseCase @Inject constructor(
         gender: Int,
         age: Int,
         image : File?
-    ) = userRepository.signUpSocialLogin(oAuth, nickname, profileImgUrl, weight, height, gender, age, image)
+    ) = signRepository.signUpSocialLogin(oAuth, nickname, profileImgUrl, weight, height, gender, age, image)
 }
