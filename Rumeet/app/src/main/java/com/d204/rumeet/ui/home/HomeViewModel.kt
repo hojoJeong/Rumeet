@@ -1,9 +1,9 @@
 package com.d204.rumeet.ui.home
 
 import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
-import com.d204.rumeet.util.UiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

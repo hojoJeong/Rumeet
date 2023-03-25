@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -36,9 +37,8 @@ internal object NetworkModule {
     @Singleton
     @Named("AuthHttpClient")
     fun provideAuthHttpClient(
-        @ApplicationContext context: Context
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
-        val authInterceptor = AuthInterceptor(UserDataStorePreferences(context))
         return OkHttpClient.Builder()
             .readTimeout(5, TimeUnit.SECONDS)
             .connectTimeout(5, TimeUnit.SECONDS)
@@ -46,6 +46,14 @@ internal object NetworkModule {
             .addInterceptor(getLoggingInterceptor())
             .addInterceptor(authInterceptor)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(
+        userDataStorePreferences: UserDataStorePreferences
+    ) : AuthInterceptor{
+        return AuthInterceptor(userDataStorePreferences)
     }
 
 
@@ -59,6 +67,7 @@ internal object NetworkModule {
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
 
@@ -72,6 +81,7 @@ internal object NetworkModule {
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
     private fun getLoggingInterceptor(): HttpLoggingInterceptor =

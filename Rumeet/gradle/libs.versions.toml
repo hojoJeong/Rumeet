@@ -81,6 +81,7 @@ androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensi
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splash" }
 circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-scalars-converter = {module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit"}
 retrofit-gson-converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 retrofit-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
@@ -107,7 +108,7 @@ rabbitmq_client = { module = "com.rabbitmq:amqp-client", version = "rabbitmq_ver
 androidx = ["androidx_core", "androidx_appcompat", "androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-common", "androidx-navigation-dynamic-features-fragment", "androidx-navigation-testing",
     "androidx-fragment-ktx", "androidx-lifecycle-extensions", "androidx-core-splashscreen", "datastore-preferences", "datastore-preferences-core"]
 navigation = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-common", "androidx-navigation-dynamic-features-fragment", "androidx-navigation-testing"]
-retrofit-bundles = ["retrofit", "retrofit-gson-converter", "retrofit-rxjava"]
+retrofit-bundles = ["retrofit", "retrofit-gson-converter", "retrofit-rxjava", "retrofit-scalars-converter"]
 okhttp3-bundles = ["okhttp3", "okhttp3-interceptor", "okhttp3-urlconnection", "okhttp3-logging"]
 
 [plugins]

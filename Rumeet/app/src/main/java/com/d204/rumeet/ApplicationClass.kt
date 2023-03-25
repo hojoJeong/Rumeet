@@ -1,6 +1,8 @@
 package com.d204.rumeet
 
 import android.app.Application
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.module.AppGlideModule
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 

@@ -1,6 +1,6 @@
-package com.d204.rumeet.ui.findaccount
+package com.d204.rumeet.ui.find_account
 
-import androidx.navigation.navGraphViewModels
+import androidx.fragment.app.viewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentFindAccountBinding
 import com.d204.rumeet.ui.base.BaseFragment
@@ -9,7 +9,7 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding, FindAccount
     override val layoutResourceId: Int
         get() = R.layout.fragment_find_account
 
-    override val viewModel: FindAccountViewModel by navGraphViewModels(R.id.navigation_join)
+    override val viewModel: FindAccountViewModel by viewModels()
 
     override fun initStartView() {
 
