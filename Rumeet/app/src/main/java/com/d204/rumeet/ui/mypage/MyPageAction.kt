@@ -10,7 +10,7 @@ sealed class MyPageAction {
     object Notice : MyPageAction()
 
     //MyPage Setting
-    object MyAccount : MyPageAction()
+    object UserInfo : MyPageAction()
     object SettingNotification : MyPageAction()
     object Privacy : MyPageAction()
     object ServiceTerms : MyPageAction()

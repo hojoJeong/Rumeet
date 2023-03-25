@@ -8,10 +8,15 @@
         <variable
             name="info"
             type="String" />
+        <variable
+            name="vm"
+            type="com.d204.rumeet.ui.mypage.MypageViewModel" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> vm.navigateSetting(title)}">
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/dv_item_setting_content_top"

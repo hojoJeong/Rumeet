@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemSettingContentBinding
+import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
 
 class SettingItemListAdapter :
-    ListAdapter<String, SettingItemListAdapter.SettingItemHolder>(SettingItemDiffUtil) {
+    ListAdapter<SettingOptionUiMdel, SettingItemListAdapter.SettingItemHolder>(SettingItemDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingItemHolder =
         SettingItemHolder(
@@ -26,25 +27,23 @@ class SettingItemListAdapter :
 
     class SettingItemHolder(private val binding: ItemSettingContentBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(title: String) {
-            binding.title = title
-            if (title == "버전 정보") {
-                binding.info = "v 1.0.0"
-            }
+        fun bind(option: SettingOptionUiMdel) {
+            binding.title = option.title
+            binding.info = option.content
         }
     }
 
-    object SettingItemDiffUtil : DiffUtil.ItemCallback<String>() {
+    object SettingItemDiffUtil : DiffUtil.ItemCallback<SettingOptionUiMdel>() {
         override fun areItemsTheSame(
-            oldItem: String,
-            newItem: String
+            oldItem: SettingOptionUiMdel,
+            newItem: SettingOptionUiMdel
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: String,
-            newItem: String
+            oldItem: SettingOptionUiMdel,
+            newItem: SettingOptionUiMdel
         ): Boolean {
             return oldItem == newItem
         }

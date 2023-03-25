@@ -1,7 +1,7 @@
 package com.d204.rumeet.ui.running
 
 import com.d204.rumeet.ui.base.BaseViewModel
-import com.d204.rumeet.ui.base.UiState
+import com.d204.rumeet.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

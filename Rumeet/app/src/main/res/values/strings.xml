@@ -61,6 +61,7 @@
         <item>서비스 이용 약관</item>
         <item>로그아웃</item>
     </string-array>
+
     <string-array name="title_user_info_content">
         <item>이메일</item>
         <item>닉네임</item>

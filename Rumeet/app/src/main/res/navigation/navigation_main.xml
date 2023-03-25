@@ -44,7 +44,16 @@
         <fragment
             android:id="@+id/settingFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.SettingFragment"
-            android:label="SettingFragment" />
+            android:label="SettingFragment" >
+            <action
+                android:id="@+id/action_settingFragment_to_settingUserInfoFragment"
+                app:destination="@id/settingUserInfoFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/settingUserInfoFragment"
+            android:name="com.d204.rumeet.ui.mypage.setting.SettingUserInfoFragment"
+            android:label="SettingUserInfoFragment" />
+
 
     </navigation>
 
