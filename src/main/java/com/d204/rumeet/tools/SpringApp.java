@@ -25,7 +25,7 @@ public class SpringApp {
         Dataset<Row> data = spark.read()
                 .format("parquet")
                 .option("header", "true")
-                .load("hdfs://localhost:9000/user/spark/output");
+                .load("hdfs://j8d204.p.ssafy.io:9000/user/spark/output");
 
         data.show();
 
