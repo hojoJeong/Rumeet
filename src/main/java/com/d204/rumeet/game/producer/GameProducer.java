@@ -31,7 +31,7 @@ public class GameProducer {
         String newTopic = "rummet" + "." + "game-id" + "." + gameId + "." + "user-id" + "." + userId;
 
         Properties properties = new Properties();
-        properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "j8d204.p.ssafy.io:9092");
 
         try (AdminClient adminClient = AdminClient.create(properties)) {
             NewTopic newUserATopic = new NewTopic(newTopic, numPartitions, replicationFactor);
