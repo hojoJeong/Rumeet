@@ -40,6 +40,10 @@ class FilledEditText @JvmOverloads constructor(
         addView(binding.root)
     }
 
+    fun setIsEnable(flag : Boolean){
+        binding.editInput.isEnabled = flag
+    }
+
     fun setEditTextType(type: FilledEditTextType, hintText: String = "") {
         when (type) {
             FilledEditTextType.ID -> {
@@ -57,9 +61,8 @@ class FilledEditText @JvmOverloads constructor(
         setHint(hintText)
     }
 
-
-    private fun setSingleLineInput(){
-        with(binding.editInput){
+    private fun setSingleLineInput() {
+        with(binding.editInput) {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL
             maxLines = 1
             maxEms = 30

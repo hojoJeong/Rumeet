@@ -1,6 +1,7 @@
 package com.d204.rumeet.ui.find_account
 
 import android.os.CountDownTimer
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
@@ -9,6 +10,8 @@ import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.DefaultAlertDialog
 import com.d204.rumeet.ui.components.FilledEditText
+import com.d204.rumeet.util.hashingSHA256
+import com.d204.rumeet.util.toMinute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import org.apache.commons.lang3.Conversion.byteToHex
@@ -35,9 +38,7 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding, FindAccount
             viewModel.findAccountAction.collectLatest {
                 when (it) {
                     is FindAccountAction.RequestAuthenticationCode -> {
-                        val pattern = android.util.Patterns.EMAIL_ADDRESS
-                        if(pattern.matcher(binding.editId.inputText).matches()) viewModel.requestCode(binding.editId.inputText)
-                        else showCheckIdDialog()
+                        viewModel.requestCode(binding.editId.inputText)
                     }
                     is FindAccountAction.FailRequestAuthenticationCode -> {
                         showCheckIdDialog()
@@ -57,8 +58,11 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding, FindAccount
                         // TODO navigate
                     }
                     is FindAccountAction.TimeOutAuthentication -> {
+                        binding.btnCodeCheck.text = getString(R.string.content_request_authentication_code)
                         showTimeOutDialog()
-                        binding.btnCodeCheck.text = getString(R.string.content_authentication_code)
+                    }
+                    is FindAccountAction.TimeCheck -> {
+                        binding.tvAuthenticationTime.text = it.time.toMinute()
                     }
                 }
             }
@@ -70,16 +74,13 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding, FindAccount
             FilledEditText.FilledEditTextType.ID,
             getString(R.string.title_find_account_id_input)
         )
-        binding.editAuthenticationCode.setEditTextType(
-            FilledEditText.FilledEditTextType.NORMAL,
-            getString(R.string.content_authentication_code_hint)
-        )
-    }
-
-    private fun hashingSHA256(code : String) : String{
-        val md = MessageDigest.getInstance("SHA-256").digest(code.toByteArray())
-        val test = md.joinToString("") { "%02x".format(it) }
-        return md.joinToString("") { "%02x".format(it) }
+        with(binding.editAuthenticationCode) {
+            setEditTextType(
+                FilledEditText.FilledEditTextType.NORMAL,
+                getString(R.string.content_authentication_code_hint)
+            )
+            setIsEnable(false)
+        }
     }
 
     private fun showFailAuthenticationDialog() {
@@ -113,18 +114,6 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding, FindAccount
             )
         )
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-    }
-
-    private fun startTimer() {
-        val countDownTimer = object : CountDownTimer(AUTHENTICATION_TIME, AUTHENTICATION_TIME) {
-            override fun onTick(millisUntilFinished: Long) {
-
-            }
-
-            override fun onFinish() {
-
-            }
-        }
     }
 
     companion object {

@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/base_horizontal_margin"
             android:layout_marginTop="20dp"
+            app:isEnable="@{!vm.authenticationState}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_find_account_title" />
 
@@ -63,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_horizontal_margin"
             android:layout_marginTop="13dp"
+            app:isEnable="@{vm.authenticationState}"
             app:layout_constraintEnd_toStartOf="@id/btn_code_check"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_id" />
@@ -77,12 +79,12 @@
             android:background="@drawable/bg_rect_light_grey_transparent_round8_stroke1"
             android:paddingHorizontal="8dp"
             android:paddingVertical="10dp"
-            app:onSingleClick="@{() -> vm.clickAuthenticationCode(vm.authenticationState)}"
             android:text="@string/content_request_authentication_code"
             app:layout_constraintBottom_toBottomOf="@id/edit_authentication_code"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/edit_authentication_code"
-            app:layout_constraintTop_toTopOf="@id/edit_authentication_code" />
+            app:layout_constraintTop_toTopOf="@id/edit_authentication_code"
+            app:onSingleClick="@{() -> vm.clickAuthenticationCode(vm.authenticationState)}" />
 
         <TextView
             android:id="@+id/tv_authentication_time"
@@ -90,22 +92,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_horizontal_margin"
-            android:visibility="gone"
             android:layout_marginTop="20dp"
+            android:visibility="gone"
+            app:authentication_visibility="@{vm.authenticationState}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_authentication_code"
             tools:text="03:00" />
 
         <TextView
+            android:id="@+id/tv_authentication_time_description"
             style="@style/base_font_medium_14_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_marginStart="6dp"
-            tools:text="@string/content_time_limit"
+            android:visibility="gone"
+            app:authentication_visibility="@{vm.authenticationState}"
             app:layout_constraintBottom_toBottomOf="@id/tv_authentication_time"
             app:layout_constraintStart_toEndOf="@id/tv_authentication_time"
-            app:layout_constraintTop_toTopOf="@id/tv_authentication_time" />
+            app:layout_constraintTop_toTopOf="@id/tv_authentication_time"
+            android:text="@string/content_time_limit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

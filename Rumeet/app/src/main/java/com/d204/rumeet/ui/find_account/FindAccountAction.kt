@@ -8,4 +8,5 @@ sealed class FindAccountAction{
     object FailAuthentication : FindAccountAction()
     object CheckAuthentication : FindAccountAction()
     object StartAuthentication: FindAccountAction()
+    class TimeCheck(val time : Long) : FindAccountAction()
 }
