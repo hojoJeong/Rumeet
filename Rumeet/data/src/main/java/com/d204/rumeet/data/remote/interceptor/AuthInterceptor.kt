@@ -1,8 +1,19 @@
 package com.d204.rumeet.data.remote.interceptor
 
+import com.d204.rumeet.common.Constants.BASE_URL
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
+import com.d204.rumeet.data.remote.api.AuthApiService
+import com.d204.rumeet.data.remote.api.handleApi
+import com.d204.rumeet.data.remote.dto.*
+import com.d204.rumeet.data.remote.dto.request.auth.RefreshTokenRequestDto
+import com.d204.rumeet.domain.NetworkResult
+import com.d204.rumeet.domain.onError
+import com.d204.rumeet.domain.onSuccess
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import javax.inject.Inject
 
@@ -12,6 +23,7 @@ import javax.inject.Inject
 * 토큰 만료 시, refreshToken으로 재발급 요청
 * */
 internal class AuthInterceptor @Inject constructor(
+    private val authApiService: AuthApiService,
     private val userDataStorePreferences: UserDataStorePreferences
 ) : Interceptor {
     // 어노테이션을 통해 예외처리 해야함을 알림
@@ -21,12 +33,32 @@ internal class AuthInterceptor @Inject constructor(
         val request = chain.request()
         val response = chain.proceed(request)
 
-        // 보안오류 관련 물어보고 작성
-        if(response.code == 400 || response.code == 403){
-            val requestUrl = request.url.toString()
-            val errorResponse = response.body?.string().let{}
+        // 401이면 토큰 재발급 후 새로 요청보내기
+        if (response.code == 401) {
+            runBlocking {
+                with(userDataStorePreferences) {
+                    val refreshRequest =
+                        RefreshTokenRequestDto(getUserId(), getRefreshToken() ?: "")
+                    handleApi { authApiService.getJWTByRefreshToken(refreshRequest) }
+                        .onSuccess { response ->
+                            this.setUserId(response?.id ?: -1)
+                            this.setToken(
+                                response?.accessToken ?: "",
+                                response?.refreshToken ?: ""
+                            )
+                            accessToken = response?.accessToken ?: ""
+                        }
+                        .onError {
+                            this.clearUserInfo()
+                            accessToken = ""
+                        }
+                }
+            }
+            val newRequest =
+                chain.request().newBuilder().addHeader("Authorization", accessToken).build()
+            return chain.proceed(newRequest)
+        } else {
+            return response
         }
-
-        return response
     }
 }

@@ -43,7 +43,7 @@ class LoginViewModel @Inject constructor(
             doKakaoLoginUseCase(accessToken)
                 .onSuccess { jwt ->
                     _navigationEvent.emit(LoginNavigationAction.LoginSuccess)
-                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken)
+                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken, jwt.userId)
                     setUserAutoLoginCheck(true)
                 }
                 .onError { e ->
@@ -86,7 +86,7 @@ class LoginViewModel @Inject constructor(
                 .onSuccess { jwt ->
                     _navigationEvent.emit(LoginNavigationAction.LoginSuccess)
                     setUserAutoLoginCheck(autoLoginState)
-                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken)
+                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken, jwt.userId)
                 }
                 .onError { e ->
                     setUserAutoLoginCheck(false)

@@ -1,6 +1,7 @@
 package com.d204.rumeet.data.remote.api
 
 import com.d204.rumeet.data.remote.dto.request.auth.EmailLoginRequest
+import com.d204.rumeet.data.remote.dto.request.auth.RefreshTokenRequestDto
 import com.d204.rumeet.data.remote.dto.response.BaseResponse
 import com.d204.rumeet.data.remote.dto.response.auth.JWTResponse
 import com.d204.rumeet.data.remote.dto.response.auth.KakaoOAuthResponse
@@ -24,4 +25,9 @@ internal interface AuthApiService {
     suspend fun getKakaoOauthInfo(
         @Query("code") accessToken: String
     ) : BaseResponse<KakaoOAuthResponse>
+
+    @POST("users/refresh")
+    suspend fun getJWTByRefreshToken(
+        @Body request : RefreshTokenRequestDto
+    ) : BaseResponse<JWTResponse>
 }
