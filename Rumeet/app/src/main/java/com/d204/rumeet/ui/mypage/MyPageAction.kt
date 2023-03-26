@@ -8,11 +8,4 @@ sealed class MyPageAction {
     object EditPofile : MyPageAction()
     object Setting : MyPageAction()
     object Notice : MyPageAction()
-
-    //MyPage Setting
-    object UserInfo : MyPageAction()
-    object SettingNotification : MyPageAction()
-    object Privacy : MyPageAction()
-    object ServiceTerms : MyPageAction()
-    object LogOut : MyPageAction()
 }

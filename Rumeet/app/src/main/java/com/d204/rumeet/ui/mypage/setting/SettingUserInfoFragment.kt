@@ -11,12 +11,12 @@ import com.d204.rumeet.ui.mypage.adapter.SettingItemListAdapter
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
 
 class SettingUserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, BaseViewModel>() {
-    private val mypageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
+    private val myPageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_setting_user_info
     override val viewModel: BaseViewModel
-        get() = mypageViewModel
+        get() = myPageViewModel
 
     override fun initStartView() {
         initView()
@@ -29,6 +29,7 @@ class SettingUserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, Bas
     }
 
     private fun initView() {
+
         //TODO(임시 데이터)
         val userInfo = listOf<String>(
             "ssafy@naver.com",
@@ -39,16 +40,22 @@ class SettingUserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, Bas
         )
 
         val settingOptionList = resources.getStringArray(R.array.title_user_info_content).toList()
-            .mapIndexed { index, title ->
-                SettingOptionUiMdel(title, userInfo[index])
+            .mapIndexed { _, title ->
+                SettingOptionUiMdel(title, "")
             }
+
+        for (idx in userInfo.indices) {
+            settingOptionList[idx].content = userInfo[idx]
+        }
 
         val userInfoAdapter = SettingItemListAdapter().apply {
             submitList(settingOptionList)
+            viewModel = myPageViewModel
         }
 
-        with(binding.rvSettingUserInfo){
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        with(binding.rvSettingUserInfo) {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = userInfoAdapter
         }
     }

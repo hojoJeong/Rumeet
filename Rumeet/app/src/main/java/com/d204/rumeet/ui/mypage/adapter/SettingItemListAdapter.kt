@@ -1,5 +1,7 @@
 package com.d204.rumeet.ui.mypage.adapter
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -8,11 +10,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemSettingContentBinding
+import com.d204.rumeet.ui.mypage.MypageViewModel
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
 
 class SettingItemListAdapter :
     ListAdapter<SettingOptionUiMdel, SettingItemListAdapter.SettingItemHolder>(SettingItemDiffUtil) {
-
+    lateinit var viewModel: MypageViewModel
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingItemHolder =
         SettingItemHolder(
             DataBindingUtil.inflate(
@@ -25,11 +28,14 @@ class SettingItemListAdapter :
     }
 
 
-    class SettingItemHolder(private val binding: ItemSettingContentBinding) :
+    inner class SettingItemHolder(private val binding: ItemSettingContentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(option: SettingOptionUiMdel) {
-            binding.title = option.title
-            binding.info = option.content
+            with(binding) {
+                title = option.title
+                info = option.content
+                vm = viewModel
+            }
         }
     }
 

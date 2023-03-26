@@ -1,37 +1,40 @@
 package com.d204.rumeet.ui.mypage
 
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.util.Log
-import androidx.core.content.ContextCompat
 import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.mypage.setting.SettingAction
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class MypageViewModel : BaseViewModel() {
-    private val _navigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
-    val navigationEvent: SharedFlow<MyPageAction> get() = _navigationEvent.asSharedFlow()
+    private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
+    val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
+
+    private val _settingNavigationEvent: MutableSharedFlow<SettingAction> = MutableSharedFlow()
+    val settingNavigationEvent: SharedFlow<SettingAction> get() = _settingNavigationEvent.asSharedFlow()
 
     private var _optionList = listOf<String>()
     val optionList: List<String>
         get() = _optionList
 
-    fun navigateSetting(title: String) {
-        Log.d(TAG, "setOptionList: 세팅 네비 메소드 호출")
-        when (title) {
-            optionList[0] -> {
-                baseViewModelScope.launch {
-                    Log.d(TAG, "setOptionList: 세팅 네비 호출")
-                    _navigationEvent.emit(MyPageAction.UserInfo)
-                }
+    fun setSettingNavigate(title: String) {
+        baseViewModelScope.launch {
+            when (title) {
+                optionList[0] -> _settingNavigationEvent.emit(SettingAction.UserInfo)
+                optionList[1] -> _settingNavigationEvent.emit(SettingAction.SettingNotification)
+                optionList[3] -> _settingNavigationEvent.emit(SettingAction.Privacy)
+                optionList[4] -> _settingNavigationEvent.emit(SettingAction.ServiceTerms)
+                optionList[5] -> _settingNavigationEvent.emit(SettingAction.LogOut)
             }
         }
 
+
     }
 
-    fun setOptionList(list: List<String>){
+    fun setOptionList(list: List<String>) {
         _optionList = list
         Log.d(TAG, "setOptionList: 세팅 리스트")
     }
