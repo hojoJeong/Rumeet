@@ -31,6 +31,7 @@ class FindAccountViewModel @Inject constructor(
     fun requestCode(email: String) {
         baseViewModelScope.launch {
             if (checkEmailValidate(email)) {
+                showLoading()
                 requestAuthenticationCodeUseCase(email)
                     .onSuccess {
                         _authenticationState.value = true
@@ -39,6 +40,7 @@ class FindAccountViewModel @Inject constructor(
                         startTimer()
                     }
                     .onError { e -> catchError(e) }
+                dismissLoading()
             } else _findAccountAction.emit(FindAccountAction.FailRequestAuthenticationCode)
         }
     }

@@ -22,9 +22,11 @@ class ResetPasswordViewModel @Inject constructor(
 
     fun requestResetPassword(email: String, password: String) {
         baseViewModelScope.launch {
+            showLoading()
             resetPasswordUseCase(email, password)
-                .onSuccess { }
-                .onError { }
+                .onSuccess { _resetPasswordAction.emit(ResetPasswordAction.SuccessResetPassword) }
+                .onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 

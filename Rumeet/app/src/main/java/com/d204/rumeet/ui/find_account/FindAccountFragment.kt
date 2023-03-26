@@ -55,7 +55,7 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding, FindAccount
                         showFailAuthenticationDialog()
                     }
                     is FindAccountAction.SuccessAuthentication -> {
-                        // TODO navigate
+                        navigate(FindAccountFragmentDirections.actionFindAccountFragmentToResetPasswordFragment(binding.editId.inputText))
                     }
                     is FindAccountAction.TimeOutAuthentication -> {
                         binding.btnCodeCheck.text = getString(R.string.content_request_authentication_code)
@@ -114,9 +114,5 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding, FindAccount
             )
         )
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-    }
-
-    companion object {
-        private const val AUTHENTICATION_TIME = 180000L
     }
 }

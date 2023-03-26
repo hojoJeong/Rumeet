@@ -99,6 +99,9 @@
             android:name="email"
             app:argType="string"
             app:nullable="false"/>
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
 

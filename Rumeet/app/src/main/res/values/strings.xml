@@ -2,6 +2,7 @@
     <!--  base -->
     <string name="app_name">Rumeet</string>
     <string name="title_dialog">알림 메시지</string>
+    <string name="content_loading">러밋으로 러닝 메이트를\n만들어보세요 :)</string>
 
     <!-- login -->
     <string name="content_auto_login">자동 로그인</string>

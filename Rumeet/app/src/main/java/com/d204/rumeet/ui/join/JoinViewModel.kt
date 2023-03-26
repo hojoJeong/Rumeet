@@ -44,6 +44,7 @@ class JoinViewModel @Inject constructor(
      * */
     fun idValidation(id: String) {
         baseViewModelScope.launch {
+            showLoading()
             checkDuplicateInfoUseCase(2, id)
                 .onSuccess {
                     _joinIdAction.emit(JoinIdAction.NavigateNicknameFragment)
@@ -53,6 +54,7 @@ class JoinViewModel @Inject constructor(
                     if (e is DuplicateInfoException) _joinIdAction.emit(JoinIdAction.IdDuplicate)
                     else catchError(e)
                 }
+            dismissLoading()
         }
     }
 
@@ -63,6 +65,7 @@ class JoinViewModel @Inject constructor(
      * */
     fun nicknameValidation(nickname: String) {
         baseViewModelScope.launch {
+            showLoading()
             checkDuplicateInfoUseCase(1, nickname)
                 .onSuccess {
                     joinInfo.nickname = nickname
@@ -72,6 +75,7 @@ class JoinViewModel @Inject constructor(
                     if (e is DuplicateInfoException) _joinNicknameAction.emit(JoinNicknameAction.DuplicateNickname)
                     else catchError(e)
                 }
+            dismissLoading()
         }
     }
 
@@ -82,6 +86,7 @@ class JoinViewModel @Inject constructor(
      * */
     fun socialSignUp() {
         baseViewModelScope.launch {
+            showLoading()
             socialSignUpUseCase.invoke(
                 joinInfo.socialJoinModel?.oauth!!,
                 joinInfo.nickname,
@@ -94,6 +99,7 @@ class JoinViewModel @Inject constructor(
             ).onSuccess {
                 _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
             }.onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 
@@ -103,6 +109,7 @@ class JoinViewModel @Inject constructor(
      * */
     fun emailSignUp() {
         baseViewModelScope.launch {
+            showLoading()
             emailSignUpUseCase.invoke(
                 joinInfo.id,
                 joinInfo.password,
@@ -115,6 +122,7 @@ class JoinViewModel @Inject constructor(
             ).onSuccess {
                 _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
             }.onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 
