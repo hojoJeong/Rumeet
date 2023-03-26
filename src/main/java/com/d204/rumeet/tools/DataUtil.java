@@ -1,31 +1,30 @@
 package com.d204.rumeet.tools;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
 
 @Component
-public class SpringApp {
+public class DataUtil {
 
     public void load() {
+
+        SparkConf sparkConf = new SparkConf()
+                .setAppName("Rumeet")
+                .setMaster("spark://j8d204.p.ssafy.io:7077");
         SparkSession spark = SparkSession
                 .builder()
-                .appName("Rumeet")
-                .master("spark://j8d204.p.ssafy.io:7077")
+                .config(sparkConf)
                 .getOrCreate();
+        spark.read();
 
         Dataset<Row> data = spark.read()
                 .format("parquet")
                 .option("header", "true")
-                .load("hdfs://j8d204.p.ssafy.io:9000/user/spark/output");
+                .load("hdfs://13.125.218.237:9000/user/spark/output");
 
         data.show();
 
