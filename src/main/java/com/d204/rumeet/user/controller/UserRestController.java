@@ -3,7 +3,6 @@ package com.d204.rumeet.user.controller;
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.CustomJwtException;
 import com.d204.rumeet.tools.JwtTool;
-import com.d204.rumeet.tools.SpringApp;
 import com.d204.rumeet.user.model.dto.*;
 import com.d204.rumeet.user.model.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,12 +22,10 @@ public class UserRestController {
     private final UserService userService;
     private final JwtTool jwtTool;
 
-    private final SpringApp testtt;
     // 유저 정보 불러오기
     @Operation(summary = "유저 정보 조회")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id){
-        testtt.load();
         UserDto user = userService.getUserById(id);
         RespData<UserDto> data = new RespData<>();
         data.setData(user);
