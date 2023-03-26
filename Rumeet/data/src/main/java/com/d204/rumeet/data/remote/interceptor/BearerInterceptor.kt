@@ -1,19 +1,14 @@
 package com.d204.rumeet.data.remote.interceptor
 
-import com.d204.rumeet.common.Constants.BASE_URL
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.api.handleApi
-import com.d204.rumeet.data.remote.dto.*
 import com.d204.rumeet.data.remote.dto.request.auth.RefreshTokenRequestDto
-import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import javax.inject.Inject
 
@@ -22,7 +17,7 @@ import javax.inject.Inject
 * 토큰 사용 시, accessToken이 유효한지 확인
 * 토큰 만료 시, refreshToken으로 재발급 요청
 * */
-internal class AuthInterceptor @Inject constructor(
+internal class BearerInterceptor @Inject constructor(
     private val authApiService: AuthApiService,
     private val userDataStorePreferences: UserDataStorePreferences
 ) : Interceptor {
