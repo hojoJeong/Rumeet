@@ -2,6 +2,7 @@ package com.d204.rumeet.data.repository
 
 import com.d204.rumeet.data.remote.api.SignApiService
 import com.d204.rumeet.data.remote.api.handleApi
+import com.d204.rumeet.data.remote.dto.request.sign.ResetPasswordRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.JoinRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.SocialJoinRequestDto
 import com.d204.rumeet.data.util.getMultipartData
@@ -9,6 +10,7 @@ import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.repository.SignRepository
 import java.io.File
 import javax.inject.Inject
+import kotlin.math.sign
 
 internal class SignRepositoryImpl @Inject constructor(
     private val signApiService: SignApiService
@@ -51,5 +53,10 @@ internal class SignRepositoryImpl @Inject constructor(
 
     override suspend fun requestAuthenticationCode(email: String): NetworkResult<String?> {
         return handleApi { signApiService.requestAuthenticationCode(email) }
+    }
+
+    override suspend fun resetPassword(email: String, password: String): NetworkResult<Unit?> {
+        val request = ResetPasswordRequestDto(email, password)
+        return handleApi { signApiService.resetPassword(request) }
     }
 }

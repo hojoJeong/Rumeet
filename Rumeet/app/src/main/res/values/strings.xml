@@ -45,6 +45,11 @@
     <string name="content_okay">확인</string>
     <string name="title_password_validate">비밀번호는 영어, 숫자, 특수문자\n8글자 이상 입력해주세요.</string>
 
+    <!-- reset password -->
+    <string name="title_reset_password">비밀번호 재설정</string>
+    <string name="title_reset_password_description">새로운 비밀번호를 입력해주세요.</string>
+
+
     <!-- home -->
     <string name="content_welcome_message">%1$s님!\n오늘도 열심히 달려볼까요?</string>
     <string name="title_best_record">최고기록</string>
