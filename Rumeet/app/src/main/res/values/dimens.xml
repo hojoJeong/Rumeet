@@ -11,4 +11,5 @@
     <dimen name="size_tv_running_record">28dp</dimen>
 
     <dimen name="check_box_size">17dp</dimen>
+    <dimen name="profile_img_size">160dp</dimen>
 </resources>

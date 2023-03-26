@@ -4,11 +4,66 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.d204.rumeet.ui.join.JoinViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile_img"
+            android:layout_width="@dimen/profile_img_size"
+            android:layout_height="@dimen/profile_img_size"
+            android:layout_margin="@dimen/base_vertical_margin"
+            android:src="@color/dark_gray"
+            app:civ_border_color="@color/dark_gray"
+            app:civ_border_width="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile_img"
+            app:layout_constraintEnd_toEndOf="@id/iv_profile_img"
+            app:onSingleClick="@{() -> vm.navigationToGallery()}" />
+
+        <com.d204.rumeet.ui.components.SingUpEditText
+            android:id="@+id/edit_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_vertical_margin"
+            android:layout_marginTop="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_profile_img" />
+
+        <TextView
+            android:id="@+id/tv_agree_terms_of_users"
+            style="@style/base_font_medium_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:text="@string/content_agree_app_terms_of_uses"
+            app:layout_constraintBottom_toTopOf="@id/btn_continue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.d204.rumeet.ui.components.SingleButton
+            android:id="@+id/btn_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginBottom="@dimen/base_vertical_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:onSingleButtonClick="@{() -> vm.checkNicknameValidation()}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,4 +1,4 @@
-package com.d204.rumeet.util
+package com.d204.rumeet.ui.base
 
 sealed class UiState<out T> {
     object Loading : UiState<Nothing>()

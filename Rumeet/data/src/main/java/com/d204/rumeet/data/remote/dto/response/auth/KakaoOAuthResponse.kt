@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName
 internal data class KakaoOAuthResponse(
     @SerializedName("oauth")
     val oauth : Long,
-    @SerializedName("profile_image")
+    @SerializedName("profile")
     val profileImg : String?
 )
