@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService{
     private final SHA256 sha256;
     private final OkhttpUtils okhttpUtils;
     final String bucketName = "rumeet";
+
     private final KafkaService kafkaService;
 
     @Override
@@ -118,9 +119,7 @@ public class UserServiceImpl implements UserService{
         user.setProfile(url);
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
-        String topic = "rumeet" + "." + "userlist";
-        String message = String.valueOf(user.getId());
-        kafkaService.sendMessage(topic,message);
+        kafkaService.createTopic("user." + user.getId());
     }
     @Override
     public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {
