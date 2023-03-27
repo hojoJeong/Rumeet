@@ -39,16 +39,18 @@ class LoginViewModel @Inject constructor(
      * */
     fun doKakaoLogin(accessToken : String) {
         baseViewModelScope.launch {
+            showLoading()
             doKakaoLoginUseCase(accessToken)
                 .onSuccess { jwt ->
                     _navigationEvent.emit(LoginNavigationAction.LoginSuccess)
-                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken)
+                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken, jwt.userId)
                     setUserAutoLoginCheck(true)
                 }
                 .onError { e ->
                     if(e is SocialLoginErrorException) redirectKakaoLogin(accessToken)
                     else catchError(e)
                 }
+            dismissLoading()
         }
     }
 
@@ -59,11 +61,13 @@ class LoginViewModel @Inject constructor(
      * */
      private fun redirectKakaoLogin(accessToken: String){
         baseViewModelScope.launch {
+            showLoading()
             redirectKakaoLoginUseCase(accessToken)
                 .onSuccess { oauthInfo ->
                     _navigationEvent.emit(LoginNavigationAction.NeedJoinFirst(oauthInfo.oauth, oauthInfo.profileImg))
                 }
                 .onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 
@@ -77,17 +81,19 @@ class LoginViewModel @Inject constructor(
      * */
     fun doEmailLogin(email: String, password: String, autoLoginState: Boolean) {
         baseViewModelScope.launch {
+            showLoading()
             doEmailLoginUseCase.invoke(email, password, autoLoginState)
                 .onSuccess { jwt ->
                     _navigationEvent.emit(LoginNavigationAction.LoginSuccess)
                     setUserAutoLoginCheck(autoLoginState)
-                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken)
+                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken, jwt.userId)
                 }
                 .onError { e ->
                     setUserAutoLoginCheck(false)
                     if (e is NoUserFindErrorException) _navigationEvent.emit(LoginNavigationAction.LoginFailed)
                     else catchError(e)
                 }
+            dismissLoading()
         }
     }
 

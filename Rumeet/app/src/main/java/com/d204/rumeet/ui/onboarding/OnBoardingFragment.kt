@@ -45,8 +45,4 @@ class OnBoardingFragment : BaseFragment<FragmentOnboardingBinding, OnBoardingVie
             it.setState(true)
         }
     }
-
-    companion object{
-        private const val TAG = "OnBoardingFragment"
-    }
 }

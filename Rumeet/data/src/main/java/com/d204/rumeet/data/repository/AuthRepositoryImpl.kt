@@ -47,9 +47,10 @@ internal class AuthRepositoryImpl @Inject constructor(
         return handleApi { authApiService.kakaoLogin(accessToken) }.toDomainResult<JWTResponse, JWTModel> { it.toDomain() }
     }
 
-    override suspend fun setUserToken(accessToken: String, refreshToken: String): Boolean {
+    override suspend fun setUserToken(accessToken: String, refreshToken: String, userId : Int): Boolean {
         try {
             userDataStorePreferences.setToken(accessToken, refreshToken)
+            userDataStorePreferences.setUserId(userId)
         } catch (e: IOException) {
             return false
         }

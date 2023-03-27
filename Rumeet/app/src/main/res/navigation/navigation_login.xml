@@ -70,7 +70,11 @@
         android:id="@+id/findAccountFragment"
         android:name="com.d204.rumeet.ui.find_account.FindAccountFragment"
         android:label="FindAccountFragment"
-        tools:layout="@layout/fragment_find_account" />
+        tools:layout="@layout/fragment_find_account" >
+        <action
+            android:id="@+id/action_findAccountFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
+    </fragment>
 
 
     <fragment
@@ -83,6 +87,21 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="false" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        tools:layout="@layout/fragment_reset_password"
+        android:name="com.d204.rumeet.ui.reset_password.ResetPasswordFragment"
+        android:label="ResetPasswordFragment" >
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="false"/>
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
 

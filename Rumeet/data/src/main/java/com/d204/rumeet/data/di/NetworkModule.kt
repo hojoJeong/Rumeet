@@ -1,13 +1,13 @@
 package com.d204.rumeet.data.di
 
-import android.content.Context
 import com.d204.rumeet.common.Constants.BASE_URL
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
-import com.d204.rumeet.data.remote.interceptor.AuthInterceptor
+import com.d204.rumeet.data.remote.api.AuthApiService
+import com.d204.rumeet.data.remote.interceptor.BearerInterceptor
+import com.d204.rumeet.data.remote.interceptor.XAccessTokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,23 +37,34 @@ internal object NetworkModule {
     @Singleton
     @Named("AuthHttpClient")
     fun provideAuthHttpClient(
-        authInterceptor: AuthInterceptor
+        bearerInterceptor: BearerInterceptor,
+        xAccessTokenInterceptor: XAccessTokenInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(5, TimeUnit.SECONDS)
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .addInterceptor(getLoggingInterceptor())
-            .addInterceptor(authInterceptor)
+            .addNetworkInterceptor(bearerInterceptor)
+            .addInterceptor(xAccessTokenInterceptor)
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(
+    fun provideBearerInterceptor(
+        authApiService: AuthApiService,
         userDataStorePreferences: UserDataStorePreferences
-    ) : AuthInterceptor{
-        return AuthInterceptor(userDataStorePreferences)
+    ) : BearerInterceptor{
+        return BearerInterceptor(authApiService, userDataStorePreferences)
+    }
+
+    @Provides
+    @Singleton
+    fun provideXAccessTokenInterceptor(
+        userDataStorePreferences: UserDataStorePreferences
+    ) : XAccessTokenInterceptor{
+        return XAccessTokenInterceptor(userDataStorePreferences)
     }
 
 
