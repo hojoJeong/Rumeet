@@ -3,9 +3,11 @@ package com.d204.rumeet.data.local.datastore
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.d204.rumeet.data.R
+import kakao.k.p
 import kotlinx.coroutines.flow.first
 
 internal class UserDataStorePreferences(val context: Context) {
@@ -15,7 +17,20 @@ internal class UserDataStorePreferences(val context: Context) {
     private val autoLogin = booleanPreferencesKey("AUTO_LOGIN")
     private val accessToken = stringPreferencesKey("ACCESS_TOKEN")
     private val refreshToken = stringPreferencesKey("REFRESH_TOKEN")
+    private val userId = intPreferencesKey("USER_ID")
     private val fcmToken = stringPreferencesKey("FCM_TOKEN")
+
+    suspend fun setUserId(userId : Int){
+        context.datastore.edit { preference ->
+            preference[this.userId] = userId
+        }
+    }
+
+    suspend fun getUserId() : Int{
+        return context.datastore.data.first().let {
+            it[userId] ?: -1
+        }
+    }
 
     // dataStore는 비동기 기반
     suspend fun setFirstRun(firstRunState: Boolean) {
@@ -61,6 +76,15 @@ internal class UserDataStorePreferences(val context: Context) {
     suspend fun getRefreshToken() : String?{
         return context.datastore.data.first().let {
             it[refreshToken]
+        }
+    }
+
+    suspend fun clearUserInfo(){
+        context.datastore.edit { preference ->
+            preference[userId] = -1
+            preference[accessToken] = ""
+            preference[refreshToken] = ""
+            preference[autoLogin] = false
         }
     }
 }

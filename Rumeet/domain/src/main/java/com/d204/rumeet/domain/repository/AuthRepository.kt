@@ -9,6 +9,6 @@ interface AuthRepository {
     suspend fun setUserAutoLoginCheck(state : Boolean) : Boolean
     suspend fun doEmailLogin(email : String, password : String, autoLoginState : Boolean) : NetworkResult<JWTModel>
     suspend fun doKakaoLogin(accessToken: String) : NetworkResult<JWTModel>
-    suspend fun setUserToken(accessToken: String, refreshToken : String)  : Boolean
+    suspend fun setUserToken(accessToken: String, refreshToken : String, userId : Int)  : Boolean
     suspend fun redirectKakaoLogin(accessToken: String) : NetworkResult<KakaoOAuthModel>
 }

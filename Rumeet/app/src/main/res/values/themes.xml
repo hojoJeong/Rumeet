@@ -44,6 +44,10 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="base_font_bold_22" parent="base_font_bold">
+        <item name="android:textSize">22sp</item>
+    </style>
+
     <style name="base_font_bold_26" parent="base_font_bold">
         <item name="android:textSize">26sp</item>
     </style>
@@ -86,6 +90,10 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="base_font_bold_14_navy_blue" parent="base_font_bold_14">
+        <item name="android:textColor">@color/navy_blue</item>
+    </style>
+
     <style name="base_font_bold_16_black" parent="base_font_bold_16">
         <item name="android:textColor">@color/black</item>
     </style>
@@ -106,8 +114,16 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="base_font_bold_22_black" parent="base_font_bold_22">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 
     <!-- medium color -->
+    <style name="base_font_medium_12_black" parent="base_font_medium_12">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="base_font_medium_14_dim_gray" parent="base_font_medium_14">
         <item name="android:textColor">@color/dim_gray</item>
     </style>
@@ -157,7 +173,7 @@
         <item name="fontFamily">@font/notosanskr_bold</item>
         <item name="android:textSize">16dp</item>
     </style>
-    
+
     <style name="tablayoutCustom" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabTextColor">@color/dim_gray</item>
         <item name="tabSelectedTextColor">@color/black</item>

@@ -1,18 +1,19 @@
 package com.d204.rumeet.data.di
 
-import android.content.Context
 import com.d204.rumeet.common.Constants.BASE_URL
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
-import com.d204.rumeet.data.remote.interceptor.AuthInterceptor
+import com.d204.rumeet.data.remote.api.AuthApiService
+import com.d204.rumeet.data.remote.interceptor.BearerInterceptor
+import com.d204.rumeet.data.remote.interceptor.XAccessTokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -36,16 +37,34 @@ internal object NetworkModule {
     @Singleton
     @Named("AuthHttpClient")
     fun provideAuthHttpClient(
-        @ApplicationContext context: Context
+        bearerInterceptor: BearerInterceptor,
+        xAccessTokenInterceptor: XAccessTokenInterceptor
     ): OkHttpClient {
-        val authInterceptor = AuthInterceptor(UserDataStorePreferences(context))
         return OkHttpClient.Builder()
             .readTimeout(5, TimeUnit.SECONDS)
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .addInterceptor(getLoggingInterceptor())
-            .addInterceptor(authInterceptor)
+            .addNetworkInterceptor(bearerInterceptor)
+            .addInterceptor(xAccessTokenInterceptor)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideBearerInterceptor(
+        authApiService: AuthApiService,
+        userDataStorePreferences: UserDataStorePreferences
+    ) : BearerInterceptor{
+        return BearerInterceptor(authApiService, userDataStorePreferences)
+    }
+
+    @Provides
+    @Singleton
+    fun provideXAccessTokenInterceptor(
+        userDataStorePreferences: UserDataStorePreferences
+    ) : XAccessTokenInterceptor{
+        return XAccessTokenInterceptor(userDataStorePreferences)
     }
 
 
@@ -59,6 +78,7 @@ internal object NetworkModule {
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
 
@@ -72,6 +92,7 @@ internal object NetworkModule {
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
     private fun getLoggingInterceptor(): HttpLoggingInterceptor =

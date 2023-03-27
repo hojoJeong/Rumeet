@@ -11,52 +11,98 @@
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_joinGraph"
-            app:destination="@id/navigation_join" />
+            android:id="@+id/action_loginFragment_to_joinIdFragment"
+            app:destination="@id/joinIdFragment" />
         <action
             android:id="@+id/action_loginFragment_to_joinNickNameFragment"
-            app:destination="@id/navigation_join" />
+            app:destination="@id/joinNickNameFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_findAccountFragment"
+            app:destination="@id/findAccountFragment" />
     </fragment>
 
-    <navigation
-        android:id="@+id/navigation_join"
-        app:startDestination="@id/joinIdFragment">
+    <fragment
+        android:id="@+id/joinIdFragment"
+        android:name="com.d204.rumeet.ui.join.id.JoinIdFragment"
+        android:label="JoinIdFragment"
+        tools:layout="@layout/fragment_join_id">
+        <action
+            android:id="@+id/action_joinIdFragment_to_joinNickNameFragment"
+            app:destination="@id/joinNickNameFragment" />
+    </fragment>
 
-        <fragment
-            android:id="@+id/joinIdFragment"
-            android:name="com.d204.rumeet.ui.join.id.JoinIdFragment"
-            android:label="JoinIdFragment">
-            <action
-                android:id="@+id/action_joinIdFragment_to_joinNickNameFragment"
-                app:destination="@id/joinNickNameFragment" />
-        </fragment>
+    <fragment
+        android:id="@+id/joinNickNameFragment"
+        android:name="com.d204.rumeet.ui.join.nickname.JoinNicknameFragment"
+        android:label="JoinNickNameFragment"
+        tools:layout="@layout/fragment_join_nickname">
 
-        <fragment
-            android:id="@+id/joinNickNameFragment"
-            android:name="com.d204.rumeet.ui.join.nickname.JoinNickNameFragment"
-            android:label="JoinNickNameFragment">
+        <action
+            android:id="@+id/action_joinNickNameFragment_to_joinPasswordFragment"
+            app:destination="@id/joinPasswordFragment" />
 
-            <action
-                android:id="@+id/action_joinNickNameFragment_to_joinPasswordFragment"
-                app:destination="@id/joinPasswordFragment" />
+        <argument
+            android:name="oauth"
+            android:defaultValue="1L"
+            app:argType="long" />
 
-            <argument
-                android:name="oauth"
-                app:argType="string"
-                app:nullable="true" />
+        <argument
+            android:name="profileImg"
+            android:defaultValue=""
+            app:argType="string" />
+        <action
+            android:id="@+id/action_joinNickNameFragment_to_additionalInfoFragment"
+            app:destination="@id/additionalInfoFragment" />
 
-            <argument
-                android:name="profileImg"
-                app:argType="string"
-                app:nullable="true" />
+    </fragment>
 
-        </fragment>
+    <fragment
+        android:id="@+id/joinPasswordFragment"
+        android:name="com.d204.rumeet.ui.join.password.JoinPasswordFragment"
+        android:label="JoinPasswordFragment"
+        tools:layout="@layout/fragment_join_password">
+        <action
+            android:id="@+id/action_joinPasswordFragment_to_additionalInfoFragment"
+            app:destination="@id/additionalInfoFragment" />
+    </fragment>
 
-        <fragment
-            android:id="@+id/joinPasswordFragment"
-            android:name="com.d204.rumeet.ui.join.password.JoinPasswordFragment"
-            android:label="JoinPasswordFragment" />
-    </navigation>
+    <fragment
+        android:id="@+id/findAccountFragment"
+        android:name="com.d204.rumeet.ui.find_account.FindAccountFragment"
+        android:label="FindAccountFragment"
+        tools:layout="@layout/fragment_find_account" >
+        <action
+            android:id="@+id/action_findAccountFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/additionalInfoFragment"
+        android:name="com.d204.rumeet.ui.join.addtional_info.AdditionalInfoFragment"
+        android:label="AdditionalInfoFragment"
+        tools:layout="@layout/fragment_addtional_info">
+        <action
+            android:id="@+id/action_additionalInfoFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        tools:layout="@layout/fragment_reset_password"
+        android:name="com.d204.rumeet.ui.reset_password.ResetPasswordFragment"
+        android:label="ResetPasswordFragment" >
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="false"/>
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
 
 </navigation>

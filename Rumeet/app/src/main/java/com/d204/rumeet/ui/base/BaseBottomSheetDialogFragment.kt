@@ -8,19 +8,18 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
+import com.d204.rumeet.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.flow.SharedFlow
 
-abstract class BaseBottomSheetDialogFragment<T : ViewDataBinding, R : BaseViewModel> :
+abstract class BaseBottomSheetDialogFragment<T : ViewDataBinding> :
     BottomSheetDialogFragment() {
 
     private var _binding: T? = null
     val binding get() = requireNotNull(_binding)
 
     abstract val layoutResourceId: Int
-
-    abstract val viewModel: R
 
     abstract fun initStartView()
 

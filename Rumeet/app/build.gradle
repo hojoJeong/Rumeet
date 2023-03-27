@@ -71,7 +71,7 @@ dependencies {
     implementation libs.hilt
     kapt libs.hilt.compiler
     implementation libs.glide
-    annotationProcessor libs.glide.compiler
+    kapt libs.glide.compiler
 
     // kakao
     implementation libs.kakao.sdk
@@ -79,6 +79,7 @@ dependencies {
     // custom view
     implementation libs.circleimageview
     implementation libs.circleindicator
+    implementation libs.shawnlin013.numberpicker
 
     // junit
     testImplementation libs.junit

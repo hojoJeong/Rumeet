@@ -28,4 +28,6 @@
     <color name="china_ivory">#FFF4CF</color>
     <color name="fuzzy_wuzzy_brown">#B95555</color>
     <color name="trans40_dim_gray">#80656565</color>
+    <color name="quartz">#E2E1E5</color>
+    <color name="trans30_black">#4D000000</color>
 </resources>
