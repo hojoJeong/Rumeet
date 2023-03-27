@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.get("/load/{mode}/{id}")
 async def rootd(mode, id):
-        global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
+        #global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
         pace = []
 
         if (mode == 4):
