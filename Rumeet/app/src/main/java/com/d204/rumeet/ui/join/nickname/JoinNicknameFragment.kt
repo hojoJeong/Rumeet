@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentJoinNicknameBinding
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.components.SingUpEditText
+import com.d204.rumeet.ui.components.SingleLineEditText
 import com.d204.rumeet.ui.join.JoinViewModel
 import com.d204.rumeet.ui.join.SocialJoinModel
 import com.d204.rumeet.util.getAbsolutePath
@@ -83,7 +83,7 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
     override fun initAfterBinding() {
         binding.btnContinue.setContent("계속하기")
         binding.editNickname.setEditTextType(
-            SingUpEditText.SingUpEditTextType.NORMAL,
+            SingleLineEditText.SingUpEditTextType.NORMAL,
             getString(R.string.content_nickname_hint)
         )
     }

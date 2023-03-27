@@ -34,7 +34,7 @@
             app:layout_constraintEnd_toEndOf="@id/iv_profile_img"
             app:onSingleClick="@{() -> vm.navigationToGallery()}" />
 
-        <com.d204.rumeet.ui.components.SingUpEditText
+        <com.d204.rumeet.ui.components.SingleLineEditText
             android:id="@+id/edit_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

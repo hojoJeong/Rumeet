@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.mypage.setting.SettingAction
+import com.d204.rumeet.ui.mypage.setting.UserInfoAction
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -16,9 +17,16 @@ class MypageViewModel : BaseViewModel() {
     private val _settingNavigationEvent: MutableSharedFlow<SettingAction> = MutableSharedFlow()
     val settingNavigationEvent: SharedFlow<SettingAction> get() = _settingNavigationEvent.asSharedFlow()
 
+    private val _userInfonNavigationEvent: MutableSharedFlow<UserInfoAction> = MutableSharedFlow()
+    val userInfoNavigationEvent: SharedFlow<UserInfoAction> get() = _userInfonNavigationEvent.asSharedFlow()
+
     private var _optionList = listOf<String>()
     val optionList: List<String>
         get() = _optionList
+
+    private var _userInfoOptionList = listOf<String>()
+    val userInfoOptionList: List<String>
+        get() = _userInfoOptionList
 
     fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
@@ -28,14 +36,21 @@ class MypageViewModel : BaseViewModel() {
                 optionList[3] -> _settingNavigationEvent.emit(SettingAction.Privacy)
                 optionList[4] -> _settingNavigationEvent.emit(SettingAction.ServiceTerms)
                 optionList[5] -> _settingNavigationEvent.emit(SettingAction.LogOut)
+
+                userInfoOptionList[6] -> _userInfonNavigationEvent.emit(UserInfoAction.ResetDetailInfo)
+
+                userInfoOptionList[7] -> _userInfonNavigationEvent.emit(UserInfoAction.ResetPassword)
+                userInfoOptionList[8] -> _userInfonNavigationEvent.emit(UserInfoAction.Withdrawal)
             }
         }
-
-
     }
 
     fun setOptionList(list: List<String>) {
         _optionList = list
-        Log.d(TAG, "setOptionList: 세팅 리스트")
+    }
+
+    fun setUserInfoOptionTitleList(list: List<String>) {
+        _userInfoOptionList = list
+        Log.d(TAG, "setOptionList: $userInfoOptionList")
     }
 }
