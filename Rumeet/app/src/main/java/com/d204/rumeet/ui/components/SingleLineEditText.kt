@@ -17,7 +17,7 @@ import com.d204.rumeet.databinding.ContentSignUpEditTextBinding
 import com.d204.rumeet.util.getColorWithNoTheme
 import com.d204.rumeet.util.setTextColorWithNoTheme
 
-class SingUpEditText @JvmOverloads constructor(
+class SingleLineEditText @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0

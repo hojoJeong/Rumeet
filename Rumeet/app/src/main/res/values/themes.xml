@@ -180,4 +180,8 @@
         <item name="colorPrimary">@color/navy_blue</item>
         <item name="tabIndicatorColor">@color/navy_blue</item>
     </style>
+    
+    <style name="switchCustom" parent="Widget.AppCompat.CompoundButton.Switch">
+
+    </style>
 </resources>

@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
+        <variable
+            name="cancelState"
+            type="Boolean" />
+
         <variable
             name="alertModel"
             type="com.d204.rumeet.ui.base.AlertModel" />
@@ -42,8 +48,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/base_horizontal_margin"
-            android:gravity="center"
-            android:layout_marginTop="48dp"
             android:text="@{alertModel.content}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +60,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/base_horizontal_margin"
-            android:layout_marginTop="48dp"
             android:layout_marginBottom="34dp"
             android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
             android:elevation="0dp"
@@ -65,6 +68,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_dialog_content" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            style="@style/base_font_bold_16_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="34dp"
+            android:background="@drawable/bg_rect_transparent_light_grey_round8_stroke0"
+            android:elevation="0dp"
+            android:text="취소"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_okay"
+            android:visibility="@{cancelState ? View.VISIBLE : View.GONE}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

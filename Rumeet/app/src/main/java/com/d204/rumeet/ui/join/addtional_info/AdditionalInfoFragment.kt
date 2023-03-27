@@ -2,6 +2,8 @@ package com.d204.rumeet.ui.join.addtional_info
 
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentAddtionalInfoBinding
 import com.d204.rumeet.ui.base.AlertModel
@@ -17,6 +19,7 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
 
     override val viewModel: JoinViewModel by activityViewModels()
     private var gedner = -1
+    private val args by navArgs<AdditionalInfoFragmentArgs>()
 
     override fun initStartView() {
         with(binding) {
@@ -25,6 +28,8 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
             lifecycleOwner = viewLifecycleOwner
         }
         exception = viewModel.errorEvent
+
+
     }
 
     override fun initDataBinding() {
@@ -40,8 +45,13 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
                         else showSignUpFailedDialog()
                     }
                     is AdditionalInfoAction.SignUpSuccess -> {
-                        toastMessage("회원가입이 성공했습니다.")
-                        navigate(AdditionalInfoFragmentDirections.actionAdditionalInfoFragmentToLoginFragment())
+                        if(!args.reset){
+                            toastMessage("회원가입이 성공했습니다.")
+                            navigate(AdditionalInfoFragmentDirections.actionAdditionalInfoFragmentToLoginFragment())
+                        }else{
+                            toastMessage("정보 수정이 완료되었습니다.")
+                            findNavController().popBackStack()
+                        }
                     }
                 }
             }
@@ -49,7 +59,11 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
     }
 
     override fun initAfterBinding() {
-        binding.btnRumeet.setContent("회원가입 완료")
+        if(args.reset){
+            binding.btnRumeet.setContent("정보 수정")
+        } else {
+            binding.btnRumeet.setContent("회원가입 완료")
+        }
         binding.tvBodyState.setOnClickListener {
             showBodyStateDialog()
         }

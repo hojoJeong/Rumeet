@@ -45,7 +45,6 @@ class RunningOptionFragment: BaseFragment<FragmentRunningOptionBinding, BaseView
 
         val vpAdapter= RunningOptionViewPagerAdapter(this).apply {
             setFragmentList(vpFragmentList)
-//            setTabCount(tabList.size)
         }
 
         binding.vpgRunningOption.adapter = vpAdapter

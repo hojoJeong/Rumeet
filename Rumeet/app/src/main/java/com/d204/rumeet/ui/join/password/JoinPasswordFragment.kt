@@ -5,7 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentJoinPasswordBinding
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.components.SingUpEditText
+import com.d204.rumeet.ui.components.SingleLineEditText
 import com.d204.rumeet.ui.join.JoinViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -41,8 +41,8 @@ class JoinPasswordFragment : BaseFragment<FragmentJoinPasswordBinding, JoinViewM
     }
 
     override fun initAfterBinding() {
-        binding.editPassword.setEditTextType(SingUpEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_hint))
-        binding.editPasswordCheck.setEditTextType(SingUpEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_check_hint))
+        binding.editPassword.setEditTextType(SingleLineEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_hint))
+        binding.editPasswordCheck.setEditTextType(SingleLineEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_check_hint))
         binding.btnSignUp.setContent("계속하기")
     }
 }

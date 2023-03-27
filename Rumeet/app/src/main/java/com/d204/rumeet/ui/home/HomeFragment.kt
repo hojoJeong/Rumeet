@@ -30,6 +30,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
         binding.tvHomeWelcomeMessage.setOnClickListener {
             navigate(HomeFragmentDirections.actionHomeFragmentToRunningOptionContainerFragment())
         }
+        //TODO(마이페이지 이동 임시)
+        binding.contentHomeBestRecord.setOnClickListener{
+            navigate(HomeFragmentDirections.actionHomeFragmentToNavigationMypage())
+        }
     }
 
     override fun initAfterBinding() {
