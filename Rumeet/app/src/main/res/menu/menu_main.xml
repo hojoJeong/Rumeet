@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_chatting"
+        android:id="@+id/chattingFragment"
         android:icon="@drawable/ic_chatting"
         android:title="@string/category_chatting"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/menu_empty"
+        android:id="@+id/homeFragment"
         android:title=""
         app:showAsAction="never"
         android:enabled="false"
         android:checked="false"/>
 
     <item
-        android:id="@+id/menu_my_page"
+        android:id="@+id/navigation_mypage"
         android:icon="@drawable/sc_my_page_bottom_navigation"
         android:title="@string/category_my_page"
         app:showAsAction="always"/>

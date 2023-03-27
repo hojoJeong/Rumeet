@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ActivityMainBinding
 import com.d204.rumeet.ui.base.BaseActivity
@@ -18,16 +19,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private lateinit var navController : NavController
 
     override fun initStartView() {
-        Log.d(TAG, "initStartView: main")
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
+        navController = navHostFragment.navController
     }
 
     override fun initDataBinding() {
-
+        binding.bvnMain.bvnMain.setupWithNavController(navController)
+        binding.bvnMain.bvnMain.selectedItemId = R.id.homeFragment
     }
 
     override fun initAfterBinding() {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
-        navController = navHostFragment.navController
         navController.addOnDestinationChangedListener { _, _, _ ->
             binding.tbToolbar.visibility = View.GONE
             when (navController.currentDestination?.id) {

@@ -15,6 +15,7 @@
         <com.d204.rumeet.ui.components.RumeetToolbar
             android:id="@+id/tb_toolbar"
             android:layout_width="match_parent"
+            android:elevation="1dp"
             android:layout_height="?attr/actionBarSize"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
