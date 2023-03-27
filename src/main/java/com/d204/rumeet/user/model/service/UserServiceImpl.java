@@ -40,6 +40,8 @@ public class UserServiceImpl implements UserService{
 
     private final KafkaService kafkaService;
 
+
+
     @Override
     public LoginUserDto doLogin(LoginDto loginDto) {
         UserDto user = userMapper.doLogin(loginDto);
@@ -119,6 +121,9 @@ public class UserServiceImpl implements UserService{
         user.setProfile(url);
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
+        String topic = "rumeet.userlist";
+        String message = String.valueOf(user.getId());
+        kafkaService.sendMessage(topic,message);
         kafkaService.createTopic("user." + user.getId());
     }
     @Override
