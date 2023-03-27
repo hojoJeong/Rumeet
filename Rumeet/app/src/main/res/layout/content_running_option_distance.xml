@@ -45,6 +45,7 @@
                     android:layout_weight="1"
                     app:strokeWidth="1dp"
                     app:strokeColor="@color/navy_blue"
+                    android:textSize="16sp"
                     style="@style/toggleButtonCustom"
                     android:text="1km"/>
                 <com.google.android.material.button.MaterialButton
@@ -53,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="2km"
+                    android:textSize="16sp"
                     app:strokeWidth="1dp"
                     app:strokeColor="@color/navy_blue"
                     style="@style/toggleButtonCustom" />
@@ -62,6 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="3km"
+                    android:textSize="16sp"
                     app:strokeWidth="1dp"
                     app:strokeColor="@color/navy_blue"
                     style="@style/toggleButtonCustom"/>
@@ -71,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="5km"
+                    android:textSize="16sp"
                     app:strokeWidth="1dp"
                     app:strokeColor="@color/navy_blue"
                     style="@style/toggleButtonCustom"/>

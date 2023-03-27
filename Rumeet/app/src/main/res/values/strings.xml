@@ -161,6 +161,10 @@
         <item>로그아웃</item>
     </string-array>
 
+    <string name="content_running_record_option_week">이번 주</string>
+    <string name="content_running_record_option_month">이번 달</string>
+    <string name="content_running_record_option_year">올 해</string>
+    <string name="content_running_record_option_all">전체</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
