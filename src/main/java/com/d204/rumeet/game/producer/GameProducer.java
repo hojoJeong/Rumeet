@@ -2,6 +2,14 @@ package com.d204.rumeet.game.producer;
 
 import com.d204.rumeet.kafka.model.KafkaService;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.common.errors.TopicExistsException;
+
+import java.util.Collections;
+import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 
 @RequiredArgsConstructor
@@ -24,7 +32,7 @@ public class GameProducer {
         String gameTopic = "rummet" + "." + "game-id" + "." + gameId + "." + "user-id" + "." + userId;
         kafkaService.createTopic(gameTopic);
         return gameTopic;
-
+    }
     public String createTopic() {
         String newTopic = "rummet" + "." + "game-id" + "." + gameId + "." + "user-id" + "." + userId;
 
