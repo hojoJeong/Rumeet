@@ -10,6 +10,17 @@ async def rootd(mode, id):
         global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
         pace = []
 
+        print(type(mode))
+        pace1_avg.show()
+
+        # pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
+        #         .select('avg_pace1') \
+        #         .collect()[0][0]
+        # pace.append(int(pace_value))
+        # print(pace_value)
+        #
+        # return {"id": id , "pace":pace}
+
         if mode == "4":
             pace1_avg.show()
             pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
@@ -48,7 +59,7 @@ async def rootd(mode, id):
                 .collect()[0][0]
         pace.append(int(pace_value))
 
-        return {"id": id , "pace":pace}
+        return {"id": int(id) , "pace":pace}
 
 @app.get("/cache")
 async def root():
