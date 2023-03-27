@@ -9,10 +9,13 @@ app = FastAPI()
 async def rootd(id):
         global data_df
         global pace1_avg
+        pace = []
         # 작업 하면됨
         data_df.show(10)
         pace1_avg.filter(pace1_avg["user_id"] == id).show()
-        return {"message": "dg"}
+        pace.append(pace1_avg["avg_pace1"])
+
+        return {"id": id , "pace":pace}
 
 @app.get("/cache")
 async def root():
@@ -35,7 +38,7 @@ async def root():
                      mean('elapsed_time').alias('avg_elapsed_time'),
                      mean('average_heart_rate').alias('avg_heart_rate'))
         pace1_avg.cache()
-        return {"message": "hi"}
+        return {"pace":"dd"}
 
 
 @app.get("/munang")
