@@ -32,7 +32,7 @@ class SplashViewModel @Inject constructor(
             launch {
                 // true -> 방문했음
                 if (getUserFirstAccessCheckUseCase()) {
-                    if (!getUserAutoLoginUseCase()) _navigationEvent.emit(SplashNavigationAction.StartMainActivity)
+                    if (getUserAutoLoginUseCase()) _navigationEvent.emit(SplashNavigationAction.StartMainActivity)
                     else _navigationEvent.emit(SplashNavigationAction.StartLoginActivity)
                 } else {
                     _navigationEvent.emit(SplashNavigationAction.NavigateOnBoarding)
