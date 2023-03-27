@@ -59,7 +59,7 @@ async def root():
         data_df.cache()
 
         pace1_avg = data_df.groupBy('user_id') \
-                .agg(mean('pace1').alias('avg_pace1'),
+                .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                      mean('elapsed_time').alias('avg_elapsed_time'),
                      mean('average_heart_rate').alias('avg_heart_rate'))
         pace1_avg.cache()
@@ -73,8 +73,8 @@ async def root():
         df_2km.cache()
 
         pace2_avg = df_2km.groupBy('user_id') \
-                .agg(mean('pace1').alias('avg_pace1'),
-                     mean('pace2').alias('avg_pace2'),
+                .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
+                     (mean('pace2').cast('integer')).alias('avg_pace2'),
                      mean('elapsed_time').alias('avg_elapsed_time'),
                      mean('average_heart_rate').alias('avg_heart_rate'))
         pace2_avg.cache()
@@ -88,9 +88,9 @@ async def root():
         df_3km.cache()
 
         pace3_avg = df_3km.groupBy('user_id') \
-            .agg(mean('pace1').alias('avg_pace1'),
-                 mean('pace2').alias('avg_pace2'),
-                 mean('pace3').alias('avg_pace3'),
+            .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
+                 (mean('pace2').cast('integer')).alias('avg_pace2'),
+                 (mean('pace3').cast('integer')).alias('avg_pace3'),
                  mean('elapsed_time').alias('avg_elapsed_time'),
                  mean('average_heart_rate').alias('avg_heart_rate'))
         pace3_avg.cache()
