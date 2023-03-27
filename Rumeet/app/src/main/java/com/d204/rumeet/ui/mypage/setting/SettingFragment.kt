@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.mypage.setting
 
+import android.app.ProgressDialog.show
 import android.content.ContentValues.TAG
 import android.util.Log
 import android.view.View
@@ -12,7 +13,6 @@ import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.DefaultAlertDialog
-import com.d204.rumeet.ui.mypage.MyPageAction
 import com.d204.rumeet.ui.mypage.MypageViewModel
 import com.d204.rumeet.ui.mypage.adapter.SettingItemListAdapter
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
@@ -49,20 +49,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
                     SettingAction.ServiceTerms -> {
                     }
                     SettingAction.LogOut -> {
-                        val dialog = DefaultAlertDialog(
-                            alertModel = AlertModel(
-                                title = "알림 메시지",
-                                content = "로그아웃하시겠습니다",
-                                buttonText = "로그아웃"
-                            )
-                        )
-                        with(dialog){
-                            binding.btnCancel.visibility = View.VISIBLE
-                            show(requireActivity().supportFragmentManager, dialog.tag)
-                            binding.btnOkay.setOnClickListener {
-                                //TODO 로그아웃
-                            }
-                        }
+                        showLogoutDialog()
                     }
                 }
             }
@@ -92,4 +79,16 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
         }
     }
 
+    private fun showLogoutDialog() {
+        val dialog = DefaultAlertDialog(
+            alertModel = AlertModel(
+                title = "알림 메시지",
+                content = "로그아웃 하시겠습니까?",
+                buttonText = "로그아웃"
+            )
+        ).apply {
+            setCancelButtonVisibility(true)
+        }
+        dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+    }
 }

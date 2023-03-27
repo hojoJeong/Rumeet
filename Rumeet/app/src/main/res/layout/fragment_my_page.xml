@@ -13,7 +13,7 @@
             android:id="@+id/tv_mypage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:text="세팅 페이지 이동" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
