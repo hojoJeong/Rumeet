@@ -83,6 +83,9 @@
                 app:destination="@id/additionalInfoFragment2"
                 app:popUpTo="@id/settingUserInfoFragment"
                 app:popUpToInclusive="false"/>
+            <action
+                android:id="@+id/action_confirmPasswordFragment_to_withdrawalFragment"
+                app:destination="@id/withdrawalFragment"/>
         </fragment>
 
         <fragment
@@ -114,5 +117,18 @@
                 app:argType="string"
                 app:nullable="false"/>
         </fragment>
+        <fragment
+            android:id="@+id/withdrawalFragment"
+            android:name="com.d204.rumeet.ui.mypage.setting.WithdrawalFragment"
+            android:label="WithdrawalFragment" >
+            <action
+                android:id="@+id/action_withdrawalFragment_to_resultWithdrawalFragment"
+                app:destination="@id/resultWithdrawalFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/resultWithdrawalFragment"
+            android:name="com.d204.rumeet.ui.mypage.setting.ResultWithdrawalFragment"
+            android:label="ResultWithdrawalFragment" />
     </navigation>
+
 </navigation>

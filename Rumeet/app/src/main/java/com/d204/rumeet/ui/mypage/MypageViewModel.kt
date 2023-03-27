@@ -38,7 +38,6 @@ class MypageViewModel : BaseViewModel() {
                 optionList[5] -> _settingNavigationEvent.emit(SettingAction.LogOut)
 
                 userInfoOptionList[6] -> _userInfonNavigationEvent.emit(UserInfoAction.ResetDetailInfo)
-
                 userInfoOptionList[7] -> _userInfonNavigationEvent.emit(UserInfoAction.ResetPassword)
                 userInfoOptionList[8] -> _userInfonNavigationEvent.emit(UserInfoAction.Withdrawal)
             }

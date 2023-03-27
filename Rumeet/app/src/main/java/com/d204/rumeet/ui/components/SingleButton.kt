@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.annotation.AttrRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentSignUpEditTextBinding
@@ -47,5 +48,9 @@ class SingleButton @JvmOverloads constructor(
 
     fun addClickListener(listener: OnClickListener?){
         binding.btnSingleText.setOnClickListener(listener)
+    }
+
+    fun setBtnBackGround(img: Int){
+        binding.btnSingleText.setBackgroundResource(img)
     }
 }

@@ -11,17 +11,31 @@
         android:padding="@dimen/base_horizontal_margin">
 
         <TextView
+            android:id="@+id/tv_withdrawal_result_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="수정이 완료되었습니다."
-            style="@style/base_font_bold_16_black"/>
+            app:layout_constraintBottom_toTopOf="@+id/tv_withdrawal_result_message"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:text="@string/content_withdrawal_result_title"
+            style="@style/base_font_bold_22_black"/>
 
+        <TextView
+            android:id="@+id/tv_withdrawal_result_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_withdrawal_result_title"
+            app:layout_constraintBottom_toTopOf="@+id/btn_result_withdrawal"
+            android:layout_marginTop="@dimen/base_vertical_title_to_content"
+            android:text="@string/content_withdrawal_result_message"
+            android:textAlignment="center"
+            style="@style/base_font_medium_14_nobel"/>
         <com.d204.rumeet.ui.components.SingleButton
-            android:id="@+id/btn_result_reset"
+            android:id="@+id/btn_result_withdrawal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"

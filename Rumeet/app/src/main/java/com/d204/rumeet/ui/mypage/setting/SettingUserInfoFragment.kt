@@ -78,7 +78,7 @@ class SettingUserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, Bas
                         navigate(SettingUserInfoFragmentDirections.actionSettingUserInfoFragmentToConfirmPasswordFragment("resetPassword"))
                     }
                     UserInfoAction.Withdrawal -> {
-
+                        navigate(SettingUserInfoFragmentDirections.actionSettingUserInfoFragmentToConfirmPasswordFragment("withdrawal"))
                     }
                 }
             }

@@ -37,6 +37,9 @@ class ConfirmPasswordFragment : BaseFragment<FragmentConfirmPasswordBinding, Bas
                 "resetPassword" -> {
                     navigate(ConfirmPasswordFragmentDirections.actionConfirmPasswordFragmentToResetPasswordFragment2("", true))
                 }
+                "withdrawal" -> {
+                    navigate(ConfirmPasswordFragmentDirections.actionConfirmPasswordFragmentToWithdrawalFragment())
+                }
             }
         }
 
