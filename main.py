@@ -17,17 +17,15 @@ async def rootd(mode, id):
             pace.append(int(filtered))
             filtered.show()
         elif (mode == 5):
+            pace2_avg.show()
             filtered = pace2_avg.filter(pace1_avg["user_id"] == id) \
-                .select('avg_pace1') \
-                .select('avg_pace2') \
+                .select('avg_pace1', 'avg_pace2') \
                 .collect()[0][0]
             pace.append(int(filtered))
             filtered.show()
         elif (mode == 6):
             filtered = pace3_avg.filter(pace1_avg["user_id"] == id) \
-                .select('avg_pace1') \
-                .select('avg_pace2') \
-                .select('avg_pace3') \
+                .select('avg_pace1', 'avg_pace2', 'avg_pace3') \
                 .collect()[0][0]
             pace.append(int(filtered))
             filtered.show()
