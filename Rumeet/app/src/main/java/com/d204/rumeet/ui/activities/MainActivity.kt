@@ -35,18 +35,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     binding.tbToolbar.visibility = View.VISIBLE
                     binding.tbToolbar.setToolbarType(
                         RumeetToolbar.ToolbarType.LOGO_TEXT_ALARM,
-                        "회원가입",
+                        "홈",
                         rightClickListener = {
                             //Todo 알람 페이지로 navigate
-                        })
-                }
-                R.id.findAccountFragment -> {
-                    binding.tbToolbar.visibility = View.VISIBLE
-                    binding.tbToolbar.setToolbarType(
-                        RumeetToolbar.ToolbarType.BACK_TEXT,
-                        "내 계정 찾기",
-                        leftClickListener = {
-                            navController.popBackStack()
                         })
                 }
             }

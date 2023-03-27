@@ -3,6 +3,8 @@
     <string name="app_name">Rumeet</string>
     <string name="title_dialog">알림 메시지</string>
     <string name="content_loading">러밋으로 러닝 메이트를\n만들어보세요 :)</string>
+    <string name="category_chatting">채팅</string>
+    <string name="category_my_page">마이페이지</string>
 
     <!-- login -->
     <string name="content_auto_login">자동 로그인</string>

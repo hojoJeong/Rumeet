@@ -60,7 +60,7 @@ class RumeetToolbar @JvmOverloads constructor(
     private fun setToolbarLeftImg(type: ToolbarLeftImgType, leftClickListener: OnClickListener?) {
         when (type) {
             ToolbarLeftImgType.LOGO -> {
-                binding.ivLeftImg.setImageResource(R.drawable.ic_app_main_logo)
+                binding.ivLeftImg.setImageResource(R.drawable.ic_toolbar_logo)
             }
             ToolbarLeftImgType.BACK -> {
                 binding.ivLeftImg.setImageResource(R.drawable.ic_back)

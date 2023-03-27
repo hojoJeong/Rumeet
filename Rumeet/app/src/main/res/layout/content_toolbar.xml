@@ -15,6 +15,7 @@
             android:id="@+id/iv_left_img"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:scaleType="fitCenter"
             android:background="@color/transparent"
             android:layout_marginStart="@dimen/base_vertical_margin"
             app:layout_constraintBottom_toBottomOf="parent"

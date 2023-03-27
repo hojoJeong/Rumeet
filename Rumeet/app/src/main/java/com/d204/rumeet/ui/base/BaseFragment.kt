@@ -98,15 +98,13 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
             }
 
             launch {
-                viewModel.loadingEvent.conflate().collectIndexed { index, value ->
-                    Log.d("TAG", "loading: $index, $value")
-                    if(value) showLoadingDialog()
+                viewModel.loadingEvent.collectLatest {
+                    if(it) showLoadingDialog()
                     else dismissLoadingDialog()
                 }
             }
 
-            launch {
-                viewModel.needLoginEvent.collectLatest { loginCheck() }
+            launch {                viewModel.needLoginEvent.collectLatest { loginCheck() }
             }
         }
     }
