@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/base_horizontal_margin"
+        tools:context=".ui.mypage.setting.WithdrawalFragment">
+
+        <TextView
+            android:id="@+id/tv_withdrawal_title"
+            style="@style/base_font_bold_22_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_withdrawal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_withdrawal_message_top"
+            style="@style/base_font_medium_14_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
+            android:text="@string/content_withdrawal_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_withdrawal_title" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/menu_withdrawal_reason"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_vertical_title_to_content"
+            app:boxBackgroundColor="@color/white_smoke"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:endIconTint="@color/dim_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_withdrawal_message_top">
+
+            <AutoCompleteTextView
+                android:id="@+id/menu_withdrawal_reason_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_rect_light_grey_transparent_round8_stroke1"
+                android:backgroundTint="@color/white_smoke"
+                android:inputType="none"
+                android:singleLine="true"
+                android:text="@string/content_withdrawal_select_reason"
+                android:textColor="@color/nobel" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_withdrawal_solution_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/menu_withdrawal_reason"
+            android:text="@string/content_withdrawal_message_bottom"
+            style="@style/base_font_medium_12_dim_gray"
+            android:layout_marginTop="@dimen/base_vertical_contents_to_contents"/>
+
+        <com.d204.rumeet.ui.components.SingleButton
+            android:id="@+id/btn_withdrawal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

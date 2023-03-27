@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="info"
+            type="String" />
+
+        <variable
+            name="vm"
+            type="com.d204.rumeet.ui.mypage.MypageViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> vm.setSettingNavigate(title)}">
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/dv_item_setting_content_top"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_item_setting_content_title"
+            style="@style/base_font_bold_16_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_horizontal_margin"
+            android:text="@{title}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="설정 이름" />
+
+        <TextView
+            android:id="@+id/tv_item_setting_content_info"
+            style="@style/base_font_medium_14_nobel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_horizontal_margin"
+            android:text="@{info}"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_setting_content_title"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_item_setting_content_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="상세 정보" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
