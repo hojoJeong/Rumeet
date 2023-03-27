@@ -29,7 +29,7 @@ async def rootd(mode, id):
             pace.append(int(pace_value))
             print(pace_value)
         elif mode =="5":
-            pace2_avg.show()
+            print(pace2_avg.columns)
             print("mode : 5")
             filtered = pace2_avg.filter(pace1_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2') \
