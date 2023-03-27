@@ -52,7 +52,6 @@
     <string name="title_reset_password">비밀번호 재설정</string>
     <string name="title_reset_password_description">새로운 비밀번호를 입력해주세요.</string>
 
-
     <!-- home -->
     <string name="content_welcome_message">%1$s님!\n오늘도 열심히 달려볼까요?</string>
     <string name="title_best_record">최고기록</string>
@@ -89,6 +88,13 @@
     <string name="content_recently_run_friend">최근에 같이 뛴 친구</string>
     <string name="content_search_friend_hint">친구를 검색해보세요</string>
     <string name="content_run_together_friend">함께 많이 달린 친구</string>
+    <string name="title_friend_dialog">친구 보기</string>
+    <string name="content_average_pace">평균 페이스</string>
+    <string name="content_friend_distance">거리</string>
+    <string name="content_friend_time">시간</string>
+    <string name="content_friend_pace">페이스</string>
+    <string name="content_friend_calorie">칼로리</string>
+    
 
     <!-- running -->
     <string name="content_option_competition">경쟁 모드</string>

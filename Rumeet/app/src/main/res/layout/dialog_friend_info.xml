@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/content_user_info"
+            layout="@layout/content_user_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_chatting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_rect_navyblue_tranparent_round8_stroke1"
+            android:padding="10dp"
+            android:src="@drawable/ic_friend_chatting"
+            app:layout_constraintEnd_toStartOf="@id/btn_okay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content_user_info" />
+
+        <com.d204.rumeet.ui.components.SingleButton
+            android:id="@+id/btn_okay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/btn_chatting"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_chatting"
+            app:layout_constraintTop_toTopOf="@id/btn_chatting" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
