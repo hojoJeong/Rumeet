@@ -5,56 +5,60 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.navGraphViewModels
 import com.d204.rumeet.R
+import com.d204.rumeet.databinding.FragmentMatchingHistoryBinding
+import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.mypage.adapter.MatchingHistoryViewPagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class MatchingHistoryFragment : BaseFragment<FragmentMatchingHistoryBinding, BaseViewModel>() {
+    private val myPageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
+    override val layoutResourceId: Int
+        get() = R.layout.fragment_matching_history
+    override val viewModel: BaseViewModel
+        get() = myPageViewModel
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MatchingHistoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MatchingHistoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    override fun initStartView() {
+        initView()
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun initDataBinding() {
+    }
+
+    override fun initAfterBinding() {
+    }
+
+    private fun initView(){
+        val ghostModeFragment = MatchingHistoryContainerFragment().apply {
+            setViewInfo("ghost")
         }
+        val competitionModeFragment = MatchingHistoryContainerFragment().apply {
+            setViewInfo("competition")
+        }
+        val teamSurvivorModeFragment = MatchingHistoryContainerFragment().apply {
+            setViewInfo("teamSurvivor")
+        }
+
+        val fragmentList = listOf(
+            ghostModeFragment,
+            competitionModeFragment,
+            teamSurvivorModeFragment
+        )
+
+        val tabList = listOf(
+            getString(R.string.title_mode_ghost),
+            getString(R.string.title_mode_competition),
+            getString(R.string.title_mode_team)
+        )
+
+        binding.vpMatchingHistory.adapter = MatchingHistoryViewPagerAdapter(this).apply {
+            setFragmentList(fragmentList)
+        }
+        TabLayoutMediator(binding.tblyMatchingHistory, binding.vpMatchingHistory){ tab, position ->
+            tab.text = tabList[position]
+        }.attach()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_matching_history, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MatchingHistoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MatchingHistoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

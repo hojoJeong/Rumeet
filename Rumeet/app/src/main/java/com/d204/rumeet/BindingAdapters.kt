@@ -110,4 +110,10 @@ object BindingAdapters {
     fun ImageView.setImageResource(img: Int){
         setImageResource(img)
     }
+
+    @JvmStatic
+    @BindingAdapter("setMode")
+    fun TextView.setMode(mode: String){
+        //TODO 운동기록과 매칭 기록에서 모드,승패 여부에 따라 text 처리
+    }
 }

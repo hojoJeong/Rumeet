@@ -43,7 +43,9 @@
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_running_record_date"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_date"
                     app:layout_constraintStart_toEndOf="@+id/tv_item_running_record_date"
-                    tools:text="싱글" />
+                    tools:text="싱글"
+                    android:layout_marginStart="10dp"/>
+                    <!--app:setMode="@{}"/>-->
 
                 <TextView
                     android:id="@+id/tv_item_running_record_title"

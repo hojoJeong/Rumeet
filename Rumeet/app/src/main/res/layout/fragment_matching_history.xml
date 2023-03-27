@@ -1,19 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
 
     </data>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.mypage.MatchingHistoryFragment">
+        tools:context=".ui.mypage.MatchingHistoryFragment"
+        android:paddingVertical="@dimen/base_vertical_margin">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cdv_matching_history_average"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="매칭기록" />
+            android:layout_height="wrap_content"
+            app:cardUseCompatPadding="true"
+            android:elevation="10dp"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/base_vertical_contents_to_contents">
+                <TextView
+                    android:id="@+id/tv_matching_history_average_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_matching_history_average_distance_title"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_matching_history_average_distance_title"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_matching_history_average_distance_title"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="00km"
+                    android:layout_marginBottom="6dp"
+                    style="@style/base_font_bold_16_black"/>
+                <TextView
+                    android:id="@+id/tv_matching_history_average_distance_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="달린 거리"
+                    style="@style/base_font_medium_14_dim_gray"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_matching_history_average_time_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_matching_history_average_distance"/>
+
+                <TextView
+                    android:id="@+id/tv_matching_history_average_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_matching_history_average_time_title"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_matching_history_average_time_title"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_matching_history_average_time_title"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="00km"
+                    android:layout_marginBottom="6dp"
+                    style="@style/base_font_bold_16_black"/>
+                <TextView
+                    android:id="@+id/tv_matching_history_average_time_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="러닝 시간"
+                    style="@style/base_font_medium_14_dim_gray"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_matching_history_average_pace_title"
+                    app:layout_constraintStart_toEndOf="@+id/tv_matching_history_average_distance_title"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_matching_history_average_time"/>
+
+                <TextView
+                    android:id="@+id/tv_matching_history_average_pace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_matching_history_average_pace_title"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_matching_history_average_pace_title"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_matching_history_average_pace_title"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="00km"
+                    android:layout_marginBottom="6dp"
+                    style="@style/base_font_bold_16_black"/>
+                <TextView
+                    android:id="@+id/tv_matching_history_average_pace_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="나의 페이스"
+                    style="@style/base_font_medium_14_dim_gray"
+                    app:layout_constraintStart_toEndOf="@+id/tv_matching_history_average_time_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_matching_history_average_distance"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tbly_matching_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cdv_matching_history_average"
+            android:layout_marginTop="@dimen/base_vertical_contents_to_contents"/>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_matching_history"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tbly_matching_history"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
