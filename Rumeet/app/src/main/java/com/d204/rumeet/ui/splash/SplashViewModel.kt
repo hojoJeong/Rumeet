@@ -1,9 +1,11 @@
 package com.d204.rumeet.ui.splash
 
+import android.util.Log
 import com.d204.rumeet.domain.usecase.auth.GetUserAutoLoginUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserFirstAccessCheckUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,14 +32,15 @@ class SplashViewModel @Inject constructor(
     fun checkAppState() {
         baseViewModelScope.launch {
             launch {
+                // 억까임
+                delay(1000)
                 // true -> 방문했음
                 if (getUserFirstAccessCheckUseCase()) {
                     if (getUserAutoLoginUseCase()) _navigationEvent.emit(SplashNavigationAction.StartMainActivity)
                     else _navigationEvent.emit(SplashNavigationAction.StartLoginActivity)
-                } else {
-                    _navigationEvent.emit(SplashNavigationAction.NavigateOnBoarding)
-                }
+                } else _navigationEvent.emit(SplashNavigationAction.NavigateOnBoarding)
             }
+            _splashScreenGone.emit(true)
         }
     }
 }

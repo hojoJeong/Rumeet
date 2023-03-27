@@ -11,10 +11,12 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
+<!--        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="S">@android:color/transparent</item>-->
     </style>
 
+    <style name="Theme.Rumeet.Splash" parent="Theme.Rumeet"/>
 
     <!-- base type -->
     <style name="base_font_bold">

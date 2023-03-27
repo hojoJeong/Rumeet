@@ -2,6 +2,7 @@ package com.d204.rumeet.ui.base
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +20,10 @@ import androidx.navigation.fragment.findNavController
 import com.d204.rumeet.data.remote.dto.InternalServerErrorException
 import com.d204.rumeet.data.remote.dto.ServerNotFoundException
 import com.d204.rumeet.ui.activities.LoginActivity
+import com.d204.rumeet.ui.components.LoadingDialogFragment
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment() {
@@ -97,8 +98,9 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
             }
 
             launch {
-                viewModel.loadingEvent.collectLatest {
-                    if(it) showLoadingDialog()
+                viewModel.loadingEvent.conflate().collectIndexed { index, value ->
+                    Log.d("TAG", "loading: $index, $value")
+                    if(value) showLoadingDialog()
                     else dismissLoadingDialog()
                 }
             }
@@ -165,12 +167,12 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     // 로딩 다이얼로그, 즉 로딩창을 띄워줌.
     // 네트워크가 시작될 때 사용자가 무작정 기다리게 하지 않기 위해 작성.
     private fun showLoadingDialog() {
-        mLoadingDialog.show(childFragmentManager, mLoadingDialog.tag)
+        if(!mLoadingDialog.isAdded) mLoadingDialog.show(childFragmentManager, mLoadingDialog.tag)
     }
 
     // 띄워 놓은 로딩 다이얼로그를 없앰.
     private fun dismissLoadingDialog() {
-        if (mLoadingDialog.isVisible) {
+        if (mLoadingDialog.isAdded) {
             mLoadingDialog.dismiss()
         }
     }

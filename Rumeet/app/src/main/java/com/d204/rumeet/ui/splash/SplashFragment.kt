@@ -3,8 +3,12 @@ package com.d204.rumeet.ui.splash
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.core.splashscreen.SplashScreen
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
@@ -15,9 +19,7 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.util.startActivityAfterClearBackStack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
-@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
 
@@ -26,7 +28,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // Android 12 부터 SplashScreen으로 대체
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             initSplashScreen()

@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.login
 
+import android.util.Log
 import com.d204.rumeet.data.remote.dto.SocialLoginErrorException
 import com.d204.rumeet.data.remote.dto.NoUserFindErrorException
 import com.d204.rumeet.domain.onError
@@ -42,9 +43,10 @@ class LoginViewModel @Inject constructor(
             showLoading()
             doKakaoLoginUseCase(accessToken)
                 .onSuccess { jwt ->
-                    _navigationEvent.emit(LoginNavigationAction.LoginSuccess)
-                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken, jwt.userId)
+                    // navigate 관련 로직이라면 모든 로직 처리 후 navigate 로직 처리, viewModel 파괴 되면 안됨(activity -> activity)
                     setUserAutoLoginCheck(true)
+                    setUserTokenUseCase(jwt.accessToken, jwt.refreshToken, jwt.userId)
+                    _navigationEvent.emit(LoginNavigationAction.LoginSuccess)
                 }
                 .onError { e ->
                     if(e is SocialLoginErrorException) redirectKakaoLogin(accessToken)
