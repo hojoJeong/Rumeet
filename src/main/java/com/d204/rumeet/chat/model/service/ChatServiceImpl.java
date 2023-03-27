@@ -56,6 +56,12 @@ public class ChatServiceImpl implements ChatService{
         StringBuilder sb = new StringBuilder();
         sb.append("room.").append(chat.getRoomId()).append(".").append(chat.getToUserId());
         rabbitTemplate.send("chat.exchange",sb.toString(),message);
+        List<ChatRoomListDto> fromUserList = this.getChatRoomList(chat.getFromUserId());
+        List<ChatRoomListDto> toUserList = this.getChatRoomList(chat.getToUserId());
+        Gson gson = new Gson();
+
+        rabbitTemplate.convertAndSend("user.exchange","user."+chat.getFromUserId(),gson.toJson(fromUserList));
+        rabbitTemplate.convertAndSend("user.exchange","user."+chat.getToUserId(),gson.toJson(toUserList));
     }
 
     @Override
@@ -65,8 +71,23 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public List<ChatDto> getChatByRoomId(int roomId) {
-        return chatDao.getChatByRoomId(roomId);
+    public ChatRoomDataDto getChatByRoomId(int roomId) {
+        ChatRoomDataDto chatRoomDataDto = new ChatRoomDataDto();
+        ChatRoomDto chatRoomDto = chatMapper.getRoomById(roomId);
+        chatRoomDataDto.setId(roomId);
+        chatRoomDataDto.setUser1(chatRoomDto.getUser1());
+        chatRoomDataDto.setUser2(chatRoomDto.getUser2());
+        chatRoomDataDto.setDate(chatRoomDto.getDate());
+        chatRoomDataDto.setState(chatRoomDto.getState());
+        chatRoomDataDto.setChat(chatDao.getChatByRoomId(roomId));
+
+        return chatRoomDataDto;
+    }
+
+    @Override
+    public void deleteRoomById(int id, int userId) {
+        chatDao.deleteLastChat(id,userId);
+        chatMapper.deleteRoomById(id);
     }
 
     @Override
@@ -93,12 +114,30 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
+    public CreateChatReturnDTO createRoom(CreateChatRoomDto dto) {
+        CreateChatReturnDTO returnDTO;
+
+        ChatRoomDto chatRoomDto = chatMapper.findChatRoom(dto);
+        if(chatRoomDto == null) {
+            chatRoomDto = new ChatRoomDto();
+            chatRoomDto.setUser1(dto.getUser1());
+            chatRoomDto.setUser2(dto.getUser2());
+            chatRoomDto.setDate(System.currentTimeMillis());
+            chatMapper.makeRoom(chatRoomDto);
+            createQueue(chatRoomDto);
+        }
+        UserDto user2 = userService.getUserById(dto.getUser2());
+        returnDTO = new CreateChatReturnDTO(chatRoomDto.getId(), chatRoomDto.getUser2()
+                ,user2.getNickname(),user2.getProfile());
+        return returnDTO;
+    }
+
+    @Override
     public List<ChatRoomListDto> getChatRoomList(int userId) {
         List<ChatRoomListDto> list = new ArrayList<>();
         System.out.println(userId);
         List<LastChatDto> lastChatDtos = chatDao.getLastChatList(userId);
         int size = lastChatDtos.size();
-//        log.info("{}", chatDao.getLastChatList2(userId).size());
         RabbitAdmin rabbitAdmin = new RabbitAdmin(rabbitTemplate);
         QueueInformation queueInformation = null;
         for(int i = size - 1; i >= 0; i--) {
@@ -114,6 +153,7 @@ public class ChatServiceImpl implements ChatService{
             dto.setContent(lastChatDto.getContent());
             dto.setProfile(userDto.getProfile());
             dto.setNickname(userDto.getNickname());
+            dto.setDate(lastChatDto.getDate());
             StringBuilder queueName = new StringBuilder();
             queueName.append("chat.queue.").append(lastChatDto.getRoomId()).append(".").append(userId);
             queueInformation = rabbitAdmin.getQueueInfo(queueName.toString());

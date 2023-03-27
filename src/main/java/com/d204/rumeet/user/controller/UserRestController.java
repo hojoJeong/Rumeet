@@ -99,6 +99,8 @@ public class UserRestController {
                                       @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {
         RespData<Void> data = new RespData<>();
         userService.joinUser(user, profile);
+
+
         return data.builder();
     }
 

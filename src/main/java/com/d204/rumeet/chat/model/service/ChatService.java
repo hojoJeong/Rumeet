@@ -1,9 +1,6 @@
 package com.d204.rumeet.chat.model.service;
 
-import com.d204.rumeet.chat.model.dto.ChatDto;
-import com.d204.rumeet.chat.model.dto.ChatRoomDto;
-import com.d204.rumeet.chat.model.dto.ChatRoomListDto;
-import com.d204.rumeet.chat.model.dto.MakeChatRoomDto;
+import com.d204.rumeet.chat.model.dto.*;
 import org.springframework.amqp.core.Message;
 
 import java.util.List;
@@ -19,9 +16,13 @@ public interface ChatService {
 
     ChatRoomDto getChatRoom(int userId);
 
-    List<ChatDto> getChatByRoomId(int roomId);
+    ChatRoomDataDto getChatByRoomId(int roomId);
 
     void createQueue(ChatRoomDto chatRoomDto);
 
     List<ChatRoomListDto> getChatRoomList(int userId);
+
+    CreateChatReturnDTO createRoom(CreateChatRoomDto chatRoomDto);
+
+    void deleteRoomById(int id, int userId);
 }
