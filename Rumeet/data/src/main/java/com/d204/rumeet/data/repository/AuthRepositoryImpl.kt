@@ -38,7 +38,6 @@ internal class AuthRepositoryImpl @Inject constructor(
         autoLoginState: Boolean
     ): NetworkResult<JWTModel> {
         val request = EmailLoginRequest(email, password)
-
         return handleApi { authApiService.login(request) }
             .toDomainResult<JWTResponse, JWTModel> { it.toDomain() }
     }

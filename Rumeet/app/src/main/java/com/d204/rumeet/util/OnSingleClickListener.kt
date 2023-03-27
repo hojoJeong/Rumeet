@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class OnSingleClickListener(
     private val clickListener: View.OnClickListener,
-    private val intervalMs: Long = 1000
+    private val intervalMs: Long = 1500
 ) : View.OnClickListener {
     private var canClick = AtomicBoolean(true)
 

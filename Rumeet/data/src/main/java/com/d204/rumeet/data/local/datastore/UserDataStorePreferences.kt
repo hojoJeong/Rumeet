@@ -1,14 +1,13 @@
 package com.d204.rumeet.data.local.datastore
 
 import android.content.Context
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
+import android.util.Log
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import com.d204.rumeet.data.R
 import kakao.k.p
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
+import java.io.IOException
 
 internal class UserDataStorePreferences(val context: Context) {
     private val Context.datastore by preferencesDataStore(name = context.getString(R.string.prefs_key))
