@@ -34,7 +34,7 @@
     </select>
 
     <select id="getUserById" parameterType="int" resultMap="user">
-        SELECT  FROM user_view WHERE id = #{id};
+        SELECT * FROM user_view WHERE id = #{id};
     </select>
 
     <select id="searchUsersByNickname" parameterType="String" resultMap="simple_user">
