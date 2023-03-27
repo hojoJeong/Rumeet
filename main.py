@@ -11,9 +11,10 @@ async def rootd(id):
         global pace1_avg
         pace = []
         # 작업 하면됨
-        pace1_avg.filter(pace1_avg["user_id"] == id).show()
-        pace.append(int(pace1_avg.select('avg_pace1').collect()[0][0]))
-
+        pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
+                .select('avg_pace1') \
+                .collect()[0][0]
+        pace.append(int(pace_value))
 
         return {"id": id , "pace":pace}
 
@@ -37,7 +38,9 @@ async def root():
                 .agg(mean('pace1').alias('avg_pace1'),
                      mean('elapsed_time').alias('avg_elapsed_time'),
                      mean('average_heart_rate').alias('avg_heart_rate'))
-        # pace1_avg.cache()
+        pace1_avg.cache()
+
+        pace1_avg.show()
         return {"pace":"dd"}
 
 
