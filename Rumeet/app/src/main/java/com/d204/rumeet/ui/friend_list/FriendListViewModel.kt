@@ -2,8 +2,9 @@ package com.d204.rumeet.ui.friend_list
 
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
-import com.d204.rumeet.domain.usecase.user.GetFriendInfoUseCase
-import com.d204.rumeet.domain.usecase.user.GetFriendListUseCase
+import com.d204.rumeet.domain.usecase.friend.GetFriendInfoUseCase
+import com.d204.rumeet.domain.usecase.friend.GetFriendListUseCase
+import com.d204.rumeet.domain.usecase.user.SearchUsersUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.friend_list.model.FriendInfoModel
@@ -16,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FriendListViewModel @Inject constructor(
     private val getFriendInfoUseCase: GetFriendInfoUseCase,
-    private val getFriendListUseCase: GetFriendListUseCase
+    private val getFriendListUseCase: GetFriendListUseCase,
 
 ) : BaseViewModel(), FriendListClickListener {
     private val _friendListAction: MutableSharedFlow<FriendListAction> = MutableSharedFlow()

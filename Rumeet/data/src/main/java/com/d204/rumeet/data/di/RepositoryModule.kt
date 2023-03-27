@@ -1,9 +1,11 @@
 package com.d204.rumeet.data.di
 
 import com.d204.rumeet.data.repository.AuthRepositoryImpl
+import com.d204.rumeet.data.repository.FriendRepositoryImpl
 import com.d204.rumeet.data.repository.SignRepositoryImpl
 import com.d204.rumeet.data.repository.UserRepositoryImpl
 import com.d204.rumeet.domain.repository.AuthRepository
+import com.d204.rumeet.domain.repository.FriendRepository
 import com.d204.rumeet.domain.repository.SignRepository
 import com.d204.rumeet.domain.repository.UserRepository
 import dagger.Binds
@@ -32,4 +34,10 @@ internal abstract class RepositoryModule {
     abstract fun bindSignRepositoryImpl(
         signRepositoryImpl: SignRepositoryImpl
     ) : SignRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFriendRepositoryImpl(
+        friendRepositoryImpl : FriendRepositoryImpl
+    ) : FriendRepository
 }

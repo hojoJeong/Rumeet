@@ -1,6 +1,6 @@
 package com.d204.rumeet.ui.friend_list.model
 
-import com.d204.rumeet.domain.model.user.FriendModel
+import com.d204.rumeet.domain.model.friend.FriendModel
 
 data class FriendInfoModel(
     val userId : Int,
