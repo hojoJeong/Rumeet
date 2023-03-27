@@ -11,9 +11,9 @@ async def rootd(id):
         global pace1_avg
         pace = []
         # 작업 하면됨
-        data_df.show(10)
         pace1_avg.filter(pace1_avg["user_id"] == id).show()
-        pace.append(pace1_avg["avg_pace1"])
+        pace.append(pace1_avg.select('avg_pace1').collect()[0][0])
+
 
         return {"id": id , "pace":pace}
 
