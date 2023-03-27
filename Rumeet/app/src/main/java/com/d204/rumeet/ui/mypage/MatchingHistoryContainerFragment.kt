@@ -45,7 +45,6 @@ class MatchingHistoryContainerFragment : BaseFragment<FragmentMatchingHistoryCon
     }
 
     private fun initTeamSurvivorModeView(){
-        binding.tvMatchingHistoryComingSoon.visibility = View.VISIBLE
     }
 
     fun setViewInfo(info: String){

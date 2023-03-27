@@ -1,19 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
 
     </data>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.mypage.BadgeListFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scv_badge_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="뱃지" />
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/base_horizontal_margin">
 
-    </FrameLayout>
+                <TextView
+                    android:id="@+id/tv_badge_recent_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@string/title_badge_recent"
+                    style="@style/base_font_bold_16_black"/>
+                <ImageView
+                    android:id="@+id/iv_badge_recent"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_badge_recent_title"
+                    android:src="@drawable/ic_launcher_background"
+                    android:layout_marginTop="@dimen/base_vertical_title_to_content"/>
+
+                <TextView
+                    android:id="@+id/tv_badge_recent_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/iv_badge_recent"
+                    app:layout_constraintTop_toTopOf="@+id/iv_badge_recent"
+                    tools:text="뱃지 이름"
+                    style="@style/base_font_medium_16_black"
+                    android:layout_marginStart="@dimen/base_horizontal_margin"/>
+                <TextView
+                    android:id="@+id/tv_badge_recent_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/tv_badge_recent_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_badge_recent_name"
+                    tools:text="2023.03.03"
+                    style="@style/base_font_medium_14_dim_gray"/>
+
+                <TextView
+                    android:id="@+id/tv_badge_recent_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/tv_badge_recent_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_badge_recent_date"
+                    tools:text="뱃지 내요요요요용"
+                    style="@style/base_font_medium_12_black"
+                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_badge"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_badge_recent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

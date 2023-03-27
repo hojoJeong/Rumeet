@@ -29,18 +29,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/tv_matching_history_coming_soon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="COMING SOON"
-            style="@style/base_font_bold_22_black"
-            android:textSize="30sp"
-            android:visibility="gone"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
