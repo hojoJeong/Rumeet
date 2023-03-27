@@ -11,12 +11,13 @@ async def rootd(mode, id):
         pace = []
 
         if (mode == 4):
-            filtered = pace1_avg.filter(pace1_avg["user_id"] == id) \
-                .select('avg_pace1') \
-                .collect()[0][0]
-            pace.append(int(filtered))
-            filtered.show()
+            pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
+                    .select('avg_pace1') \
+                    .collect()[0][0]
+            pace.append(int(pace_value))
+            pace_value.show()
         elif (mode == 5):
+            print("mode : 5")
             pace2_avg.show()
             filtered = pace2_avg.filter(pace1_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2') \
