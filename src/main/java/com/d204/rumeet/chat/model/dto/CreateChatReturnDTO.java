@@ -1,14 +1,15 @@
 package com.d204.rumeet.chat.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class ChatRoomListDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateChatReturnDTO {
     int roomId;
     int userId;
-    int noReadCnt;
     String nickname;
     String profile;
-    String content;
-    long date;
 }

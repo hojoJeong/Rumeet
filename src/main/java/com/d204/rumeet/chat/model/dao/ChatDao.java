@@ -17,7 +17,15 @@ public class ChatDao {
     public void saveChat(ChatDto chatDto) {
         mongoTemplate.save(chatDto);
         mongoTemplate.remove(Query.query(Criteria.where("roomId").is(chatDto.getRoomId())), LastChatDto.class);
-        mongoTemplate.save(chatDto,"LastChatDto");
+        LastChatDto lastChatDto = new LastChatDto();
+        lastChatDto.setUserId(chatDto.getToUserId());
+        lastChatDto.setDate(chatDto.getDate());
+        lastChatDto.setToUserId(chatDto.getToUserId());
+        lastChatDto.setFromUserId(chatDto.getFromUserId());
+        lastChatDto.setContent(chatDto.getContent());
+        mongoTemplate.save(lastChatDto,"LastChatDto");
+        lastChatDto.setUserId(chatDto.getFromUserId());
+        mongoTemplate.save(lastChatDto,"LastChatDto");
     }
 
     public List<ChatDto> getChatByRoomId(int roomId) {
@@ -25,17 +33,18 @@ public class ChatDao {
     }
 
     public List<LastChatDto> getLastChatList(int userId) {
-        Query query = new Query();
-        Criteria criteria = new Criteria();
-        criteria.orOperator(
-                Criteria.where("toUserId").is(userId),
-                Criteria.where("fromUserId").is(userId)
-        );
-        query.addCriteria(criteria);
-        return mongoTemplate.find(query , LastChatDto.class);
+//        Query query = new Query();
+//        Criteria criteria = new Criteria();
+//        criteria.orOperator(
+//                Criteria.where("userId").is(userId),
+//                Criteria.where("fromUserId").is(userId)
+//        );
+//        query.addCriteria(criteria);
+//        return mongoTemplate.find(query , LastChatDto.class);
+        return mongoTemplate.find(Query.query(Criteria.where("userId").is(userId)), LastChatDto.class);
     }
-    public List<ChatDto> getLastChatList2(int userId) {
-        return mongoTemplate.find(new Query(Criteria.where("fromUserId").is(userId).orOperator(Criteria.where("toUserId").is(userId)))
-                , ChatDto.class);
+
+    public void deleteLastChat(int id, int userId) {
+        mongoTemplate.remove(Query.query(Criteria.where("roomId").is(id).and("userId").is(userId)), LastChatDto.class);
     }
 }
