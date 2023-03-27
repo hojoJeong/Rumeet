@@ -1,13 +1,18 @@
 package com.d204.rumeet.game.controller;
 
 import com.d204.rumeet.game.producer.GameProducer;
-import com.d204.rumeet.game.producer.TopicProducer;
+import com.d204.rumeet.kafka.model.KafkaService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
 @RequestMapping("/game")
+@RequiredArgsConstructor
 @RestController()
 public class RestGameController {
+
+
+    private KafkaService kafkaService;
 
     @GetMapping("/run")
     public void run(@RequestParam(value = "roomId") int roomId, @RequestParam(value = "userAId") int userAId, @RequestParam(value = "userBId") int userBId) {
@@ -25,15 +30,13 @@ public class RestGameController {
         String bootstrapServer = "j8d204.p.ssafy.io:9092";
         GameProducer userA = new GameProducer(bootstrapServer, roomId, userAId);
         GameProducer userB = new GameProducer(bootstrapServer, roomId, userBId);
-        String userATopic = userA.createTopic();
-        String userBTopic = userB.createTopic();
-        TopicProducer topicProducer = new TopicProducer();
+        String userATopic = userA.createGameTopic();
+        String userBTopic = userB.createGameTopic();
     }
 
     @PostMapping("/send/message")
     @CrossOrigin()
     public void sendMessage(@RequestParam(value = "topic") String topic, @RequestParam(value = "message") String message) {
-        TopicProducer topicProducer = new TopicProducer();
-        topicProducer.sendMessage(topic, message);
+        kafkaService.sendMessage(topic, message);
     }
 }

@@ -70,12 +70,12 @@
         SELECT * FROM user WHERE (oauth like #{tokenId});
     </select>
 
-    <insert id="joinUser" parameterType="JoinUserDto">
+    <insert id="joinUser" parameterType="JoinUserDto" useGeneratedKeys="true" keyProperty="id">
         INSERT user (email, password, nickname, profile_img, gender, age, height, weight, date)
             VALUES(#{email},#{password},#{nickname},#{profile}, #{gender}, #{age},#{height},#{weight}, #{date});
     </insert>
 
-    <insert id="joinKakaoUser" parameterType="JoinKakaoUserDto">
+    <insert id="joinKakaoUser" parameterType="JoinKakaoUserDto" useGeneratedKeys="true" keyProperty="id">
         INSERT user (email, password, nickname, profile_img, gender, age, height, weight , oauth, date)
             VALUES(#{email},#{password},#{nickname},#{profile}, #{gender}, #{age},#{height},#{weight}, #{oauth} , #{date});
     </insert>

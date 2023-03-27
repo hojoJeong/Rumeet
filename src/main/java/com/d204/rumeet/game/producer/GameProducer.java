@@ -1,31 +1,29 @@
 package com.d204.rumeet.game.producer;
 
-import java.util.Properties;
+import com.d204.rumeet.kafka.model.KafkaService;
+import lombok.RequiredArgsConstructor;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.common.errors.TopicExistsException;
-import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.concurrent.ExecutionException;
-
-@Data
+@RequiredArgsConstructor
 public class GameProducer {
     private String bootstrapServers;
     private int gameId;
     private int userId;
     int numPartitions = 1; // 파티션의 수
     short replicationFactor = 1; // 복제 수
+    private KafkaService kafkaService;
 
     public GameProducer(String bootstrapServers, int gameId, int userId) {
         this.bootstrapServers = bootstrapServers;
         this.gameId = gameId;
         this.userId = userId;
     }
+
+
+    public String createGameTopic() {
+        String gameTopic = "rummet" + "." + "game-id" + "." + gameId + "." + "user-id" + "." + userId;
+        kafkaService.createTopic(gameTopic);
+        return gameTopic;
 
     public String createTopic() {
         String newTopic = "rummet" + "." + "game-id" + "." + gameId + "." + "user-id" + "." + userId;
