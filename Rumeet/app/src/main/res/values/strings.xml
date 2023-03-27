@@ -126,7 +126,7 @@
     </string-array>
 
     <string name="content_confirm_password">현재 비밀번호를 입력해주세요.</string>
-    
+
     <string name="title_withdrawal">러밋을 이용해주셔서 감사합니다.</string>
     <string name="content_withdrawal_message">서비스에 만족을 드리지 못해 대단히 죄송합니다.\n탈퇴 사유를 남겨주시면 서비스 개선에 힘쓰겠습니다.</string>
     <string name="content_withdrawal_select_reason">탈퇴 사유를 선택해주세요.</string>
@@ -140,12 +140,26 @@
         <item>알림이 너무 자주 울려서</item>
         <item>기타</item>
     </string-array>
-    
+
     <string name="content_withdrawal_message_bottom">- 러닝 기록을 포함하여 이용하신 모든 데이터가 삭제됩니다.\n- 현재 계정으로 다시 로그인할 수 없습니다.</string>
 
     <string name="content_withdrawal_result_title">회원 탈퇴가 완료되었습니다.</string>
     <string name="content_withdrawal_result_message">러밋을 이용해주셔서 감사합니다.\n더욱 노력하고 발전하는 러밋이 되겠습니다.</string>
     <string name="content_result_withdrawal_btn">로그인 화면으로 돌아가기</string>
+
+    <string name="content_mypage_message_top">힘차게 러밋!</string>
+    <string name="content_mypage_message_include_name">%1$s님!\n오늘도 열심히 달려볼까요?</string>
+    <string-array name="title_mypage_menu">
+        <item>운동기록</item>
+        <item>매칭기록</item>
+        <item>친구</item>
+        <item>뱃지</item>
+        <item>프로필 수정</item>
+        <item>설정</item>
+        <item>로그아웃</item>
+    </string-array>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

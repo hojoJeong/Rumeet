@@ -39,6 +39,21 @@
             <action
                 android:id="@+id/action_myPageFragment_to_settingFragment"
                 app:destination="@id/settingFragment" />
+            <action
+                android:id="@+id/action_myPageFragment_to_friendListFragment"
+                app:destination="@id/friendListFragment" />
+            <action
+                android:id="@+id/action_myPageFragment_to_badgeListFragment"
+                app:destination="@id/badgeListFragment" />
+            <action
+                android:id="@+id/action_myPageFragment_to_editProfileFragment"
+                app:destination="@id/editProfileFragment" />
+            <action
+                android:id="@+id/action_myPageFragment_to_matchingHistoryFragment"
+                app:destination="@id/matchingHistoryFragment" />
+            <action
+                android:id="@+id/action_myPageFragment_to_runningRecordFragment"
+                app:destination="@id/runningRecordFragment" />
         </fragment>
 
         <fragment
@@ -129,6 +144,27 @@
             android:id="@+id/resultWithdrawalFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.ResultWithdrawalFragment"
             android:label="ResultWithdrawalFragment" />
+        <fragment
+            android:id="@+id/runningRecordFragment"
+            android:name="com.d204.rumeet.ui.mypage.RunningRecordFragment"
+            android:label="RunningRecordFragment" />
+        <fragment
+            android:id="@+id/matchingHistoryFragment"
+            android:name="com.d204.rumeet.ui.mypage.MatchingHistoryFragment"
+            android:label="MatchingHistoryFragment" />
+        <fragment
+            android:id="@+id/friendListFragment"
+            android:name="com.d204.rumeet.ui.mypage.FriendListFragment"
+            android:label="FriendListFragment" />
+        <fragment
+            android:id="@+id/badgeListFragment"
+            android:name="com.d204.rumeet.ui.mypage.BadgeListFragment"
+            android:label="BadgeListFragment" />
+        <fragment
+            android:id="@+id/editProfileFragment"
+            android:name="com.d204.rumeet.ui.mypage.EditProfileFragment"
+            android:label="EditProfileFragment" />
     </navigation>
+
 
 </navigation>

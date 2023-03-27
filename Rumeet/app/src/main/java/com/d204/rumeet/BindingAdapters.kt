@@ -104,4 +104,10 @@ object BindingAdapters {
     fun ImageView.setImageByGlide(url: String) {
         Glide.with(context).load(url).into(this)
     }
+
+    @JvmStatic
+    @BindingAdapter("setImageResource")
+    fun ImageView.setImageResource(img: Int){
+        setImageResource(img)
+    }
 }

@@ -1,7 +1,5 @@
 package com.d204.rumeet.ui.mypage.setting
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,7 +43,7 @@ class SettingUserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, Bas
         )
 
         val userInfoOptionTitleList = resources.getStringArray(R.array.title_user_info_content).toList()
-        myPageViewModel.setUserInfoOptionTitleList(userInfoOptionTitleList)
+        myPageViewModel.setUserInfoMenuTitleList(userInfoOptionTitleList)
 
         val settingOptionList = userInfoOptionTitleList.mapIndexed { _, title ->
             SettingOptionUiMdel(title, "")

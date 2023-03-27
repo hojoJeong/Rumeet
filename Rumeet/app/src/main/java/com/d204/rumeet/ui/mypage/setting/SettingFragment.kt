@@ -1,9 +1,5 @@
 package com.d204.rumeet.ui.mypage.setting
 
-import android.app.ProgressDialog.show
-import android.content.ContentValues.TAG
-import android.util.Log
-import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +28,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
     }
 
     override fun initDataBinding() {
-        myPageViewModel.setOptionList(
+        myPageViewModel.setSettingMenuTitleList(
             resources.getStringArray(R.array.title_setting_content).toList()
         )
         lifecycleScope.launchWhenResumed {
