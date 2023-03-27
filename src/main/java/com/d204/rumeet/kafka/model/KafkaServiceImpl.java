@@ -23,7 +23,7 @@ public class KafkaServiceImpl implements KafkaService {
         short replicationFactor = 1;
 
         Properties properties = new Properties();
-        properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        properties.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "j8d204.p.ssafy.io:9092");
 
         try (AdminClient adminClient = AdminClient.create(properties)) {
             NewTopic newUserATopic = new NewTopic(topicTitle, numPartitions, replicationFactor);
@@ -70,7 +70,7 @@ public class KafkaServiceImpl implements KafkaService {
     @Override
     public Properties setProps() {
         Properties props = new Properties();
-        props.setProperty("bootstrap.servers", "localhost:9092");
+        props.setProperty("bootstrap.servers", "j8d204.p.ssafy.io:9092");
         props.setProperty("group.id", "group-id");
         props.setProperty("key.deserializer", StringDeserializer.class.getName());
         props.setProperty("value.deserializer", StringDeserializer.class.getName());
