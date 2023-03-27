@@ -15,12 +15,12 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 android {
     namespace 'com.d204.rumeet'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.d204.rumeet"
-        minSdk 21
-        targetSdk 32
+        minSdk 24
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 

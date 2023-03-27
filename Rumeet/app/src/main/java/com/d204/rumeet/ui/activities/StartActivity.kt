@@ -1,5 +1,7 @@
 package com.d204.rumeet.ui.activities
 
+import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ActivityStartBinding
 import com.d204.rumeet.ui.base.BaseActivity

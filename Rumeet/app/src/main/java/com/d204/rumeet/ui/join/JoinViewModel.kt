@@ -80,7 +80,7 @@ class JoinViewModel @Inject constructor(
     }
 
     /**
-     * 소셜로그인
+     * 소셜로그인 회원가입
      * oauth로 id, password를 생성
      * profile img는 null로 넣어도 상관없음 -> 서버 내부 로직 처리
      * */
@@ -104,7 +104,7 @@ class JoinViewModel @Inject constructor(
     }
 
     /**
-     * 이메일로그인
+     * 이메일로 회원가입
      * profile img는 File로 전달
      * */
     fun emailSignUp() {
