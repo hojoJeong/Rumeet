@@ -17,7 +17,7 @@ async def rootd(mode, id):
                 .select('avg_pace1') \
                 .collect()[0][0]
         pace.append(int(pace_value))
-        pace_value.show()
+        print(pace_value)
 
         return {"id": id , "pace":pace}
 
