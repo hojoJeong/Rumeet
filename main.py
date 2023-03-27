@@ -4,7 +4,7 @@ from pyspark.sql.functions import col
 from pyspark.sql.functions import mean
 
 app = FastAPI()
-
+global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
 @app.get("/load/{mode:int}/{id}")
 async def rootd(mode, id):
         #global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
@@ -46,7 +46,7 @@ async def rootd(mode, id):
 
 @app.get("/cache")
 async def root():
-        global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
+       
     # SparkSession 생성
         spark = SparkSession.builder \
         .appName("ReadParquetFromHDFS") \
