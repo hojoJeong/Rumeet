@@ -6,7 +6,7 @@ import com.d204.rumeet.data.remote.api.handleApi
 import com.d204.rumeet.data.remote.dto.request.auth.RefreshTokenRequestDto
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
@@ -30,23 +30,25 @@ internal class BearerInterceptor @Inject constructor(
 
         // 401이면 토큰 재발급 후 새로 요청보내기
         if (response.code == 401) {
-            runBlocking {
-                with(userDataStorePreferences) {
-                    val refreshRequest =
-                        RefreshTokenRequestDto(getUserId(), getRefreshToken() ?: "")
-                    handleApi { authApiService.getJWTByRefreshToken(refreshRequest) }
-                        .onSuccess { response ->
-                            this.setUserId(response?.id ?: -1)
-                            this.setToken(
-                                response?.accessToken ?: "",
-                                response?.refreshToken ?: ""
-                            )
-                            accessToken = response?.accessToken ?: ""
-                        }
-                        .onError {
-                            this.clearUserInfo()
-                            accessToken = ""
-                        }
+            CoroutineScope(Dispatchers.IO).launch {
+                withContext(Dispatchers.IO){
+                    with(userDataStorePreferences) {
+                        val refreshRequest =
+                            RefreshTokenRequestDto(getUserId(), getRefreshToken() ?: "")
+                        handleApi { authApiService.getJWTByRefreshToken(refreshRequest) }
+                            .onSuccess { response ->
+                                this.setUserId(response?.id ?: -1)
+                                this.setToken(
+                                    response?.accessToken ?: "",
+                                    response?.refreshToken ?: ""
+                                )
+                                accessToken = response?.accessToken ?: ""
+                            }
+                            .onError {
+                                this.clearUserInfo()
+                                accessToken = ""
+                            }
+                    }
                 }
             }
             val newRequest =
