@@ -10,7 +10,7 @@ async def rootd(mode, id):
         #global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
         pace = []
 
-        print("mode:"+type(mode))
+        print(type(mode))
         pace1_avg.show()
         pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
                 .select('avg_pace1') \
