@@ -5,12 +5,36 @@ from pyspark.sql.functions import mean
 
 app = FastAPI()
 
-@app.get("/load/{id}")
-async def rootd(id):
+@app.get("/load/{mode}/{id}")
+async def rootd(mode, id):
         global data_df
         global pace1_avg
         pace = []
-        # 작업 하면됨
+
+        # if (mode == 4):
+        #     filtered = pace1_avg.filter(pace1_avg["user_id"] == id) \
+        #         .select('avg_pace1') \
+        #         .collect()[0][0]
+        #     pace.append(int(filtered))
+        #     filtered.show()
+        # elif (mode == 5):
+        #     filtered = pace2_avg.filter(pace1_avg["user_id"] == id) \
+        #         .select('avg_pace1') \
+        #         .collect()[0][0]
+        #     pace.append(int(filtered))
+        #     filtered.show()
+        # elif (mode == 6):
+        #     filtered = pace3_avg.filter(pace1_avg["user_id"] == id) \
+        #         .select('avg_pace1') \
+        #         .collect()[0][0]
+        #     pace.append(int(filtered))
+        #     filtered.show()
+        #     df_3km.show()
+        # elif (mode == 7):
+        #     df_5km.show()
+        # return {"id": id,
+        #         "pace": pace}
+
         pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
                 .select('avg_pace1') \
                 .collect()[0][0]
@@ -20,7 +44,7 @@ async def rootd(id):
 
 @app.get("/cache")
 async def root():
-        global data_df ,pace1_avg
+        global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
     # SparkSession 생성
         spark = SparkSession.builder \
         .appName("ReadParquetFromHDFS") \
@@ -41,9 +65,54 @@ async def root():
         pace1_avg.cache()
 
         pace1_avg.show()
+
+        df_2km = spark.read \
+                .format("parquet") \
+                .option("header", "true") \
+                .load("hdfs://13.125.218.237:9000/user/spark/output/2km")
+        df_2km.cache()
+
+        pace2_avg = df_2km.groupBy('user_id') \
+                .agg(mean('pace1').alias('avg_pace1'),
+                     mean('pace2').alias('avg_pace2'),
+                     mean('elapsed_time').alias('avg_elapsed_time'),
+                     mean('average_heart_rate').alias('avg_heart_rate'))
+        pace2_avg.cache()
+
+        pace2_avg.show()
+
+        df_3km = spark.read \
+                .format("parquet") \
+                .option("header", "true") \
+                .load("hdfs://13.125.218.237:9000/user/spark/output/3km")
+        df_3km.cache()
+
+        pace3_avg = df_3km.groupBy('user_id') \
+            .agg(mean('pace1').alias('avg_pace1'),
+                 mean('pace2').alias('avg_pace2'),
+                 mean('pace3').alias('avg_pace3'),
+                 mean('elapsed_time').alias('avg_elapsed_time'),
+                 mean('average_heart_rate').alias('avg_heart_rate'))
+        pace3_avg.cache()
+
+        pace3_avg.show()
+
+        # df_5km = spark.read \
+        #         .format("parquet") \
+        #         .option("header", "true") \
+        #         .load("hdfs://13.125.218.237:9000/user/spark/output/5km")
+        # df_5km.cache()
+        #
+        # pace5_avg = df_5km.groupBy('user_id') \
+        #     .agg(mean('pace1').alias('avg_pace1'),
+        #          mean('elapsed_time').alias('avg_elapsed_time'),
+        #          mean('average_heart_rate').alias('avg_heart_rate'))
+        # pace5_avg.cache()
+
         return {"pace":"dd"}
 
 
 @app.get("/munang")
 async def root():
     return {"message": "무냉"}
+
