@@ -52,7 +52,6 @@ async def rootd(mode, id):
             #df_5km.show()
 
         return {"id": id,
-                "mode": mode,
                 "pace": pace}
 
         pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
