@@ -16,7 +16,10 @@ public class DataUtil {
         SparkConf sparkConf = new SparkConf()
                 .setAppName("Rumeets")
                 .setMaster("spark://j8d204.p.ssafy.io:7077")
-                .set("spark.executor.memory", "4g");
+                .set("spark.executor.memory", "4g")
+                .set("spark.driver.url", "127.0.0.1")
+                .set("spark.driver.host", "127.0.0.1");
+
         SparkSession spark = SparkSession
                 .builder()
                 .config(sparkConf)
@@ -26,7 +29,7 @@ public class DataUtil {
         Dataset<Row> data = spark.read()
                 .format("parquet")
                 .option("header", "true")
-                .load("hdfs://13.125.218.237:9000/user/spark/output");
+                .load("hdfs://j8d204.p.ssafy.io:9000/user/spark/output");
         data.show();
         System.out.println("90-=");
 
