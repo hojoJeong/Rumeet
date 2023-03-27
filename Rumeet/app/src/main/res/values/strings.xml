@@ -2,6 +2,7 @@
     <!--  base -->
     <string name="app_name">Rumeet</string>
     <string name="title_dialog">알림 메시지</string>
+    <string name="content_loading">러밋으로 러닝 메이트를\n만들어보세요 :)</string>
 
     <!-- login -->
     <string name="content_auto_login">자동 로그인</string>
@@ -45,6 +46,10 @@
     <string name="content_okay">확인</string>
     <string name="title_password_validate">비밀번호는 영어, 숫자, 특수문자\n8글자 이상 입력해주세요.</string>
 
+    <!-- reset password -->
+    <string name="title_reset_password">비밀번호 재설정</string>
+    <string name="title_reset_password_description">새로운 비밀번호를 입력해주세요.</string>
+
 
     <!-- home -->
     <string name="content_welcome_message">%1$s님!\n오늘도 열심히 달려볼까요?</string>
@@ -63,6 +68,18 @@
     <string name="content_no_best_record">입력된 체력 데이터가 없습니다.</string>
     <string name="content_no_badge">아직 획득한 뱃지가 없어요 :(\n싱글 모드 달리기를 하면\nWelcome뱃지를 받을 수 있어요!</string>
     <string name="content_no_pace">아직 페이스가 입력되지 않았아요\n열심히 달려서 비슷한\n체력의 친구를 추천 받아보세요!</string>
+
+    <!-- find account -->
+    <string name="title_find_account">내 계정 찾기</string>
+    <string name="content_find_account_description">고객님의 정보를 입력해주세요</string>
+    <string name="title_find_account_id_input">아이디 입력</string>
+    <string name="content_authentication_code_hint">인증번호 입력</string>
+    <string name="content_request_authentication_code">인증요청</string>
+    <string name="content_authentication_code">인증번호 확인</string>
+    <string name="content_check_id">아이디를 확인해주세요</string>
+    <string name="content_time_limit">이내에 인증을 완료해주세요</string>
+    <string name="content_check_authentication_code">인증번호를 확인해주세요</string>
+    <string name="content_time_out">시간이 만료되었습니다\n인증요청을 다시해주세요</string>
 
     <!-- running -->
     <string name="content_option_competition">경쟁 모드</string>

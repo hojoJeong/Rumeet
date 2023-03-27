@@ -12,10 +12,13 @@ import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
 import com.d204.rumeet.R
+import com.d204.rumeet.ui.find_account.FindAccountAction
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
 
 fun Context.startActivityAfterClearBackStack(classType: Class<out Activity>) {
     val intent = Intent(this, classType).apply {
@@ -46,9 +49,25 @@ fun Context.getAbsolutePath(path : Uri?, context : Context) : String{
     return result!!
 }
 
-fun Context.getMultipartData(imagePath : Uri?) : MultipartBody.Part{
-    val file = File(getAbsolutePath(imagePath, this))
-    val mediaType = "image/png".toMediaTypeOrNull()
-    val requestFile = file.asRequestBody(mediaType)
-    return MultipartBody.Part.createFormData("profile_img",file.name, requestFile)
+fun hashingSHA256(input : String) : String{
+    val md = MessageDigest.getInstance("SHA256")
+    val hash = md.digest(input.toByteArray(StandardCharsets.UTF_8))
+    return bytesToHex(hash)
+}
+
+fun bytesToHex(hash: ByteArray): String {
+    val hexString = StringBuilder(2 * hash.size)
+    for (b in hash) {
+        val hex = Integer.toHexString(0xff and b.toInt())
+        if (hex.length == 1) {
+            hexString.append('0')
+        }
+        hexString.append(hex)
+    }
+    return hexString.toString()
+}
+
+fun checkEmailValidate(email : String) : Boolean{
+    val pattern = android.util.Patterns.EMAIL_ADDRESS
+    return pattern.matcher(email).matches()
 }

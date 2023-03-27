@@ -1,8 +1,7 @@
 package com.d204.rumeet.data.di
 
-import android.os.Build.VERSION_CODES.P
 import com.d204.rumeet.data.remote.api.AuthApiService
-import com.d204.rumeet.data.remote.api.UserApiService
+import com.d204.rumeet.data.remote.api.SignApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,9 +24,9 @@ internal object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesUserApiService(
+    fun providesSignApiService(
         @Named("Auth") retrofit: Retrofit
-    ) : UserApiService{
-        return retrofit.create(UserApiService::class.java)
+    ) : SignApiService{
+        return retrofit.create(SignApiService::class.java)
     }
 }

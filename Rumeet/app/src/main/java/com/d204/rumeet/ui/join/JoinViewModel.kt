@@ -3,15 +3,14 @@ package com.d204.rumeet.ui.join
 import com.d204.rumeet.data.remote.dto.DuplicateInfoException
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
-import com.d204.rumeet.domain.usecase.user.CheckDuplicateInfoUseCase
-import com.d204.rumeet.domain.usecase.user.EmailSignUpUseCase
-import com.d204.rumeet.domain.usecase.user.SocialSignUpUseCase
+import com.d204.rumeet.domain.usecase.sign.CheckDuplicateInfoUseCase
+import com.d204.rumeet.domain.usecase.sign.EmailSignUpUseCase
+import com.d204.rumeet.domain.usecase.sign.SocialSignUpUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.join.addtional_info.AdditionalInfoAction
 import com.d204.rumeet.ui.join.id.JoinIdAction
 import com.d204.rumeet.ui.join.nickname.JoinNicknameAction
 import com.d204.rumeet.ui.join.password.JoinPasswordAction
-import com.kakao.sdk.common.KakaoSdk.type
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -45,6 +44,7 @@ class JoinViewModel @Inject constructor(
      * */
     fun idValidation(id: String) {
         baseViewModelScope.launch {
+            showLoading()
             checkDuplicateInfoUseCase(2, id)
                 .onSuccess {
                     _joinIdAction.emit(JoinIdAction.NavigateNicknameFragment)
@@ -54,6 +54,7 @@ class JoinViewModel @Inject constructor(
                     if (e is DuplicateInfoException) _joinIdAction.emit(JoinIdAction.IdDuplicate)
                     else catchError(e)
                 }
+            dismissLoading()
         }
     }
 
@@ -64,6 +65,7 @@ class JoinViewModel @Inject constructor(
      * */
     fun nicknameValidation(nickname: String) {
         baseViewModelScope.launch {
+            showLoading()
             checkDuplicateInfoUseCase(1, nickname)
                 .onSuccess {
                     joinInfo.nickname = nickname
@@ -73,6 +75,7 @@ class JoinViewModel @Inject constructor(
                     if (e is DuplicateInfoException) _joinNicknameAction.emit(JoinNicknameAction.DuplicateNickname)
                     else catchError(e)
                 }
+            dismissLoading()
         }
     }
 
@@ -83,6 +86,7 @@ class JoinViewModel @Inject constructor(
      * */
     fun socialSignUp() {
         baseViewModelScope.launch {
+            showLoading()
             socialSignUpUseCase.invoke(
                 joinInfo.socialJoinModel?.oauth!!,
                 joinInfo.nickname,
@@ -95,6 +99,7 @@ class JoinViewModel @Inject constructor(
             ).onSuccess {
                 _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
             }.onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 
@@ -104,6 +109,7 @@ class JoinViewModel @Inject constructor(
      * */
     fun emailSignUp() {
         baseViewModelScope.launch {
+            showLoading()
             emailSignUpUseCase.invoke(
                 joinInfo.id,
                 joinInfo.password,
@@ -116,6 +122,7 @@ class JoinViewModel @Inject constructor(
             ).onSuccess {
                 _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
             }.onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 

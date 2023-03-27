@@ -1,11 +1,12 @@
-package com.d204.rumeet.domain.usecase.user
+package com.d204.rumeet.domain.usecase.sign
 
+import com.d204.rumeet.domain.repository.SignRepository
 import com.d204.rumeet.domain.repository.UserRepository
 import java.io.File
 import javax.inject.Inject
 
 class EmailSignUpUseCase @Inject constructor(
-    private val userRepository: UserRepository
+    private val signRepository: SignRepository
 ) {
     suspend operator fun invoke(
         id: String,
@@ -16,5 +17,5 @@ class EmailSignUpUseCase @Inject constructor(
         gender: Int,
         age: Int,
         imageUri: File?
-    ) = userRepository.signUpEmail(id, password, nickname, weight, height, gender, age, imageUri)
+    ) = signRepository.signUpEmail(id, password, nickname, weight, height, gender, age, imageUri)
 }

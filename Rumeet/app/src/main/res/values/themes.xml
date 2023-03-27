@@ -90,6 +90,10 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="base_font_bold_14_navy_blue" parent="base_font_bold_14">
+        <item name="android:textColor">@color/navy_blue</item>
+    </style>
+
     <style name="base_font_bold_16_black" parent="base_font_bold_16">
         <item name="android:textColor">@color/black</item>
     </style>

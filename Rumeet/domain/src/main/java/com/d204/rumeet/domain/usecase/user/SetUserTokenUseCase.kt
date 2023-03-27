@@ -7,5 +7,5 @@ import javax.inject.Inject
 class SetUserTokenUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(newAccessToken : String, newRefreshToken : String) = authRepository.setUserToken(newAccessToken, newRefreshToken)
+    suspend operator fun invoke(newAccessToken : String, newRefreshToken : String, userId : Int) = authRepository.setUserToken(newAccessToken, newRefreshToken, userId)
 }
