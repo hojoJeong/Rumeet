@@ -5,31 +5,33 @@ from pyspark.sql.functions import mean
 
 app = FastAPI()
 global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
-@app.get("/load/{mode:int}/{id}")
+@app.get("/load/{mode}/{id}")
 async def rootd(mode, id):
         #global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
         pace = []
 
-        if mode == 4:
+        if mode == "4":
+            pace1_avg.show()
             pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
                     .select('avg_pace1') \
                     .collect()[0][0]
             pace.append(pace_value)
             pace_value.show()
-        elif mode == 5:
+        elif mode =="5":
+            pace2_avg.show()
             print("mode : 5")
             filtered = pace2_avg.filter(pace1_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2') \
                 .collect()[0][0]
             pace.append(filtered)
             filtered.show()
-        elif mode == 6:
+        elif mode == "6":
             filtered = pace3_avg.filter(pace1_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2', 'avg_pace3') \
                 .collect()[0][0]
             pace.append(int(filtered))
             filtered.show()
-        elif mode == 7:
+        elif mode == "7":
             print('5km data is empty')
             #df_5km.show()
 
@@ -46,7 +48,7 @@ async def rootd(mode, id):
 
 @app.get("/cache")
 async def root():
-       
+
     # SparkSession 생성
         spark = SparkSession.builder \
         .appName("ReadParquetFromHDFS") \
