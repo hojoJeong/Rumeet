@@ -4,18 +4,20 @@ from pyspark.sql.functions import col
 from pyspark.sql.functions import mean
 
 app = FastAPI()
-global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
+
 @app.get("/load/{mode}/{id}")
 async def rootd(mode, id):
-        #global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
+        global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
         pace = []
 
         print(type(mode))
         pace1_avg.show()
+        
         pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
                 .select('avg_pace1') \
                 .collect()[0][0]
         pace.append(int(pace_value))
+        pace_value.show()
 
         return {"id": id , "pace":pace}
 
@@ -57,7 +59,7 @@ async def rootd(mode, id):
 
 @app.get("/cache")
 async def root():
-
+    global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
     # SparkSession 생성
         spark = SparkSession.builder \
         .appName("ReadParquetFromHDFS") \
