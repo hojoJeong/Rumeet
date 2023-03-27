@@ -38,14 +38,14 @@ async def rootd(mode, id):
                 .select('avg_pace1', 'avg_pace2') \
                 .rdd.flatMap(lambda x: x) \
                 .collect()
-            pace.append(filtered)
+            pace = filtered
             print(filtered)
         elif mode == "6":
             filtered = pace3_avg.filter(pace3_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2', 'avg_pace3') \
                 .rdd.flatMap(lambda x: x) \
                 .collect()
-            pace.append(int(filtered))
+            pace = filtered
             print(filtered)
         elif mode == "7":
             print('5km data is empty')
