@@ -125,15 +125,24 @@
         <item name="android:textColor">@color/dim_gray</item>
     </style>
 
+    <!-- medium size -->
+    <style name="base_font_medium_10_white" parent="base_font_medium_10">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="base_font_medium_12_black" parent="base_font_medium_12">
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="base_font_medium_14_dim_gray" parent="base_font_medium_14">
+    <style name="base_font_medium_12_dim_gray" parent="base_font_medium_12">
         <item name="android:textColor">@color/dim_gray</item>
     </style>
 
-    <style name="base_font_medium_12_dim_gray" parent="base_font_medium_12">
+    <style name="base_font_medium_12_white" parent="base_font_medium_12">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="base_font_medium_14_dim_gray" parent="base_font_medium_14">
         <item name="android:textColor">@color/dim_gray</item>
     </style>
 

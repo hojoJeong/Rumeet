@@ -82,6 +82,13 @@
     <string name="content_time_limit">이내에 인증을 완료해주세요</string>
     <string name="content_check_authentication_code">인증번호를 확인해주세요</string>
     <string name="content_time_out">시간이 만료되었습니다\n인증요청을 다시해주세요</string>
+    
+    <!-- friend -->
+    <string name="title_friend_list">목록</string>
+    <string name="content_all_friend">전체 친구</string>
+    <string name="content_recently_run_friend">최근에 같이 뛴 친구</string>
+    <string name="content_search_friend_hint">친구를 검색해보세요</string>
+    <string name="content_run_together_friend">함께 많이 달린 친구</string>
 
     <!-- running -->
     <string name="content_option_competition">경쟁 모드</string>

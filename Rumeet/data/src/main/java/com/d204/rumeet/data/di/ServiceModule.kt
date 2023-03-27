@@ -2,6 +2,7 @@ package com.d204.rumeet.data.di
 
 import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.api.SignApiService
+import com.d204.rumeet.data.remote.api.UserApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,5 +29,13 @@ internal object ServiceModule {
         @Named("Auth") retrofit: Retrofit
     ) : SignApiService{
         return retrofit.create(SignApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesUserApiService(
+        @Named("Auth") retrofit: Retrofit
+    ) : UserApiService{
+        return retrofit.create(UserApiService::class.java)
     }
 }

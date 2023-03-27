@@ -4,18 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="friend"
+            type="com.d204.rumeet.ui.friend_list.model.FriendInfoModel" />
 
+        <variable
+            name="clickListener"
+            type="com.d204.rumeet.ui.friend_list.FriendListClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_marginBottom="12dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:onSingleClick="@{() -> clickListener.onFriendListClick(friend.userId)}">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_profile_img"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            app:imgByUrl="@{friend.userProfileImg}"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,13 +43,14 @@
                 android:id="@+id/tv_user_name"
                 style="@style/base_font_medium_12_black"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="123" />
+                android:text="@{friend.userNickname}"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv_pace"
                 style="@style/base_font_medium_10_dim_gray"
                 android:layout_width="wrap_content"
+                android:text="@{`평균 페이스 ` +  friend.averagePace}"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp" />
             
