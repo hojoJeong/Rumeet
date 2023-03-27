@@ -45,15 +45,16 @@
             <action
                 android:id="@+id/action_myPageFragment_to_badgeListFragment"
                 app:destination="@id/badgeListFragment" />
-            <action
-                android:id="@+id/action_myPageFragment_to_editProfileFragment"
-                app:destination="@id/editProfileFragment" />
+
             <action
                 android:id="@+id/action_myPageFragment_to_matchingHistoryFragment"
                 app:destination="@id/matchingHistoryFragment" />
             <action
                 android:id="@+id/action_myPageFragment_to_runningRecordFragment"
                 app:destination="@id/runningRecordFragment" />
+            <action
+                android:id="@+id/action_myPageFragment_to_joinNicknameFragment2"
+                app:destination="@id/joinNicknameFragment2" />
         </fragment>
 
         <fragment
@@ -161,10 +162,26 @@
             android:name="com.d204.rumeet.ui.mypage.BadgeListFragment"
             android:label="BadgeListFragment" />
         <fragment
-            android:id="@+id/editProfileFragment"
-            android:name="com.d204.rumeet.ui.mypage.EditProfileFragment"
-            android:label="EditProfileFragment" />
+            android:id="@+id/joinNicknameFragment2"
+            android:name="com.d204.rumeet.ui.join.nickname.JoinNicknameFragment"
+            android:label="JoinNicknameFragment" >
+            <argument
+                android:name="oauth"
+                android:defaultValue="1L"
+                app:argType="long" />
+            <argument
+                android:name="profileImg"
+                android:defaultValue=""
+                app:argType="string" />
+            <argument
+                android:name="reset"
+                app:argType="boolean"
+                app:nullable="false"
+                android:defaultValue="false"/>
+        </fragment>
+
     </navigation>
+
 
 
 </navigation>

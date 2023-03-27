@@ -42,7 +42,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, BaseViewModel>() {
             myPageViewModel.myPageNavigationEvent.collectLatest { action ->
                 when (action) {
                     MyPageAction.BadgeList -> navigate(MyPageFragmentDirections.actionMyPageFragmentToBadgeListFragment())
-                    MyPageAction.EditProfile -> navigate(MyPageFragmentDirections.actionMyPageFragmentToEditProfileFragment())
+                    MyPageAction.EditProfile -> navigate(MyPageFragmentDirections.actionMyPageFragmentToJoinNicknameFragment2(1,"", true))
                     MyPageAction.FriendList -> navigate(MyPageFragmentDirections.actionMyPageFragmentToFriendListFragment())
                     MyPageAction.LogOut -> showLogoutDialog()
                     MyPageAction.MatchingHistory -> navigate(MyPageFragmentDirections.actionMyPageFragmentToMatchingHistoryFragment())

@@ -6,6 +6,7 @@ import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.d204.rumeet.R
@@ -70,9 +71,15 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
                         )
                     }
                     is JoinNicknameAction.PassNicknameValidation -> {
-                        viewModel.joinInfo.profileImg = imageFile
-                        if(!socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
-                        else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
+                        if(!args.reset){
+                            viewModel.joinInfo.profileImg = imageFile
+                            if(!socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
+                            else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
+                        } else {
+                            //TODO 프로필 수정
+                            findNavController().popBackStack()
+                        }
+
                     }
                     is JoinNicknameAction.NavigateGallery -> { navigateGallery() }
                 }
@@ -81,7 +88,11 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
     }
 
     override fun initAfterBinding() {
-        binding.btnContinue.setContent("계속하기")
+        if(!args.reset){
+            binding.btnContinue.setContent("계속하기")
+        } else {
+            binding.btnContinue.setContent("수정하기")
+        }
         binding.editNickname.setEditTextType(
             SingleLineEditText.SingUpEditTextType.NORMAL,
             getString(R.string.content_nickname_hint)
