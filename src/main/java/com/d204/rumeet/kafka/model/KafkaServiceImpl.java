@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.errors.TopicExistsException;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.stereotype.Service;
 
@@ -64,5 +65,15 @@ public class KafkaServiceImpl implements KafkaService {
         System.out.println(producer);
         // Producer 종료
         producer.close();
+    }
+
+    @Override
+    public Properties setProps() {
+        Properties props = new Properties();
+        props.setProperty("bootstrap.servers", "localhost:9092");
+        props.setProperty("group.id", "group-id");
+        props.setProperty("key.deserializer", StringDeserializer.class.getName());
+        props.setProperty("value.deserializer", StringDeserializer.class.getName());
+        return props;
     }
 }

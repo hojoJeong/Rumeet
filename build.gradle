@@ -61,7 +61,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
     //Kafka
-    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.springframework.kafka:spring-kafka:3.0.5'
+
+    implementation group: 'org.glassfish.main.core', name: 'glassfish', version: '4.1'
 
 }
 
