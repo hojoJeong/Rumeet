@@ -11,7 +11,7 @@ async def rootd(id):
         global pace1_avg
         # 작업 하면됨
         data_df.show(10)
-        pace1_avg.show()
+        pace1_avg.filter(pace1_avg["user_id"] == id).show()
         return {"message": "dg"}
 
 @app.get("/cache")
