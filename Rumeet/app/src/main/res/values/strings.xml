@@ -104,6 +104,49 @@
     <string name="content_btn_accept">수락</string>
     <string name="title_request_friend">친구 요청</string>
     <string name="title_request_running">러닝 요청</string>
+    <string-array name="title_setting_content">
+        <item>내 계정</item>
+        <item>알림 설정</item>
+        <item>버전 정보</item>
+        <item>개인정보 수집 및 이용 설정</item>
+        <item>서비스 이용 약관</item>
+        <item>로그아웃</item>
+    </string-array>
+
+    <string-array name="title_user_info_content">
+        <item>이메일</item>
+        <item>닉네임</item>
+        <item>나이</item>
+        <item>성별</item>
+        <item>신장/체중</item>
+        <item>SNS 연동</item>
+        <item>부가정보 수정</item>
+        <item>비밀번호 재설정</item>
+        <item>회원탈퇴</item>
+    </string-array>
+
+    <string name="content_confirm_password">현재 비밀번호를 입력해주세요.</string>
+    
+    <string name="title_withdrawal">러밋을 이용해주셔서 감사합니다.</string>
+    <string name="content_withdrawal_message">서비스에 만족을 드리지 못해 대단히 죄송합니다.\n탈퇴 사유를 남겨주시면 서비스 개선에 힘쓰겠습니다.</string>
+    <string name="content_withdrawal_select_reason">탈퇴 사유를 선택해주세요.</string>
+    <string-array name="content_withdrawal_reason">
+        <item>기록 삭제 목적</item>
+        <item>이용이 불편하고 에러가 많아서</item>
+        <item>신뢰도가 떨어져서</item>
+        <item>운동 능력 향상에 효과가 없어서</item>
+        <item>다른 플랫폼을 이용해서</item>
+        <item>사용 빈도가 낮아서</item>
+        <item>알림이 너무 자주 울려서</item>
+        <item>기타</item>
+    </string-array>
+    
+    <string name="content_withdrawal_message_bottom">- 러닝 기록을 포함하여 이용하신 모든 데이터가 삭제됩니다.\n- 현재 계정으로 다시 로그인할 수 없습니다.</string>
+
+    <string name="content_withdrawal_result_title">회원 탈퇴가 완료되었습니다.</string>
+    <string name="content_withdrawal_result_message">러밋을 이용해주셔서 감사합니다.\n더욱 노력하고 발전하는 러밋이 되겠습니다.</string>
+    <string name="content_result_withdrawal_btn">로그인 화면으로 돌아가기</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

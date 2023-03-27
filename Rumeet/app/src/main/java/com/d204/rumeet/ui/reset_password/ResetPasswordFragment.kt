@@ -2,12 +2,12 @@ package com.d204.rumeet.ui.reset_password
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentResetPasswordBinding
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.components.SingUpEditText
-import com.d204.rumeet.ui.join.password.JoinPasswordFragmentDirections
+import com.d204.rumeet.ui.components.SingleLineEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -32,7 +32,11 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding, ResetPa
             viewModel.resetPasswordAction.collectLatest {
                 when(it){
                     is ResetPasswordAction.SuccessResetPassword -> {
-                        navigate(ResetPasswordFragmentDirections.actionResetPasswordFragmentToLoginFragment())
+                        if(!args.reset){
+                            navigate(ResetPasswordFragmentDirections.actionResetPasswordFragmentToLoginFragment())
+                        } else {
+                            findNavController().popBackStack()
+                        }
                     }
                     is ResetPasswordAction.RequestResetPassword -> {
                         if (binding.editPassword.passwordValidate && binding.editPasswordCheck.checkPasswordMatch(binding.editPassword.keyword)) {
@@ -45,8 +49,8 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding, ResetPa
     }
 
     override fun initAfterBinding() {
-        binding.editPassword.setEditTextType(SingUpEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_hint))
-        binding.editPasswordCheck.setEditTextType(SingUpEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_check_hint))
+        binding.editPassword.setEditTextType(SingleLineEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_hint))
+        binding.editPasswordCheck.setEditTextType(SingleLineEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_check_hint))
         binding.btnResetPassword.setContent("비밀번호 재설정")
     }
 }

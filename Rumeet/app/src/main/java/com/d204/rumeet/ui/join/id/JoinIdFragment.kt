@@ -6,7 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentJoinIdBinding
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.components.SingUpEditText
+import com.d204.rumeet.ui.components.SingleLineEditText
 import com.d204.rumeet.ui.join.JoinViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -50,7 +50,7 @@ class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinViewModel>() {
 
     override fun initAfterBinding() {
         binding.btnNext.setContent("계속하기")
-        binding.editId.setEditTextType(SingUpEditText.SingUpEditTextType.ID, getString(R.string.title_id_input))
+        binding.editId.setEditTextType(SingleLineEditText.SingUpEditTextType.ID, getString(R.string.title_id_input))
     }
 
     override fun onDestroyView() {

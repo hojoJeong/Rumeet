@@ -17,12 +17,20 @@ class DefaultAlertDialog(
     override val layoutResourceId: Int
         get() = R.layout.content_single_button_dialog
 
+    private var cancelButtonVisibility = false
+
     override fun initStartView() {
+        binding.cancelState = cancelButtonVisibility
         binding.alertModel = alertModel
         binding.btnOkay.setOnClickListener { dismissAllowingStateLoss() }
+        binding.btnCancel.setOnClickListener { dismissAllowingStateLoss() }
     }
 
     override fun initDataBinding() {}
 
     override fun initAfterBinding() {}
+
+    fun setCancelButtonVisibility(state: Boolean){
+        cancelButtonVisibility = state
+    }
 }

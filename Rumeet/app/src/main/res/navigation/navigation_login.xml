@@ -82,14 +82,13 @@
         android:name="com.d204.rumeet.ui.join.addtional_info.AdditionalInfoFragment"
         android:label="AdditionalInfoFragment"
         tools:layout="@layout/fragment_addtional_info">
+
         <action
             android:id="@+id/action_additionalInfoFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="false" />
     </fragment>
-
-
     <fragment
         android:id="@+id/resetPasswordFragment"
         tools:layout="@layout/fragment_reset_password"
@@ -101,8 +100,6 @@
             app:nullable="false"/>
         <action
             android:id="@+id/action_resetPasswordFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"/>
     </fragment>
-
-
 </navigation>
