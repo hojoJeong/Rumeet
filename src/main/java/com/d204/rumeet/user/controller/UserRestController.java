@@ -2,16 +2,17 @@ package com.d204.rumeet.user.controller;
 
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.CustomJwtException;
+import com.d204.rumeet.tools.DataUtil;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.user.model.dto.*;
 import com.d204.rumeet.user.model.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RequestMapping("/users")
@@ -22,7 +23,9 @@ public class UserRestController {
     private final UserService userService;
     private final JwtTool jwtTool;
 
+    private final DataUtil dataUtil;
     // 유저 정보 불러오기
+    @Operation(summary = "유저 정보 조회")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id){
         UserDto user = userService.getUserById(id);
@@ -32,6 +35,7 @@ public class UserRestController {
     }
 
     // 로그인
+    @Operation(summary = "로그인")
     @PostMapping("/login")
     public ResponseEntity<?> doLogin(@RequestBody LoginDto loginDto) {
         LoginUserDto user = userService.doLogin(loginDto);
@@ -41,6 +45,7 @@ public class UserRestController {
     }
 
     // 리프레시 토큰 재발급
+    @Operation(summary = "리프레시 토큰 재발급")
     @PostMapping("/refresh")
     public ResponseEntity<?> reToken(@RequestBody ReTokenDto token) {
         if(token.getRefreshToken() == null
@@ -56,6 +61,7 @@ public class UserRestController {
     }
     
     // 유저 업데이트
+    @Operation(summary = "유저 정보 업데이트", description = "성별, 나이, 키, 몸무게 업데이트")
     @PutMapping
     public ResponseEntity<?> modifyUser(@RequestBody ModifyUserDto user) {
         userService.modifyUser(user);
@@ -64,6 +70,7 @@ public class UserRestController {
         return data.builder();
     }
 
+    @Operation(summary = "회원 탈퇴")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delUser(@PathVariable int id) {
         userService.delUser(id);
@@ -71,7 +78,7 @@ public class UserRestController {
         data.setData(null);
         return data.builder();
     }
-
+    @Operation(summary = "프로필 사진 변경")
     @PostMapping("/modify/profile")
     public ResponseEntity<?> modifyUserProfile(@RequestPart(value = "user") ProfileUserDto user,
                                       @RequestPart(value = "profile_img") MultipartFile profile) {
@@ -79,7 +86,14 @@ public class UserRestController {
         userService.modifyUserProfile(user, profile);
         return data.builder();
     }
+    @GetMapping("/hdfs")
+    public ResponseEntity<?> hdfs() {
+        RespData<Void> data = new RespData<>();
+        dataUtil.load();
+        return data.builder();
+    }
 
+    @Operation(summary = "회원 가입")
     @PostMapping("/join")
     public ResponseEntity<?> joinUser(@RequestPart(value = "user") JoinUserDto user,
                                       @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {
@@ -88,6 +102,7 @@ public class UserRestController {
         return data.builder();
     }
 
+    @Operation(summary = "닉네임, 이메일 중복검사", description = "type - 1 : nickname, 2 : email / value - 중복 검사할 데이터")
     @GetMapping("/check")
     public ResponseEntity<?> checkDuplication(@RequestParam("type") int type, @RequestParam("value") String value) {
         RespData<Void> data = new RespData<>();
@@ -95,6 +110,10 @@ public class UserRestController {
         return data.builder();
     }
 
+    @Operation(summary = "이메일 인증 코드 전송", description = "Email 인증 코드를 전송한다.\n" +
+            "이메일로 올바른 코드가 전송되고,\n" +
+            "Data는 SHA256로 해싱된 정보가 넘어간다.\n" +
+            "Data를 저장하고 유저가 입력한 코드를 SHA256으로 인코딩하여 일치 여부를 확인하면된다.")
     @GetMapping("/email")
     public ResponseEntity<?> emailConfirm(@RequestParam String email) {
         String confirm = userService.sendSimpleMessage(email);
@@ -104,6 +123,7 @@ public class UserRestController {
     }
 
     // 닉네임으로 유저 검색
+    @Operation(summary = "유저 검색 (닉네임)", description = "전체 사용자에서 닉네임 검색")
     @GetMapping("/search")
     public ResponseEntity<?> searchFriend(@RequestParam("nickname") String nickname) {
         List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
@@ -112,6 +132,7 @@ public class UserRestController {
         return data.builder();
     }
 
+    @Operation(summary = "비밀번호 변경")
     @PostMapping("/modify/pwd")
     public ResponseEntity<?> modifyPwd(@RequestBody ModifyPwdDto dto) {
         RespData<Void> data = new RespData<>();
@@ -119,6 +140,7 @@ public class UserRestController {
         return data.builder();
     }
 
+    @Operation(summary = "카카오 로그인")
     @GetMapping("/oauth/kakao")
     public ResponseEntity<?> kakaoOauth(@RequestParam String code) {
         KakaoUserDto kakaoUser = userService.kakaoOauth(code);
@@ -135,6 +157,8 @@ public class UserRestController {
         data.setData(userService.generateUser(user.getId()));
         return data.builder();
     }
+
+    @Operation(summary = "네이버 로그인")
     @GetMapping("/oauth/naver")
     public ResponseEntity<?> naverOauth(@RequestParam String code) {
         NaverUserDto naverUserDto = userService.naverOauth(code);
@@ -152,6 +176,7 @@ public class UserRestController {
         return data.builder();
     }
 
+    @Operation(summary = "카카오/네이버로 회원가입")
     @PostMapping("/oauth/join")
     public ResponseEntity<?> kakaoOauth(@RequestPart(value = "user") JoinKakaoUserDto user,
                                         @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {

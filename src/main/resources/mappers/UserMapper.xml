@@ -63,7 +63,7 @@
     </select>
 
     <update id="modifyPwd" parameterType="ModifyPwdDto">
-        UPDATE user SET password = #{password} WHERE id = #{id};
+        UPDATE user SET password = #{password} WHERE email = #{email};
     </update>
 
     <select id="getUserOauth" parameterType="string" resultMap="user">

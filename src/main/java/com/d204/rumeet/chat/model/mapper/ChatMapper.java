@@ -1,6 +1,5 @@
 package com.d204.rumeet.chat.model.mapper;
 
-import com.d204.rumeet.chat.model.dto.ChatDto;
 import com.d204.rumeet.chat.model.dto.ChatRoomDto;
 import org.apache.ibatis.annotations.Mapper;
 

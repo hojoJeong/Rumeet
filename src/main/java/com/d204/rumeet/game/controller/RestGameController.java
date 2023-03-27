@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 public class RestGameController {
 
+
     private KafkaService kafkaService;
-    @PostMapping("/run")
-    @CrossOrigin()
+
+    @GetMapping("/run")
     public void run(@RequestParam(value = "roomId") int roomId, @RequestParam(value = "userAId") int userAId, @RequestParam(value = "userBId") int userBId) {
     /*
         1. 게임을 시작한다
@@ -26,7 +27,7 @@ public class RestGameController {
         3. 각 유저는 상대 유저의 토픽을 추적하자
      */
         // 게임에 참여한 인원 관련 토픽 생성
-        String bootstrapServer = "localhost:9092";
+        String bootstrapServer = "j8d204.p.ssafy.io:9092";
         GameProducer userA = new GameProducer(bootstrapServer, roomId, userAId);
         GameProducer userB = new GameProducer(bootstrapServer, roomId, userBId);
         String userATopic = userA.createGameTopic();

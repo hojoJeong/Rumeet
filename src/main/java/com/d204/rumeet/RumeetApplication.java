@@ -1,5 +1,7 @@
 package com.d204.rumeet;
 
+import org.glassfish.jersey.servlet.ServletContainer;
+import org.glassfish.jersey.servlet.ServletProperties;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,4 +15,6 @@ public class RumeetApplication {
     public static void main(String[] args) {
         SpringApplication.run(RumeetApplication.class, args);
     }
+
+
 }
