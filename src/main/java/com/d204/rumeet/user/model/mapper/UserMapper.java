@@ -30,4 +30,6 @@ public interface UserMapper {
     void joinKakaoUser(JoinKakaoUserDto user);
 
     int modifyUserProfile(ProfileUserDto user);
+
+    SimpleUserDto getSimpleUserById(int id);
 }

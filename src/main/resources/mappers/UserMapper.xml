@@ -37,6 +37,12 @@
         SELECT * FROM user_view WHERE id = #{id};
     </select>
 
+
+
+    <select id="getSimpleUserById" parameterType="int" resultMap="simple_user">
+        SELECT id, email, nickname, age, gender, profile_img, date, state FROM user_view WHERE id = #{id};
+    </select>
+
     <select id="searchUsersByNickname" parameterType="String" resultMap="simple_user">
         SELECT id, email, nickname, age, gender, profile_img, date, state
         FROM user_view WHERE nickname LIKE #{nickname};
