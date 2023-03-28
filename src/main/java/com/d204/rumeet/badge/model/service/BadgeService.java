@@ -8,7 +8,7 @@ public interface BadgeService {
 
     BadgeDto getBadgeById(int id);
 
-    void addBadge(BadgeDto badge);
+    void addBadge(int badgeId, int userId);
 
     List<BadgeDto> getAllBadgesByUserId(int userId);
 }

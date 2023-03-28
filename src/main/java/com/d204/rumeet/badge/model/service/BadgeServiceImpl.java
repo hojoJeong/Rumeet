@@ -4,9 +4,11 @@ import com.d204.rumeet.badge.model.dto.BadgeDto;
 import com.d204.rumeet.badge.model.mapper.BadgeMapper;
 import com.d204.rumeet.exception.NoBadgeDataException;
 import com.d204.rumeet.exception.NoUserDataException;
+import com.d204.rumeet.user.model.dto.JoinUserDto;
 import com.d204.rumeet.user.model.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,9 +27,11 @@ public class BadgeServiceImpl implements BadgeService{
         return badge;
     }
 
-    @Override
-    public void addBadge(BadgeDto badge) {
 
+    @Override
+    public void addBadge(int badgeId, int userId) {
+        long date = System.currentTimeMillis();
+        badgeMapper.addBadge(badgeId, userId, date);
     }
 
     @Override

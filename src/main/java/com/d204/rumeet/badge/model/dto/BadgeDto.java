@@ -8,6 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class BadgeDto {
+    int id;
     String name;
     String description;
     int type;
