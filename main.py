@@ -4,7 +4,7 @@ from pyspark.sql.functions import col
 from pyspark.sql.functions import mean
 
 app = FastAPI()
-data_df = None
+
 pace1_avg = None
 df_1km = None
 df_2km = None
@@ -13,9 +13,10 @@ df_5km = None
 pace2_avg = None
 pace3_avg = None
 pace5_avg = None
+
 @app.get("/load/{mode}/{id}")
 async def rootd(mode, id):
-        global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
+        global pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
         pace = []
 
         # pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
@@ -62,7 +63,7 @@ async def rootd(mode, id):
 
 @app.get("/cache")
 async def root():
-        global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
+        global pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
     # SparkSession 생성
         spark = SparkSession.builder \
         .appName("ReadParquetFromHDFS") \
@@ -80,7 +81,7 @@ async def root():
 
         if pace1_avg is not None:
             pace1_avg.unpersist()
-        new_pace1_avg = data_df.groupBy('user_id') \
+        new_pace1_avg = df_1km.groupBy('user_id') \
                 .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                      (mean('elapsed_time').cast('integer')).alias('avg_elapsed_time'),
                      (mean('average_heart_rate').cast('integer')).alias('avg_heart_rate'))
