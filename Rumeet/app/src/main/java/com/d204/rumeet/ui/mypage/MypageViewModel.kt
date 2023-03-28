@@ -3,6 +3,7 @@ package com.d204.rumeet.ui.mypage
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.mypage.model.BadgeContentListUiModel
 import com.d204.rumeet.ui.mypage.setting.SettingAction
 import com.d204.rumeet.ui.mypage.setting.UserInfoAction
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -31,6 +32,10 @@ class MypageViewModel : BaseViewModel() {
     private var _userInfoOptionList = listOf<String>()
     val userInfoOptionList: List<String>
         get() = _userInfoOptionList
+
+    private lateinit var _myBadgeList: BadgeContentListUiModel
+    val myBadgeList: BadgeContentListUiModel
+        get() = _myBadgeList
 
     fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
@@ -67,5 +72,13 @@ class MypageViewModel : BaseViewModel() {
 
     fun setUserInfoMenuTitleList(list: List<String>) {
         _userInfoOptionList = list
+    }
+
+    fun getBadgeList(){
+        //TODO 뱃지 서버통신
+    }
+
+    fun setBadgeList(badgeList: BadgeContentListUiModel){
+        _myBadgeList = badgeList
     }
 }

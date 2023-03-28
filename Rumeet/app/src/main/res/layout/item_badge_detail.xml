@@ -1,34 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <ImageView
-        android:id="@+id/iv_item_badge1"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_launcher_background"/>
-    <TextView
-        android:id="@+id/tv_item_badge1_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/iv_item_badge1"
-        app:layout_constraintEnd_toEndOf="@+id/iv_item_badge1"
-        app:layout_constraintTop_toBottomOf="@+id/iv_item_badge1"
-        tools:text="뱃지이름"
-        style="@style/base_font_medium_14_black"
-        android:layout_marginTop="6dp"/>
-    <TextView
-        android:id="@+id/tv_item_badge1_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/iv_item_badge1"
-        app:layout_constraintEnd_toEndOf="@id/iv_item_badge1"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item_badge1_name"
-        tools:text="2023.03.03"
-        style="@style/base_font_medium_12_dim_gray"/>
+<layout>
+    <data>
+        <variable
+            name="badge"
+            type="com.d204.rumeet.ui.mypage.model.BadgeDetailUiModel" />
+    </data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_item_badge1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setImageResource="@{badge.badgeImg}"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/tv_item_badge1_name"
+            style="@style/base_font_medium_14_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_item_badge1"
+            app:layout_constraintStart_toStartOf="@+id/iv_item_badge1"
+            app:layout_constraintTop_toBottomOf="@+id/iv_item_badge1"
+            tools:text="뱃지이름"
+            android:text="@{badge.badgeName}"/>
+
+        <TextView
+            android:id="@+id/tv_item_badge1_date"
+            style="@style/base_font_medium_12_dim_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/iv_item_badge1"
+            app:layout_constraintStart_toStartOf="@+id/iv_item_badge1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_badge1_name"
+            tools:text="2023.03.03"
+            android:text="@{badge.badgeDate}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
