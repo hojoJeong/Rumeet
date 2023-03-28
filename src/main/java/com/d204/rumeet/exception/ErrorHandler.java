@@ -74,4 +74,11 @@ public class ErrorHandler {
         data.setData(null);
         return data.builder();
     }
+
+    @ExceptionHandler(NoBadgeDataException.class)
+    public ResponseEntity<?> NoBadgeDataException() {
+        RespData<Void> data = new RespData(ErrorEnum.NO_BADGE_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
 }
