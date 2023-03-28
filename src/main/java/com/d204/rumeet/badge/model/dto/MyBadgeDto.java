@@ -9,5 +9,5 @@ import lombok.Data;
 public class MyBadgeDto {
     int userId;
     int badgeId;
-    int date;
+    long date;
 }

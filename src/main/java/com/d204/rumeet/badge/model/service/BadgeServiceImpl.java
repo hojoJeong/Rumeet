@@ -1,6 +1,7 @@
 package com.d204.rumeet.badge.model.service;
 
 import com.d204.rumeet.badge.model.dto.BadgeDto;
+import com.d204.rumeet.badge.model.dto.MyBadgeDto;
 import com.d204.rumeet.badge.model.mapper.BadgeMapper;
 import com.d204.rumeet.exception.NoBadgeDataException;
 import com.d204.rumeet.exception.NoUserDataException;
@@ -31,7 +32,8 @@ public class BadgeServiceImpl implements BadgeService{
     @Override
     public void addBadge(int badgeId, int userId) {
         long date = System.currentTimeMillis();
-        badgeMapper.addBadge(badgeId, userId, date);
+        MyBadgeDto myBadge = new MyBadgeDto(badgeId, userId, date);
+        badgeMapper.addBadge(myBadge);
     }
 
     @Override
