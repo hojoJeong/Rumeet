@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService{
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
         String topic = "rumeet.userlist";
-        String message = String.valueOf(user.getId());
+//        String message = String.valueOf(user.getId());
 //        kafkaService.sendMessage(topic,message);
 //        kafkaService.createTopic("user." + user.getId());
     }
@@ -175,6 +175,15 @@ public class UserServiceImpl implements UserService{
     public List<SimpleUserDto> searchUsersByNickname(String nickname) {
         List<SimpleUserDto> users = userMapper.searchUsersByNickname("%" + nickname + "%");
         return users;
+    }
+
+    @Override
+    public SimpleUserDto getSimpleUserById(int id) {
+        SimpleUserDto user = userMapper.getSimpleUserById(id);
+        if(user == null) {
+            throw new NoUserDataException();
+        }
+        return user;
     }
 
     @Override

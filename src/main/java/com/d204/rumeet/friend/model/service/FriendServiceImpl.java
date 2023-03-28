@@ -1,16 +1,13 @@
 package com.d204.rumeet.friend.model.service;
-import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.DuplicateFriendRequestException;
 import com.d204.rumeet.exception.ExistingFriendException;
 import com.d204.rumeet.exception.NoFriendDataException;
 import com.d204.rumeet.exception.NoRequestException;
 import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
-import com.d204.rumeet.friend.model.dto.FriendDto;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
 import com.d204.rumeet.user.model.service.UserService;
-import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -31,12 +28,25 @@ public class FriendServiceImpl implements FriendService {
 
     private final UserService userService;
 
+
     @Override
-    public List<FriendDao> getFriendsByUserId(int userId) {
+    public List<SimpleUserDto> getFriendsByUserId(int userId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
-        return mongoTemplate.find(query, FriendDao.class, "friend");
+        List<FriendDao> friends = mongoTemplate.find(query, FriendDao.class, "friend");
+
+        Set<Integer> friendIds = new HashSet<>();
+        for (FriendDao friend : friends) {
+            friendIds.add(friend.getFriendId());
+        }
+
+        List<SimpleUserDto> filteredFriends = new ArrayList<>();
+        for (int friendId : friendIds) {
+            filteredFriends.add(userService.getSimpleUserById(friendId));
+        }
+        return filteredFriends;
     }
+
 
     @Override
     public void deleteFriend(int userId, int friendId) {
