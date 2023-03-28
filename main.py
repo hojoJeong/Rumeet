@@ -21,15 +21,13 @@ async def rootd(mode, id):
         #
         # return {"id": id , "pace":pace}
 
-        if mode == "4":
-            pace1_avg.show()
+        if mode == "4": # 1km
             pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
                     .select('avg_pace1') \
                     .collect()[0][0]
             pace.append(int(pace_value))
             print(pace_value)
-        elif mode =="5":
-            print(pace2_avg.columns)
+        elif mode =="5": # 2km
             print("mode : 5")
             pace2_avg.filter(pace2_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2')\
@@ -40,26 +38,22 @@ async def rootd(mode, id):
                 .collect()
             pace = filtered
             print(filtered)
-        elif mode == "6":
+        elif mode == "6": # 3km
             filtered = pace3_avg.filter(pace3_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2', 'avg_pace3') \
                 .rdd.flatMap(lambda x: x) \
                 .collect()
             pace = filtered
             print(filtered)
-        elif mode == "7":
-            print('5km data is empty')
-            #df_5km.show()
-
+        elif mode == "7": # 5km
+            filtered = pace5_avg.filter(pace5_avg["user_id"] == id) \
+                .select('avg_pace1', 'avg_pace2', 'avg_pace3', 'avg_pace4', 'avg_pace5') \
+                .rdd.flatMap(lambda x: x) \
+                .collect()
+            pace = filtered
+            print(filtered)
         return {"id": id,
                 "pace": pace}
-
-        pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
-                .select('avg_pace1') \
-                .collect()[0][0]
-        pace.append(int(pace_value))
-
-        return {"id": int(id) , "pace":pace}
 
 @app.get("/cache")
 async def root():
@@ -70,65 +64,75 @@ async def root():
         .master("spark://j8d204.p.ssafy.io:7077") \
         .getOrCreate()
 
-# HDFS에서 파케이 파일 읽기
-        data_df = spark.read \
+    # HDFS에서 파케이 파일 읽기
+        df_1km.unpersist()
+        new_df_1km = spark.read \
         .format("parquet") \
         .option("header", "true") \
         .load("hdfs://13.125.218.237:9000/user/spark/output/1km")
-        data_df.cache()
+        df_1km = new_df_1km.cache()
 
-        pace1_avg = data_df.groupBy('user_id') \
+        pace1_avg.unpersist()
+        new_pace1_avg = data_df.groupBy('user_id') \
                 .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                      (mean('elapsed_time').cast('integer')).alias('avg_elapsed_time'),
                      (mean('average_heart_rate').cast('integer')).alias('avg_heart_rate'))
-        pace1_avg.cache()
-
+        pace1_avg = new_pace1_avg.cache()
         pace1_avg.show()
 
-        df_2km = spark.read \
+        df_2km.unpersist()
+        new_df_2km = spark.read \
                 .format("parquet") \
                 .option("header", "true") \
                 .load("hdfs://13.125.218.237:9000/user/spark/output/2km")
-        df_2km.cache()
+        df_2km = new_df_2km.cache()
 
-        pace2_avg = df_2km.groupBy('user_id') \
+        pace2_avg.unpersist()
+        new_pace2_avg = df_2km.groupBy('user_id') \
                 .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                      (mean('pace2').cast('integer')).alias('avg_pace2'),
                      (mean('elapsed_time').cast('integer')).alias('avg_elapsed_time'),
                      (mean('average_heart_rate').cast('integer')).alias('avg_heart_rate'))
-        pace2_avg.cache()
-
+        pace2_avg = new_pace2_avg.cache()
         pace2_avg.show()
 
-        df_3km = spark.read \
+        df_3km.unpersist()
+        new_df_3km = spark.read \
                 .format("parquet") \
                 .option("header", "true") \
                 .load("hdfs://13.125.218.237:9000/user/spark/output/3km")
-        df_3km.cache()
+        df_3km = new_df_3km.cache()
 
-        pace3_avg = df_3km.groupBy('user_id') \
+        pace3_avg.unpersist()
+        new_pace3_avg = df_3km.groupBy('user_id') \
             .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                  (mean('pace2').cast('integer')).alias('avg_pace2'),
                  (mean('pace3').cast('integer')).alias('avg_pace3'),
                  (mean('elapsed_time').cast('integer')).alias('avg_elapsed_time'),
                  (mean('average_heart_rate').cast('integer')).alias('avg_heart_rate'))
-        pace3_avg.cache()
-
+        pace3_avg = new_pace3_avg.cache()
         pace3_avg.show()
 
-        # df_5km = spark.read \
-        #         .format("parquet") \
-        #         .option("header", "true") \
-        #         .load("hdfs://13.125.218.237:9000/user/spark/output/5km")
-        # df_5km.cache()
-        #
-        # pace5_avg = df_5km.groupBy('user_id') \
-        #     .agg(mean('pace1').alias('avg_pace1'),
-        #          mean('elapsed_time').alias('avg_elapsed_time'),
-        #          mean('average_heart_rate').alias('avg_heart_rate'))
-        # pace5_avg.cache()
+        df_5km.unpersist()
+        new_df_5km = spark.read \
+                .format("parquet") \
+                .option("header", "true") \
+                .load("hdfs://13.125.218.237:9000/user/spark/output/5km")
+        df_5km = new_df_5km.cache()
 
-        return {"pace":"dd"}
+        pace5_avg.unpersist()
+        new_pace5_avg = df_5km.groupBy('user_id') \
+            .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
+                 (mean('pace2').cast('integer')).alias('avg_pace2'),
+                 (mean('pace3').cast('integer')).alias('avg_pace3'),
+                 (mean('pace4').cast('integer')).alias('avg_pace4'),
+                 (mean('pace5').cast('integer')).alias('avg_pace5'),
+                 (mean('elapsed_time').cast('integer')).alias('avg_elapsed_time'),
+                 (mean('average_heart_rate').cast('integer')).alias('avg_heart_rate'))
+        pace5_avg = new_pace5_avg.cache()
+        pace5_avg.show()
+
+        return {"flag":"success"}
 
 
 @app.get("/munang")
