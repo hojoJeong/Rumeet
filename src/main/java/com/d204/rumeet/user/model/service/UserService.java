@@ -37,4 +37,7 @@ public interface UserService {
 
     List<SimpleUserDto> searchUsersByNickname(String nickname);
 
+    SimpleUserDto getSimpleUserById(int id);
+
+
 }

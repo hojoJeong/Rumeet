@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class JoinUserDto {
-    int id;
     String email;
     String password;
     String nickname;
@@ -16,4 +15,5 @@ public class JoinUserDto {
     float weight;
     String profile;
     long date;
+
 }
