@@ -13,6 +13,17 @@
         <result column="badge_img_black" property="badge_img_black"/>
     </resultMap>
 
+    <resultMap id="myBadge" type="BadgeImageDto">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="type" property="type" />
+        <result column="image" property="image" />
+        <result column="flag" property="flag" />
+        <result column="date" property="date" />
+    </resultMap>
+
+
     <select id="getBadgeById" parameterType="int" resultMap="badge">
         SELECT * FROM badge WHERE id = #{badgeId};
     </select>
@@ -21,10 +32,13 @@
         INSERT INTO my_badge (user_id, badge_id, date) VALUES (#{userId}, #{badgeId}, #{date});
     </insert>
 
-    <select id="getAllBadgesByUserId" parameterType="int" resultMap="badge">
-        SELECT b.id, b.name, b.description, b.type, mb.date
+    <select id="getAllBadgesByUserId" parameterType="int" resultMap="myBadge">
+        SELECT b.id, b.name, b.description, b.type,
+               CASE WHEN mb.user_id IS NULL THEN b.badge_img_black ELSE b.badge_img END AS image,
+               CASE WHEN mb.user_id IS NULL THEN 0 ELSE 1 END AS flag,
+               mb.date
         FROM badge b
-        JOIN my_badge mb ON b.id = mb.badge_id
-        WHERE mb.user_id = #{userId} AND b.type = #{type};
+                 LEFT JOIN my_badge mb ON b.id = mb.badge_id AND mb.user_id =#{userId}
+        WHERE b.type =#{type};
     </select>
 </mapper>
