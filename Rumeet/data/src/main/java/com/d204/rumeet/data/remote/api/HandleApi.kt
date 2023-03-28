@@ -1,6 +1,8 @@
 package com.d204.rumeet.data.remote.api
 
 import com.d204.rumeet.data.remote.dto.*
+import com.d204.rumeet.data.remote.dto.ErrorMessage.ALREADY_FRIEND_ERROR_MESSAGE
+import com.d204.rumeet.data.remote.dto.ErrorMessage.ALREADY_REQUEST_FRIEND_ERROR_MESSAGE
 import com.d204.rumeet.data.remote.dto.ErrorMessage.DUPLICATE_USER_INFO_ERROR_MESSAGE
 import com.d204.rumeet.data.remote.dto.ErrorMessage.EXCEPTION
 import com.d204.rumeet.data.remote.dto.ErrorMessage.NO_KAKAO_USER_ERROR_MESSAGE
@@ -23,6 +25,8 @@ internal inline fun <T> handleApi(transform: () -> BaseResponse<T>): NetworkResu
             NO_KAKAO_USER_ERROR_MESSAGE -> NetworkResult.Error(SocialLoginErrorException(e.cause, e.message))
             DUPLICATE_USER_INFO_ERROR_MESSAGE -> NetworkResult.Error(DuplicateInfoException(e.cause, e.message))
             SIGN_UP_FAIL_ERROR_MESSAGE -> NetworkResult.Error(SingUpErrorException(e.cause, e.message))
+            ALREADY_FRIEND_ERROR_MESSAGE -> NetworkResult.Error(AlreadyFriendException(e.cause, e.message))
+            ALREADY_REQUEST_FRIEND_ERROR_MESSAGE -> NetworkResult.Error(AlreadyRequestFriendException(e.cause, e.message))
             else -> NetworkResult.Error(e)
         }
     }
