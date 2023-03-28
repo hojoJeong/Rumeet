@@ -18,9 +18,6 @@ async def rootd(mode, id):
         global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
         pace = []
 
-        print(type(mode))
-        pace1_avg.show()
-
         # pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
         #         .select('avg_pace1') \
         #         .collect()[0][0]
@@ -73,14 +70,16 @@ async def root():
         .getOrCreate()
 
     # HDFS에서 파케이 파일 읽기
-        df_1km.unpersist()
+        if df_1km is not None:
+            df_1km.unpersist()
         new_df_1km = spark.read \
         .format("parquet") \
         .option("header", "true") \
         .load("hdfs://13.125.218.237:9000/user/spark/output/1km")
         df_1km = new_df_1km.cache()
 
-        pace1_avg.unpersist()
+        if pace1_avg is not None:
+            pace1_avg.unpersist()
         new_pace1_avg = data_df.groupBy('user_id') \
                 .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                      (mean('elapsed_time').cast('integer')).alias('avg_elapsed_time'),
@@ -88,14 +87,16 @@ async def root():
         pace1_avg = new_pace1_avg.cache()
         pace1_avg.show()
 
-        df_2km.unpersist()
+        if df_2km is not None:
+            df_2km.unpersist()
         new_df_2km = spark.read \
                 .format("parquet") \
                 .option("header", "true") \
                 .load("hdfs://13.125.218.237:9000/user/spark/output/2km")
         df_2km = new_df_2km.cache()
 
-        pace2_avg.unpersist()
+        if pace2_avg is not None:
+            pace2_avg.unpersist()
         new_pace2_avg = df_2km.groupBy('user_id') \
                 .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                      (mean('pace2').cast('integer')).alias('avg_pace2'),
@@ -104,14 +105,16 @@ async def root():
         pace2_avg = new_pace2_avg.cache()
         pace2_avg.show()
 
-        df_3km.unpersist()
+        if df_3km is not None:
+            df_3km.unpersist()
         new_df_3km = spark.read \
                 .format("parquet") \
                 .option("header", "true") \
                 .load("hdfs://13.125.218.237:9000/user/spark/output/3km")
         df_3km = new_df_3km.cache()
 
-        pace3_avg.unpersist()
+        if pace3_avg is not None:
+            pace3_avg.unpersist()
         new_pace3_avg = df_3km.groupBy('user_id') \
             .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                  (mean('pace2').cast('integer')).alias('avg_pace2'),
@@ -121,14 +124,16 @@ async def root():
         pace3_avg = new_pace3_avg.cache()
         pace3_avg.show()
 
-        df_5km.unpersist()
+        if df_5km is not None:
+            df_5km.unpersist()
         new_df_5km = spark.read \
                 .format("parquet") \
                 .option("header", "true") \
                 .load("hdfs://13.125.218.237:9000/user/spark/output/5km")
         df_5km = new_df_5km.cache()
 
-        pace5_avg.unpersist()
+        if pace5_avg is not None:
+            pace5_avg.unpersist()
         new_pace5_avg = df_5km.groupBy('user_id') \
             .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                  (mean('pace2').cast('integer')).alias('avg_pace2'),
