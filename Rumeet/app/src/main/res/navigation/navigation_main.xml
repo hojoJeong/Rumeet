@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.d204.rumeet.ui.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="HomeFragment">
         <action
             android:id="@+id/action_homeFragment_to_runningOptionContainerFragment"
             app:destination="@id/runningOptionFragment" />
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/runningOptionFragment"
         android:name="com.d204.rumeet.ui.running.fragment.RunningOptionFragment"
-        android:label="RunningOptionContainerFragment" >
+        android:label="RunningOptionContainerFragment">
         <action
             android:id="@+id/action_runningOptionContainerFragment_to_runningFragment"
             app:destination="@id/runningFragment" />
@@ -39,12 +39,15 @@
             <action
                 android:id="@+id/action_myPageFragment_to_settingFragment"
                 app:destination="@id/settingFragment" />
+            <action
+                android:id="@+id/action_myPageFragment_to_friendListFragment"
+                app:destination="@id/friendListFragment" />
         </fragment>
 
         <fragment
             android:id="@+id/settingFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.SettingFragment"
-            android:label="SettingFragment" >
+            android:label="SettingFragment">
             <action
                 android:id="@+id/action_settingFragment_to_settingUserInfoFragment"
                 app:destination="@id/settingUserInfoFragment" />
@@ -55,7 +58,7 @@
         <fragment
             android:id="@+id/settingUserInfoFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.SettingUserInfoFragment"
-            android:label="SettingUserInfoFragment" >
+            android:label="SettingUserInfoFragment">
             <action
                 android:id="@+id/action_settingUserInfoFragment_to_confirmPasswordFragment"
                 app:destination="@id/confirmPasswordFragment" />
@@ -67,41 +70,40 @@
         <fragment
             android:id="@+id/confirmPasswordFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.ConfirmPasswordFragment"
-            android:label="ConfirmPasswordFragment" >
+            android:label="ConfirmPasswordFragment">
             <argument
                 android:name="destination_fragment"
                 app:argType="string"
-                app:nullable="false"/>
+                app:nullable="false" />
 
             <action
                 android:id="@+id/action_confirmPasswordFragment_to_resetPasswordFragment2"
                 app:destination="@id/resetPasswordFragment2"
                 app:popUpTo="@id/settingUserInfoFragment"
-                app:popUpToInclusive="false"/>
+                app:popUpToInclusive="false" />
             <action
                 android:id="@+id/action_confirmPasswordFragment_to_additionalInfoFragment2"
                 app:destination="@id/additionalInfoFragment2"
                 app:popUpTo="@id/settingUserInfoFragment"
-                app:popUpToInclusive="false"/>
+                app:popUpToInclusive="false" />
             <action
                 android:id="@+id/action_confirmPasswordFragment_to_withdrawalFragment"
-                app:destination="@id/withdrawalFragment"/>
+                app:destination="@id/withdrawalFragment" />
         </fragment>
 
         <fragment
             android:id="@+id/additionalInfoFragment2"
             android:name="com.d204.rumeet.ui.join.addtional_info.AdditionalInfoFragment"
-            android:label="AdditionalInfoFragment" >
+            android:label="AdditionalInfoFragment">
             <argument
                 android:name="reset"
-                app:argType="boolean"
-                app:nullable="false"
                 android:defaultValue="false"
-                />
+                app:argType="boolean"
+                app:nullable="false" />
             <argument
                 android:name="email"
                 app:argType="string"
-                app:nullable="false"/>
+                app:nullable="false" />
         </fragment>
         <fragment
             android:id="@+id/resetPasswordFragment2"
@@ -109,18 +111,18 @@
             android:label="ResetPasswordFragment">
             <argument
                 android:name="reset"
+                android:defaultValue="false"
                 app:argType="boolean"
-                app:nullable="false"
-                android:defaultValue="false"/>
+                app:nullable="false" />
             <argument
                 android:name="email"
                 app:argType="string"
-                app:nullable="false"/>
+                app:nullable="false" />
         </fragment>
         <fragment
             android:id="@+id/withdrawalFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.WithdrawalFragment"
-            android:label="WithdrawalFragment" >
+            android:label="WithdrawalFragment">
             <action
                 android:id="@+id/action_withdrawalFragment_to_resultWithdrawalFragment"
                 app:destination="@id/resultWithdrawalFragment" />
@@ -129,6 +131,21 @@
             android:id="@+id/resultWithdrawalFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.ResultWithdrawalFragment"
             android:label="ResultWithdrawalFragment" />
+
+        <fragment
+            android:id="@+id/friendListFragment"
+            android:name="com.d204.rumeet.ui.friend.list.FriendListFragment"
+            android:label="FriendListFragment">
+            <action
+                android:id="@+id/action_friendListFragment_to_addFriendFragment"
+                app:destination="@id/addFriendFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/addFriendFragment"
+            android:name="com.d204.rumeet.ui.friend.add.AddFriendFragment"
+            android:label="AddFriendFragment" />
+
     </navigation>
 
 </navigation>

@@ -10,10 +10,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class NotificationFragment : BaseFragment<FragmentNotificationBinding, BaseViewModel>() {
     private val notificationViewModel by activityViewModels<NotificationViewModel>()
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_notification
-    override val viewModel: BaseViewModel
-        get() = notificationViewModel
+
+    override val layoutResourceId: Int get() = R.layout.fragment_notification
+    override val viewModel: BaseViewModel get() = notificationViewModel
 
     override fun initStartView() {
         initView()

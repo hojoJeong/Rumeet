@@ -33,13 +33,31 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             binding.tbToolbar.visibility = View.GONE
             when (navController.currentDestination?.id) {
                 R.id.homeFragment -> {
-                    binding.tbToolbar.visibility = View.VISIBLE
-                    binding.tbToolbar.setToolbarType(
-                        RumeetToolbar.ToolbarType.LOGO_TEXT_ALARM,
-                        "홈",
-                        rightClickListener = {
-                            //Todo 알람 페이지로 navigate
+                    binding.bvnMain.root.visibility = View.VISIBLE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(RumeetToolbar.ToolbarType.LOGO_TEXT_ALARM, "홈", rightClickListener = {
+                                //Todo 알람 페이지로 navigate
+                            })
+                    }
+                }
+                R.id.friendListFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(RumeetToolbar.ToolbarType.BACK_TEXT, "친구", leftClickListener = {
+                            navController.popBackStack()
                         })
+                    }
+                }
+                R.id.addFriendFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(RumeetToolbar.ToolbarType.BACK_TEXT, "친구 추가", leftClickListener = {
+                            navController.popBackStack()
+                        })
+                    }
                 }
             }
         }

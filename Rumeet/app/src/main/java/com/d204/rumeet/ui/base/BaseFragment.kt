@@ -1,11 +1,13 @@
 package com.d204.rumeet.ui.base
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -215,5 +217,10 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 //            if (result.resultCode == 0) navigateToHomeFragment(null)
         }
+
+    protected fun hideKeyboard(){
+        val ime = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        ime.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
 }
 

@@ -33,7 +33,7 @@ class SplashViewModel @Inject constructor(
         baseViewModelScope.launch {
             launch {
                 // 억까임
-                delay(1000)
+                delay(500)
                 // true -> 방문했음
                 if (getUserFirstAccessCheckUseCase()) {
                     if (getUserAutoLoginUseCase()) _navigationEvent.emit(SplashNavigationAction.StartMainActivity)
