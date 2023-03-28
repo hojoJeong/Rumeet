@@ -8,7 +8,8 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.d204.rumeet.ui.home.HomeFragment"
-        android:label="HomeFragment">
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_runningOptionContainerFragment"
             app:destination="@id/runningOptionFragment" />
@@ -93,17 +94,12 @@
 
         <fragment
             android:id="@+id/additionalInfoFragment2"
-            android:name="com.d204.rumeet.ui.join.addtional_info.AdditionalInfoFragment"
-            android:label="AdditionalInfoFragment">
+            android:name="com.d204.rumeet.ui.reset_password.AdditionalInfoFragment"
+            android:label="AdditionalInfoFragment2">
             <argument
                 android:name="reset"
                 android:defaultValue="false"
-                app:argType="boolean"
-                app:nullable="false" />
-            <argument
-                android:name="email"
-                app:argType="string"
-                app:nullable="false" />
+                app:argType="boolean" />
         </fragment>
         <fragment
             android:id="@+id/resetPasswordFragment2"
@@ -147,5 +143,27 @@
             android:label="AddFriendFragment" />
 
     </navigation>
+
+    <fragment
+        android:id="@+id/chattingFragment"
+        android:name="com.d204.rumeet.ui.chatting.ChattingFragment"
+        android:label="ChattingFragment"
+        tools:layout="@layout/fragment_chatting">
+        <argument
+            android:name="chattingRoomId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chattingListFragment"
+        android:name="com.d204.rumeet.ui.chatting.chatting_list.ChattingListFragment"
+        android:label="ChattingListFragment"
+        tools:layout="@layout/fragment_chatting_list">
+        <action
+            android:id="@+id/action_chattingListFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment" />
+    </fragment>
+
 
 </navigation>

@@ -32,7 +32,7 @@ class ConfirmPasswordFragment : BaseFragment<FragmentConfirmPasswordBinding, Bas
 
             when(args.destinationFragment){
                 "resetDetailUserInfo" -> {
-                    navigate(ConfirmPasswordFragmentDirections.actionConfirmPasswordFragmentToAdditionalInfoFragment2("", true))
+                    navigate(ConfirmPasswordFragmentDirections.actionConfirmPasswordFragmentToAdditionalInfoFragment2(true))
                 }
                 "resetPassword" -> {
                     navigate(ConfirmPasswordFragmentDirections.actionConfirmPasswordFragmentToResetPasswordFragment2("", true))

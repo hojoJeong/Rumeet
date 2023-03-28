@@ -69,7 +69,7 @@ class JoinViewModel @Inject constructor(
             checkDuplicateInfoUseCase(1, nickname)
                 .onSuccess {
                     joinInfo.nickname = nickname
-                    _joinNicknameAction.emit(JoinNicknameAction.PassNicknameValidation)
+                    _joinNicknameAction.emit(JoinNicknameAction.PassNicknameValidation(nickname))
                 }
                 .onError { e ->
                     if (e is DuplicateInfoException) _joinNicknameAction.emit(JoinNicknameAction.DuplicateNickname)

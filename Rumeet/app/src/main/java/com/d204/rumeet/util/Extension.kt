@@ -5,18 +5,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
-import com.d204.rumeet.R
-import com.d204.rumeet.ui.find_account.FindAccountAction
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 
@@ -38,7 +35,7 @@ fun TextView.setTextColorWithNoTheme(colorRes : Int){
 fun Context.getColorWithNoTheme(colorRes : Int) = ResourcesCompat.getColor(resources, colorRes, null)
 
 @SuppressLint("Recycle")
-fun Context.getAbsolutePath(path : Uri?, context : Context) : String{
+fun getAbsolutePath(path: Uri?, context: Context) : String{
     val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
     val c: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
     val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -71,3 +68,28 @@ fun checkEmailValidate(email : String) : Boolean{
     val pattern = android.util.Patterns.EMAIL_ADDRESS
     return pattern.matcher(email).matches()
 }
+
+fun resizeImage(imageFile: File, targetWidth: Int, targetHeight: Int): Bitmap {
+    // 이미지 파일 로드
+    val options = BitmapFactory.Options().apply {
+        inJustDecodeBounds = true // 이미지 정보만 가져오기 위해 inJustDecodeBounds 옵션을 true로 설정
+    }
+    BitmapFactory.decodeFile(imageFile.path, options)
+
+    // 이미지 리사이징
+    val width = options.outWidth
+    val height = options.outHeight
+    var scaleFactor = 1
+    if (width > targetWidth || height > targetHeight) {
+        val widthRatio = width.toFloat() / targetWidth.toFloat()
+        val heightRatio = height.toFloat() / targetHeight.toFloat()
+        scaleFactor = Math.min(widthRatio, heightRatio).toInt()
+    }
+    val scaledOptions = BitmapFactory.Options().apply {
+        inSampleSize = scaleFactor // 이미지 리사이징 옵션 설정
+    }
+
+    return BitmapFactory.decodeFile(imageFile.path, scaledOptions)
+}
+
+

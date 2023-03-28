@@ -11,6 +11,8 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.DefaultAlertDialog
 import com.d204.rumeet.ui.components.BodyInfoBottomSheetDialog
 import com.d204.rumeet.ui.join.JoinViewModel
+import com.d204.rumeet.ui.reset_password.AdditionalInfoFragmentArgs
+import com.d204.rumeet.ui.reset_password.AdditionalInfoFragmentDirections
 import kotlinx.coroutines.flow.collectLatest
 
 class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinViewModel>() {
@@ -28,8 +30,6 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
             lifecycleOwner = viewLifecycleOwner
         }
         exception = viewModel.errorEvent
-
-
     }
 
     override fun initDataBinding() {
@@ -62,7 +62,7 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
         if(args.reset){
             binding.btnRumeet.setContent("정보 수정")
         } else {
-            binding.btnRumeet.setContent("회원가입 완료")
+            binding.btnRumeet.setContent("계속하기")
         }
         binding.tvBodyState.setOnClickListener {
             showBodyStateDialog()

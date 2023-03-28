@@ -1,46 +1,57 @@
 package com.d204.rumeet.ui.reset_password
 
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
-import com.d204.rumeet.databinding.FragmentResetPasswordBinding
+import com.d204.rumeet.databinding.FragmentAddtionalInfoBinding
+import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.components.SingleLineEditText
-import dagger.hilt.android.AndroidEntryPoint
+import com.d204.rumeet.ui.base.DefaultAlertDialog
+import com.d204.rumeet.ui.components.BodyInfoBottomSheetDialog
+import com.d204.rumeet.ui.join.JoinViewModel
+import com.d204.rumeet.ui.join.addtional_info.AdditionalInfoAction
 import kotlinx.coroutines.flow.collectLatest
 
-@AndroidEntryPoint
-class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding, ResetPasswordViewModel>(){
+class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinViewModel>() {
     override val layoutResourceId: Int
-        get() =  R.layout.fragment_reset_password
+        get() = R.layout.fragment_addtional_info
 
-    override val viewModel: ResetPasswordViewModel by viewModels()
-    private val args by navArgs<ResetPasswordFragmentArgs>()
+    override val viewModel: JoinViewModel by activityViewModels()
+    private var gedner = -1
+    private val args by navArgs<AdditionalInfoFragmentArgs>()
 
     override fun initStartView() {
-        with(binding){
+        with(binding) {
             vm = viewModel
+            socialType = viewModel.joinInfo.socialJoinModel != null
             lifecycleOwner = viewLifecycleOwner
         }
         exception = viewModel.errorEvent
+
+
     }
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            viewModel.resetPasswordAction.collectLatest {
-                when(it){
-                    is ResetPasswordAction.SuccessResetPassword -> {
-                        if(!args.reset){
-                            navigate(ResetPasswordFragmentDirections.actionResetPasswordFragmentToLoginFragment())
-                        } else {
-                            findNavController().popBackStack()
-                        }
+            viewModel.additionalInfoAction.collectLatest {
+                when (it) {
+                    is AdditionalInfoAction.SocialSignUp -> {
+                        if(checkEmptyValue()) viewModel.socialSignUp()
+                        else showSignUpFailedDialog()
                     }
-                    is ResetPasswordAction.RequestResetPassword -> {
-                        if (binding.editPassword.passwordValidate && binding.editPasswordCheck.checkPasswordMatch(binding.editPassword.keyword)) {
-                            viewModel.requestResetPassword(args.email, binding.editPassword.keyword)
+                    is AdditionalInfoAction.EmailSignUp -> {
+                        if(checkEmptyValue()) viewModel.emailSignUp()
+                        else showSignUpFailedDialog()
+                    }
+                    is AdditionalInfoAction.SignUpSuccess -> {
+                        if(!args.reset){
+                            toastMessage("회원가입이 성공했습니다.")
+                            navigate(AdditionalInfoFragmentDirections.actionAdditionalInfoFragmentToLoginFragment())
+                        }else{
+                            toastMessage("정보 수정이 완료되었습니다.")
+                            findNavController().popBackStack()
                         }
                     }
                 }
@@ -49,8 +60,60 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding, ResetPa
     }
 
     override fun initAfterBinding() {
-        binding.editPassword.setEditTextType(SingleLineEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_hint))
-        binding.editPasswordCheck.setEditTextType(SingleLineEditText.SingUpEditTextType.PASSWORD, getString(R.string.content_password_check_hint))
-        binding.btnResetPassword.setContent("비밀번호 재설정")
+        if(args.reset){
+            binding.btnRumeet.setContent("정보 수정")
+        } else {
+            binding.btnRumeet.setContent("계속하기")
+        }
+        binding.tvBodyState.setOnClickListener {
+            showBodyStateDialog()
+        }
+        binding.rgGender.setOnCheckedChangeListener { _, checkId ->
+            when (checkId) {
+                R.id.btn_male -> { gedner = 0 }
+                R.id.btn_female -> { gedner = 1 }
+            }
+        }
+    }
+
+    private fun showBodyStateDialog() {
+        val dialog = BodyInfoBottomSheetDialog().apply {
+            addButtonClickListener { tallValue, weightValue ->
+                viewModel.joinInfo.height = tallValue.toFloat()
+                viewModel.joinInfo.weight = weightValue.toFloat()
+                dismissAllowingStateLoss()
+                this@AdditionalInfoFragment.binding.tvBodyState.text = "${tallValue}cm / ${weightValue}kg"
+            }
+            initPreviousData(viewModel.joinInfo.height, viewModel.joinInfo.weight)
+        }
+        dialog.show(childFragmentManager, dialog.tag)
+    }
+
+    private fun checkEmptyValue() : Boolean{
+        return binding.let {
+            if(this@AdditionalInfoFragment.gedner != -1 && it.tvBodyState.text.isNotEmpty() && it.editBirth.text.isNotEmpty()){
+                viewModel.joinInfo.age = it.editBirth.text.toString().toInt()
+                viewModel.joinInfo.gender = gedner
+                true
+            }else{
+                false
+            }
+        }
+    }
+
+    private fun showSignUpFailedDialog(){
+        val dialog = DefaultAlertDialog(
+            alertModel = AlertModel(title = "알림 메시지", content = "빈칸을 모두 채워주세요", buttonText = "확인")
+        )
+        dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        with(viewModel.joinInfo){
+            height = 0f
+            weight = 0f
+            gender = -1
+        }
     }
 }
