@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemFriendListBinding
 import com.d204.rumeet.ui.friend_list.FriendListClickListener
-import com.d204.rumeet.ui.friend_list.model.FriendInfoModel
+import com.d204.rumeet.ui.friend_list.model.FriendListModel
 
 class FriendListAdapter(
     private val friendListClickListener: FriendListClickListener
-) : ListAdapter<FriendInfoModel, FriendListAdapter.FriendListViewHolder>(FriendListDiffUtil) {
+) : ListAdapter<FriendListModel, FriendListAdapter.FriendListViewHolder>(FriendListDiffUtil) {
 
     class FriendListViewHolder(private val binding : ItemFriendListBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(data : FriendInfoModel){
+        fun bind(data : FriendListModel){
             binding.friend = data
             binding.executePendingBindings()
         }
@@ -38,14 +38,14 @@ class FriendListAdapter(
         currentList.addAll(list)
     }
 
-    private object FriendListDiffUtil : DiffUtil.ItemCallback<FriendInfoModel>(){
-        override fun areItemsTheSame(oldItem: FriendInfoModel, newItem: FriendInfoModel): Boolean {
+    private object FriendListDiffUtil : DiffUtil.ItemCallback<FriendListModel>(){
+        override fun areItemsTheSame(oldItem: FriendListModel, newItem: FriendListModel): Boolean {
             return oldItem.userId == newItem.userId
         }
 
         override fun areContentsTheSame(
-            oldItem: FriendInfoModel,
-            newItem: FriendInfoModel
+            oldItem: FriendListModel,
+            newItem: FriendListModel
         ): Boolean {
             return oldItem == newItem
         }

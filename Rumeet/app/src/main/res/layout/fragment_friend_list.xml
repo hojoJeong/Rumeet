@@ -9,172 +9,202 @@
             type="com.d204.rumeet.ui.friend_list.FriendListViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/edit_search_friend"
-            style="@style/base_font_medium_14_nobel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_midnight_express_transparent_round8_stroke1"
-            android:drawableStart="@drawable/ic_search"
-            android:drawablePadding="8dp"
-            android:hint="@string/content_search_friend_hint"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ctly_all_friend"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginStart="@dimen/base_horizontal_margin"
-            android:layout_marginTop="@dimen/base_horizontal_margin"
-            android:background="@drawable/bg_rect_transparent_kelly_green_round8_stroke0"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="6dp"
-            app:layout_constraintEnd_toStartOf="@id/ctly_recently_run"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_search_friend"
-            app:onSingleClick="@{() -> vm.requestFriendList()}">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/iv_all_friend_logo"
-                android:layout_width="30dp"
+            <EditText
+                android:id="@+id/edit_search_friend"
+                style="@style/base_font_medium_14_black"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:src="@drawable/ic_all_friend"
+                android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_midnight_express_transparent_round8_stroke1"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="8dp"
+                android:hint="@string/content_search_friend_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp"
+                android:textColorHint="@color/nobel"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_all_friend_content"
-                style="@style/base_font_medium_12_white"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ctly_all_friend"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ctly_recently_run"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="@dimen/base_horizontal_margin"
-            android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="6dp"
-            app:layout_constraintEnd_toStartOf="@id/ctly_together_run"
-            app:layout_constraintStart_toEndOf="@id/ctly_all_friend"
-            app:layout_constraintTop_toBottomOf="@id/edit_search_friend"
-            app:onSingleClick="@{() -> vm.sortRecentlyRunFriend()}">
-
-            <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:layout_margin="4dp"
-                android:src="@drawable/ic_toolbar_logo"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginStart="@dimen/base_horizontal_margin"
+                android:layout_marginTop="@dimen/base_horizontal_margin"
+                android:background="@drawable/bg_rect_transparent_kelly_green_round8_stroke0"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="6dp"
+                app:layout_constraintEnd_toStartOf="@id/ctly_recently_run"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/edit_search_friend"
+                app:onSingleClick="@{() -> vm.requestFriendList()}">
 
-            <TextView
-                android:id="@+id/tv_content"
-                style="@style/base_font_medium_10_white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/content_recently_run_friend"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:id="@+id/iv_all_friend_logo"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_all_friend"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_all_friend_content"
+                    style="@style/base_font_medium_12_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_all_friend_logo"
+                    app:layout_constraintVertical_bias="1.0" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ctly_together_run"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="@dimen/base_horizontal_margin"
-            android:layout_marginEnd="@dimen/base_horizontal_margin"
-            android:background="@drawable/bg_rect_transparent_selective_yellow_round8_stroke0"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="6dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ctly_recently_run"
-            app:layout_constraintTop_toBottomOf="@id/edit_search_friend"
-            app:onSingleClick="@{() -> vm.sortRunTogetherFriend()}">
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/iv_together_run_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:src="@drawable/ic_together_run"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ctly_recently_run"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="@dimen/base_horizontal_margin"
+                android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ctly_all_friend"
+                app:layout_constraintEnd_toStartOf="@id/ctly_together_run"
+                app:layout_constraintStart_toEndOf="@id/ctly_all_friend"
+                app:layout_constraintTop_toBottomOf="@id/edit_search_friend"
+                app:onSingleClick="@{() -> vm.sortRecentlyRunFriend()}">
+
+                <ImageView
+                    android:id="@+id/iv_recently_run_logo"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_toolbar_logo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_content"
+                    style="@style/base_font_medium_10_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@string/content_recently_run_friend"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_recently_run_logo"
+                    app:layout_constraintVertical_bias="1.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ctly_together_run"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="@dimen/base_horizontal_margin"
+                android:layout_marginEnd="@dimen/base_horizontal_margin"
+                android:background="@drawable/bg_rect_transparent_selective_yellow_round8_stroke0"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="6dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ctly_recently_run"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ctly_recently_run"
+                app:layout_constraintTop_toBottomOf="@id/edit_search_friend"
+                app:onSingleClick="@{() -> vm.sortRunTogetherFriend()}">
+
+                <ImageView
+                    android:id="@+id/iv_together_run_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_together_run"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_together_run_content"
+                    style="@style/base_font_medium_10_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@string/content_run_together_friend"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_together_run_logo"
+                    app:layout_constraintVertical_bias="1.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/div_friend"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="@dimen/base_horizontal_margin"
+                android:background="@color/light_grey"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/ctly_all_friend" />
 
             <TextView
-                android:id="@+id/tv_together_run_content"
-                style="@style/base_font_medium_10_white"
+                android:id="@+id/tv_list_title"
+                style="@style/base_font_bold_20_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="@string/content_run_together_friend"
+                android:layout_marginStart="@dimen/base_horizontal_margin"
+                android:layout_marginTop="@dimen/base_horizontal_margin"
+                android:text="@string/title_friend_list"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/div_friend" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_friend_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/base_horizontal_margin"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                app:friends="@{vm.friendList}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_list_title"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <include
+                android:id="@+id/ly_no_result"
+                layout="@layout/content_no_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_list_title"
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/div_friend"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginTop="@dimen/base_horizontal_margin"
-            android:background="@color/light_grey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ctly_all_friend" />
+    </androidx.core.widget.NestedScrollView>
 
-        <TextView
-            android:id="@+id/tv_list_title"
-            style="@style/base_font_bold_20_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/base_horizontal_margin"
-            android:layout_marginTop="@dimen/base_horizontal_margin"
-            android:text="@string/title_friend_list"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/div_friend" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_friend_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/base_horizontal_margin"
-            android:orientation="vertical"
-            app:friends="@{vm.friendList}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_list_title"
-            app:layout_constraintVertical_bias="0.0" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

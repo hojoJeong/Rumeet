@@ -1,5 +1,6 @@
 package com.d204.rumeet.data.repository
 
+import android.util.Log
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.FriendApiService
 import com.d204.rumeet.data.remote.api.handleApi
@@ -13,16 +14,13 @@ import javax.inject.Inject
 
 internal class FriendRepositoryImpl @Inject constructor(
     private val userDataStorePreferences: UserDataStorePreferences,
-    private val friendApiService : FriendApiService
-)  : FriendRepository {
+    private val friendApiService: FriendApiService
+) : FriendRepository {
 
     override suspend fun getUserFriendList(): NetworkResult<List<FriendModel>> {
         return handleApi { friendApiService.getFriendList(userDataStorePreferences.getUserId()) }
             .toDomainResult<List<FriendResponseDto>, List<FriendModel>> { response ->
-                response
-                    .map {
-                        it.toDomainModel()
-                    }
+                response.map { it.toDomainModel() }
             }
     }
 

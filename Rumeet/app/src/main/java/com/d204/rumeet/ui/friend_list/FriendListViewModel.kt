@@ -4,10 +4,9 @@ import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.friend.GetFriendInfoUseCase
 import com.d204.rumeet.domain.usecase.friend.GetFriendListUseCase
-import com.d204.rumeet.domain.usecase.user.SearchUsersUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
-import com.d204.rumeet.ui.friend_list.model.FriendInfoModel
+import com.d204.rumeet.ui.friend_list.model.FriendListModel
 import com.d204.rumeet.ui.friend_list.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -23,15 +22,16 @@ class FriendListViewModel @Inject constructor(
     private val _friendListAction: MutableSharedFlow<FriendListAction> = MutableSharedFlow()
     val friendListAction: SharedFlow<FriendListAction> get() = _friendListAction.asSharedFlow()
 
-    private val _friendList: MutableStateFlow<UiState<List<FriendInfoModel>>> =
+    private val _friendList: MutableStateFlow<UiState<List<FriendListModel>>> =
         MutableStateFlow(UiState.Loading)
-    val friendList: StateFlow<UiState<List<FriendInfoModel>>> get() = _friendList.asStateFlow()
+    val friendList: StateFlow<UiState<List<FriendListModel>>> get() = _friendList.asStateFlow()
 
     fun requestFriendList() {
         baseViewModelScope.launch {
             showLoading()
             getFriendListUseCase()
                 .onSuccess { response ->
+                    _friendListAction.emit(FriendListAction.SuccessFriendList(response.size))
                     _friendList.value = UiState.Success(response.map { it.toUiModel() })
                 }
                 .onError { e -> catchError(e) }
@@ -42,7 +42,7 @@ class FriendListViewModel @Inject constructor(
     fun getFriendInfo(userId: Int) {
         baseViewModelScope.launch {
             getFriendInfoUseCase(userId)
-                .onSuccess { _friendListAction.emit(FriendListAction.ShowFriendInfoDialog(it.toUiModel())) }
+                .onSuccess { _friendListAction.emit(FriendListAction.SuccessFriendInfo(it.toUiModel())) }
                 .onError { e -> catchError(e) }
         }
     }
