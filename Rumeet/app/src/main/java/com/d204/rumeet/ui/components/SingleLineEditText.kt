@@ -74,7 +74,7 @@ class SingleLineEditText @JvmOverloads constructor(
     }
 
     private fun checkNickNameValidate(): Boolean {
-        return if (binding.editInput.text.length > 12) {
+        return if (binding.editInput.text.length > 10){
             setStateMessage(context.getString(R.string.content_nickname_size_error), false)
             false
         } else if (binding.editInput.text.length < 2) {

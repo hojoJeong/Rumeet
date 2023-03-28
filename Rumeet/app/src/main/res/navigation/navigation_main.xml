@@ -134,8 +134,17 @@
 
         <fragment
             android:id="@+id/friendListFragment"
-            android:name="com.d204.rumeet.ui.friend_list.FriendListFragment"
-            android:label="FriendListFragment"/>
+            android:name="com.d204.rumeet.ui.friend.list.FriendListFragment"
+            android:label="FriendListFragment">
+            <action
+                android:id="@+id/action_friendListFragment_to_addFriendFragment"
+                app:destination="@id/addFriendFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/addFriendFragment"
+            android:name="com.d204.rumeet.ui.friend.add.AddFriendFragment"
+            android:label="AddFriendFragment" />
 
     </navigation>
 

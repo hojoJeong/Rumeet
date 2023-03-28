@@ -36,4 +36,7 @@ internal class UserRepositoryImpl @Inject constructor(
             .toDomainResult<List<UserResponseDto>, List<UserModel>> { response -> response.map { it.toDomainModel() } }
     }
 
+    override suspend fun getUserId(): Int {
+        return userDataStorePreferences.getUserId()
+    }
 }

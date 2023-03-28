@@ -1,4 +1,4 @@
-package com.d204.rumeet.ui.friend_list.adapter
+package com.d204.rumeet.ui.friend.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemFriendListBinding
-import com.d204.rumeet.ui.friend_list.FriendListClickListener
-import com.d204.rumeet.ui.friend_list.model.FriendListModel
+import com.d204.rumeet.ui.friend.list.FriendListClickListener
+import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
 
 class FriendListAdapter(
     private val friendListClickListener: FriendListClickListener
-) : ListAdapter<FriendListModel, FriendListAdapter.FriendListViewHolder>(FriendListDiffUtil) {
+) : ListAdapter<FriendListUiModel, FriendListAdapter.FriendListViewHolder>(FriendListDiffUtil) {
 
     class FriendListViewHolder(private val binding : ItemFriendListBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(data : FriendListModel){
+        fun bind(data : FriendListUiModel){
             binding.friend = data
             binding.executePendingBindings()
         }
@@ -32,20 +32,14 @@ class FriendListAdapter(
         holder.bind(getItem(position))
     }
 
-    fun filterNickName(nickname : String){
-        val list = currentList.filter { it.userNickname == nickname }.toList()
-        currentList.clear()
-        currentList.addAll(list)
-    }
-
-    private object FriendListDiffUtil : DiffUtil.ItemCallback<FriendListModel>(){
-        override fun areItemsTheSame(oldItem: FriendListModel, newItem: FriendListModel): Boolean {
+    private object FriendListDiffUtil : DiffUtil.ItemCallback<FriendListUiModel>(){
+        override fun areItemsTheSame(oldItem: FriendListUiModel, newItem: FriendListUiModel): Boolean {
             return oldItem.userId == newItem.userId
         }
 
         override fun areContentsTheSame(
-            oldItem: FriendListModel,
-            newItem: FriendListModel
+            oldItem: FriendListUiModel,
+            newItem: FriendListUiModel
         ): Boolean {
             return oldItem == newItem
         }

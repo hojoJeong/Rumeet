@@ -20,31 +20,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/btn_chatting"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            style="@style/base_font_medium_16_white"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_horizontal_margin"
             android:layout_marginTop="32dp"
-            android:background="@drawable/bg_rect_navyblue_tranparent_round8_stroke1"
-            android:padding="10dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="@dimen/base_horizontal_margin"
+            android:background="@drawable/bg_rect_transparent_light_grey_round8_stroke0"
+            android:text="취소"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/ic_friend_chatting"
-            app:layout_constraintEnd_toStartOf="@id/btn_okay"
+            app:layout_constraintEnd_toStartOf="@id/btn_request_friend"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content_user_info" />
 
-        <com.d204.rumeet.ui.components.SingleButton
-            android:id="@+id/btn_okay"
-            android:layout_marginStart="12dp"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_request_friend"
+            style="@style/base_font_medium_16_white"
             android:layout_width="0dp"
-            android:layout_marginEnd="@dimen/base_horizontal_margin"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/btn_chatting"
+            android:layout_marginEnd="@dimen/base_horizontal_margin"
+            android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
+            android:text="친구 요청"
+            app:layout_constraintBottom_toBottomOf="@id/btn_cancel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_chatting"
-            app:layout_constraintTop_toTopOf="@id/btn_chatting" />
+            app:layout_constraintStart_toEndOf="@id/btn_cancel"
+            app:layout_constraintTop_toTopOf="@id/btn_cancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

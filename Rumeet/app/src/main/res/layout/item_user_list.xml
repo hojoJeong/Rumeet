@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
-            name="friend"
-            type="com.d204.rumeet.ui.friend.list.model.FriendListUiModel" />
+            name="users"
+            type="com.d204.rumeet.ui.friend.add.model.UserListUiModel" />
 
         <variable
             name="clickListener"
-            type="com.d204.rumeet.ui.friend.list.FriendListClickListener" />
+            type="com.d204.rumeet.ui.friend.add.AddFriendListClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:onSingleClick="@{() -> clickListener.onFriendListClick(friend.userId)}">
+        app:onSingleClick="@{() -> clickListener.searchUserClick(users)}">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_profile_img"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:src="@drawable/ic_launcher_background"
-            app:imgByUrl="@{friend.userProfileImg}"
+            app:imgByUrl="@{users.userProfileImg}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +43,7 @@
                 style="@style/base_font_medium_12_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{friend.userNickname}" />
+                android:text="@{users.userNickname}" />
 
             <TextView
                 android:id="@+id/tv_pace"
@@ -53,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="@{`평균 페이스 ` +  friend.averagePace}" />
+                android:text="@{`평균 페이스 ` +  users.averagePace}" />
 
         </LinearLayout>
 

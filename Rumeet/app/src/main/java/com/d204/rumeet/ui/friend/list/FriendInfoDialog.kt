@@ -1,9 +1,11 @@
-package com.d204.rumeet.ui.friend_list
+package com.d204.rumeet.ui.friend.list
 
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.DialogFriendInfoBinding
 import com.d204.rumeet.ui.base.BaseDialogFragment
-import com.d204.rumeet.ui.friend_list.model.FriendListModel
+import com.d204.rumeet.ui.friend.UserDialogModel
+import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
+import com.d204.rumeet.ui.friend.toUserDialogModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -12,6 +14,7 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
         get() = R.layout.dialog_friend_info
 
     private lateinit var chattingClickListener: (Int) -> Unit
+    private lateinit var userDialogModel: UserDialogModel
 
     override fun initStartView() {
 
@@ -22,8 +25,9 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
     }
 
     override fun initAfterBinding() {
+        binding.contentUserInfo
         binding.btnChatting.setOnClickListener {
-            chattingClickListener.invoke(binding.friendBindData?.userId!!)
+            chattingClickListener.invoke(userDialogModel.id)
             dismissAllowingStateLoss()
         }
         binding.btnOkay.setOnClickListener {
@@ -35,7 +39,7 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
         chattingClickListener = event
     }
 
-    fun initFriendInfo(data : FriendListModel){
-        binding.friendBindData = data
+    fun initFriendInfo(data : FriendListUiModel){
+        userDialogModel = data.toUserDialogModel()
     }
 }

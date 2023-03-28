@@ -7,4 +7,5 @@ interface UserRepository {
     suspend fun setUserFirstRunCheck(): Boolean
     suspend fun getUserFirstRunCheck(): Boolean
     suspend fun searchUsers(nickname : String) : NetworkResult<List<UserModel>>
+    suspend fun getUserId() : Int
 }

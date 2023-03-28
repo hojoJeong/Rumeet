@@ -50,6 +50,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         })
                     }
                 }
+                R.id.addFriendFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(RumeetToolbar.ToolbarType.BACK_TEXT, "친구 추가", leftClickListener = {
+                            navController.popBackStack()
+                        })
+                    }
+                }
             }
         }
     }

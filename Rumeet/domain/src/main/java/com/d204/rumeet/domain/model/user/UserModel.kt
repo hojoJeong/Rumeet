@@ -8,5 +8,6 @@ data class UserModel(
     val age : Int,
     val gender : Int,
     val profileImg : String,
+    val createdAt : Long,
     val state : Int
 )

@@ -9,8 +9,8 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface UserApiService {
-    @GET("/users/search")
-    fun searchUsers(
+    @GET("users/search")
+    suspend fun searchUsers(
         @Query("nickname") nickname : String
     ) : BaseResponse<List<UserResponseDto?>>
 }
