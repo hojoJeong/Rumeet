@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     override val layoutResourceId: Int = R.layout.fragment_my_page
-    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage_graph){defaultViewModelProviderFactory}
+    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage){defaultViewModelProviderFactory}
 
     override fun initStartView() {
         with(binding){

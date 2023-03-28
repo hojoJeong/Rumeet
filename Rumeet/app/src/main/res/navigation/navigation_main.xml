@@ -30,7 +30,7 @@
         android:label="RunningFragment" />
 
     <navigation
-        android:id="@+id/navigation_mypage_graph"
+        android:id="@+id/navigation_mypage"
         app:startDestination="@id/myPageFragment">
         <fragment
             android:id="@+id/myPageFragment"
