@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RequestMapping("/badge")
 @RequiredArgsConstructor
@@ -30,10 +32,19 @@ public class BadgeController {
 
     @Operation(summary = "뱃지 추가")
     @PostMapping("/add")
-    public ResponseEntity<?> addBadge(@RequestParam("badgeId") int badgeId, @RequestParam("userId") int userId){
-        badgeService.addBadge(badgeId, userId);
+    public ResponseEntity<?> addBadge(@RequestParam("userId") int userId, @RequestParam("badgeId") int badgeId){
+        badgeService.addBadge(userId, badgeId);
         RespData<Void> data = new RespData<>();
         data.setMsg("뱃지 추가 완료");
+        return data.builder();
+    }
+
+    @Operation(summary = "취득한 뱃지 조회 (타입별로)")
+    @GetMapping("/{userId}/{type}")
+    public ResponseEntity<?> getAllBadgesByUserId(@PathVariable("userId") int userId, @PathVariable("type") int type){
+        List<BadgeDto> badges = badgeService.getAllBadgesByUserId(userId, type);
+        RespData<List> data = new RespData<>();
+        data.setData(badges);
         return data.builder();
     }
 }

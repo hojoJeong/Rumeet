@@ -30,14 +30,15 @@ public class BadgeServiceImpl implements BadgeService{
 
 
     @Override
-    public void addBadge(int badgeId, int userId) {
+    public void addBadge(int userId, int badgeId) {
         long date = System.currentTimeMillis();
-        MyBadgeDto myBadge = new MyBadgeDto(badgeId, userId, date);
+        MyBadgeDto myBadge = new MyBadgeDto(userId, badgeId, date);
         badgeMapper.addBadge(myBadge);
     }
 
     @Override
-    public List<BadgeDto> getAllBadgesByUserId(int userId) {
-        return null;
+    public List<BadgeDto> getAllBadgesByUserId(int userId, int type) {
+        List<BadgeDto> badges = badgeMapper.getAllBadgesByUserId(userId, type);
+        return badges;
     }
 }

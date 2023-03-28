@@ -12,4 +12,6 @@ public class BadgeDto {
     String name;
     String description;
     int type;
+    String badge_img;
+    String badge_img_black;
 }
