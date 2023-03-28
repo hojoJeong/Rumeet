@@ -4,7 +4,15 @@ from pyspark.sql.functions import col
 from pyspark.sql.functions import mean
 
 app = FastAPI()
-
+data_df = None
+pace1_avg = None
+df_1km = None
+df_2km = None
+df_3km = None
+df_5km = None
+pace2_avg = None
+pace3_avg = None
+pace5_avg = None
 @app.get("/load/{mode}/{id}")
 async def rootd(mode, id):
         global data_df, pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
