@@ -1,17 +1,32 @@
 package com.d204.rumeet.data.remote.dto.response.user
 
+import com.google.gson.annotations.SerializedName
+
 data class UserInfoResponse(
+    @SerializedName("age")
     val age: Int,
-    val date: Any,
+    @SerializedName("date")
+    val date: Long,
+    @SerializedName("email")
     val email: String,
+    @SerializedName("gender")
     val gender: Int,
+    @SerializedName("height")
     val height: Double,
+    @SerializedName("id")
     val id: Int,
-    val nickname: String ="닉네임",
-    val oauth: Any,
+    @SerializedName("nickname")
+    val nickname: String,
+    @SerializedName("oauth")
+    val oauth: String,
+    @SerializedName("password")
     val password: String,
-    val profileImg: Any?,
-    val refreshToken: Any,
+    @SerializedName("profileImg")
+    val profileImg: String?,
+    @SerializedName("refreshToken")
+    val refreshToken: String,
+    @SerializedName("state")
     val state: Int,
+    @SerializedName("weight")
     val weight: Double
 )

@@ -113,7 +113,7 @@ class MyPageViewModel @Inject constructor(
     fun getUserInfo() {
         baseViewModelScope.launch {
             showLoading()
-            Log.d(TAG, "getUserInfo: ${userId.value.successOrNull()}")
+            Log.d(TAG, "getUserInfo userID: ${userId.value.successOrNull()}")
             getUserInfoUseCase(userId.value.successOrNull() ?: -1)
                 .onSuccess {
                     dismissLoading()

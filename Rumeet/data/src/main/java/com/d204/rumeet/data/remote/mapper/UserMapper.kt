@@ -13,7 +13,7 @@ internal fun UserInfoResponse.toDomainModel() = UserInfoDomainModel(
     nickname,
     oauth,
     password,
-    profileImg?:"",
+    profileImg,
     refreshToken,
     state,
     weight
