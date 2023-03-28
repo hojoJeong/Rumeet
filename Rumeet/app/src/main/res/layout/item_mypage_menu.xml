@@ -3,7 +3,7 @@
     <data>
         <variable
             name="vm"
-            type="com.d204.rumeet.ui.mypage.MypageViewModel" />
+            type="com.d204.rumeet.ui.mypage.MyPageEventHandler" />
         <variable
             name="title"
             type="String" />
@@ -18,7 +18,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:background="@drawable/bg_rect_navyblue_white_round20_stroke1"
-        android:onClick="@{() -> vm.setSettingNavigate(title)}">
+        android:onClick="@{() -> vm.onClick(title)}">
 
         <ImageView
             android:id="@+id/iv_item_mypage_menu"

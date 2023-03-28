@@ -1,5 +1,7 @@
 package com.d204.rumeet.ui.join.addtional_info
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController

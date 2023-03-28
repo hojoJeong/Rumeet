@@ -30,7 +30,7 @@
         android:label="RunningFragment" />
 
     <navigation
-        android:id="@+id/navigation_mypage"
+        android:id="@+id/navigation_mypage_graph"
         app:startDestination="@id/myPageFragment">
         <fragment
             android:id="@+id/myPageFragment"
@@ -114,10 +114,6 @@
                 app:nullable="false"
                 android:defaultValue="false"
                 />
-            <argument
-                android:name="email"
-                app:argType="string"
-                app:nullable="false"/>
         </fragment>
         <fragment
             android:id="@+id/resetPasswordFragment2"

@@ -1,16 +1,10 @@
 package com.d204.rumeet.ui.mypage
 
-import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,42 +16,42 @@ import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.DefaultAlertDialog
 import com.d204.rumeet.ui.mypage.adapter.MyPageMenuAdapter
 import com.d204.rumeet.ui.mypage.model.MyPageMenuUiModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-class MyPageFragment : BaseFragment<FragmentMyPageBinding, BaseViewModel>() {
-    private val myPageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_my_page
-    override val viewModel: BaseViewModel
-        get() = myPageViewModel
+@AndroidEntryPoint
+class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
+    override val layoutResourceId: Int = R.layout.fragment_my_page
+    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage_graph){defaultViewModelProviderFactory}
 
     override fun initStartView() {
+        with(binding){
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
+        exception = viewModel.errorEvent
         initText()
         initMenu()
     }
 
     override fun initDataBinding() {
-        binding.vm = myPageViewModel
-        lifecycleScope.launchWhenResumed {
-            myPageViewModel.myPageNavigationEvent.collectLatest { action ->
-                when (action) {
-                    MyPageAction.BadgeList -> navigate(MyPageFragmentDirections.actionMyPageFragmentToBadgeListFragment())
-                    MyPageAction.EditProfile -> navigate(MyPageFragmentDirections.actionMyPageFragmentToJoinNicknameFragment2(1,"", true))
-                    MyPageAction.FriendList -> navigate(MyPageFragmentDirections.actionMyPageFragmentToFriendListFragment())
-                    MyPageAction.LogOut -> showLogoutDialog()
-                    MyPageAction.MatchingHistory -> navigate(MyPageFragmentDirections.actionMyPageFragmentToMatchingHistoryFragment())
-                    MyPageAction.RunningRecord -> navigate(MyPageFragmentDirections.actionMyPageFragmentToRunningRecordFragment())
-                    MyPageAction.Setting -> navigate(MyPageFragmentDirections.actionMyPageFragmentToSettingFragment())
+        initMyPageAction()
+        viewModel.getUserId()
+        lifecycleScope.launchWhenStarted {
+            launch {
+                viewModel.userId.collectLatest {
+                    viewModel.getUserInfo()
                 }
             }
         }
     }
 
     override fun initAfterBinding() {
+
     }
 
     private fun initText() {
-        //TODO(사용자 닉네임 임시)
         val userName = "배달전문 박정은"
         val message = getString(R.string.content_mypage_message_top)
         val messageBuilder = SpannableStringBuilder(message).apply {
@@ -81,7 +75,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, BaseViewModel>() {
 
     private fun initMenu() {
         val menuTitleList = resources.getStringArray(R.array.title_mypage_menu).toList()
-        myPageViewModel.setMyPageMunuTitleList(menuTitleList)
+        viewModel.setMyPageMunuTitleList(menuTitleList)
 
         val menuImgList = listOf(
             R.drawable.ic_running_record,
@@ -97,15 +91,37 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, BaseViewModel>() {
             MyPageMenuUiModel(title, menuImgList[index])
         }
 
-        val myPageMenuAdapter = MyPageMenuAdapter().apply {
+        val myPageMenuAdapter = MyPageMenuAdapter(viewModel).apply {
             submitList(menuList)
-            viewModel = myPageViewModel
         }
         with(binding.rvMypageMenu) {
             layoutManager =
                 GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
             adapter = myPageMenuAdapter
             bringToFront()
+        }
+    }
+
+    private fun initMyPageAction() {
+        binding.vm = viewModel
+        lifecycleScope.launchWhenResumed {
+            viewModel.myPageNavigationEvent.collectLatest { action ->
+                when (action) {
+                    MyPageAction.BadgeList -> navigate(MyPageFragmentDirections.actionMyPageFragmentToBadgeListFragment())
+                    MyPageAction.EditProfile -> navigate(
+                        MyPageFragmentDirections.actionMyPageFragmentToJoinNicknameFragment2(
+                            1,
+                            "",
+                            true
+                        )
+                    )
+                    MyPageAction.FriendList -> navigate(MyPageFragmentDirections.actionMyPageFragmentToFriendListFragment())
+                    MyPageAction.LogOut -> showLogoutDialog()
+                    MyPageAction.MatchingHistory -> navigate(MyPageFragmentDirections.actionMyPageFragmentToMatchingHistoryFragment())
+                    MyPageAction.RunningRecord -> navigate(MyPageFragmentDirections.actionMyPageFragmentToRunningRecordFragment())
+                    MyPageAction.Setting -> navigate(MyPageFragmentDirections.actionMyPageFragmentToSettingFragment())
+                }
+            }
         }
     }
 

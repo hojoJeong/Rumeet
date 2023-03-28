@@ -7,13 +7,14 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentSettingUserInfoBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
-import com.d204.rumeet.ui.mypage.MypageViewModel
+import com.d204.rumeet.ui.mypage.MyPageViewModel
 import com.d204.rumeet.ui.mypage.adapter.SettingItemListAdapter
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-
+@AndroidEntryPoint
 class SettingUserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, BaseViewModel>() {
-    private val myPageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
+    private val myPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage)
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_setting_user_info

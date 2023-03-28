@@ -9,9 +9,11 @@ import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.mypage.adapter.BadgeContentListAdapter
 import com.d204.rumeet.ui.mypage.model.BadgeDetailUiModel
 import com.d204.rumeet.ui.mypage.model.BadgeContentListUiModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, BaseViewModel>() {
-    private val myPageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
+    private val myPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage)
     override val layoutResourceId: Int
         get() = R.layout.fragment_badge_list
     override val viewModel: BaseViewModel

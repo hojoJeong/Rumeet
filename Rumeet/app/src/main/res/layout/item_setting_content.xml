@@ -13,7 +13,7 @@
 
         <variable
             name="vm"
-            type="com.d204.rumeet.ui.mypage.MypageViewModel" />
+            type="com.d204.rumeet.ui.mypage.MyPageViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

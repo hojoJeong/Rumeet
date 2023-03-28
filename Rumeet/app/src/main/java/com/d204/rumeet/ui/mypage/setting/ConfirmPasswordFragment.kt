@@ -9,10 +9,12 @@ import com.d204.rumeet.databinding.FragmentConfirmPasswordBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.components.SingleLineEditText
-import com.d204.rumeet.ui.mypage.MypageViewModel
+import com.d204.rumeet.ui.mypage.MyPageViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ConfirmPasswordFragment : BaseFragment<FragmentConfirmPasswordBinding, BaseViewModel>() {
-    private val mypageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
+    private val mypageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage)
     private val args: ConfirmPasswordFragmentArgs by navArgs()
 
     override val layoutResourceId: Int
@@ -32,7 +34,7 @@ class ConfirmPasswordFragment : BaseFragment<FragmentConfirmPasswordBinding, Bas
 
             when(args.destinationFragment){
                 "resetDetailUserInfo" -> {
-                    navigate(ConfirmPasswordFragmentDirections.actionConfirmPasswordFragmentToAdditionalInfoFragment2("", true))
+                    navigate(ConfirmPasswordFragmentDirections.actionConfirmPasswordFragmentToAdditionalInfoFragment2(true))
                 }
                 "resetPassword" -> {
                     navigate(ConfirmPasswordFragmentDirections.actionConfirmPasswordFragmentToResetPasswordFragment2("", true))

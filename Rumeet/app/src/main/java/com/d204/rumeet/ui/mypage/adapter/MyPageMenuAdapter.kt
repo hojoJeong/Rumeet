@@ -8,19 +8,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemMypageMenuBinding
-import com.d204.rumeet.ui.mypage.MypageViewModel
+import com.d204.rumeet.ui.mypage.MyPageEventHandler
+import com.d204.rumeet.ui.mypage.MyPageViewModel
 import com.d204.rumeet.ui.mypage.model.MyPageMenuUiModel
+import kotlinx.coroutines.NonDisposableHandle.parent
 
-class MyPageMenuAdapter :
-    ListAdapter<MyPageMenuUiModel, MyPageMenuAdapter.MyPageMenuItemHolder>(MyPageDiffUtil) {
+class MyPageMenuAdapter(
+    private val handler: MyPageEventHandler
+) : ListAdapter<MyPageMenuUiModel, MyPageMenuAdapter.MyPageMenuItemHolder>(MyPageDiffUtil) {
 
-    lateinit var viewModel: MypageViewModel
     inner class MyPageMenuItemHolder(private val binding: ItemMypageMenuBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MyPageMenuUiModel) {
             binding.title = item.title
             binding.img = item.img
-            binding.vm = viewModel
         }
     }
 
@@ -40,12 +41,14 @@ class MyPageMenuAdapter :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPageMenuItemHolder =
-        MyPageMenuItemHolder(
-            DataBindingUtil.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPageMenuItemHolder {
+        val view =
+            DataBindingUtil.inflate<ItemMypageMenuBinding>(
                 LayoutInflater.from(parent.context), R.layout.item_mypage_menu, parent, false
             )
-        )
+        view.vm = handler
+        return MyPageMenuItemHolder(view)
+    }
 
     override fun onBindViewHolder(holder: MyPageMenuItemHolder, position: Int) {
         holder.bind(getItem(position))

@@ -9,14 +9,15 @@ import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.DefaultAlertDialog
-import com.d204.rumeet.ui.mypage.MypageViewModel
+import com.d204.rumeet.ui.mypage.MyPageViewModel
 import com.d204.rumeet.ui.mypage.adapter.SettingItemListAdapter
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
-
+@AndroidEntryPoint
 class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
-    private val myPageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
+    private val myPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage)
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_setting
