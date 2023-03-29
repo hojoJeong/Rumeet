@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.apache.ibatis.binding.BindingException;
+import org.springframework.amqp.core.*;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService{
     private final OSUpload osUpload;
     private final JavaMailSender emailSender;
     private final SHA256 sha256;
+    private final AmqpAdmin amqpAdmin;
     private final OkhttpUtils okhttpUtils;
     final String bucketName = "rumeet";
 
@@ -123,6 +125,14 @@ public class UserServiceImpl implements UserService{
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
         kafkaService.createTopic("user." + user.getId());
+
+        StringBuilder sb = new StringBuilder();
+        Queue queue = QueueBuilder.durable("user.queue." + user.getId()).build();
+        amqpAdmin.declareQueue(queue);
+        Binding binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("user.exchange"))
+                .with(sb.toString());
+        amqpAdmin.declareBinding(binding);
     }
     @Override
     public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {
@@ -141,6 +151,14 @@ public class UserServiceImpl implements UserService{
         user.setDate(System.currentTimeMillis());
         userMapper.joinKakaoUser(user);
         kafkaService.createTopic("user." + user.getId());
+
+        StringBuilder sb = new StringBuilder();
+        Queue queue = QueueBuilder.durable("user.queue." + user.getId()).build();
+        amqpAdmin.declareQueue(queue);
+        Binding binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("user.exchange"))
+                .with(sb.toString());
+        amqpAdmin.declareBinding(binding);
     }
 
     @Override
