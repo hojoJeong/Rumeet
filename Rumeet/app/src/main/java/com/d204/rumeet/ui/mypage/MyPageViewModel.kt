@@ -12,6 +12,7 @@ import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.mypage.model.BadgeContentListUiModel
 import com.d204.rumeet.ui.mypage.model.UserInfoUiModel
+import com.d204.rumeet.ui.mypage.model.toUiModel
 import com.d204.rumeet.ui.mypage.setting.SettingAction
 import com.d204.rumeet.ui.mypage.setting.UserInfoAction
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase
-) : BaseViewModel(), MyPageEventHandler{
+) : BaseViewModel(), MyPageEventHandler {
     private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
     val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
 
@@ -75,9 +76,9 @@ class MyPageViewModel @Inject constructor(
                 settingOptionList[4] -> _settingNavigationEvent.emit(SettingAction.ServiceTerms)
                 settingOptionList[5] -> _settingNavigationEvent.emit(SettingAction.LogOut)
 
-                userInfoOptionList[6] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetDetailInfo)
-                userInfoOptionList[7] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetPassword)
-                userInfoOptionList[8] -> _userInfoNavigationEvent.emit(UserInfoAction.Withdrawal)
+                userInfoOptionList[5] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetDetailInfo)
+                userInfoOptionList[6] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetPassword)
+                userInfoOptionList[7] -> _userInfoNavigationEvent.emit(UserInfoAction.Withdrawal)
             }
         }
     }
@@ -113,13 +114,13 @@ class MyPageViewModel @Inject constructor(
     fun getUserInfo() {
         baseViewModelScope.launch {
             showLoading()
-            Log.d(TAG, "getUserInfo userID: ${userId.value.successOrNull()}")
             getUserInfoUseCase(userId.value.successOrNull() ?: -1)
                 .onSuccess {
                     dismissLoading()
-                    Log.d(TAG, "getUserInfo: $it")
+                    _userInfo.value = UiState.Success(it.toUiModel())
                 }
                 .onError {
+                    dismissLoading()
                     catchError(it)
                 }
         }

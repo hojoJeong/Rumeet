@@ -10,6 +10,8 @@ import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.mypage.MyPageViewModel
 import com.d204.rumeet.ui.mypage.adapter.SettingItemListAdapter
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
+import com.d204.rumeet.util.checkEmailValidate
+import com.d204.rumeet.util.hashingSHA256
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -41,10 +43,10 @@ class UserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, MyPageView
         val settingOptionList = userInfoOptionTitleList.mapIndexed { _, title ->
             SettingOptionUiMdel(title, "")
         }.apply {
-            this[0].content = userInfo.email
+            this[0].content = if(checkEmailValidate(userInfo.email)) userInfo.email else "소셜로그인입니다."
             this[1].content = userInfo.nickname
-            this[2].content = userInfo.age.toString()
-            this[3].content = userInfo.gender.toString()
+            this[2].content = "${userInfo.age}세"
+            this[3].content = if(userInfo.gender == 0) "남자" else "여자"
             this[4].content = "${userInfo.height}cm / ${userInfo.weight}kg"
         }
 

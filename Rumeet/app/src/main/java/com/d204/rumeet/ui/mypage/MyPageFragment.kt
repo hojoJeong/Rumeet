@@ -3,45 +3,52 @@ package com.d204.rumeet.ui.mypage
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentMyPageBinding
-import com.d204.rumeet.ui.base.AlertModel
-import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.base.BaseViewModel
-import com.d204.rumeet.ui.base.DefaultAlertDialog
+import com.d204.rumeet.ui.base.*
 import com.d204.rumeet.ui.mypage.adapter.MyPageMenuAdapter
 import com.d204.rumeet.ui.mypage.model.MyPageMenuUiModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     override val layoutResourceId: Int = R.layout.fragment_my_page
-    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage){defaultViewModelProviderFactory}
+    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage) { defaultViewModelProviderFactory }
 
     override fun initStartView() {
-        with(binding){
+        with(binding) {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
         exception = viewModel.errorEvent
-        initText()
         initMenu()
     }
 
     override fun initDataBinding() {
         initMyPageAction()
         viewModel.getUserId()
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenResumed {
             launch {
-                viewModel.userId.collectLatest {
+                viewModel.userId.collect {
                     viewModel.getUserInfo()
+                }
+            }
+            launch {
+                viewModel.userInfo.collect(){
+                    initText()
+                    initProfile()
                 }
             }
         }
@@ -51,8 +58,15 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     }
 
+    private fun initProfile() {
+        val profile =
+            viewModel.userInfo.value.successOrNull()?.profile ?: R.drawable.ic_app_main_logo
+        Glide.with(requireContext()).load(profile).override(50, 50).into(binding.ivMypageProfile)
+    }
+
     private fun initText() {
-        val userName = "배달전문 박정은"
+        val userName = viewModel.userInfo.value.successOrNull()?.nickname ?: ""
+        Log.d("TAG", "initText: $userName")
         val message = getString(R.string.content_mypage_message_top)
         val messageBuilder = SpannableStringBuilder(message).apply {
             setSpan(

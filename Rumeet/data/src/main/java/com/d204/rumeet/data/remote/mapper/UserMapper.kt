@@ -4,16 +4,15 @@ import com.d204.rumeet.data.remote.dto.response.user.UserInfoResponse
 import com.d204.rumeet.domain.model.user.UserInfoDomainModel
 
 internal fun UserInfoResponse.toDomainModel() = UserInfoDomainModel(
-    age,
-    date,
     email,
-    gender,
-    height,
-    nickname,
-    oauth,
     password,
+    nickname,
+    age,
+    gender,
     profile,
-    refreshToken,
+    height,
+    weight,
+    date,
     state,
-    weight
+    oauth
 )

@@ -1,16 +1,15 @@
 package com.d204.rumeet.domain.model.user
 
 data class UserInfoDomainModel(
-    val age: Int,
-    val date: Long,
     val email: String,
-    val gender: Int,
-    val height: Double,
+    val password: String,
     val nickname: String,
-    val oauth: String,
-    val password: String?,
+    val age: Int,
+    val gender: Int,
     val profile: String?,
-    val refreshToken: String,
+    val height: Double,
+    val weight: Double,
+    val date: Long,
     val state: Int,
-    val weight: Double
+    val oauth: String
 )
