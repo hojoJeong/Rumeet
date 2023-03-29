@@ -2,6 +2,7 @@ package com.d204.rumeet.user.controller;
 
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.CustomJwtException;
+import com.d204.rumeet.tools.DataUtil;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.user.model.dto.*;
 import com.d204.rumeet.user.model.service.UserService;
@@ -22,6 +23,7 @@ public class UserRestController {
     private final UserService userService;
     private final JwtTool jwtTool;
 
+    private final DataUtil dataUtil;
     // 유저 정보 불러오기
     @Operation(summary = "유저 정보 조회")
     @GetMapping("/{id}")
@@ -84,6 +86,12 @@ public class UserRestController {
         userService.modifyUserProfile(user, profile);
         return data.builder();
     }
+    @GetMapping("/hdfs")
+    public ResponseEntity<?> hdfs() {
+        RespData<Void> data = new RespData<>();
+        dataUtil.load();
+        return data.builder();
+    }
 
     @Operation(summary = "회원 가입")
     @PostMapping("/join")
@@ -91,6 +99,8 @@ public class UserRestController {
                                       @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {
         RespData<Void> data = new RespData<>();
         userService.joinUser(user, profile);
+
+
         return data.builder();
     }
 

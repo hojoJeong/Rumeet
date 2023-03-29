@@ -15,4 +15,5 @@ public class JoinUserDto {
     float weight;
     String profile;
     long date;
+
 }

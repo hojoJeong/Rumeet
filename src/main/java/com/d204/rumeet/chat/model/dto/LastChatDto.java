@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 public class LastChatDto {
     int roomId;
+    int userId;
     int toUserId;
     int fromUserId;
     String content;

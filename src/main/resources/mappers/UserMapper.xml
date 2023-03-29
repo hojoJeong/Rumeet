@@ -34,7 +34,13 @@
     </select>
 
     <select id="getUserById" parameterType="int" resultMap="user">
-        SELECT  FROM user_view WHERE id = #{id};
+        SELECT * FROM user_view WHERE id = #{id};
+    </select>
+
+
+
+    <select id="getSimpleUserById" parameterType="int" resultMap="simple_user">
+        SELECT id, email, nickname, age, gender, profile_img, date, state FROM user_view WHERE id = #{id};
     </select>
 
     <select id="searchUsersByNickname" parameterType="String" resultMap="simple_user">
@@ -70,12 +76,12 @@
         SELECT * FROM user WHERE (oauth like #{tokenId});
     </select>
 
-    <insert id="joinUser" parameterType="JoinUserDto">
+    <insert id="joinUser" parameterType="JoinUserDto" useGeneratedKeys="true" keyProperty="id">
         INSERT user (email, password, nickname, profile_img, gender, age, height, weight, date)
             VALUES(#{email},#{password},#{nickname},#{profile}, #{gender}, #{age},#{height},#{weight}, #{date});
     </insert>
 
-    <insert id="joinKakaoUser" parameterType="JoinKakaoUserDto">
+    <insert id="joinKakaoUser" parameterType="JoinKakaoUserDto" useGeneratedKeys="true" keyProperty="id">
         INSERT user (email, password, nickname, profile_img, gender, age, height, weight , oauth, date)
             VALUES(#{email},#{password},#{nickname},#{profile}, #{gender}, #{age},#{height},#{weight}, #{oauth} , #{date});
     </insert>

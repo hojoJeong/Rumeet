@@ -2,6 +2,7 @@ package com.d204.rumeet.user.model.service;
 
 import com.d204.rumeet.exception.DuplicateException;
 import com.d204.rumeet.exception.NoUserDataException;
+//import com.d204.rumeet.kafka.model.KafkaService;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.tools.OSUpload;
 import com.d204.rumeet.tools.OkhttpUtils;
@@ -22,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
 
@@ -37,6 +37,10 @@ public class UserServiceImpl implements UserService{
     private final SHA256 sha256;
     private final OkhttpUtils okhttpUtils;
     final String bucketName = "rumeet";
+
+//    private final KafkaService kafkaService;
+
+
 
     @Override
     public LoginUserDto doLogin(LoginDto loginDto) {
@@ -117,6 +121,10 @@ public class UserServiceImpl implements UserService{
         user.setProfile(url);
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
+        String topic = "rumeet.userlist";
+//        String message = String.valueOf(user.getId());
+//        kafkaService.sendMessage(topic,message);
+//        kafkaService.createTopic("user." + user.getId());
     }
     @Override
     public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {
@@ -167,6 +175,15 @@ public class UserServiceImpl implements UserService{
     public List<SimpleUserDto> searchUsersByNickname(String nickname) {
         List<SimpleUserDto> users = userMapper.searchUsersByNickname("%" + nickname + "%");
         return users;
+    }
+
+    @Override
+    public SimpleUserDto getSimpleUserById(int id) {
+        SimpleUserDto user = userMapper.getSimpleUserById(id);
+        if(user == null) {
+            throw new NoUserDataException();
+        }
+        return user;
     }
 
     @Override
