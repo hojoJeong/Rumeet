@@ -2,6 +2,7 @@ package com.d204.rumeet.user.controller;
 
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.CustomJwtException;
+import com.d204.rumeet.exception.ErrorEnum;
 import com.d204.rumeet.tools.DataUtil;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.user.model.dto.*;
@@ -154,6 +155,14 @@ public class UserRestController {
             data.setCode(2);
             data.setMsg("회원가입");
             data.setData(new KakaoUserJoinDto(kakaoUser.getId(), kakaoUser.getProperties().get("profile_image")));
+            return data.builder();
+        }
+        if(user.getState() == -1) {
+            RespData<LoginUserDto> data = new RespData<>();
+            data.setFlag("fail");
+            data.setCode(ErrorEnum.DELETED_USER.code);
+            data.setMsg("이미 탈퇴한 회원");
+            data.setData(null);
             return data.builder();
         }
         RespData<LoginUserDto> data = new RespData<>();
