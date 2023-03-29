@@ -28,6 +28,7 @@ public class RestGameController {
         GamePaceDto user =  kafkaService.messageBYFastApi(gameMode, userId);
         //TODO 매칭 큐를 만들어 봅시다.
 
+        //END
         kafkaService.sendMessage(topic, new Gson().toJson(user));
     }
 
