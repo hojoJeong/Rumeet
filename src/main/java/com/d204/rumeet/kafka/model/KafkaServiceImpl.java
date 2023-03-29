@@ -1,6 +1,8 @@
 package com.d204.rumeet.kafka.model;
 
 import com.d204.rumeet.data.RespData;
+import com.d204.rumeet.game.model.dto.GamePaceDto;
+import com.google.gson.Gson;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -82,21 +84,23 @@ public class KafkaServiceImpl implements KafkaService {
     }
 
     @Override
-    public ResponseEntity<?> messageBYFastApi(int mode, int userId) {
+    public GamePaceDto messageBYFastApi(int mode, int userId) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url("http://j8d204.p.ssafy.io:8000/load/" + mode + "/" + userId).get().build();
         Call call = client.newCall(request);
-
+        String responseBody= "";
         RespData<String> data = new RespData<>();
         try {
             Response response = call.execute();
-            String responseBody = response.body().string();
+            responseBody = response.body().string();
             System.out.println("responseBody = " + responseBody);
             data.setData(responseBody);
         } catch (IOException e) {
             System.out.println("e = " + e);
         }
-        return data.builder();
+        GamePaceDto user = new Gson().fromJson(responseBody, GamePaceDto.class);
+
+        return user;
     }
 
     @Override
