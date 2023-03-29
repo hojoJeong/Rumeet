@@ -5,6 +5,8 @@ import com.d204.rumeet.data.remote.dto.request.user.JoinRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.SocialJoinRequestDto
 import com.d204.rumeet.data.remote.dto.response.BaseResponse
 import okhttp3.MultipartBody
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.http.*
 
 internal interface SignApiService {
@@ -18,7 +20,7 @@ internal interface SignApiService {
     @POST("users/join")
     suspend fun join(
         @Part("user") request : JoinRequestDto,
-        @Part("profile_img") file : MultipartBody.Part?
+        @Part file : MultipartBody.Part?
     ) : BaseResponse<Unit?>
 
     @Multipart

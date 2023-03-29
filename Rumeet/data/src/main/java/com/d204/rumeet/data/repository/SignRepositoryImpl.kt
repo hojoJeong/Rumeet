@@ -6,9 +6,13 @@ import com.d204.rumeet.data.remote.api.handleApi
 import com.d204.rumeet.data.remote.dto.request.sign.ResetPasswordRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.JoinRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.SocialJoinRequestDto
+import com.d204.rumeet.data.remote.dto.response.BaseResponse
 import com.d204.rumeet.data.util.getMultipartData
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.repository.SignRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
 import kotlin.math.sign
@@ -31,7 +35,6 @@ internal class SignRepositoryImpl @Inject constructor(
         imageUri: File?
     ): NetworkResult<Unit?> {
         val multipartData = getMultipartData(imageUri)
-        Log.d("TAG", "signUpSocialLogin: ${multipartData}")
         val request = JoinRequestDto(id, password, nickname, gender, age, height, weight, System.currentTimeMillis())
         return handleApi { signApiService.join(request, multipartData) }
     }
