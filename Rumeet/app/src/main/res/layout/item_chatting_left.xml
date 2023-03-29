@@ -24,6 +24,7 @@
             android:id="@+id/iv_item_chatting_profile_other"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:visibility="invisible"
             app:civ_circle_background_color="@color/whisper"
             app:imgByUrl="@{profileImg}"
             app:layout_constraintBottom_toBottomOf="parent"

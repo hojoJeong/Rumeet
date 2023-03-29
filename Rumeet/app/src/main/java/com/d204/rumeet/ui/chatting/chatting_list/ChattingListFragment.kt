@@ -13,6 +13,7 @@ import com.d204.rumeet.databinding.FragmentChattingBinding
 import com.d204.rumeet.databinding.FragmentChattingListBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.chatting.chatting_list.adapter.ChattingListAdapter
+import com.d204.rumeet.util.AMQPManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -31,6 +32,10 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
         }
         exception = viewModel.errorEvent
         viewModel.requestChattingRoom()
+
+        if(AMQPManager.channel == null){
+            AMQPManager.initChannel()
+        }
     }
 
     override fun initDataBinding() {

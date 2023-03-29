@@ -11,6 +11,7 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ActivityMainBinding
 import com.d204.rumeet.ui.base.BaseActivity
 import com.d204.rumeet.ui.components.RumeetToolbar
+import com.d204.rumeet.util.AMQPManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -25,20 +25,26 @@ class ChattingItemAdapter(
         private const val RECEIVER = 1
     }
 
-    private var sender = false
     private var receiver = false
 
     inner class ChattingLeftMessageHolder(private val leftBinding: ItemChattingLeftBinding) :
         RecyclerView.ViewHolder(leftBinding.root) {
         fun bind(data: ChattingMessageModel) {
+            leftBinding.profileImg = profile
             leftBinding.data = data
+            // 프로필 이미지를 보여주는 조건
+            if(receiver || adapterPosition == 0) {
+                leftBinding.ivItemChattingProfileOther.visibility = View.VISIBLE
+                receiver = false
+            }
         }
     }
 
-    class ChattingRightMessageHolder(private val rightBinding: ItemChattingRightBinding) :
+    inner class ChattingRightMessageHolder(private val rightBinding: ItemChattingRightBinding) :
         RecyclerView.ViewHolder(rightBinding.root) {
         fun bind(data: ChattingMessageModel) {
             rightBinding.data = data
+            receiver = true
         }
     }
 

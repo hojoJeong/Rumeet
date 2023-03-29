@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_horizontal_margin"
+            android:layout_marginHorizontal="14dp"
             android:layout_marginBottom="@dimen/base_vertical_margin"
             android:orientation="vertical"
             app:chatting="@{vm.chattingDataList}"
