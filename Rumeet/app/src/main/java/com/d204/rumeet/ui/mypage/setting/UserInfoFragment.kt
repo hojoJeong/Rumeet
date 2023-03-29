@@ -13,7 +13,9 @@ import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
 import com.d204.rumeet.util.checkEmailValidate
 import com.d204.rumeet.util.hashingSHA256
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class UserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, MyPageViewModel>() {
@@ -33,23 +35,30 @@ class UserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, MyPageView
     }
 
     private fun initView() {
+        lifecycleScope.launchWhenResumed {
+            launch {
+                viewModel.userInfo.collect{
+                    val userInfo = viewModel.userInfo.value.successOrNull()!!
+                    val userInfoOptionTitleList =
+                        resources.getStringArray(R.array.title_user_info_content).toList()
+                    viewModel.setUserInfoMenuTitleList(userInfoOptionTitleList)
 
-        //TODO(임시 데이터)
-        val userInfo = viewModel.userInfo.value.successOrNull()!!
-        val userInfoOptionTitleList =
-            resources.getStringArray(R.array.title_user_info_content).toList()
-        viewModel.setUserInfoMenuTitleList(userInfoOptionTitleList)
-
-        val settingOptionList = userInfoOptionTitleList.mapIndexed { _, title ->
-            SettingOptionUiMdel(title, "")
-        }.apply {
-            this[0].content = if(checkEmailValidate(userInfo.email)) userInfo.email else "소셜로그인입니다."
-            this[1].content = userInfo.nickname
-            this[2].content = "${userInfo.age}세"
-            this[3].content = if(userInfo.gender == 0) "남자" else "여자"
-            this[4].content = "${userInfo.height}cm / ${userInfo.weight}kg"
+                    val settingOptionList = userInfoOptionTitleList.mapIndexed { _, title ->
+                        SettingOptionUiMdel(title, "")
+                    }.apply {
+                        this[0].content = if(checkEmailValidate(userInfo.email)) userInfo.email else "소셜로그인입니다."
+                        this[1].content = userInfo.nickname
+                        this[2].content = "${userInfo.age}세"
+                        this[3].content = if(userInfo.gender == 0) "남자" else "여자"
+                        this[4].content = "${userInfo.height}cm / ${userInfo.weight}kg"
+                    }
+                    initUserInfoAdapter(settingOptionList)
+                }
+            }
         }
+    }
 
+    private fun initUserInfoAdapter(settingOptionList: List<SettingOptionUiMdel>){
         val userInfoAdapter = SettingItemListAdapter(viewModel).apply {
             submitList(settingOptionList)
         }

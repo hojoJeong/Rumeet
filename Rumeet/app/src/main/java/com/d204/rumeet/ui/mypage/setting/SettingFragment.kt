@@ -13,16 +13,20 @@ import com.d204.rumeet.ui.mypage.adapter.SettingItemListAdapter
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
 import com.d204.rumeet.util.checkEmailValidate
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_setting
-    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage){defaultViewModelProviderFactory}
+    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage) { defaultViewModelProviderFactory }
 
 
     override fun initStartView() {
+        binding.lifecycleOwner = viewLifecycleOwner
+
         initMenu()
         initUserProfile()
     }
@@ -32,20 +36,22 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
             resources.getStringArray(R.array.title_setting_content).toList()
         )
         lifecycleScope.launchWhenResumed {
-            viewModel.settingNavigationEvent.collectLatest { action ->
-                when (action) {
-                    SettingAction.UserInfo -> {
-                        navigate(SettingFragmentDirections.actionSettingFragmentToUserInfoFragment())
-                    }
-                    SettingAction.SettingNotification -> {
-                        navigate(SettingFragmentDirections.actionSettingFragmentToNotificationSettingFragment())
-                    }
-                    SettingAction.Privacy -> {
-                    }
-                    SettingAction.ServiceTerms -> {
-                    }
-                    SettingAction.LogOut -> {
-                        showLogoutDialog()
+            launch {
+                viewModel.settingNavigationEvent.collectLatest { action ->
+                    when (action) {
+                        SettingAction.UserInfo -> {
+                            navigate(SettingFragmentDirections.actionSettingFragmentToUserInfoFragment())
+                        }
+                        SettingAction.SettingNotification -> {
+                            navigate(SettingFragmentDirections.actionSettingFragmentToNotificationSettingFragment())
+                        }
+                        SettingAction.Privacy -> {
+                        }
+                        SettingAction.ServiceTerms -> {
+                        }
+                        SettingAction.LogOut -> {
+                            showLogoutDialog()
+                        }
                     }
                 }
             }
@@ -55,13 +61,23 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
     override fun initAfterBinding() {
     }
 
-    private fun initUserProfile(){
-        val email =  viewModel.userInfo.value.successOrNull()!!.email
-        val profile = viewModel.userInfo.value.successOrNull()?.profile ?: R.drawable.ic_app_main_logo
-        binding.name = viewModel.userInfo.value.successOrNull()?.nickname ?: ""
-        binding.email = if(checkEmailValidate(email)) email else "소셜로그인 입니다"
-        Glide.with(requireContext()).load(profile).override(80, 80).into(binding.ivSettingProfile)
+    private fun initUserProfile() {
+        lifecycleScope.launchWhenResumed {
+            launch {
+                viewModel.userInfo.collectLatest {
+                    viewModel.dismissLoading()
+                    val email = viewModel.userInfo.value.successOrNull()!!.email
+                    val profile = viewModel.userInfo.value.successOrNull()?.profile
+                        ?: R.drawable.ic_app_main_logo
+                    binding.name = viewModel.userInfo.value.successOrNull()?.nickname ?: ""
+                    binding.email = if (checkEmailValidate(email)) email else "소셜로그인 입니다"
+                    Glide.with(requireContext()).load(profile).override(80, 80)
+                        .into(binding.ivSettingProfile)
+                }
+            }
+        }
     }
+
     private fun initMenu() {
         val titleList = resources.getStringArray(R.array.title_setting_content).toList()
         val settingOptionList = titleList.mapIndexed { _, title ->

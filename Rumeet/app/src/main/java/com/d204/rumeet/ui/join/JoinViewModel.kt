@@ -1,16 +1,21 @@
 package com.d204.rumeet.ui.join
 
+import android.util.Log
 import com.d204.rumeet.data.remote.dto.DuplicateInfoException
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.sign.CheckDuplicateInfoUseCase
 import com.d204.rumeet.domain.usecase.sign.EmailSignUpUseCase
 import com.d204.rumeet.domain.usecase.sign.SocialSignUpUseCase
+import com.d204.rumeet.domain.usecase.user.ModifyUserDetailInfoUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.join.addtional_info.AdditionalInfoAction
 import com.d204.rumeet.ui.join.id.JoinIdAction
 import com.d204.rumeet.ui.join.nickname.JoinNicknameAction
 import com.d204.rumeet.ui.join.password.JoinPasswordAction
+import com.d204.rumeet.ui.mypage.EditUserInfoAction
+import com.d204.rumeet.ui.mypage.model.UserDetailInfoUiModel
+import com.d204.rumeet.ui.mypage.model.toDomainModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -20,7 +25,8 @@ import javax.inject.Inject
 class JoinViewModel @Inject constructor(
     private val checkDuplicateInfoUseCase: CheckDuplicateInfoUseCase,
     private val emailSignUpUseCase: EmailSignUpUseCase,
-    private val socialSignUpUseCase: SocialSignUpUseCase
+    private val socialSignUpUseCase: SocialSignUpUseCase,
+    private val modifyUserDetailInfoUseCase: ModifyUserDetailInfoUseCase
 ) : BaseViewModel() {
 
     private val _joinIdAction: MutableSharedFlow<JoinIdAction> = MutableSharedFlow()
@@ -35,7 +41,12 @@ class JoinViewModel @Inject constructor(
     private val _additionalInfoAction: MutableSharedFlow<AdditionalInfoAction> = MutableSharedFlow()
     val additionalInfoAction: SharedFlow<AdditionalInfoAction> get() = _additionalInfoAction.asSharedFlow()
 
+    private val _editUserInfoEvent: MutableSharedFlow<EditUserInfoAction> = MutableSharedFlow()
+    val editUserInfoEvent: SharedFlow<EditUserInfoAction> get() = _editUserInfoEvent.asSharedFlow()
+
     val joinInfo: JoinModel = JoinModel()
+    val editUserInfo: UserDetailInfoUiModel = UserDetailInfoUiModel()
+
 
     /**
      * 아이디 중복체크
@@ -123,6 +134,18 @@ class JoinViewModel @Inject constructor(
                 _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
             }.onError { e -> catchError(e) }
             dismissLoading()
+        }
+    }
+
+    fun editUserInfo(){
+        baseViewModelScope.launch {
+                    showLoading()
+                    if(modifyUserDetailInfoUseCase.invoke(editUserInfo.toDomainModel())){
+                        _additionalInfoAction.emit(AdditionalInfoAction.SignUpSuccess)
+                dismissLoading()
+            } else {
+                Log.d("TAG", "editUserInfo: 회원 정보 수정 오류")
+            }
         }
     }
 

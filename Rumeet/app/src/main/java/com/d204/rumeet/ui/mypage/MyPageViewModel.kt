@@ -11,6 +11,7 @@ import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.mypage.model.BadgeContentListUiModel
+import com.d204.rumeet.ui.mypage.model.UserDetailInfoUiModel
 import com.d204.rumeet.ui.mypage.model.UserInfoUiModel
 import com.d204.rumeet.ui.mypage.model.toUiModel
 import com.d204.rumeet.ui.mypage.setting.SettingAction
@@ -59,7 +60,7 @@ class MyPageViewModel @Inject constructor(
     val userInfo: StateFlow<UiState<UserInfoUiModel>>
         get() = _userInfo.asStateFlow()
 
-    private fun setSettingNavigate(title: String) {
+    fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
             when (title) {
                 myPageMunuList[0] -> _myPageNavigationEvent.emit(MyPageAction.RunningRecord)
