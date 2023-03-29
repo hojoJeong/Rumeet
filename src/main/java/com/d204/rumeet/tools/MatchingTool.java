@@ -67,6 +67,10 @@ public class MatchingTool {
         System.out.println("========================");
     }
 
+    public void doCancel(GameDto gameDto) {
+        lists[gameDto.getMode()].remove(gameDto.getUserId());
+        lists[gameDto.getMode()].print();
+    }
 
     private static double calculateEuclideanSimilarity(int[] user1, int[] user2) {
         double distance = 0;
