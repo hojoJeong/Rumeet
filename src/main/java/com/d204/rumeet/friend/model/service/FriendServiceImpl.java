@@ -70,11 +70,15 @@ public class FriendServiceImpl implements FriendService {
         int fromId = friendRequestDto.getFromUserId();
         int toId = friendRequestDto.getToUserId();
 
-        Query query = new Query(Criteria.where("fromUserId").is(fromId)
+        Query query1 = new Query(Criteria.where("fromUserId").is(fromId)
                 .and("toUserId").is(toId));
-        FriendRequestDao existingRequest = mongoTemplate.findOne(query, FriendRequestDao.class);
 
-        FriendDao existingFriend = mongoTemplate.findOne(query, FriendDao.class);
+        Query query2 = new Query(Criteria.where("userId").is(fromId)
+                .and("friendId").is(toId));
+
+        FriendRequestDao existingRequest = mongoTemplate.findOne(query1, FriendRequestDao.class);
+
+        FriendDao existingFriend = mongoTemplate.findOne(query2, FriendDao.class);
 
         if (existingRequest != null) {
             throw new DuplicateFriendRequestException();
