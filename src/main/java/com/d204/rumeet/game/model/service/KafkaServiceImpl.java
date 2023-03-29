@@ -117,4 +117,5 @@ public class KafkaServiceImpl implements KafkaService {
         this.sendMessage(userATopic, gameInfo);
         this.sendMessage(userBTopic, gameInfo);
     }
+
 }
