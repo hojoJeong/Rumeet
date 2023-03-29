@@ -1,6 +1,6 @@
 package com.d204.rumeet.kafka.model.consumer;
 
-import com.d204.rumeet.kafka.model.KafkaService;
+import com.d204.rumeet.game.model.service.KafkaService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
