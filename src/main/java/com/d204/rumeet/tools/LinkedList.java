@@ -5,27 +5,31 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LinkedList {
-    MatchingTool.Node head;
-    MatchingTool.Node tail;
+    Node head;
+    Node tail;
 
     void add(GamePaceDto target) {
-        MatchingTool.Node node = new MatchingTool.Node(target);
+        if(this.head == null) {
+            this.head = this.tail = new Node(target);
+            return;
+        }
+        Node node = new Node(target);
         this.tail.next = node;
         this.tail = node;
     }
 
     void remove(int userId) {
-        MatchingTool.Node node = this.head;
-        if(this.head.user.getId() == userId) {
+        Node node = this.head;
+        if (this.head.user.getId() == userId) {
             this.head = this.tail = null;
             return;
         }
-        MatchingTool.Node prev = node;
+        Node prev = node;
         node = node.next;
-        while (node !=null) {
-            if(node.user.getId() == userId) {
+        while (node != null) {
+            if (node.user.getId() == userId) {
                 prev.next = node.next;
-                if(node == this.tail) {
+                if (node == this.tail) {
                     this.tail = prev;
                 }
                 break;
@@ -35,3 +39,5 @@ public class LinkedList {
         }
     }
 }
+
+

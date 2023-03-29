@@ -16,9 +16,6 @@ public class MatchingTool {
     //이번
     // 매칭 시작하는 것
     public void doMatching(GamePaceDto target) {
-        int userIndex = 0;
-        int topK = 5;
-
         double similarities = 0;
         double top_val = 0;
         GamePaceDto top_user = null;
@@ -51,12 +48,4 @@ public class MatchingTool {
         return 1 / (1 + Math.sqrt(distance));
     }
 
-    static class Node {
-        GamePaceDto user;
-        Node next;
-
-        public Node(GamePaceDto user) {
-            this.user = user;
-        }
-    }
 }
