@@ -1,12 +1,10 @@
 package com.d204.rumeet.tools;
 
-import com.d204.rumeet.game.model.dto.GameDto;
 import com.d204.rumeet.game.model.dto.GamePaceDto;
 import com.d204.rumeet.game.model.dto.RaceDto;
 import com.d204.rumeet.game.model.service.GameService;
-import com.d204.rumeet.kafka.model.service.KafkaService;
+import com.d204.rumeet.game.model.service.KafkaService;
 import com.google.gson.Gson;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
