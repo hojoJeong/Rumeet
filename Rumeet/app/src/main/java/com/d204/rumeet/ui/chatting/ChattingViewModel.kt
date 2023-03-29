@@ -16,6 +16,7 @@ import com.rabbitmq.client.Envelope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +25,8 @@ class ChattingViewModel @Inject constructor(
     private val getChattingDataUseCase: GetChattingDataUseCase
 ) : BaseViewModel() {
 
-    private val _chattingSideEffect: MutableSharedFlow<ChattingSideEffect> = MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
+    private val _chattingSideEffect: MutableSharedFlow<ChattingSideEffect> =
+        MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
     val chattingSideEffect: SharedFlow<ChattingSideEffect> get() = _chattingSideEffect.asSharedFlow()
 
     private val _chattingDataList: MutableStateFlow<UiState<List<ChattingMessageModel>>> =
@@ -35,8 +37,10 @@ class ChattingViewModel @Inject constructor(
         baseViewModelScope.launch {
             getChattingDataUseCase(roomId)
                 .onSuccess {
-                    val myId = getUserIdUseCase()
-                    AMQPManager.queueName = "chat.queue.${roomId}.${myId}"
+                    val userId = getUserIdUseCase()
+                    AMQPManager.queueName = "chat.queue.${roomId}.${2}"
+
+                    _chattingSideEffect.emit(ChattingSideEffect.SuccessChattingData(userId = userId))
                     _chattingDataList.emit(UiState.Success(it.chat))
                     startSubscribe()
                 }
@@ -52,10 +56,16 @@ class ChattingViewModel @Inject constructor(
                 properties: AMQP.BasicProperties?,
                 body: ByteArray
             ) {
+                Log.d("TAG", "handleDelivery: ${String(body)}")
                 val message = Gson().fromJson(String(body), ChattingMessageModel::class.java)
-                Log.d("TAG", "handleDelivery: ${message}")
                 _chattingSideEffect.tryEmit(ChattingSideEffect.ReceiveChatting(message))
             }
         })
+    }
+
+    fun sendChatting() {
+        baseViewModelScope.launch {
+            _chattingSideEffect.emit(ChattingSideEffect.SendChatting)
+        }
     }
 }

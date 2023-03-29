@@ -4,6 +4,7 @@ import com.rabbitmq.client.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 object AMQPManager {
@@ -20,7 +21,9 @@ object AMQPManager {
 
     fun initChannel() {
         CoroutineScope(Dispatchers.Default).launch {
-            channel = factory.newConnection().createChannel()
+            withContext(Dispatchers.Default) {
+                channel = factory.newConnection().createChannel()
+            }
         }
     }
 

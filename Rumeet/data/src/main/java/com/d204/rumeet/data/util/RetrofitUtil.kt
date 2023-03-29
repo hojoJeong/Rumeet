@@ -8,7 +8,7 @@ import java.io.File
 
 fun getMultipartData(file : File?): MultipartBody.Part? {
     return file?.let {
-        val mediaType = "image/png".toMediaTypeOrNull()
+        val mediaType = "image/jpeg".toMediaTypeOrNull()
         val requestFile = file.asRequestBody(mediaType)
         MultipartBody.Part.createFormData("profile_img", file.name, requestFile)
     }

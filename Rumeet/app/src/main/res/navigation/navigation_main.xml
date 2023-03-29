@@ -188,13 +188,15 @@
         android:label="ChattingFragment"
         tools:layout="@layout/fragment_chatting">
         <argument
-            android:name="chattingRoomId"
-            android:defaultValue="0"
-            app:argType="integer" />
-        <argument
             android:name="profile"
             app:argType="string"
             app:nullable="true" />
+
+        <argument
+            android:name="chattingRoomId"
+            android:defaultValue="0"
+            app:argType="integer" />
+
     </fragment>
 
     <fragment

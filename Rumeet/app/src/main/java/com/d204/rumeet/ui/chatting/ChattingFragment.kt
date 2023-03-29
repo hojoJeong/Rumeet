@@ -36,22 +36,18 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         lifecycleScope.launchWhenResumed {
             viewModel.chattingSideEffect.collectLatest {
                 when(it){
-                    is ChattingSideEffect.RequestSendMessage -> {
-
-                    }
-                    is ChattingSideEffect.StartSubscribeRabbiMq -> {
-
+                    is ChattingSideEffect.SuccessChattingData -> {
+                        chattingAdapter = ChattingItemAdapter(2, args.profile)
+                        binding.rvChattingContent.adapter = chattingAdapter
                     }
                     is ChattingSideEffect.SendChatting -> {
-                        if(binding.btnChattingSubmit.text.toString().isNotEmpty())
+                        if(binding.editChattingInput.text.toString().isNotEmpty()){
                             AMQPManager.sendMessage(binding.editChattingInput.text.toString())
+                            binding.editChattingInput.setText("")
+                        }
                     }
                     is ChattingSideEffect.ReceiveChatting -> {
-                        val currentChattingList = chattingAdapter.currentList
-                        currentChattingList.add(it.messageModel)
-                        chattingAdapter.submitList(currentChattingList
-                        )
-                        Log.d("TAG", "initDataBinding: ${it.messageModel}")
+                       toastMessage("됐따!!")
                     }
                 }
             }
@@ -60,8 +56,5 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
 
     override fun initAfterBinding() {
         viewModel.requestChattingData(args.chattingRoomId)
-        chattingAdapter = ChattingItemAdapter(args.chattingRoomId, args.profile)
-
-        binding.rvChattingContent.adapter = chattingAdapter
     }
 }

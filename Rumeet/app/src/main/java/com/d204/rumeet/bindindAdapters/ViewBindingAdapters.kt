@@ -81,6 +81,8 @@ fun RecyclerView.bindChattingRoom(uiState: UiState<List<ChattingRoomUiModel>>){
 fun RecyclerView.bindChattingData(uiState: UiState<List<ChattingMessageModel>>){
     val bindAdapter = this.adapter
     if(bindAdapter is ChattingItemAdapter){
-        bindAdapter.submitList(uiState.successOrNull())
+        val list = uiState.successOrNull()
+        bindAdapter.submitList(list)
+        smoothScrollToPosition(list?.size ?: 0)
     }
 }

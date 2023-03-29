@@ -18,7 +18,7 @@ internal interface SignApiService {
     @POST("users/join")
     suspend fun join(
         @Part("user") request : JoinRequestDto,
-        @Part file : MultipartBody.Part?
+        @Part("profile_img") file : MultipartBody.Part?
     ) : BaseResponse<Unit?>
 
     @Multipart

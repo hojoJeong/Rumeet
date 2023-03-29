@@ -17,5 +17,5 @@ data class ChattingMessageModel(
     val toUserId : Int,
     val fromUserId : Int,
     val content : String,
-    val createdAt: Long
+    val date: Long
 )

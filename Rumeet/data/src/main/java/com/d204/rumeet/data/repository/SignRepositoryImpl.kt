@@ -1,5 +1,6 @@
 package com.d204.rumeet.data.repository
 
+import android.util.Log
 import com.d204.rumeet.data.remote.api.SignApiService
 import com.d204.rumeet.data.remote.api.handleApi
 import com.d204.rumeet.data.remote.dto.request.sign.ResetPasswordRequestDto
@@ -30,6 +31,7 @@ internal class SignRepositoryImpl @Inject constructor(
         imageUri: File?
     ): NetworkResult<Unit?> {
         val multipartData = getMultipartData(imageUri)
+        Log.d("TAG", "signUpSocialLogin: ${multipartData}")
         val request = JoinRequestDto(id, password, nickname, gender, age, height, weight, System.currentTimeMillis())
         return handleApi { signApiService.join(request, multipartData) }
     }
@@ -47,6 +49,7 @@ internal class SignRepositoryImpl @Inject constructor(
         // 소셜로그인의 아이디 비밀번호는 oauth로 전달
         val request = SocialJoinRequestDto("", "", nickname, gender, age, height, weight, oAuth.toString(), System.currentTimeMillis())
         val profileImg = getMultipartData(imageUri)
+
         // 소셜로그인은 서버에서 로직처리, 멀티파트는 null을 전달
         return handleApi { signApiService.socialJoin(request,profileImg) }
     }

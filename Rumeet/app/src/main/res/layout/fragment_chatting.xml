@@ -17,7 +17,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_chatting_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:nestedScrollingEnabled="false"
             android:layout_marginTop="@dimen/base_horizontal_margin"
             android:layout_marginHorizontal="14dp"
             android:layout_marginBottom="@dimen/base_vertical_margin"
@@ -46,6 +47,7 @@
             <EditText
                 android:id="@+id/edit_chatting_input"
                 android:layout_width="0dp"
+                android:paddingHorizontal="12dp"
                 android:layout_height="46dp"
                 android:layout_weight="5"
                 android:background="@color/transparent" />
@@ -54,9 +56,10 @@
                 android:id="@+id/btn_chatting_submit"
                 style="@style/base_font_bold_14"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                app:onSingleClick="@{() -> vm.sendChatting()}"
                 android:gravity="center"
                 android:paddingHorizontal="10dp"
                 android:text="전송" />

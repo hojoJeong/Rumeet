@@ -23,7 +23,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
         get() = R.layout.fragment_chatting_list
 
     override val viewModel: ChattingListViewModel by viewModels()
-    private lateinit var chattingListAdapter : ChattingListAdapter
+    private lateinit var chattingListAdapter: ChattingListAdapter
 
     override fun initStartView() {
         with(binding) {
@@ -33,7 +33,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
         exception = viewModel.errorEvent
         viewModel.requestChattingRoom()
 
-        if(AMQPManager.channel == null){
+        if (AMQPManager.channel == null) {
             AMQPManager.initChannel()
         }
     }
@@ -46,15 +46,20 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         setNoResult(it.isEmpty)
                     }
                     is ChattingListSideEffect.NavigateChattingRoom -> {
-                        navigate(ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(it.profile,it.chattingRoomId))
+                        navigate(
+                            ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(
+                                profile = it.profile,
+                                chattingRoomId = it.chattingRoomId
+                            )
+                        )
                     }
                 }
             }
         }
     }
 
-    private fun setNoResult(isEmpty : Boolean){
-        if(isEmpty){
+    private fun setNoResult(isEmpty: Boolean) {
+        if (isEmpty) {
             binding.contentNoResultChattingList.root.visibility = View.VISIBLE
             binding.contentNoResultChattingList.tvContentNoResultMessage.text = "채팅 내역이 없습니다"
         }

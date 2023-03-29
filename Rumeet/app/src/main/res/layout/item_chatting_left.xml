@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_chatting_dialog_other"
             app:layout_constraintStart_toEndOf="@id/tv_item_chatting_dialog_other"
-            app:time="@{data.createdAt}"/>
+            app:time="@{data.date}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

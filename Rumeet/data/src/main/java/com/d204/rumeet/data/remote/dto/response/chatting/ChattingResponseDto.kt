@@ -50,5 +50,5 @@ internal fun ChattingMessageResponseDto.toDomainModel() = ChattingMessageModel(
     toUserId = this.toUserId,
     fromUserId = this.fromUserId,
     content = this.content,
-    createdAt = this.createdAt
+    date = this.createdAt
 )

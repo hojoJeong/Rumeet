@@ -11,4 +11,5 @@ interface UserRepository {
     suspend fun getUserId(): Int
     suspend fun getUserInfo(userId: Int): NetworkResult<UserInfoDomainModel>
     suspend fun searchUsers(nickname : String) : NetworkResult<List<UserModel>>
+    suspend fun getAccessToken() : String
 }

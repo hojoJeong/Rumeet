@@ -8,12 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.R
-import com.d204.rumeet.databinding.ItemChattingDateBinding
 import com.d204.rumeet.databinding.ItemChattingLeftBinding
 import com.d204.rumeet.databinding.ItemChattingRightBinding
 import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
-import com.d204.rumeet.domain.model.chatting.ChattingModel
-import java.util.concurrent.atomic.AtomicBoolean
 
 class ChattingItemAdapter(
     private val userId: Int,
@@ -50,7 +47,7 @@ class ChattingItemAdapter(
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        return if (userId == item.toUserId) SENDER else RECEIVER
+        return if (userId == item.fromUserId) SENDER else RECEIVER
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -95,7 +92,7 @@ class ChattingItemAdapter(
             oldItem: ChattingMessageModel,
             newItem: ChattingMessageModel
         ): Boolean {
-            return oldItem.createdAt == newItem.createdAt
+            return oldItem.date == newItem.date
         }
 
         override fun areContentsTheSame(

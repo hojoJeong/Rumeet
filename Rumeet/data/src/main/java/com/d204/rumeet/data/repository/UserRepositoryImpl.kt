@@ -51,4 +51,8 @@ internal class UserRepositoryImpl @Inject constructor(
             .toDomainResult<List<UserResponseDto>, List<UserModel>> { response -> response.map { it.toDomainModel() } }
     }
 
+    override suspend fun getAccessToken(): String {
+        return userDataStorePreferences.getAccessToken() ?: ""
+    }
+
 }
