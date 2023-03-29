@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <variable
+            name="name"
+            type="String" />
 
+        <variable
+            name="email"
+            type="String" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -17,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginHorizontal="@dimen/base_horizontal_margin"
             android:layout_marginVertical="50dp"
-            android:src="@drawable/ic_app_main_logo"
+            tools:src="@drawable/ic_app_main_logo"
             app:civ_circle_background_color="@color/whisper"
             android:scaleType="centerCrop"/>
 
@@ -29,6 +35,7 @@
             app:layout_constraintTop_toTopOf="@+id/iv_setting_profile"
             android:layout_marginStart="@dimen/base_horizontal_margin"
             tools:text="닉네임"
+            android:text="@{name}"
             style="@style/base_font_bold_14_black"
             android:textSize="24sp"/>
 
@@ -39,6 +46,7 @@
             app:layout_constraintStart_toStartOf="@+id/tv_setting_name"
             app:layout_constraintBottom_toBottomOf="@+id/iv_setting_profile"
             tools:text="ssafy@naver.com"
+            android:text="@{email}"
             style="@style/base_font_bold_16_black"/>
 
         <androidx.recyclerview.widget.RecyclerView

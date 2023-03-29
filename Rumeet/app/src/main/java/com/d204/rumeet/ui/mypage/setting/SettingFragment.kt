@@ -1,17 +1,17 @@
 package com.d204.rumeet.ui.mypage.setting
 
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentSettingBinding
-import com.d204.rumeet.ui.base.AlertModel
-import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.base.BaseViewModel
-import com.d204.rumeet.ui.base.DefaultAlertDialog
+import com.d204.rumeet.ui.base.*
 import com.d204.rumeet.ui.mypage.MyPageViewModel
 import com.d204.rumeet.ui.mypage.adapter.SettingItemListAdapter
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
+import com.d204.rumeet.util.checkEmailValidate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -23,7 +23,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
 
 
     override fun initStartView() {
-        initView()
+        initMenu()
+        initUserProfile()
     }
 
     override fun initDataBinding() {
@@ -54,7 +55,14 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
     override fun initAfterBinding() {
     }
 
-    private fun initView() {
+    private fun initUserProfile(){
+        val email =  viewModel.userInfo.value.successOrNull()!!.email
+        val profile = viewModel.userInfo.value.successOrNull()?.profile ?: R.drawable.ic_app_main_logo
+        binding.name = viewModel.userInfo.value.successOrNull()?.nickname ?: ""
+        binding.email = if(checkEmailValidate(email)) email else "소셜로그인 입니다"
+        Glide.with(requireContext()).load(profile).override(80, 80).into(binding.ivSettingProfile)
+    }
+    private fun initMenu() {
         val titleList = resources.getStringArray(R.array.title_setting_content).toList()
         val settingOptionList = titleList.mapIndexed { _, title ->
             SettingOptionUiMdel(title, "")
