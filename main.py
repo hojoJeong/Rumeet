@@ -14,27 +14,19 @@ pace2_avg = None
 pace3_avg = None
 pace5_avg = None
 
-@app.get("/load/{mode}/{id}")
-async def rootd(mode, id):
+@app.get("/load/{km}/{id}")
+async def rootd(km, id):
         global pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
         pace = []
 
-        # pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
-        #         .select('avg_pace1') \
-        #         .collect()[0][0]
-        # pace.append(int(pace_value))
-        # print(pace_value)
-        #
-        # return {"id": id , "pace":pace}
-
-        if mode == "4": # 1km
+        if km == "1": # 1km
             pace_value = pace1_avg.filter(pace1_avg["user_id"] == id) \
                     .select('avg_pace1') \
                     .collect()[0][0]
             pace.append(int(pace_value))
             print(pace_value)
-        elif mode =="5": # 2km
-            print("mode : 5")
+        elif km =="2": # 2km
+            print("km : 5")
             pace2_avg.filter(pace2_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2')\
                 .show()
@@ -44,14 +36,14 @@ async def rootd(mode, id):
                 .collect()
             pace = filtered
             print(filtered)
-        elif mode == "6": # 3km
+        elif km == "3": # 3km
             filtered = pace3_avg.filter(pace3_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2', 'avg_pace3') \
                 .rdd.flatMap(lambda x: x) \
                 .collect()
             pace = filtered
             print(filtered)
-        elif mode == "7": # 5km
+        elif km == "5": # 5km
             filtered = pace5_avg.filter(pace5_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2', 'avg_pace3', 'avg_pace4', 'avg_pace5') \
                 .rdd.flatMap(lambda x: x) \
