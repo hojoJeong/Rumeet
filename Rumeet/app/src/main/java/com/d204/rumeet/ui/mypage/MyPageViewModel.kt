@@ -2,11 +2,13 @@ package com.d204.rumeet.ui.mypage
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.util.LogPrinter
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserInfoUseCase
+import com.d204.rumeet.domain.usecase.user.WithdrawalUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
@@ -24,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val withdrawalUseCase: WithdrawalUseCase
 ) : BaseViewModel(), MyPageEventHandler {
     private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
     val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
@@ -59,6 +62,10 @@ class MyPageViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val userInfo: StateFlow<UiState<UserInfoUiModel>>
         get() = _userInfo.asStateFlow()
+
+    private val _resultWithdrawal: MutableStateFlow<UiState<Boolean>> = MutableStateFlow(UiState.Loading)
+    val resultWithdrawal: StateFlow<UiState<Boolean>>
+        get() = _resultWithdrawal
 
     fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
@@ -127,6 +134,17 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun withdrawal(){
+        baseViewModelScope.launch {
+            showLoading()
+            try {
+                dismissLoading()
+                _resultWithdrawal.value = UiState.Success(withdrawalUseCase.invoke(userId.value.successOrNull()!!))
+            } catch (e: Exception){
+                _resultWithdrawal.value = UiState.Error(e.cause)
+            }
+        }
+    }
     override fun onClick(title: String) {
         setSettingNavigate(title)
     }

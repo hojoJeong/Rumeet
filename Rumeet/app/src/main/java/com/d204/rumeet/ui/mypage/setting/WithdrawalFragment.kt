@@ -2,21 +2,23 @@ package com.d204.rumeet.ui.mypage.setting
 
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentWithdrawalBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.mypage.MyPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class WithdrawalFragment : BaseFragment<FragmentWithdrawalBinding, BaseViewModel>() {
-    private val myPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage)
     override val layoutResourceId: Int
         get() = R.layout.fragment_withdrawal
-    override val viewModel: BaseViewModel
-        get() = myPageViewModel
+    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage) { defaultViewModelProviderFactory }
 
     override fun initStartView() {
         initWithdrawalBtn()
@@ -45,11 +47,27 @@ class WithdrawalFragment : BaseFragment<FragmentWithdrawalBinding, BaseViewModel
     }
 
     private fun initWithdrawalBtn() {
-        with(binding.btnWithdrawal){
+        with(binding.btnWithdrawal) {
             setContent("회원 탈퇴하기")
             setState(false)
-            addClickListener{
-                navigate(WithdrawalFragmentDirections.actionWithdrawalFragmentToResultWithdrawalFragment())
+            addClickListener {
+                viewModel.withdrawal()
+                checkWithdrawalResult()
+            }
+        }
+    }
+
+    private fun checkWithdrawalResult() {
+        lifecycleScope.launchWhenResumed {
+            launch {
+                viewModel.resultWithdrawal.collect {
+                    val result = viewModel.resultWithdrawal.value.successOrNull() ?: false
+                    if (result) {
+                        navigate(WithdrawalFragmentDirections.actionWithdrawalFragmentToResultWithdrawalFragment())
+                    } else {
+                        toastMessage("회원탈퇴에 실패하였습니다. 다시 시도해주세요.")
+                    }
+                }
             }
         }
     }

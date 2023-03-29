@@ -5,6 +5,7 @@ import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.api.handleApi
 import com.d204.rumeet.data.remote.dto.InternalServerErrorException
 import com.d204.rumeet.data.remote.dto.request.auth.EmailLoginRequest
+import com.d204.rumeet.data.remote.dto.response.BaseResponse
 import com.d204.rumeet.data.remote.dto.response.auth.JWTResponse
 import com.d204.rumeet.data.remote.dto.response.auth.KakaoOAuthResponse
 import com.d204.rumeet.data.remote.mapper.toDomain
@@ -46,7 +47,11 @@ internal class AuthRepositoryImpl @Inject constructor(
         return handleApi { authApiService.kakaoLogin(accessToken) }.toDomainResult<JWTResponse, JWTModel> { it.toDomain() }
     }
 
-    override suspend fun setUserToken(accessToken: String, refreshToken: String, userId : Int): Boolean {
+    override suspend fun setUserToken(
+        accessToken: String,
+        refreshToken: String,
+        userId: Int
+    ): Boolean {
         try {
             userDataStorePreferences.setToken(accessToken, refreshToken)
             userDataStorePreferences.setUserId(userId)

@@ -50,5 +50,7 @@ internal class UserRepositoryImpl @Inject constructor(
         return userApi.modifyUserDetailInfo(userInfo.toRequestDto()).flag == "success"
     }
 
-
+    override suspend fun withdrawal(userId: Int): Boolean {
+        return userApi.withdrawal(userId).flag == "success"
+    }
 }
