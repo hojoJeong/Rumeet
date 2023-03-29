@@ -82,11 +82,14 @@ class UserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, MyPageView
                         )
                     }
                     UserInfoAction.ResetPassword -> {
-                        navigate(
-                            UserInfoFragmentDirections.actionUserInfoFragmentToConfirmPasswordFragment(
-                                "resetPassword"
+                        if(viewModel.userInfo.value.successOrNull()?.oauth.isNullOrEmpty()){
+                            navigate(
+                                UserInfoFragmentDirections.actionUserInfoFragmentToResetPasswordFragment2("")
                             )
-                        )
+                        } else {
+                            toastMessage("소셜로그인은 비밀번호를 변경할 수 없습니다.")
+                        }
+
                     }
                     UserInfoAction.Withdrawal -> {
                         navigate(UserInfoFragmentDirections.actionUserInfoFragmentToWithdrawalFragment())
