@@ -41,5 +41,10 @@ fun TextView.bindChattingDate(date : Long){
         isYesterday -> "어제"
         else -> dateSimpleDateFormat.format(date)
     }
+}
 
+@BindingAdapter("time")
+fun TextView.bindTime(date : Long){
+    val timeSimpleDateFormat = SimpleDateFormat("mm:ss", Locale.KOREA)
+    text = timeSimpleDateFormat.format(date)
 }

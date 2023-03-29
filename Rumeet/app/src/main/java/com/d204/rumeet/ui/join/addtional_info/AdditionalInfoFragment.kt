@@ -11,8 +11,6 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.DefaultAlertDialog
 import com.d204.rumeet.ui.components.BodyInfoBottomSheetDialog
 import com.d204.rumeet.ui.join.JoinViewModel
-import com.d204.rumeet.ui.reset_password.AdditionalInfoFragmentArgs
-import com.d204.rumeet.ui.reset_password.AdditionalInfoFragmentDirections
 import kotlinx.coroutines.flow.collectLatest
 
 class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinViewModel>() {
@@ -105,14 +103,5 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
             alertModel = AlertModel(title = "알림 메시지", content = "빈칸을 모두 채워주세요", buttonText = "확인")
         )
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        with(viewModel.joinInfo){
-            height = 0f
-            weight = 0f
-            gender = -1
-        }
     }
 }

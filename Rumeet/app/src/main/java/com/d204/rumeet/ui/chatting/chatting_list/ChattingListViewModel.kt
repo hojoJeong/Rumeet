@@ -20,11 +20,10 @@ class ChattingListViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase
 ) : BaseViewModel(), ChattingRoomClickListener {
 
-    private val _chattingListSideEffect: MutableSharedFlow<ChattingListSideEffect> = MutableSharedFlow()
+    private val _chattingListSideEffect: MutableSharedFlow<ChattingListSideEffect> = MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
     val chattingListSideEffect: SharedFlow<ChattingListSideEffect> get() = _chattingListSideEffect.asSharedFlow()
 
-    private val _chattingList: MutableStateFlow<UiState<List<ChattingRoomUiModel>>> =
-        MutableStateFlow(UiState.Loading)
+    private val _chattingList: MutableStateFlow<UiState<List<ChattingRoomUiModel>>> = MutableStateFlow(UiState.Loading)
     val chattingList: StateFlow<UiState<List<ChattingRoomUiModel>>> get() = _chattingList.asStateFlow()
 
     fun requestChattingRoom() {
@@ -33,7 +32,11 @@ class ChattingListViewModel @Inject constructor(
             val userId = getUserIdUseCase()
             getChattingRoomUseCase(userId)
                 .onSuccess { result ->
-                    _chattingListSideEffect.emit(ChattingListSideEffect.SuccessGetChattingList(result.isEmpty()))
+                    _chattingListSideEffect.emit(
+                        ChattingListSideEffect.SuccessGetChattingList(
+                            result.isEmpty()
+                        )
+                    )
                     _chattingList.emit(UiState.Success(result.map { it.toUiModel() }))
                 }
                 .onError { e ->

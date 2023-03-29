@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="chattingRoomData"
             type="com.d204.rumeet.ui.chatting.chatting_list.model.ChattingRoomUiModel" />
@@ -16,9 +17,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId)}"
         android:paddingHorizontal="@dimen/base_horizontal_margin"
-        android:paddingVertical="@dimen/base_vertical_title_to_content">
+        android:paddingVertical="@dimen/base_vertical_title_to_content"
+        app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId)}">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_item_chatting_list_profile"
@@ -26,8 +27,8 @@
             android:layout_height="50dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_app_main_logo"
-            app:imgByUrl="@{chattingRoomData.senderProfileImg}"
             app:civ_circle_background_color="@color/trans40_dim_gray"
+            app:imgByUrl="@{chattingRoomData.senderProfileImg}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,9 +50,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@{chattingRoomData.lastContent}"
             android:ellipsize="end"
             android:maxLength="14"
+            android:text="@{chattingRoomData.lastContent}"
             app:layout_constraintStart_toStartOf="@+id/tv_item_chatting_list_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_chatting_list_name"
             tools:text="엽떡에 허니콤보먹고싶다진심을 다해서" />
@@ -61,6 +62,7 @@
             style="@style/base_font_medium_14_nobel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:chatting_date="@{chattingRoomData.lastDate}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_item_chatting_list_name"
             tools:text="2023.03.03" />

@@ -17,6 +17,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
+            android:id="@+id/rv_chatting_room"
             android:layout_height="0dp"
             android:orientation="vertical"
             app:chatting_rooms="@{vm.chattingList}"
@@ -30,8 +31,8 @@
             android:id="@+id/content_no_result_chatting_list"
             layout="@layout/content_no_result"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

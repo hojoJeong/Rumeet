@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="profileImg"
+            type="String" />
+
+        <variable
+            name="data"
+            type="com.d204.rumeet.domain.model.chatting.ChattingMessageModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="12dp"
+        tools:background="@color/nobel">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_item_chatting_profile_other"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            app:civ_circle_background_color="@color/whisper"
+            app:imgByUrl="@{profileImg}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:src="@drawable/ic_app_main_logo" />
+
+        <TextView
+            android:id="@+id/tv_item_chatting_dialog_other"
+            style="@style/base_font_medium_14_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_rect_transparent_white_round20_stroke0"
+            android:gravity="center"
+            android:maxEms="12"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="8dp"
+            android:text="@{data.content}"
+            app:layout_constraintBottom_toBottomOf="@id/iv_item_chatting_profile_other"
+            app:layout_constraintStart_toEndOf="@+id/iv_item_chatting_profile_other"
+            app:layout_constraintTop_toTopOf="@id/iv_item_chatting_profile_other"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/base_font_medium_10_dim_gray"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_chatting_dialog_other"
+            app:layout_constraintStart_toEndOf="@id/tv_item_chatting_dialog_other"
+            app:time="@{data.createdAt}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

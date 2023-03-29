@@ -19,9 +19,9 @@ internal class UserDataStorePreferences(val context: Context) {
     private val userId = intPreferencesKey("USER_ID")
     private val fcmToken = stringPreferencesKey("FCM_TOKEN")
 
-    suspend fun setUserId(userId : Int){
+    suspend fun setUserId(id : Int){
         context.datastore.edit { preference ->
-            preference[this.userId] = userId
+            preference[userId] = id
         }
     }
 

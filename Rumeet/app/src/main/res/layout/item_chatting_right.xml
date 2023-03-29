@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.d204.rumeet.domain.model.chatting.ChattingMessageModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="12dp">
+
+        <TextView
+            android:id="@+id/tv_item_chatting_dialog_my"
+            style="@style/base_font_medium_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_rect_transparent_navyblue_round20_stroke0"
+            android:maxEms="12"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="8dp"
+            android:text="@{data.content}"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅채팅" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/base_font_medium_10_dim_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_chatting_dialog_my"
+            app:layout_constraintEnd_toStartOf="@id/tv_item_chatting_dialog_my"
+            app:time="@{data.createdAt}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -79,7 +79,7 @@
 
     <fragment
         android:id="@+id/additionalInfoFragment"
-        android:name="com.d204.rumeet.ui.reset_password.AdditionalInfoFragment"
+        android:name="com.d204.rumeet.ui.join.addtional_info.AdditionalInfoFragment"
         android:label="AdditionalInfoFragment"
         tools:layout="@layout/fragment_addtional_info">
 
