@@ -3,9 +3,9 @@ package com.d204.rumeet.record.model.service;
 import com.d204.rumeet.record.model.dto.RecordDto;
 import com.d204.rumeet.record.model.mapper.RecordMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.hadoop.shaded.net.minidev.json.JSONObject;
-import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,31 +22,34 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public void updateRecord(String data) throws ParseException {
-        String data_tmp = "{\"user_id\":32,\"race_id\":36,\"pace1\":590,\"pace2\":460,\"elapsed_time\":1050,\"average_heart_rate\":140}";
+    public void updateRecord(String json_data) throws org.json.simple.parser.ParseException {
+        JSONParser jsonParser = new JSONParser();
+        JSONObject data = (JSONObject) jsonParser.parse(json_data);
 
-        int userId = 0;
-        RecordDto record = recordMapper.getRecord(userId);
-//페이스 이미 있는지없는지에따라 다름
+        int userId = Integer.parseInt(data.get("user_id").toString());
 
+        RecordDto origin_record = recordMapper.getRecord(userId);
+        Integer origin_pace = origin_record.getAverage_pace();
+        int origin_count = origin_record.getTotal_count();
+        float average_pace;
 
-        JSONParser parser = new JSONParser();
-        JSONObject obj = (JSONObject) parser.parse(data_tmp);
+        int km = 0;
+        int total = 0;
+        for (int i = 1; i <= 5; i++) {
+            String paceNo = "pace" + i;
+            if (data.containsKey(paceNo)) {
+                km++;
+                total += Integer.parseInt(data.get(paceNo).toString());
+            }
+        }
+        float new_pace = (float) total / km;
+        if (origin_pace == null) {
+            average_pace = new_pace;
+        } else {
+            average_pace = ((origin_pace * origin_count) + new_pace) / (origin_count + 1);
+        }
 
-
-
-        //total_km, total_count, average_pace
-        //{"user_id":32,"race_id":36,"pace1":590,"pace2":460,"elapsed_time":1050,"average_heart_rate":140}
-        //{"user_id":32,"race_id":36,"pace1":590,"pace2":460,"pace3":600,"elapsed_time":1050,"average_heart_rate":140}
-
-        // getRecord?
-        int pace1 = 1234;
-        int pace2 = 666;
-        int pace3 = 500;
-        userId = 1;
-        int pace = 600;
-        int km = 3;
-        recordMapper.updateRecord(userId, pace, km);
+        recordMapper.updateRecord(userId, average_pace, km);
 
     }
 

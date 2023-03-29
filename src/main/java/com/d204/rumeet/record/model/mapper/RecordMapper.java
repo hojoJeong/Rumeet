@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface RecordMapper {
 
-    void updateRecord(int userId, int pace, int km);
+    void updateRecord(int userId, float pace, float km);
 
     RecordDto getRecord(int userId);
 }

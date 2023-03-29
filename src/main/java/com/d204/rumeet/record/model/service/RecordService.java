@@ -7,6 +7,6 @@ public interface RecordService {
 
     RecordDto getRecord(int userId);
 
-    void updateRecord(String data) throws ParseException;
+    void updateRecord(String data) throws ParseException, org.json.simple.parser.ParseException;
 
 }
