@@ -62,7 +62,7 @@ public class UserRestController {
     
     // 유저 업데이트
     @Operation(summary = "유저 정보 업데이트", description = "성별, 나이, 키, 몸무게 업데이트")
-    @PutMapping
+    @PutMapping("/info")
     public ResponseEntity<?> modifyUser(@RequestBody ModifyUserDto user) {
         userService.modifyUser(user);
         RespData<Void> data = new RespData<>();
