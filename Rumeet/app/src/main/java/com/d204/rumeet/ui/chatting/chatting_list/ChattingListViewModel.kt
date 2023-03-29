@@ -1,14 +1,21 @@
 package com.d204.rumeet.ui.chatting.chatting_list
 
 import android.util.Log
+import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.chatting.GetChattingRoomUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
+import com.d204.rumeet.ui.chatting.ChattingSideEffect
 import com.d204.rumeet.ui.chatting.chatting_list.model.ChattingRoomUiModel
 import com.d204.rumeet.ui.chatting.chatting_list.model.toUiModel
+import com.d204.rumeet.util.AMQPManager
+import com.google.gson.Gson
+import com.rabbitmq.client.AMQP
+import com.rabbitmq.client.DefaultConsumer
+import com.rabbitmq.client.Envelope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -20,23 +27,24 @@ class ChattingListViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase
 ) : BaseViewModel(), ChattingRoomClickListener {
 
-    private val _chattingListSideEffect: MutableSharedFlow<ChattingListSideEffect> = MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
+    private val _chattingListSideEffect: MutableSharedFlow<ChattingListSideEffect> = MutableSharedFlow()
     val chattingListSideEffect: SharedFlow<ChattingListSideEffect> get() = _chattingListSideEffect.asSharedFlow()
 
     private val _chattingList: MutableStateFlow<UiState<List<ChattingRoomUiModel>>> = MutableStateFlow(UiState.Loading)
     val chattingList: StateFlow<UiState<List<ChattingRoomUiModel>>> get() = _chattingList.asStateFlow()
 
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
+
     fun requestChattingRoom() {
         baseViewModelScope.launch {
             showLoading()
-            val userId = getUserIdUseCase()
-            getChattingRoomUseCase(userId)
+            _userId.emit(getUserIdUseCase())
+            getChattingRoomUseCase(userId.value)
                 .onSuccess { result ->
-                    _chattingListSideEffect.emit(
-                        ChattingListSideEffect.SuccessGetChattingList(
-                            result.isEmpty()
-                        )
-                    )
+                    AMQPManager.userQueueName = "user.queue.${userId.value}"
+                    startChattingListSubscribe()
+                    _chattingListSideEffect.emit(ChattingListSideEffect.SuccessGetChattingList(result.isEmpty()))
                     _chattingList.emit(UiState.Success(result.map { it.toUiModel() }))
                 }
                 .onError { e ->
@@ -49,5 +57,23 @@ class ChattingListViewModel @Inject constructor(
         baseViewModelScope.launch {
             _chattingListSideEffect.emit(ChattingListSideEffect.NavigateChattingRoom(roomId,profile))
         }
+    }
+
+    private fun startChattingListSubscribe(){
+        AMQPManager.setChattingListReceive(object : DefaultConsumer(AMQPManager.userChannel){
+            override fun handleDelivery(
+                consumerTag: String?,
+                envelope: Envelope?,
+                properties: AMQP.BasicProperties?,
+                body: ByteArray
+            ) {
+                try {
+                    val message = Gson().fromJson(String(body), Array<ChattingRoomUiModel>::class.java).toList()
+                    _chattingListSideEffect.tryEmit(ChattingListSideEffect.SuccessNewChattingList(message))
+                }catch (e : Exception){
+                    Log.e("chattinglist", "handleDelivery: ${e.message}")
+                }
+            }
+        })
     }
 }

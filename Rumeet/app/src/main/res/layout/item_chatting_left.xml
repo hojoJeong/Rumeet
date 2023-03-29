@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
 
         <variable
             name="profileImg"
@@ -11,20 +12,20 @@
 
         <variable
             name="data"
-            type="com.d204.rumeet.domain.model.chatting.ChattingMessageModel" />
+            type="com.d204.rumeet.ui.chatting.model.ChattingMessageUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="12dp"
+        android:paddingTop="12dp"
         tools:background="@color/nobel">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_item_chatting_profile_other"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:visibility="invisible"
+            android:visibility="@{data.profileVisibility ? View.VISIBLE : View.INVISIBLE}"
             app:civ_circle_background_color="@color/whisper"
             app:imgByUrl="@{profileImg}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,11 +41,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:background="@drawable/bg_rect_transparent_white_round20_stroke0"
-            android:gravity="center"
+            android:gravity="start"
             android:maxEms="12"
             android:paddingHorizontal="10dp"
             android:paddingVertical="8dp"
-            android:text="@{data.content}"
+            android:text="@{data.message.content}"
             app:layout_constraintBottom_toBottomOf="@id/iv_item_chatting_profile_other"
             app:layout_constraintStart_toEndOf="@+id/iv_item_chatting_profile_other"
             app:layout_constraintTop_toTopOf="@id/iv_item_chatting_profile_other"
@@ -58,7 +59,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_chatting_dialog_other"
             app:layout_constraintStart_toEndOf="@id/tv_item_chatting_dialog_other"
-            app:time="@{data.date}"/>
+            app:time="@{data.message.date}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

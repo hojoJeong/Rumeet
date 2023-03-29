@@ -9,13 +9,16 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import java.io.File
-import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
+
 
 fun Context.startActivityAfterClearBackStack(classType: Class<out Activity>) {
     val intent = Intent(this, classType).apply {
@@ -92,4 +95,16 @@ fun resizeImage(imageFile: File, targetWidth: Int, targetHeight: Int): Bitmap {
     return BitmapFactory.decodeFile(imageFile.path, scaledOptions)
 }
 
-
+fun RecyclerView.scrollToBottom() {
+    // scroll to last item to get the view of last item
+    val layoutManager = layoutManager as LinearLayoutManager?
+    val lastItemPosition = adapter?.itemCount?.minus(1) ?: 0
+    layoutManager!!.scrollToPositionWithOffset(lastItemPosition, 0)
+    post { // then scroll to specific offset
+        val target: View? = layoutManager.findViewByPosition(lastItemPosition)
+        if (target != null) {
+            val offset: Int = measuredHeight - target.measuredHeight
+            layoutManager.scrollToPositionWithOffset(lastItemPosition, offset)
+        }
+    }
+}

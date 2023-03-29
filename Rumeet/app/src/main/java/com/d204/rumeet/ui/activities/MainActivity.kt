@@ -22,6 +22,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initStartView() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
         navController = navHostFragment.navController
+
+        AMQPManager.initChannel()
     }
 
     override fun initDataBinding() {
@@ -77,7 +79,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         }
     }
-
+    
     companion object {
         private const val TAG = "MainActivity"
     }

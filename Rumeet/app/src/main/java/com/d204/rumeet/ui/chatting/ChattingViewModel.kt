@@ -8,6 +8,8 @@ import com.d204.rumeet.domain.usecase.chatting.GetChattingDataUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
+import com.d204.rumeet.ui.chatting.model.ChattingMessageUiModel
+import com.d204.rumeet.ui.chatting.model.toUiList
 import com.d204.rumeet.util.AMQPManager
 import com.google.gson.Gson
 import com.rabbitmq.client.AMQP
@@ -16,7 +18,6 @@ import com.rabbitmq.client.Envelope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,19 +30,25 @@ class ChattingViewModel @Inject constructor(
         MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
     val chattingSideEffect: SharedFlow<ChattingSideEffect> get() = _chattingSideEffect.asSharedFlow()
 
-    private val _chattingDataList: MutableStateFlow<UiState<List<ChattingMessageModel>>> =
+    private val _chattingDataList: MutableStateFlow<UiState<List<ChattingMessageUiModel>>> =
         MutableStateFlow(UiState.Loading)
-    val chattingDataList: StateFlow<UiState<List<ChattingMessageModel>>> get() = _chattingDataList.asStateFlow()
+    val chattingDataList: StateFlow<UiState<List<ChattingMessageUiModel>>> get() = _chattingDataList.asStateFlow()
+
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
+
+    private val _chattingUserId : MutableStateFlow<Int> = MutableStateFlow(-1)
+    val chattingUserId : StateFlow<Int> get() = _chattingUserId.asStateFlow()
 
     fun requestChattingData(roomId: Int) {
         baseViewModelScope.launch {
             getChattingDataUseCase(roomId)
                 .onSuccess {
-                    val userId = getUserIdUseCase()
-                    AMQPManager.queueName = "chat.queue.${roomId}.${2}"
-
-                    _chattingSideEffect.emit(ChattingSideEffect.SuccessChattingData(userId = userId))
-                    _chattingDataList.emit(UiState.Success(it.chat))
+                    _userId.emit(getUserIdUseCase())
+                    _chattingUserId.emit(it.user1)
+                    AMQPManager.chattingQueueName = "chat.queue.${roomId}.${userId.value}"
+                    _chattingSideEffect.emit(ChattingSideEffect.SuccessChattingData(userId = userId.value))
+                    _chattingDataList.emit(UiState.Success(it.chat.toUiList()))
                     startSubscribe()
                 }
                 .onError { e -> catchError(e) }
@@ -49,16 +56,19 @@ class ChattingViewModel @Inject constructor(
     }
 
     private fun startSubscribe() {
-        AMQPManager.setReceiveMessage(object : DefaultConsumer(AMQPManager.channel) {
+        AMQPManager.setReceiveMessage(object : DefaultConsumer(AMQPManager.chattingChanel) {
             override fun handleDelivery(
                 consumerTag: String?,
                 envelope: Envelope?,
                 properties: AMQP.BasicProperties?,
                 body: ByteArray
             ) {
-                Log.d("TAG", "handleDelivery: ${String(body)}")
-                val message = Gson().fromJson(String(body), ChattingMessageModel::class.java)
-                _chattingSideEffect.tryEmit(ChattingSideEffect.ReceiveChatting(message))
+                try {
+                    val message = Gson().fromJson(String(body), ChattingMessageModel::class.java)
+                    _chattingSideEffect.tryEmit(ChattingSideEffect.ReceiveChatting(message))
+                }catch (e : Exception){
+                    Log.e("chatting", "handleDelivery: ${e.message}")
+                }
             }
         })
     }

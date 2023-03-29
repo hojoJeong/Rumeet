@@ -7,13 +7,13 @@
 
         <variable
             name="data"
-            type="com.d204.rumeet.domain.model.chatting.ChattingMessageModel" />
+            type="com.d204.rumeet.ui.chatting.model.ChattingMessageUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="12dp">
+        android:paddingTop="12dp">
 
         <TextView
             android:id="@+id/tv_item_chatting_dialog_my"
@@ -24,8 +24,9 @@
             android:background="@drawable/bg_rect_transparent_navyblue_round20_stroke0"
             android:maxEms="12"
             android:paddingHorizontal="10dp"
+            android:gravity="start"
             android:paddingVertical="8dp"
-            android:text="@{data.content}"
+            android:text="@{data.message.content}"
             android:textAlignment="viewStart"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +42,7 @@
             android:layout_marginEnd="6dp"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_chatting_dialog_my"
             app:layout_constraintEnd_toStartOf="@id/tv_item_chatting_dialog_my"
-            app:time="@{data.date}" />
+            app:time="@{data.message.date}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

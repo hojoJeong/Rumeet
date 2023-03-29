@@ -16,7 +16,7 @@ internal class ChattingRepositoryImpl @Inject constructor(
     private val chattingApiService: ChattingApiService
 ) : ChattingRepository {
     override suspend fun getChattingRooms(userId: Int): NetworkResult<List<ChattingRoomModel>> {
-        return handleApi { chattingApiService.getChattingRoom(2) }
+        return handleApi { chattingApiService.getChattingRoom(userId) }
             .toDomainResult<List<ChattingRoomResponseDto>, List<ChattingRoomModel>> { response ->
                 response.map {
                     it.toDomainModel()

@@ -1,15 +1,10 @@
 package com.d204.rumeet.ui.chatting.chatting_list
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.os.Build.VERSION_CODES.P
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
-import com.d204.rumeet.databinding.FragmentChattingBinding
 import com.d204.rumeet.databinding.FragmentChattingListBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.chatting.chatting_list.adapter.ChattingListAdapter
@@ -32,10 +27,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
         }
         exception = viewModel.errorEvent
         viewModel.requestChattingRoom()
-
-        if (AMQPManager.channel == null) {
-            AMQPManager.initChannel()
-        }
     }
 
     override fun initDataBinding() {
@@ -43,6 +34,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
             viewModel.chattingListSideEffect.collectLatest {
                 when (it) {
                     is ChattingListSideEffect.SuccessGetChattingList -> {
+                        AMQPManager
                         setNoResult(it.isEmpty)
                     }
                     is ChattingListSideEffect.NavigateChattingRoom -> {
@@ -52,6 +44,11 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                                 chattingRoomId = it.chattingRoomId
                             )
                         )
+                    }
+                    is ChattingListSideEffect.SuccessNewChattingList -> {
+                        chattingListAdapter.submitList(null)
+                        chattingListAdapter.submitList(it.chattingRoomInfo.toList())
+                        toastMessage("확인")
                     }
                 }
             }

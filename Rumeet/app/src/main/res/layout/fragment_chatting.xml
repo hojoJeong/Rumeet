@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,8 +10,7 @@
             type="com.d204.rumeet.ui.chatting.ChattingViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/whisper">
@@ -18,11 +19,14 @@
             android:id="@+id/rv_chatting_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:nestedScrollingEnabled="false"
-            android:layout_marginTop="@dimen/base_horizontal_margin"
             android:layout_marginHorizontal="14dp"
-            android:layout_marginBottom="@dimen/base_vertical_margin"
+            android:layout_marginTop="@dimen/base_horizontal_margin"
+            android:layout_marginBottom="18dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
             android:orientation="vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none"
             app:chatting="@{vm.chattingDataList}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/ly_chatting"
@@ -42,15 +46,16 @@
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_chatting_content">
 
             <EditText
                 android:id="@+id/edit_chatting_input"
                 android:layout_width="0dp"
-                android:paddingHorizontal="12dp"
                 android:layout_height="46dp"
                 android:layout_weight="5"
-                android:background="@color/transparent" />
+                android:background="@color/transparent"
+                android:paddingHorizontal="12dp" />
 
             <TextView
                 android:id="@+id/btn_chatting_submit"
@@ -59,10 +64,10 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                app:onSingleClick="@{() -> vm.sendChatting()}"
                 android:gravity="center"
                 android:paddingHorizontal="10dp"
-                android:text="전송" />
+                android:text="전송"
+                app:onSingleClick="@{() -> vm.sendChatting()}" />
 
         </LinearLayout>
 

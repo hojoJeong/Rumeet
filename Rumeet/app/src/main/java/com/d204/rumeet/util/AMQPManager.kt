@@ -4,7 +4,6 @@ import com.rabbitmq.client.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 object AMQPManager {
@@ -16,22 +15,33 @@ object AMQPManager {
         password = "guest"
     }
 
-    var queueName: String = ""
-    var channel: Channel? = null
+    var chattingQueueName: String = ""
+    var userQueueName : String = ""
+    var chattingChanel: Channel? = null
+    var userChannel: Channel? = null
 
     fun initChannel() {
         CoroutineScope(Dispatchers.Default).launch {
-            withContext(Dispatchers.Default) {
-                channel = factory.newConnection().createChannel()
-            }
+            chattingChanel = factory.newConnection().createChannel()
+            userChannel = factory.newConnection().createChannel()
         }
     }
 
     fun sendMessage(message: String) {
-        channel?.basicPublish("", queueName, null, message.toByteArray())
+        CoroutineScope(Dispatchers.IO).launch {
+            chattingChanel?.basicPublish("", chattingQueueName, null, message.toByteArray())
+        }
     }
 
     fun setReceiveMessage(callback: DefaultConsumer) {
-        channel?.basicConsume(queueName, true, callback)
+        CoroutineScope(Dispatchers.IO).launch {
+            chattingChanel?.basicConsume(chattingQueueName, true, callback)
+        }
+    }
+
+    fun setChattingListReceive(callback : DefaultConsumer){
+        CoroutineScope(Dispatchers.IO).launch {
+            userChannel?.basicConsume(userQueueName,true, callback)
+        }
     }
 }

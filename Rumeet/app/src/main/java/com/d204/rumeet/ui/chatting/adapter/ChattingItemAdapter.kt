@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.chatting.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +12,12 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemChattingLeftBinding
 import com.d204.rumeet.databinding.ItemChattingRightBinding
 import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
+import com.d204.rumeet.ui.chatting.model.ChattingMessageUiModel
 
 class ChattingItemAdapter(
     private val userId: Int,
     private val profile : String?,
-) : ListAdapter<ChattingMessageModel, RecyclerView.ViewHolder>(ChattingMessageDiffUtil) {
+) : ListAdapter<ChattingMessageUiModel, RecyclerView.ViewHolder>(ChattingMessageDiffUtil) {
 
     companion object {
         private const val SENDER = 0
@@ -26,20 +28,15 @@ class ChattingItemAdapter(
 
     inner class ChattingLeftMessageHolder(private val leftBinding: ItemChattingLeftBinding) :
         RecyclerView.ViewHolder(leftBinding.root) {
-        fun bind(data: ChattingMessageModel) {
+        fun bind(data: ChattingMessageUiModel) {
             leftBinding.profileImg = profile
             leftBinding.data = data
-            // 프로필 이미지를 보여주는 조건
-            if(receiver || adapterPosition == 0) {
-                leftBinding.ivItemChattingProfileOther.visibility = View.VISIBLE
-                receiver = false
-            }
         }
     }
 
     inner class ChattingRightMessageHolder(private val rightBinding: ItemChattingRightBinding) :
         RecyclerView.ViewHolder(rightBinding.root) {
-        fun bind(data: ChattingMessageModel) {
+        fun bind(data: ChattingMessageUiModel) {
             rightBinding.data = data
             receiver = true
         }
@@ -47,7 +44,7 @@ class ChattingItemAdapter(
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        return if (userId == item.fromUserId) SENDER else RECEIVER
+        return if (userId == item.message.fromUserId) SENDER else RECEIVER
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -87,17 +84,17 @@ class ChattingItemAdapter(
         }
     }
 
-    private object ChattingMessageDiffUtil : DiffUtil.ItemCallback<ChattingMessageModel>() {
+    private object ChattingMessageDiffUtil : DiffUtil.ItemCallback<ChattingMessageUiModel>() {
         override fun areItemsTheSame(
-            oldItem: ChattingMessageModel,
-            newItem: ChattingMessageModel
+            oldItem: ChattingMessageUiModel,
+            newItem: ChattingMessageUiModel
         ): Boolean {
-            return oldItem.date == newItem.date
+            return oldItem.message.date == newItem.message.date
         }
 
         override fun areContentsTheSame(
-            oldItem: ChattingMessageModel,
-            newItem: ChattingMessageModel
+            oldItem: ChattingMessageUiModel,
+            newItem: ChattingMessageUiModel
         ): Boolean {
             return oldItem == newItem
         }
