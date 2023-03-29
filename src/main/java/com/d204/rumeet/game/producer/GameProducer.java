@@ -1,6 +1,6 @@
 package com.d204.rumeet.game.producer;
 
-import com.d204.rumeet.kafka.model.KafkaService;
+import com.d204.rumeet.game.model.service.KafkaService;
 import lombok.RequiredArgsConstructor;
 
 

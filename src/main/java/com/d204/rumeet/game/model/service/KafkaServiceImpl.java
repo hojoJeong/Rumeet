@@ -1,4 +1,4 @@
-package com.d204.rumeet.kafka.model;
+package com.d204.rumeet.game.model.service;
 
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.game.model.dto.GamePaceDto;
@@ -17,8 +17,6 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.errors.TopicExistsException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
