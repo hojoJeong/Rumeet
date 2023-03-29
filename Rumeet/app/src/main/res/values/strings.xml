@@ -216,38 +216,38 @@
 
     <string-array name="title_badge">
         <item>경쟁 10회 승리</item>
-        <item>경쟁 10회 승리_no</item>
+        <item>경쟁 10회 승리</item>
         <item>경쟁 20회 승리</item>
-        <item>경쟁 20회 승리_no</item>
+        <item>경쟁 20회 승리</item>
         <item>경쟁 30회 승리</item>
-        <item>경쟁 30회 승리_no</item>
+        <item>경쟁 30회 승리</item>
         <item>러닝 100km 달성</item>
         <item>러닝 1000km 달성</item>
-        <item>러닝 1000km 달성_no</item>
-        <item>러닝 100km 달성_no</item>
+        <item>러닝 1000km 달성</item>
+        <item>러닝 100km 달성</item>
         <item>러닝 500km 달성</item>
-        <item>러닝 500km 달성_no</item>
+        <item>러닝 500km 달성</item>
         <item>경쟁 첫 번째 승리</item>
-        <item>경쟁 첫 번째 승리_no</item>
+        <item>경쟁 첫 번째 승리</item>
         <item>러닝 10시간 달성</item>
-        <item>러닝 10시간 달성_no</item>
+        <item>러닝 10시간 달성</item>
         <item>러닝 20시간 달성</item>
-        <item>러닝 20시간 달성_no</item>
+        <item>러닝 20시간 달성</item>
         <item>러닝 50시간 달성</item>
-        <item>러닝 50시간 달성_no</item>
+        <item>러닝 50시간 달성</item>
         <item>이어달리기 10회 완료</item>
-        <item>이어달리기 10회 완료_no</item>
+        <item>이어달리기 10회 완료</item>
         <item>이어달리기 20회 완료</item>
-        <item>이어달리기 20회 완료_no</item>
+        <item>이어달리기 20회 완료</item>
         <item>이어달리기 30회 완료</item>
-        <item>이어달리기 30회 완료_no</item>
+        <item>이어달리기 30회 완료</item>
         <item>협동 10회 완료</item>
-        <item>협동 10회 완료_no</item>
+        <item>협동 10회 완료</item>
         <item>협동 20회 완료</item>
-        <item>협동 20회 완료_no</item>
+        <item>협동 20회 완료</item>
         <item>협동 30회 완료</item>
-        <item>협동 30회 완료_no</item>
+        <item>협동 30회 완료</item>
         <item>웰컴 뱃지</item>
-        <item>웰컴 뱃지_no</item>
+        <item>웰컴 뱃지</item>
     </string-array>
 </resources>
