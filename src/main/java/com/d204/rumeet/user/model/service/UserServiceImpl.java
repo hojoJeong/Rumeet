@@ -2,7 +2,7 @@ package com.d204.rumeet.user.model.service;
 
 import com.d204.rumeet.exception.DuplicateException;
 import com.d204.rumeet.exception.NoUserDataException;
-//import com.d204.rumeet.kafka.model.KafkaService;
+import com.d204.rumeet.game.model.service.KafkaService;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.tools.OSUpload;
 import com.d204.rumeet.tools.OkhttpUtils;
@@ -15,6 +15,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.apache.ibatis.binding.BindingException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService{
     private final OkhttpUtils okhttpUtils;
     final String bucketName = "rumeet";
 
-//    private final KafkaService kafkaService;
+    private final KafkaService kafkaService;
 
 
 
@@ -121,10 +122,7 @@ public class UserServiceImpl implements UserService{
         user.setProfile(url);
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
-        String topic = "rumeet.userlist";
-//        String message = String.valueOf(user.getId());
-//        kafkaService.sendMessage(topic,message);
-//        kafkaService.createTopic("user." + user.getId());
+        kafkaService.createTopic("user." + user.getId());
     }
     @Override
     public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {
@@ -142,6 +140,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(pwd);
         user.setDate(System.currentTimeMillis());
         userMapper.joinKakaoUser(user);
+        kafkaService.createTopic("user." + user.getId());
     }
 
     @Override
@@ -184,6 +183,15 @@ public class UserServiceImpl implements UserService{
             throw new NoUserDataException();
         }
         return user;
+    }
+
+    @Override
+    public int checkExistsUser(String email) {
+        int userId = userMapper.checkExistsUseByEmail(email);
+        if (userId != 0) {
+            return userId;
+        }
+        throw new BindingException();
     }
 
     @Override
