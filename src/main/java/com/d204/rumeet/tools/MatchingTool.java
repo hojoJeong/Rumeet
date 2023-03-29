@@ -1,7 +1,9 @@
 package com.d204.rumeet.tools;
 
 import com.d204.rumeet.game.model.dto.GamePaceDto;
-import com.d204.rumeet.kafka.model.service.KafkaService;
+import com.d204.rumeet.kafka.model.KafkaService;
+import com.google.gson.Gson;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +33,8 @@ public class MatchingTool {
         }
         if (top_user != null) {
             list.remove(top_user.getId());
-//            kafkaService.sendMessage(topic, new Gson().toJson(target));
+            //TODO Race 생성
+
         } else {
             list.add(target);
         }
