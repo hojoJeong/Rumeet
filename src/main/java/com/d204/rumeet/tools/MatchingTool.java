@@ -18,6 +18,7 @@ public class MatchingTool {
     //이번
     // 매칭 시작하는 것
     public void doMatching(GamePaceDto target) {
+        System.out.println("target = " + target);
         double similarities = 0;
         double top_val = 0;
         GamePaceDto top_user = null;
@@ -30,14 +31,20 @@ public class MatchingTool {
                     top_val = similarities;
                 }
             }
+            node = node.next;
         }
+
         if (top_user != null) {
             list.remove(top_user.getId());
             //TODO Race 생성
-
+            System.out.println("top_user = " + top_user);
+            System.out.println("target = " + target);
         } else {
             list.add(target);
         }
+
+        list.print();
+        System.out.println("========================");
     }
 
 

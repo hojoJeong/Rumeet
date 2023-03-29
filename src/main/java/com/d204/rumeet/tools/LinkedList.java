@@ -38,6 +38,14 @@ public class LinkedList {
             node = node.next;
         }
     }
+    void print() {
+        Node node = this.head;
+        System.out.println(" 큐 출력 ");
+        while (node != null) {
+            System.out.print(node.user + " ");
+            node = node.next;
+        }
+    }
 }
 
 
