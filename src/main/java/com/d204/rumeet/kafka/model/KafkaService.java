@@ -1,5 +1,6 @@
 package com.d204.rumeet.kafka.model;
 
+import com.d204.rumeet.game.model.dto.GamePaceDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Properties;
@@ -13,7 +14,7 @@ public interface KafkaService {
 
     Properties setProps();
 
-    ResponseEntity<?> messageBYFastApi(int mode, int userId);
+    GamePaceDto messageBYFastApi(int mode, int userId);
 
     boolean topicExists(String topicName) throws ExecutionException, InterruptedException;
 
