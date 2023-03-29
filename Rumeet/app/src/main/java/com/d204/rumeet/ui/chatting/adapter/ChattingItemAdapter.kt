@@ -1,6 +1,7 @@
 package com.d204.rumeet.ui.chatting.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -12,9 +13,11 @@ import com.d204.rumeet.databinding.ItemChattingLeftBinding
 import com.d204.rumeet.databinding.ItemChattingRightBinding
 import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
 import com.d204.rumeet.domain.model.chatting.ChattingModel
+import java.util.concurrent.atomic.AtomicBoolean
 
 class ChattingItemAdapter(
-    private val userId: Int
+    private val userId: Int,
+    private val profile : String?,
 ) : ListAdapter<ChattingMessageModel, RecyclerView.ViewHolder>(ChattingMessageDiffUtil) {
 
     companion object {
@@ -22,7 +25,10 @@ class ChattingItemAdapter(
         private const val RECEIVER = 1
     }
 
-    class ChattingLeftMessageHolder(private val leftBinding: ItemChattingLeftBinding) :
+    private var sender = false
+    private var receiver = false
+
+    inner class ChattingLeftMessageHolder(private val leftBinding: ItemChattingLeftBinding) :
         RecyclerView.ViewHolder(leftBinding.root) {
         fun bind(data: ChattingMessageModel) {
             leftBinding.data = data

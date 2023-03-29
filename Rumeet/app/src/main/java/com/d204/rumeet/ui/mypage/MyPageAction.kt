@@ -7,5 +7,5 @@ sealed class MyPageAction {
     object BadgeList : MyPageAction()
     object EditProfile : MyPageAction()
     object Setting : MyPageAction()
-    object Notice : MyPageAction()
+    object LogOut : MyPageAction()
 }

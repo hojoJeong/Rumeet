@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.d204.rumeet.ui.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="HomeFragment">
         <action
             android:id="@+id/action_homeFragment_to_runningOptionContainerFragment"
             app:destination="@id/runningOptionFragment" />
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/runningOptionFragment"
         android:name="com.d204.rumeet.ui.running.fragment.RunningOptionFragment"
-        android:label="RunningOptionContainerFragment" >
+        android:label="RunningOptionContainerFragment">
         <action
             android:id="@+id/action_runningOptionContainerFragment_to_runningFragment"
             app:destination="@id/runningFragment" />
@@ -60,7 +60,7 @@
         <fragment
             android:id="@+id/settingFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.SettingFragment"
-            android:label="SettingFragment" >
+            android:label="SettingFragment">
             <action
                 android:id="@+id/action_settingFragment_to_userInfoFragment"
                 app:destination="@id/userInfoFragment" />
@@ -71,7 +71,7 @@
         <fragment
             android:id="@+id/userInfoFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.UserInfoFragment"
-            android:label="SettingUserInfoFragment" >
+            android:label="SettingUserInfoFragment">
             <action
                 android:id="@+id/action_userInfoFragment_to_confirmPasswordFragment"
                 app:destination="@id/confirmPasswordFragment" />
@@ -89,29 +89,28 @@
         <fragment
             android:id="@+id/confirmPasswordFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.ConfirmPasswordFragment"
-            android:label="ConfirmPasswordFragment" >
+            android:label="ConfirmPasswordFragment">
             <argument
                 android:name="destination_fragment"
                 app:argType="string"
-                app:nullable="false"/>
+                app:nullable="false" />
 
             <action
                 android:id="@+id/action_confirmPasswordFragment_to_resetPasswordFragment2"
                 app:destination="@id/resetPasswordFragment2"
                 app:popUpTo="@id/userInfoFragment"
-                app:popUpToInclusive="false"/>
+                app:popUpToInclusive="false" />
         </fragment>
 
         <fragment
             android:id="@+id/additionalInfoFragment2"
             android:name="com.d204.rumeet.ui.join.addtional_info.AdditionalInfoFragment"
-            android:label="AdditionalInfoFragment" >
+            android:label="AdditionalInfoFragment">
             <argument
                 android:name="reset"
-                app:argType="boolean"
-                app:nullable="false"
                 android:defaultValue="false"
-                />
+                app:argType="boolean"
+                app:nullable="false" />
         </fragment>
         <fragment
             android:id="@+id/resetPasswordFragment2"
@@ -119,18 +118,18 @@
             android:label="ResetPasswordFragment">
             <argument
                 android:name="reset"
+                android:defaultValue="false"
                 app:argType="boolean"
-                app:nullable="false"
-                android:defaultValue="false"/>
+                app:nullable="false" />
             <argument
                 android:name="email"
                 app:argType="string"
-                app:nullable="false"/>
+                app:nullable="false" />
         </fragment>
         <fragment
             android:id="@+id/withdrawalFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.WithdrawalFragment"
-            android:label="WithdrawalFragment" >
+            android:label="WithdrawalFragment">
             <action
                 android:id="@+id/action_withdrawalFragment_to_resultWithdrawalFragment"
                 app:destination="@id/resultWithdrawalFragment" />
@@ -150,7 +149,11 @@
         <fragment
             android:id="@+id/friendListFragment"
             android:name="com.d204.rumeet.ui.mypage.FriendListFragment"
-            android:label="FriendListFragment" />
+            android:label="FriendListFragment">
+            <action
+                android:id="@+id/action_friendListFragment_to_addFriendFragment"
+                app:destination="@id/addFriendFragment" />
+        </fragment>
         <fragment
             android:id="@+id/badgeListFragment"
             android:name="com.d204.rumeet.ui.mypage.BadgeListFragment"
@@ -158,7 +161,7 @@
         <fragment
             android:id="@+id/joinNicknameFragment2"
             android:name="com.d204.rumeet.ui.join.nickname.JoinNicknameFragment"
-            android:label="JoinNicknameFragment" >
+            android:label="JoinNicknameFragment">
             <argument
                 android:name="oauth"
                 android:defaultValue="1L"
@@ -169,11 +172,14 @@
                 app:argType="string" />
             <argument
                 android:name="reset"
+                android:defaultValue="false"
                 app:argType="boolean"
-                app:nullable="false"
-                android:defaultValue="false"/>
+                app:nullable="false" />
         </fragment>
-
+        <fragment
+            android:id="@+id/addFriendFragment"
+            android:name="com.d204.rumeet.ui.friend.add.AddFriendFragment"
+            android:label="AddFriendFragment" />
     </navigation>
 
     <fragment
@@ -185,6 +191,10 @@
             android:name="chattingRoomId"
             android:defaultValue="0"
             app:argType="integer" />
+        <argument
+            android:name="profile"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -196,6 +206,5 @@
             android:id="@+id/action_chattingListFragment_to_chattingFragment"
             app:destination="@id/chattingFragment" />
     </fragment>
-
 
 </navigation>

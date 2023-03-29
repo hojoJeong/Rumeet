@@ -1,6 +1,7 @@
 package com.d204.rumeet.ui.chatting
 
 import androidx.lifecycle.ViewModel
+import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
 import com.d204.rumeet.domain.model.chatting.ChattingModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
@@ -20,14 +21,14 @@ class ChattingViewModel @Inject constructor(
     private val _chattingSideEffect : MutableSharedFlow<ChattingSideEffect> = MutableSharedFlow()
     val chattingSideEffect : SharedFlow<ChattingSideEffect> get() = _chattingSideEffect.asSharedFlow()
 
-    private val _chattingDataList : MutableStateFlow<UiState<ChattingModel>> = MutableStateFlow(UiState.Loading)
-    val chattingDataList : StateFlow<UiState<ChattingModel>> get() = _chattingDataList.asStateFlow()
+    private val _chattingDataList : MutableStateFlow<UiState<List<ChattingMessageModel>>> = MutableStateFlow(UiState.Loading)
+    val chattingDataList : StateFlow<UiState<List<ChattingMessageModel>>> get() = _chattingDataList.asStateFlow()
 
     fun requestChattingData(roomId : Int){
         baseViewModelScope.launch {
             getChattingDataUseCase(roomId)
-                .onSuccess {  }
-                .onError {  }
+                .onSuccess { _chattingDataList.emit(UiState.Success(it.chat)) }
+                .onError { e -> catchError(e) }
         }
     }
 }

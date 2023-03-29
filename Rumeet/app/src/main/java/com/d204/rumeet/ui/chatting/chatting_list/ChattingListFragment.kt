@@ -41,7 +41,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         setNoResult(it.isEmpty)
                     }
                     is ChattingListSideEffect.NavigateChattingRoom -> {
-                        navigate(ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(it.chattingRoomId))
+                        navigate(ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(it.profile,it.chattingRoomId))
                     }
                 }
             }

@@ -45,9 +45,9 @@ class ChattingListViewModel @Inject constructor(
         }
     }
 
-    override fun onChattingRoomClick(roomId: Int) {
+    override fun onChattingRoomClick(roomId: Int, profile : String) {
         baseViewModelScope.launch {
-            _chattingListSideEffect.emit(ChattingListSideEffect.NavigateChattingRoom(roomId))
+            _chattingListSideEffect.emit(ChattingListSideEffect.NavigateChattingRoom(roomId,profile))
         }
     }
 }

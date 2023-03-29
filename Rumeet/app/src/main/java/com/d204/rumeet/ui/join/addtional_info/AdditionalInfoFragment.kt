@@ -11,6 +11,7 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.DefaultAlertDialog
 import com.d204.rumeet.ui.components.BodyInfoBottomSheetDialog
 import com.d204.rumeet.ui.join.JoinViewModel
+
 import kotlinx.coroutines.flow.collectLatest
 
 class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinViewModel>() {
