@@ -21,7 +21,13 @@ public class LinkedList {
     void remove(int userId) {
         Node node = this.head;
         if (this.head.user.getId() == userId) {
-            this.head = this.tail = null;
+            if(this.head == this.tail) {
+                this.head = this.tail = null;
+            } else {
+                Node next = this.head.next;
+                this.head.next = null;
+                this.head = next;
+            }
             return;
         }
         Node prev = node;
@@ -40,11 +46,12 @@ public class LinkedList {
     }
     void print() {
         Node node = this.head;
-        System.out.println(" 큐 출력 ");
+        System.out.println("큐 출력@@@@@@@@@@@@@@@@2");
         while (node != null) {
             System.out.print(node.user + " ");
             node = node.next;
         }
+        System.out.println();
     }
 }
 

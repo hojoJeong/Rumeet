@@ -2,6 +2,7 @@ package com.d204.rumeet.kafka.model;
 
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.game.model.dto.GamePaceDto;
+import com.d204.rumeet.kafka.model.service.KafkaService;
 import com.google.gson.Gson;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -119,4 +120,5 @@ public class KafkaServiceImpl implements KafkaService {
         this.sendMessage(userATopic, gameInfo);
         this.sendMessage(userBTopic, gameInfo);
     }
+
 }

@@ -1,4 +1,4 @@
-package com.d204.rumeet.kafka.model;
+package com.d204.rumeet.kafka.model.service;
 
 import com.d204.rumeet.game.model.dto.GamePaceDto;
 import org.springframework.http.ResponseEntity;

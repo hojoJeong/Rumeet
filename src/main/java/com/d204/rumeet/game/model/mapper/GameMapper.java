@@ -1,7 +1,7 @@
-package com.d204.rumeet.game.model.service;
+package com.d204.rumeet.game.model.mapper;
 
 import com.d204.rumeet.game.model.dto.RaceDto;
 
-public interface GameService {
+public interface GameMapper {
     void makeRace(RaceDto gameDto);
 }

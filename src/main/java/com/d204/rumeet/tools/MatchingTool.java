@@ -1,7 +1,10 @@
 package com.d204.rumeet.tools;
 
+import com.d204.rumeet.game.model.dto.GameDto;
 import com.d204.rumeet.game.model.dto.GamePaceDto;
-import com.d204.rumeet.kafka.model.KafkaService;
+import com.d204.rumeet.game.model.dto.RaceDto;
+import com.d204.rumeet.game.model.service.GameService;
+import com.d204.rumeet.kafka.model.service.KafkaService;
 import com.google.gson.Gson;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +15,21 @@ import org.springframework.stereotype.Component;
 public class MatchingTool {
 
 
-    private final LinkedList list;
+    private final LinkedList[] lists = new LinkedList[20];
     private final KafkaService kafkaService;
+
+    private final GameService gameService;
 
     //이번
     // 매칭 시작하는 것
     public void doMatching(GamePaceDto target) {
-        System.out.println("target = " + target);
+        int mode = target.getMode();
+        if(lists[mode] == null) {
+            lists[mode] = new LinkedList();
+        }
+
+        LinkedList list = lists[mode];
+
         double similarities = 0;
         double top_val = 0;
         GamePaceDto top_user = null;
@@ -36,13 +47,20 @@ public class MatchingTool {
 
         if (top_user != null) {
             list.remove(top_user.getId());
-            //TODO Race 생성
+            RaceDto raceDto = new RaceDto();
+            raceDto.setMode(mode);
+            raceDto.setDate(System.currentTimeMillis());
+            raceDto.setUserId(top_user.getId());
+            raceDto.setPartnerId(target.getId());
+            gameService.makeRace(raceDto);
+            String json = new Gson().toJson(raceDto);
+            kafkaService.sendMessage("user."+top_user.getId(), json);
+            kafkaService.sendMessage("user."+target.getId(), json);
             System.out.println("top_user = " + top_user);
             System.out.println("target = " + target);
         } else {
             list.add(target);
         }
-
         list.print();
         System.out.println("========================");
     }

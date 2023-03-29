@@ -1,4 +1,4 @@
-package com.d204.rumeet.kafka.model.consumer;
+package com.d204.rumeet.game.model.consumer;
 
 import com.d204.rumeet.game.model.dto.GamePaceDto;
 import com.d204.rumeet.tools.MatchingTool;
