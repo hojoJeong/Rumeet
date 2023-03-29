@@ -1,6 +1,7 @@
 package com.d204.rumeet.exception;
 
 import com.d204.rumeet.data.RespData;
+import org.apache.ibatis.binding.BindingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,10 +13,21 @@ import java.util.ArrayList;
 @RestControllerAdvice
 public class ErrorHandler {
 
+    @ExceptionHandler(BindingException.class)
+    public ResponseEntity<?> BindingException(BindingException ex) {
+        RespData<Integer> data = new RespData(ErrorEnum.SQL_ERROR);
+        if (ex instanceof BindingException) {
+            data = new RespData(ErrorEnum.NO_USER_ERROR);
+            data.setData(-1);
+        }
+        return data.builder();
+    }
+
+
     @ExceptionHandler(SQLException.class)
     public ResponseEntity<?> SqlException(SQLException ex) {
         RespData<Void> data = new RespData(ErrorEnum.SQL_ERROR);
-        if(ex instanceof SQLSyntaxErrorException) {
+        if (ex instanceof SQLSyntaxErrorException) {
             data = new RespData(ErrorEnum.SQL_SYNTAX_ERROR);
         }
         return data.builder();
@@ -40,6 +52,7 @@ public class ErrorHandler {
         data.setData(new ArrayList<>());
         return data.builder();
     }
+
     @ExceptionHandler(DuplicateException.class)
     public ResponseEntity<?> DuplicateException() {
         RespData<Void> data = new RespData(ErrorEnum.DUPLICATE_USER);

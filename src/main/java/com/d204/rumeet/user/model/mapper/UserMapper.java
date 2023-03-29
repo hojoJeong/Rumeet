@@ -32,4 +32,6 @@ public interface UserMapper {
     int modifyUserProfile(ProfileUserDto user);
 
     SimpleUserDto getSimpleUserById(int id);
+
+    int checkExistsUseByEmail(String email);
 }
