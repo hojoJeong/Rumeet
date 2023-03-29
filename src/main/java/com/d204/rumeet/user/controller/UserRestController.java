@@ -188,4 +188,18 @@ public class UserRestController {
         return data.builder();
     }
 
+    @Operation(summary = "이메일을 통한 유저 가입 유무 조회")
+    @GetMapping("check/email")
+    public ResponseEntity<?> checkExistsUser(@RequestParam String email) {
+        int userId = userService.checkExistsUser(email);
+        RespData<Integer> data = new RespData<>();
+        if (userId == 0) {
+            data.setFlag("fail");
+            data.setCode(2);
+            data.setMsg("회원가입");
+            data.setData(0);
+        }
+        data.setData(userId);
+        return data.builder();
+    }
 }
