@@ -35,7 +35,8 @@ public class MatchingTool {
         }
         if(top_user != null) {
             list.remove(top_user.getId());
-//            kafkaService.sendMessage(topic, new Gson().toJson(target));
+            //TODO Race 생성
+
         } else {
             list.add(target);
         }
@@ -66,7 +67,10 @@ public class MatchingTool {
         void remove(int userId) {
             Node node = this.head;
             if(this.head.user.getId() == userId) {
-                this.head = this.tail = null;
+                if (this.head == this.tail)
+                    this.head = this.tail = null;
+                else
+                    this.head = this.head.next;
                 return;
             }
             Node prev = node;
