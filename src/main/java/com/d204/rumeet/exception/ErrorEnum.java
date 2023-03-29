@@ -17,7 +17,8 @@ public enum ErrorEnum {
     DUPLICATE_REQUEST_ERROR("fail","이미 친구요청을 보낸 상태입니다.",1),
     NO_REQUEST_ERROR("fail", "해당 친구요청이 존재하지 않습니다." , 1 ),
     NO_FRIEND_ERROR("fail", "친구가 아닙니다.", 1),
-    ALREADY_FRIEND_ERROR("fail", "이미 친구입니다.", 2);
+    ALREADY_FRIEND_ERROR("fail", "이미 친구입니다.", 2),
+    NO_BADGE_ERROR("fail", "해당 뱃지 정보가 없습니다.", 1);
     public String flag;
     public String msg;
     public int code;
