@@ -9,6 +9,12 @@
         <result column="name" property="name"/>
         <result column="description" property="description"/>
         <result column="type" property="type"/>
+    </resultMap>
+    <resultMap id="myBadge" type="BadgeDateDto">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="type" property="type"/>
         <result column="date" property="date"/>
     </resultMap>
 
@@ -20,10 +26,10 @@
         INSERT INTO my_badge (user_id, badge_id, date) VALUES (#{userId}, #{badgeId}, #{date});
     </insert>
 
-    <select id="getAllBadgesByUserId" parameterType="int" resultMap="badge">
+    <select id="getAllBadgesByUserId" parameterType="int" resultMap="myBadge">
         SELECT b.id, b.name, b.description, b.type, mb.date
         FROM badge b
         JOIN my_badge mb ON b.id = mb.badge_id
-        WHERE mb.user_id = #{userId} AND b.type = #{type};
+        WHERE mb.user_id = #{userId} and b.type = #{type};
     </select>
 </mapper>
