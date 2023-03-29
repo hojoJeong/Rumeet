@@ -2,7 +2,7 @@ package com.d204.rumeet.user.model.service;
 
 import com.d204.rumeet.exception.DuplicateException;
 import com.d204.rumeet.exception.NoUserDataException;
-//import com.d204.rumeet.kafka.model.KafkaService;
+import com.d204.rumeet.game.model.service.KafkaService;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.tools.OSUpload;
 import com.d204.rumeet.tools.OkhttpUtils;
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService{
     private final OkhttpUtils okhttpUtils;
     final String bucketName = "rumeet";
 
-//    private final KafkaService kafkaService;
+    private final KafkaService kafkaService;
 
 
 
@@ -121,10 +121,7 @@ public class UserServiceImpl implements UserService{
         user.setProfile(url);
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
-        String topic = "rumeet.userlist";
-//        String message = String.valueOf(user.getId());
-//        kafkaService.sendMessage(topic,message);
-//        kafkaService.createTopic("user." + user.getId());
+        kafkaService.createTopic("user." + user.getId());
     }
     @Override
     public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {
@@ -142,6 +139,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(pwd);
         user.setDate(System.currentTimeMillis());
         userMapper.joinKakaoUser(user);
+        kafkaService.createTopic("user." + user.getId());
     }
 
     @Override
