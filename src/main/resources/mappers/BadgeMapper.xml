@@ -9,8 +9,7 @@
         <result column="name" property="name"/>
         <result column="description" property="description"/>
         <result column="type" property="type"/>
-        <result column="badge_img" property="badge_img"/>
-        <result column="badge_img_black" property="badge_img_black"/>
+        <result column="date" property="date"/>
     </resultMap>
 
     <select id="getBadgeById" parameterType="int" resultMap="badge">
