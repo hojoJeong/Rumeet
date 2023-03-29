@@ -14,26 +14,24 @@ public class MatchingTool {
 
     private final LinkedList list;
     private final KafkaService kafkaService;
+
     //이번
     // 매칭 시작하는 것
-    public void doMatching(GamePaceDto target){
-        int userIndex = 0;
-        int topK = 5;
-
+    public void doMatching(GamePaceDto target) {
         double similarities = 0;
         double top_val = 0;
         GamePaceDto top_user = null;
         Node node = list.head;
         while (node != null) {
             similarities = calculateEuclideanSimilarity(node.user.getPace(), target.getPace());
-            if(similarities >= 0.01) {
-                if(top_val < similarities) {
+            if (similarities >= 0.01) {
+                if (top_val < similarities) {
                     top_user = node.user;
                     top_val = similarities;
                 }
             }
         }
-        if(top_user != null) {
+        if (top_user != null) {
             list.remove(top_user.getId());
             //TODO Race 생성
 
@@ -53,47 +51,4 @@ public class MatchingTool {
         return 1 / (1 + Math.sqrt(distance));
     }
 
-
-    class LinkedList {
-        Node head;
-        Node tail;
-
-        void add(GamePaceDto target) {
-            Node node = new Node(target);
-            this.tail.next = node;
-            this.tail = node;
-        }
-
-        void remove(int userId) {
-            Node node = this.head;
-            if(this.head.user.getId() == userId) {
-                if (this.head == this.tail)
-                    this.head = this.tail = null;
-                else
-                    this.head = this.head.next;
-                return;
-            }
-            Node prev = node;
-            node = node.next;
-            while (node !=null) {
-                if(node.user.getId() == userId) {
-                    prev.next = node.next;
-                    if(node == this.tail) {
-                        this.tail = prev;
-                    }
-                    break;
-                }
-                prev = node;
-                node = node.next;
-            }
-        }
-    }
-    class Node {
-        GamePaceDto user;
-        Node next;
-
-        public Node(GamePaceDto user) {
-            this.user = user;
-        }
-    }
 }
