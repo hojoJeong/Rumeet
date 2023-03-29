@@ -9,11 +9,10 @@ internal fun UserInfoResponse.toDomainModel() = UserInfoDomainModel(
     email,
     gender,
     height,
-    id,
     nickname,
     oauth,
     password,
-    profileImg,
+    profile,
     refreshToken,
     state,
     weight

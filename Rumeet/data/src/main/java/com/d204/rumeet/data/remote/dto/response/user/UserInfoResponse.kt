@@ -21,8 +21,8 @@ data class UserInfoResponse(
     val oauth: String,
     @SerializedName("password")
     val password: String,
-    @SerializedName("profileImg")
-    val profileImg: String?,
+    @SerializedName("profile")
+    val profile: String?,
     @SerializedName("refreshToken")
     val refreshToken: String,
     @SerializedName("state")

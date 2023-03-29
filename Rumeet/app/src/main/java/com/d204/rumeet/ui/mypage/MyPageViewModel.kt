@@ -53,12 +53,12 @@ class MyPageViewModel @Inject constructor(
     val userId: StateFlow<UiState<Int>>
         get() = _userId.asStateFlow()
 
-    private val _userInfo: MutableStateFlow<NetworkResult<UserInfoUiModel>> =
-        MutableStateFlow(NetworkResult.Loading)
-    val userInfo: StateFlow<NetworkResult<UserInfoUiModel>>
+    private val _userInfo: MutableStateFlow<UiState<UserInfoUiModel>> =
+        MutableStateFlow(UiState.Loading)
+    val userInfo: StateFlow<UiState<UserInfoUiModel>>
         get() = _userInfo.asStateFlow()
 
-    fun setSettingNavigate(title: String) {
+    private fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
             when (title) {
                 myPageMunuList[0] -> _myPageNavigationEvent.emit(MyPageAction.RunningRecord)

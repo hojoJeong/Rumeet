@@ -46,7 +46,7 @@ class MyPageMenuAdapter(
             DataBindingUtil.inflate<ItemMypageMenuBinding>(
                 LayoutInflater.from(parent.context), R.layout.item_mypage_menu, parent, false
             )
-        view.vm = handler
+        view.handler = handler
         return MyPageMenuItemHolder(view)
     }
 

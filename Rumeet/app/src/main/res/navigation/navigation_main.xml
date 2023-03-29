@@ -62,19 +62,25 @@
             android:name="com.d204.rumeet.ui.mypage.setting.SettingFragment"
             android:label="SettingFragment" >
             <action
-                android:id="@+id/action_settingFragment_to_settingUserInfoFragment"
-                app:destination="@id/settingUserInfoFragment" />
+                android:id="@+id/action_settingFragment_to_userInfoFragment"
+                app:destination="@id/userInfoFragment" />
             <action
                 android:id="@+id/action_settingFragment_to_notificationSettingFragment"
                 app:destination="@id/notificationSettingFragment" />
         </fragment>
         <fragment
-            android:id="@+id/settingUserInfoFragment"
-            android:name="com.d204.rumeet.ui.mypage.setting.SettingUserInfoFragment"
+            android:id="@+id/userInfoFragment"
+            android:name="com.d204.rumeet.ui.mypage.setting.UserInfoFragment"
             android:label="SettingUserInfoFragment" >
             <action
-                android:id="@+id/action_settingUserInfoFragment_to_confirmPasswordFragment"
+                android:id="@+id/action_userInfoFragment_to_confirmPasswordFragment"
                 app:destination="@id/confirmPasswordFragment" />
+            <action
+                android:id="@+id/action_userInfoFragment_to_additionalInfoFragment2"
+                app:destination="@id/additionalInfoFragment2" />
+            <action
+                android:id="@+id/action_userInfoFragment_to_withdrawalFragment"
+                app:destination="@id/withdrawalFragment" />
         </fragment>
         <fragment
             android:id="@+id/notificationSettingFragment"
@@ -92,16 +98,8 @@
             <action
                 android:id="@+id/action_confirmPasswordFragment_to_resetPasswordFragment2"
                 app:destination="@id/resetPasswordFragment2"
-                app:popUpTo="@id/settingUserInfoFragment"
+                app:popUpTo="@id/userInfoFragment"
                 app:popUpToInclusive="false"/>
-            <action
-                android:id="@+id/action_confirmPasswordFragment_to_additionalInfoFragment2"
-                app:destination="@id/additionalInfoFragment2"
-                app:popUpTo="@id/settingUserInfoFragment"
-                app:popUpToInclusive="false"/>
-            <action
-                android:id="@+id/action_confirmPasswordFragment_to_withdrawalFragment"
-                app:destination="@id/withdrawalFragment"/>
         </fragment>
 
         <fragment

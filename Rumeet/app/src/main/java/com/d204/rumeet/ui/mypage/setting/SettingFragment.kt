@@ -17,26 +17,24 @@ import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
-    private val myPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage)
-
     override val layoutResourceId: Int
         get() = R.layout.fragment_setting
-    override val viewModel: BaseViewModel
-        get() = myPageViewModel
+    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage){defaultViewModelProviderFactory}
+
 
     override fun initStartView() {
         initView()
     }
 
     override fun initDataBinding() {
-        myPageViewModel.setSettingMenuTitleList(
+        viewModel.setSettingMenuTitleList(
             resources.getStringArray(R.array.title_setting_content).toList()
         )
         lifecycleScope.launchWhenResumed {
-            myPageViewModel.settingNavigationEvent.collectLatest { action ->
+            viewModel.settingNavigationEvent.collectLatest { action ->
                 when (action) {
                     SettingAction.UserInfo -> {
-                        navigate(SettingFragmentDirections.actionSettingFragmentToSettingUserInfoFragment())
+                        navigate(SettingFragmentDirections.actionSettingFragmentToUserInfoFragment())
                     }
                     SettingAction.SettingNotification -> {
                         navigate(SettingFragmentDirections.actionSettingFragmentToNotificationSettingFragment())
@@ -64,9 +62,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
         settingOptionList[titleList.indexOf(resources.getStringArray(R.array.title_setting_content)[2])].content =
             "v 0.0.1"
 
-        val settingContentAdapter = SettingItemListAdapter().apply {
+        val settingContentAdapter = SettingItemListAdapter(viewModel).apply {
             submitList(settingOptionList)
-            viewModel = myPageViewModel
         }
 
         with(binding.rvSetting) {

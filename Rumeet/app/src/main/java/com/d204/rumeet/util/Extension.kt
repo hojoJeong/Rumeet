@@ -38,7 +38,7 @@ fun TextView.setTextColorWithNoTheme(colorRes : Int){
 fun Context.getColorWithNoTheme(colorRes : Int) = ResourcesCompat.getColor(resources, colorRes, null)
 
 @SuppressLint("Recycle")
-fun Context.getAbsolutePath(path : Uri?, context : Context) : String{
+fun getAbsolutePath(path : Uri?, context : Context) : String{
     val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
     val c: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
     val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)

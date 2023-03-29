@@ -178,7 +178,42 @@
     <string name="title_badge_team">상어를 피해\n끝까지 달려봐요!</string>
     <string name="title_badge_relay">내가 성정하는\n이어달리기!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="url_badge">
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_10.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_10_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_20.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_20_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_30.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_30_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_100.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_1000.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_1000_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_100_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_500.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_500_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_first_victory.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_first_victory_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_hours_10.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_hours_10_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_hours_20.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_hours_20_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_hours_50.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_hours_50_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_relay_times_10.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_relay_times_10_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_relay_times_20.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_relay_times_20_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_relay_times_30.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_relay_times_30_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_team_times_10.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_team_times_10_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_team_times_20.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_team_times_20_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_team_times_30.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_team_times_30_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_welcome.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_welcome_no.png</item>
+
+    </string-array>
 
 </resources>

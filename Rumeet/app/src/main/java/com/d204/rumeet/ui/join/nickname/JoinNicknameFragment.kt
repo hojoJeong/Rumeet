@@ -6,7 +6,6 @@ import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.d204.rumeet.R
@@ -32,7 +31,7 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
         registerForActivityResult((ActivityResultContracts.StartActivityForResult())) { result ->
             if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data!!
-                imageFile = File(requireContext().getAbsolutePath(uri, requireContext()))
+                imageFile = File(getAbsolutePath(uri, requireContext()))
                 binding.ivProfileImg.setImageURI(uri)
             }
         }
@@ -71,15 +70,10 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
                         )
                     }
                     is JoinNicknameAction.PassNicknameValidation -> {
-                        if(!args.reset){
-                            viewModel.joinInfo.profileImg = imageFile
-                            if(!socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
-                            else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
-                        } else {
-                            //TODO 프로필 수정
-                            findNavController().popBackStack()
-                        }
-
+                        viewModel.joinInfo.nickname =  it.nickname
+                        viewModel.joinInfo.profileImg = imageFile
+                        if(!socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
+                        else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
                     }
                     is JoinNicknameAction.NavigateGallery -> { navigateGallery() }
                 }
@@ -88,11 +82,7 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
     }
 
     override fun initAfterBinding() {
-        if(!args.reset){
-            binding.btnContinue.setContent("계속하기")
-        } else {
-            binding.btnContinue.setContent("수정하기")
-        }
+        binding.btnContinue.setContent("계속하기")
         binding.editNickname.setEditTextType(
             SingleLineEditText.SingUpEditTextType.NORMAL,
             getString(R.string.content_nickname_hint)
@@ -109,13 +99,5 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
             putExtra(Intent.EXTRA_TITLE, "사용할 앱을 선택해주세요")
         }
         galleryLauncher.launch(chooserIntent)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        with(viewModel.joinInfo){
-            nickname = ""
-            profileImg = null
-        }
     }
 }

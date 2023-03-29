@@ -6,11 +6,10 @@ data class UserInfoDomainModel(
     val email: String,
     val gender: Int,
     val height: Double,
-    val id: Int,
     val nickname: String,
     val oauth: String,
     val password: String?,
-    val profileImg: String?,
+    val profile: String?,
     val refreshToken: String,
     val state: Int,
     val weight: Double
