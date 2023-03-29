@@ -16,16 +16,6 @@
         <result column="date" property="date"/>
     </resultMap>
 
-    <resultMap id="myBadge" type="BadgeImageDto">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="description" property="description" />
-        <result column="type" property="type" />
-        <result column="image" property="image" />
-        <result column="flag" property="flag" />
-        <result column="date" property="date" />
-    </resultMap>
-
 
     <select id="getBadgeById" parameterType="int" resultMap="badge">
         SELECT * FROM badge WHERE id = #{badgeId};
