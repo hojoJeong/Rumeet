@@ -9,6 +9,5 @@ public class BadgeDateDto {
     int id;
     String name;
     String description;
-    int type;
     long date;
 }

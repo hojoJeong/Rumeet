@@ -37,8 +37,8 @@ public class BadgeServiceImpl implements BadgeService{
     }
 
     @Override
-    public List<BadgeDto> getAllBadgesByUserId(int userId, int type) {
-        List<BadgeDto> badges = badgeMapper.getAllBadgesByUserId(userId, type);
+    public List<BadgeDto> getAllBadgesByUserId(int userId) {
+        List<BadgeDto> badges = badgeMapper.getAllBadgesByUserId(userId);
         return badges;
     }
 }

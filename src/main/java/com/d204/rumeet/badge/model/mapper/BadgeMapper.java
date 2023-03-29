@@ -12,5 +12,5 @@ public interface BadgeMapper {
 
     void addBadge(MyBadgeDto myBadge);
 
-    List<BadgeDto> getAllBadgesByUserId(int userId, int type);
+    List<BadgeDto> getAllBadgesByUserId(int userId);
 }

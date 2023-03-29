@@ -40,9 +40,9 @@ public class BadgeController {
     }
 
     @Operation(summary = "취득한 뱃지 조회 (타입별로)")
-    @GetMapping("/{userId}/{type}")
-    public ResponseEntity<?> getAllBadgesByUserId(@PathVariable("userId") int userId, @PathVariable("type") int type){
-        List<BadgeDto> badges = badgeService.getAllBadgesByUserId(userId, type);
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<?> getAllBadgesByUserId(@PathVariable("userId") int userId){
+        List<BadgeDto> badges = badgeService.getAllBadgesByUserId(userId);
         RespData<List> data = new RespData<>();
         data.setData(badges);
         return data.builder();
