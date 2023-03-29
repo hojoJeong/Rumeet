@@ -39,5 +39,8 @@ public interface UserService {
 
     SimpleUserDto getSimpleUserById(int id);
 
+    int checkExistsUser(String email);
+
+
 
 }

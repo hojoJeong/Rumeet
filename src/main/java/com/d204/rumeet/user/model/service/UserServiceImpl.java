@@ -15,6 +15,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.apache.ibatis.binding.BindingException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -182,6 +183,15 @@ public class UserServiceImpl implements UserService{
             throw new NoUserDataException();
         }
         return user;
+    }
+
+    @Override
+    public int checkExistsUser(String email) {
+        int userId = userMapper.checkExistsUseByEmail(email);
+        if (userId != 0) {
+            return userId;
+        }
+        throw new BindingException();
     }
 
     @Override
