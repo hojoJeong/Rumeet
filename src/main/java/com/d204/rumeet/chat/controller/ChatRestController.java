@@ -1,13 +1,12 @@
 package com.d204.rumeet.chat.controller;
 
-import com.d204.rumeet.chat.model.dto.ChatRoomDataDto;
-import com.d204.rumeet.chat.model.dto.ChatRoomDto;
-import com.d204.rumeet.chat.model.dto.CreateChatReturnDTO;
-import com.d204.rumeet.chat.model.dto.CreateChatRoomDto;
+import com.d204.rumeet.chat.model.dto.*;
 import com.d204.rumeet.chat.model.service.ChatService;
 import com.d204.rumeet.data.RespData;
+import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,7 @@ import java.util.List;
 public class ChatRestController {
 
     private final ChatService chatService;
-
+    private final RabbitTemplate rabbitTemplate;
     @Operation(summary = "방 정보와 전체 채팅 메시지 기록 조회")
     @GetMapping("/{id}")
     public ResponseEntity<?> getChatByRoomId(@PathVariable int id) {
@@ -51,5 +50,14 @@ public class ChatRestController {
         return data.builder();
     }
 
+
+    @PostMapping("/debug")
+    public ResponseEntity<?> debug(@RequestBody ChatDto chatDto){
+        RespData<Void> data = new RespData<>();
+        System.out.println(new Gson().toJson(chatDto));
+        rabbitTemplate.convertAndSend("chat.exchange","room.*",new Gson().toJson(chatDto));
+        data.setData(null);
+        return data.builder();
+    }
 
 }
