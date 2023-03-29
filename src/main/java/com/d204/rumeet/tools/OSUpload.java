@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class OSUpload {
-    private final String bucket = "/vilez";
+    private final String bucket = "/rumeet";
     private final AmazonS3 naver;
 
     public void mkdir(String bucketName, String folderName) {
