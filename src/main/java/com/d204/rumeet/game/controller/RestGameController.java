@@ -3,9 +3,9 @@ package com.d204.rumeet.game.controller;
 import com.d204.rumeet.game.model.dto.GameDto;
 import com.d204.rumeet.game.model.dto.GamePaceDto;
 import com.d204.rumeet.kafka.model.KafkaService;
+import com.d204.rumeet.tools.MatchingTool;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,18 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestGameController {
 
     private final KafkaService kafkaService;
-
+    private final MatchingTool matchingTool;
     @PostMapping("/start")
     public void run(@RequestBody GameDto gameInfo) {
         int gameMode = gameInfo.getGameMode();
         int userId = gameInfo.getUserId();
         String topic = "rumeet.matching." + gameMode;
         System.out.println("topic = " + topic);
-        GamePaceDto user =  kafkaService.messageBYFastApi(gameMode, userId);
+        GamePaceDto target =  kafkaService.messageBYFastApi(gameMode, userId);
         //TODO 매칭 큐를 만들어 봅시다.
-
-        //END
-        kafkaService.sendMessage(topic, new Gson().toJson(user));
+        matchingTool.doMatching(target);
     }
 
 }
