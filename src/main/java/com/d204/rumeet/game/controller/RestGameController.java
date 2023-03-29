@@ -2,10 +2,9 @@ package com.d204.rumeet.game.controller;
 
 import com.d204.rumeet.game.model.dto.GameDto;
 import com.d204.rumeet.game.model.dto.GamePaceDto;
-import com.d204.rumeet.kafka.model.KafkaService;
+import com.d204.rumeet.game.model.service.KafkaService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
