@@ -23,6 +23,7 @@ public class ChatDao {
         lastChatDto.setToUserId(chatDto.getToUserId());
         lastChatDto.setFromUserId(chatDto.getFromUserId());
         lastChatDto.setContent(chatDto.getContent());
+        lastChatDto.setRoomId(chatDto.getRoomId());
         mongoTemplate.save(lastChatDto,"LastChatDto");
         lastChatDto.setUserId(chatDto.getFromUserId());
         mongoTemplate.save(lastChatDto,"LastChatDto");
