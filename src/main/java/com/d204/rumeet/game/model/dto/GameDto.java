@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class GameDto {
     int userId;
-    int gameMode;
+    int mode;
 }

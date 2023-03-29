@@ -1,5 +1,6 @@
 package com.d204.rumeet.game.model.consumer;
 
+import com.d204.rumeet.game.model.dto.GameDto;
 import com.d204.rumeet.game.model.dto.GamePaceDto;
 import com.d204.rumeet.tools.MatchingTool;
 import com.google.gson.Gson;
@@ -17,7 +18,7 @@ public class MatchingConsumer {
     private final MatchingTool matchingTool;
     @KafkaListener(topicPattern = "rumeet\\.game\\.matching\\..*", groupId = "*")
     public void listenMatching(String message) {
-        GamePaceDto target = new Gson().fromJson(message, GamePaceDto.class);
-        matchingTool.doMatching(target);
+        GameDto info = new Gson().fromJson(message, GameDto.class);
+        matchingTool.doMatching(info);
     }
 }

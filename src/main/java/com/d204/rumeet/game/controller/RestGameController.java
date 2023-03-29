@@ -17,16 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestGameController {
 
     private final KafkaService kafkaService;
-    private final MatchingTool matchingTool;
-    @PostMapping("/start")
-    public void run(@RequestBody GameDto gameInfo) {
-        int gameMode = gameInfo.getGameMode();
-        int userId = gameInfo.getUserId();
-        String topic = "rumeet.matching." + gameMode;
-        System.out.println("topic = " + topic);
-        GamePaceDto target =  kafkaService.messageBYFastApi(gameMode, userId);
-        //TODO 매칭 큐를 만들어 봅시다.
-        matchingTool.doMatching(target);
-    }
+
 
 }

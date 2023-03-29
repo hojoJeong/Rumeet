@@ -5,6 +5,5 @@ import lombok.Data;
 @Data
 public class GamePaceDto {
     int id;
-    int mode;
     int[] pace;
 }

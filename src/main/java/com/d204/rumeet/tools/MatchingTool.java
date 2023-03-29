@@ -1,5 +1,6 @@
 package com.d204.rumeet.tools;
 
+import com.d204.rumeet.game.model.dto.GameDto;
 import com.d204.rumeet.game.model.dto.GamePaceDto;
 import com.d204.rumeet.game.model.dto.RaceDto;
 import com.d204.rumeet.game.model.service.GameService;
@@ -20,13 +21,16 @@ public class MatchingTool {
 
     //이번
     // 매칭 시작하는 것
-    public void doMatching(GamePaceDto target) {
-        int mode = target.getMode();
+    public void doMatching(GameDto info) {
+        int mode = info.getMode();
+        int[] km = new int[] {1,2,3,5,1,2,3,5,1,2,3,5};
         if(lists[mode] == null) {
             lists[mode] = new LinkedList();
         }
 
         LinkedList list = lists[mode];
+
+        GamePaceDto target = kafkaService.messageBYFastApi(km[mode], info.getUserId());
 
         double similarities = 0;
         double top_val = 0;
