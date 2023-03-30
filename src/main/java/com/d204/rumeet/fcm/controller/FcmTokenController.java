@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.io.IOException;
 @RestController
 @CrossOrigin("*")
 @RequiredArgsConstructor
+@RequestMapping("/fcm")
 public class FcmTokenController {
 
     FcmTokenService fcmService;
