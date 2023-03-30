@@ -22,6 +22,7 @@ public class GameHandler {
     public void matchingHandler(Message message) {
         String msg = new String(message.getBody());
         GameDto info = new Gson().fromJson(msg, GameDto.class);
+        System.out.println(info);
         matchingTool.doMatching(info);
     }
     @RabbitListener(queues = "cancel.queue")
@@ -33,8 +34,7 @@ public class GameHandler {
 
     @RabbitListener(queues = "end.queue")
     public void endHandler(Message message) {
-        // TODO
-//        gameService.endGameToKafka(message);
+        gameService.endGameToKafka(message);
     }
 
     @RabbitListener(queues = "result.queue")

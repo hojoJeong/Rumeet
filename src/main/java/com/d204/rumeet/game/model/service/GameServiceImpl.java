@@ -28,6 +28,11 @@ public class GameServiceImpl implements GameService {
         kafkaService.sendMessage("rumeet.endgame."+km[mode],msg);
     }
 
+    @Override
+    public void endGameToKafka2(Message message) {
+
+    }
+
     int getMode(String msg) {
         String[] tmp = msg.split("mode\":");
         StringBuilder sb = new StringBuilder();
