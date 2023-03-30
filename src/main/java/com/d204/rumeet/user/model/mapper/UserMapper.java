@@ -34,4 +34,6 @@ public interface UserMapper {
     SimpleUserDto getSimpleUserById(int id);
 
     int checkExistsUseByEmail(String email);
+
+    void joinUserToRecord(int id);
 }
