@@ -18,6 +18,7 @@ class MatchingHistoryContainerFragment : BaseFragment<FragmentMatchingHistoryCon
     private lateinit var viewInfo: String
 
     override fun initStartView() {
+        binding.contentMatchintHistoryNoResult.tvContentNoResultMessage.text = "매칭 기록이 없습니다."
         when(viewInfo){
             "ghost" -> initGhostModeView()
             "competition" -> initCompetitionModeView()
