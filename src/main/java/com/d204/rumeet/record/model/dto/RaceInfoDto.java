@@ -15,4 +15,5 @@ public class RaceInfoDto {
     int success;
     String polyline;
     long date;
+
 }
