@@ -8,6 +8,7 @@ import lombok.Data;
 public class BadgeDateDto {
     int id;
     String name;
-    String description;
+    int code;
+
     long date;
 }
