@@ -6,7 +6,7 @@
     <update id="updateUserToken" parameterType="FcmTokenDto">
         UPDATE user
         SET fcm_token = #{fcmToken}
-        WHERE id = #{userId}
+        WHERE (id = #{id});
     </update>
 
 </mapper>
