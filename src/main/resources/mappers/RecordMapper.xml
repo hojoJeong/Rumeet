@@ -13,6 +13,7 @@
         <result column="team_success_count" property="team_success_count"/>
         <result column="competition_success_count" property="competition_success_count"/>
     </resultMap>
+
     <select id="getRecord" parameterType="int" resultMap="record">
         SELECT * FROM record WHERE user_id = #{userId};
     </select>
@@ -34,8 +35,8 @@
         VALUES (#{race_id}, #{user_id}, #{velocity}, #{km}, #{time}, #{heart_rate}, #{kcal}, #{success}, #{date})
     </insert>
 
-    <select id="getRaceInfo" resultType="raceInfoDto">
-        SELECT * FROM race_info WHERE user_id = #{userId}
+    <select id="getRaceInfo" resultType="raceDateInfoDto">
+        SELECT ri.*, r.mode FROM race_info ri JOIN race r ON r.id = ri.race_id WHERE ri.user_id = #{userId}
     </select>
 
 

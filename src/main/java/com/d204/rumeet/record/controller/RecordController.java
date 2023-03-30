@@ -21,6 +21,7 @@ import java.util.List;
 public class RecordController {
 
     private final RecordService recordService;
+
     @Operation(summary = "메인페이지 기록 조회")
     @GetMapping("/{userId}")
     public ResponseEntity<?> getRecord(@PathVariable int userId) {
