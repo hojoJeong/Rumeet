@@ -10,5 +10,5 @@ import lombok.Data;
 public class BadgeDto {
     int id;
     String name;
-
+    int code;
 }

@@ -8,6 +8,6 @@ public class RecordDto {
     int user_id;
     int total_count;
     float total_km;
-    int average_pace;
+    float average_pace;
 
 }

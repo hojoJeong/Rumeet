@@ -5,13 +5,15 @@ import com.d204.rumeet.record.model.dto.RecordDto;
 import com.d204.rumeet.record.model.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController
 @RequiredArgsConstructor
+@RestController
+@Slf4j
 @RequestMapping("/record")
 public class RecordController {
 
