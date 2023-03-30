@@ -3,7 +3,6 @@ package com.d204.rumeet.badge.controller;
 import com.d204.rumeet.badge.model.dto.BadgeDto;
 import com.d204.rumeet.badge.model.service.BadgeService;
 import com.d204.rumeet.data.RespData;
-import com.d204.rumeet.user.model.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
