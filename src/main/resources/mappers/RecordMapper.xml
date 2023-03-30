@@ -20,7 +20,8 @@
         SET
             total_count = total_count + 1,
             total_km = total_km + #{km},
-            average_pace = #{pace}
+            average_pace = #{pace},
+            total_time = total_time + #{time}
         WHERE user_id = #{userId}
     </update>
 

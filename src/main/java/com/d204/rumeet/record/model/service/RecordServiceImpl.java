@@ -22,11 +22,13 @@ public class RecordServiceImpl implements RecordService{
 
     @Override
     public void updateRecord(String jsonData) throws org.json.simple.parser.ParseException {
-        //{"user_id":1,"pace1":192, "pace2":241, "pace3":268}
+
+        //{"user_id":1,"race_id":999,"pace1":192, "pace2":241 , "pace3":268 , "elapsed_time":701}
         JSONParser jsonParser = new JSONParser();
         JSONObject data = (JSONObject) jsonParser.parse(jsonData);
 
         int userId = Integer.parseInt(data.get("user_id").toString());
+        long time = Long.parseLong(data.get("elapsed_time").toString());
 
         RecordDto originRecord = recordMapper.getRecord(userId);
         Float originPace = originRecord.getAverage_pace();
@@ -51,7 +53,13 @@ public class RecordServiceImpl implements RecordService{
             averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
         }
         float km = (float) cnt;
-        recordMapper.updateRecord(userId, averagePace, km);
+        recordMapper.updateRecord(userId, averagePace, km, time);
+
+    }
+
+    @Override
+    public void updateRaceInfo(String jsonData) throws org.json.simple.parser.ParseException {
+        //{"user_id":1, "race_id":999, "mode":2, "velocity":23, "elapsed_time":701,"average_heart_rate":150, "success":1}
 
     }
 
