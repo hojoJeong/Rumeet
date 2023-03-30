@@ -31,7 +31,7 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
         registerForActivityResult((ActivityResultContracts.StartActivityForResult())) { result ->
             if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data!!
-                imageFile = File(requireContext().getAbsolutePath(uri, requireContext()))
+                imageFile = File(getAbsolutePath(uri, requireContext()))
                 binding.ivProfileImg.setImageURI(uri)
             }
         }
@@ -70,6 +70,7 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
                         )
                     }
                     is JoinNicknameAction.PassNicknameValidation -> {
+                        viewModel.joinInfo.nickname =  it.nickname
                         viewModel.joinInfo.profileImg = imageFile
                         if(!socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
                         else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
@@ -98,13 +99,5 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
             putExtra(Intent.EXTRA_TITLE, "사용할 앱을 선택해주세요")
         }
         galleryLauncher.launch(chooserIntent)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        with(viewModel.joinInfo){
-            nickname = ""
-            profileImg = null
-        }
     }
 }

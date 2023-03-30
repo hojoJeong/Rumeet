@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/chattingFragment"
+        android:id="@+id/chattingListFragment"
         android:icon="@drawable/ic_chatting"
         android:title="@string/category_chatting"
         app:showAsAction="always"/>

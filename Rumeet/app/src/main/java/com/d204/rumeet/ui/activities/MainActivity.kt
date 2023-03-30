@@ -11,6 +11,7 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ActivityMainBinding
 import com.d204.rumeet.ui.base.BaseActivity
 import com.d204.rumeet.ui.components.RumeetToolbar
+import com.d204.rumeet.util.AMQPManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,6 +22,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initStartView() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv_main) as NavHostFragment
         navController = navHostFragment.navController
+
+        AMQPManager.initChannel()
     }
 
     override fun initDataBinding() {
@@ -59,10 +62,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         })
                     }
                 }
+                R.id.chattingListFragment -> {
+                    binding.bvnMain.root.visibility = View.VISIBLE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(RumeetToolbar.ToolbarType.TEXT, "채팅")
+                    }
+                }
+                R.id.chattingFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(RumeetToolbar.ToolbarType.BACK_TEXT, "채팅")
+                    }
+                }
             }
         }
     }
-
+    
     companion object {
         private const val TAG = "MainActivity"
     }

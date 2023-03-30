@@ -14,26 +14,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
         get() = HomeViewModel()
 
     override fun initDataBinding() {
-    }
-
-    override fun initStartView() {
         with(homeViewModel) {
             getUserNameForHome()
             getBestRecordListForHome()
             getBadgeListForHome()
             getRecommendFriendListForHome()
         }
-
         binding.vm = homeViewModel
+    }
 
+    override fun initStartView() {
         //TODO(러닝 페이지 이동 임시)
         binding.tvHomeWelcomeMessage.setOnClickListener {
             navigate(HomeFragmentDirections.actionHomeFragmentToRunningOptionContainerFragment())
         }
-        //TODO(마이페이지 이동 임시)
-        binding.contentHomeBestRecord.setOnClickListener{
-            navigate(HomeFragmentDirections.actionHomeFragmentToNavigationMypage())
-        }
+
+
     }
 
     override fun initAfterBinding() {

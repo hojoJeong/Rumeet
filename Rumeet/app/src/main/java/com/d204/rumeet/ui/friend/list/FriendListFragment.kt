@@ -11,6 +11,7 @@ import com.d204.rumeet.databinding.FragmentFriendListBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.friend.list.adapter.FriendListAdapter
 import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
+import com.d204.rumeet.ui.mypage.FriendListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 

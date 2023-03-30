@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cdv_item_running_record"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/base_vertical_margin">
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_date"
+                    style="@style/base_font_medium_14_dim_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="2023.03.03" />
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_mode"
+                    style="@style/base_font_medium_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_running_record_date"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_date"
+                    app:layout_constraintStart_toEndOf="@+id/tv_item_running_record_date"
+                    tools:text="싱글"
+                    android:layout_marginStart="10dp"/>
+                    <!--app:setMode="@{}"/>-->
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_title"
+                    style="@style/base_font_bold_16_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_item_running_record_date"
+                    tools:text="나의 1번째 러닝" />
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_distance_title"
+                    style="@style/base_font_medium_12_dim_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
+                    android:text="거리"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_item_running_record_title" />
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_distance"
+                    style="@style/base_font_bold_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_item_running_record_distance_title"
+                    tools:text="00km" />
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_pace_title"
+                    style="@style/base_font_medium_12_dim_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="나의 페이스"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tv_item_running_record_distance_title"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_distance_title"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_item_running_record_time_title"
+                    app:layout_constraintStart_toEndOf="@+id/tv_item_running_record_distance" />
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_pace"
+                    style="@style/base_font_bold_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_running_record_distance"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_distance"
+                    app:layout_constraintStart_toStartOf="@+id/tv_item_running_record_pace_title"
+                    tools:text="00'00''" />
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_time_title"
+                    style="@style/base_font_medium_12_dim_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시간"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tv_item_running_record_pace_title"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_pace_title"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_item_running_record"
+                    app:layout_constraintStart_toEndOf="@+id/tv_item_running_record_pace_title" />
+
+                <TextView
+                    android:id="@+id/tv_item_running_record_time"
+                    style="@style/base_font_bold_14_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tv_item_running_record_pace"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_pace"
+                    app:layout_constraintStart_toStartOf="@+id/tv_item_running_record_time_title"
+                    tools:text="00:00" />
+
+                <ImageView
+                    android:id="@+id/iv_item_running_record"
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_time"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:src="@drawable/ic_launcher_background" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

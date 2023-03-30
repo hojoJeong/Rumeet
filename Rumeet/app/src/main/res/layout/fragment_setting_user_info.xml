@@ -8,7 +8,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.mypage.setting.SettingUserInfoFragment"
+        tools:context=".ui.mypage.setting.UserInfoFragment"
         android:paddingVertical="@dimen/base_vertical_margin">
 
         <androidx.recyclerview.widget.RecyclerView
