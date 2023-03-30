@@ -5,14 +5,15 @@ import android.util.Log
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.UserApi
 import com.d204.rumeet.data.remote.api.handleApi
+import com.d204.rumeet.data.remote.dto.response.user.AcquiredBadgeResponse
 import com.d204.rumeet.data.remote.dto.response.user.UserInfoResponse
 import com.d204.rumeet.data.remote.mapper.toDomainModel
 import com.d204.rumeet.data.remote.mapper.toRequestDto
 import com.d204.rumeet.domain.NetworkResult
+import com.d204.rumeet.domain.model.user.AcquiredBadgeListDomainModel
 import com.d204.rumeet.domain.model.user.ModifyUserDetailInfoDomainModel
 import com.d204.rumeet.domain.model.user.UserInfoDomainModel
 import com.d204.rumeet.domain.repository.UserRepository
-import com.d204.rumeet.domain.succeeded
 import com.d204.rumeet.domain.toDomainResult
 import java.io.IOException
 import javax.inject.Inject
@@ -41,7 +42,8 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserInfo(userId: Int): NetworkResult<UserInfoDomainModel> {
-        val response = handleApi { userApi.getUserInfo(userId) }.toDomainResult<UserInfoResponse, UserInfoDomainModel> { it.toDomainModel() }
+        val response =
+            handleApi { userApi.getUserInfo(userId) }.toDomainResult<UserInfoResponse, UserInfoDomainModel> { it.toDomainModel() }
         Log.d(TAG, "getUserInfo: $response")
         return response
     }
@@ -52,5 +54,9 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun withdrawal(userId: Int): Boolean {
         return userApi.withdrawal(userId).flag == "success"
+    }
+
+    override suspend fun getAcquiredBadgeList(userId: Int): NetworkResult<List<AcquiredBadgeListDomainModel>> {
+        return handleApi { userApi.getAcquiredBadgeList(userId) }.toDomainResult<List<AcquiredBadgeResponse>, List<AcquiredBadgeListDomainModel>> { it.map { model -> model.toDomainModel() } }
     }
 }

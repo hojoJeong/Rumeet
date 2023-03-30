@@ -6,16 +6,14 @@ import android.util.LogPrinter
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
+import com.d204.rumeet.domain.usecase.user.GetAcquiredBadgeListUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserInfoUseCase
 import com.d204.rumeet.domain.usecase.user.WithdrawalUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
-import com.d204.rumeet.ui.mypage.model.BadgeContentListUiModel
-import com.d204.rumeet.ui.mypage.model.UserDetailInfoUiModel
-import com.d204.rumeet.ui.mypage.model.UserInfoUiModel
-import com.d204.rumeet.ui.mypage.model.toUiModel
+import com.d204.rumeet.ui.mypage.model.*
 import com.d204.rumeet.ui.mypage.setting.SettingAction
 import com.d204.rumeet.ui.mypage.setting.UserInfoAction
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +25,8 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val withdrawalUseCase: WithdrawalUseCase
+    private val withdrawalUseCase: WithdrawalUseCase,
+    private val getAcquiredBadgeListUseCase: GetAcquiredBadgeListUseCase
 ) : BaseViewModel(), MyPageEventHandler {
     private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
     val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
@@ -63,9 +62,15 @@ class MyPageViewModel @Inject constructor(
     val userInfo: StateFlow<UiState<UserInfoUiModel>>
         get() = _userInfo.asStateFlow()
 
-    private val _resultWithdrawal: MutableStateFlow<UiState<Boolean>> = MutableStateFlow(UiState.Loading)
+    private val _resultWithdrawal: MutableStateFlow<UiState<Boolean>> =
+        MutableStateFlow(UiState.Loading)
     val resultWithdrawal: StateFlow<UiState<Boolean>>
-        get() = _resultWithdrawal
+        get() = _resultWithdrawal.asStateFlow()
+
+    private val _acquiredBadgeList: MutableStateFlow<UiState<List<AcquiredBadgeUiModel>>> =
+        MutableStateFlow(UiState.Loading)
+    val acquiredBadgeList: StateFlow<UiState<List<AcquiredBadgeUiModel>>>
+        get() = _acquiredBadgeList.asStateFlow()
 
     fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
@@ -104,10 +109,6 @@ class MyPageViewModel @Inject constructor(
         _userInfoOptionList = list
     }
 
-    fun getBadgeList() {
-        //TODO 뱃지 서버통신
-    }
-
     fun getUserId() {
         baseViewModelScope.launch {
             try {
@@ -134,17 +135,34 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun withdrawal(){
+    fun withdrawal() {
         baseViewModelScope.launch {
             showLoading()
             try {
                 dismissLoading()
-                _resultWithdrawal.value = UiState.Success(withdrawalUseCase.invoke(userId.value.successOrNull()!!))
-            } catch (e: Exception){
+                _resultWithdrawal.value =
+                    UiState.Success(withdrawalUseCase.invoke(userId.value.successOrNull()!!))
+            } catch (e: Exception) {
                 _resultWithdrawal.value = UiState.Error(e.cause)
             }
         }
     }
+
+    fun getAcquiredBadgeList() {
+        baseViewModelScope.launch {
+            showLoading()
+            getAcquiredBadgeListUseCase(userId.value.successOrNull()!!)
+                .onSuccess {
+                    dismissLoading()
+                    _acquiredBadgeList.value = UiState.Success(it.map { model -> model.toUiModel() })
+                }
+                .onError {
+                    dismissLoading()
+                    catchError(it)
+                }
+        }
+    }
+
     override fun onClick(title: String) {
         setSettingNavigate(title)
     }

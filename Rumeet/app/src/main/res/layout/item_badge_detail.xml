@@ -10,15 +10,17 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="6dp">
 
         <ImageView
             android:id="@+id/iv_item_badge1"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:setImageResource="@{badge.badgeImg}"
+            app:setImageByGlide="@{badge.badgeImg}"
             tools:src="@drawable/ic_launcher_background" />
 
         <TextView
@@ -30,8 +32,11 @@
             app:layout_constraintEnd_toEndOf="@+id/iv_item_badge1"
             app:layout_constraintStart_toStartOf="@+id/iv_item_badge1"
             app:layout_constraintTop_toBottomOf="@+id/iv_item_badge1"
-            tools:text="뱃지이름"
-            android:text="@{badge.badgeName}"/>
+            tools:text="뱃지이름ddddddddd"
+            android:textAlignment="center"
+            android:maxWidth="100dp"
+            app:badgeUrl="@{badge.badgeImg}"
+            app:badgeTitle="@{badge.badgeName}"/>
 
         <TextView
             android:id="@+id/tv_item_badge1_date"

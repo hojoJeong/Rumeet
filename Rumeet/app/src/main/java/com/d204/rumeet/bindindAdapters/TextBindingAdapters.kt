@@ -65,6 +65,16 @@ fun TextView.setBestRecord(value: String) {
     }
 }
 
+@BindingAdapter(value = ["badgeUrl","badgeTitle"])
+fun TextView.setBadgeText(url: String, title: String){
+    text = title
+    if(url.substring(url.length - 6) == "no.png"){
+        this.setTextColor(context.getColor(R.color.nobel))
+    } else {
+        this.setTextColor(context.getColor(R.color.black))
+    }
+}
+
 @BindingAdapter("setMode")
 fun TextView.setMode(mode: String) {
     //TODO 운동기록과 매칭 기록에서 모드,승패 여부에 따라 text 처리

@@ -29,6 +29,18 @@
                 android:paddingVertical="@dimen/base_horizontal_margin">
 
                 <TextView
+                    android:id="@+id/tv_badge_recent_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_badge_recent_title"
+                    app:layout_constraintBottom_toTopOf="@+id/rv_badge_content_list"
+                    android:text="아직 획득한 뱃지가 없네요 :("
+                    style="@style/base_font_bold_16_black"
+                    android:visibility="gone"/>
+
+                <TextView
                     android:id="@+id/tv_badge_recent_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -45,7 +57,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_badge_recent_title"
                     tools:src="@drawable/ic_launcher_background"
-                    app:setImageResource="@{recent.badgeImg}"
+                    app:setImageByGlide="@{recent.badgeImg}"
                     android:layout_marginTop="@dimen/base_vertical_title_to_content"/>
 
                 <TextView
@@ -68,20 +80,9 @@
                     android:text="@{recent.badgeDate}"
                     style="@style/base_font_medium_14_dim_gray"/>
 
-                <TextView
-                    android:id="@+id/tv_badge_recent_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@+id/tv_badge_recent_name"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_badge_recent_date"
-                    tools:text="뱃지 내요요요요용"
-                    android:text="@{recent.badgeDescription}"
-                    style="@style/base_font_medium_12_black"
-                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"/>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_badge_content_list"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

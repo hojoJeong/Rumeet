@@ -2,6 +2,7 @@ package com.d204.rumeet.data.remote.api
 
 import com.d204.rumeet.data.remote.dto.request.user.ModifyUserDetailInfoRequestDto
 import com.d204.rumeet.data.remote.dto.response.BaseResponse
+import com.d204.rumeet.data.remote.dto.response.user.AcquiredBadgeResponse
 import com.d204.rumeet.data.remote.dto.response.user.UserInfoResponse
 import retrofit2.http.*
 
@@ -15,4 +16,7 @@ internal interface UserApi {
 
     @DELETE("users/{id}")
     suspend fun withdrawal(@Path("id") id: Int): BaseResponse<Boolean>
+
+    @GET("badge/list/{userId}")
+    suspend fun getAcquiredBadgeList(@Path("userId") id: Int): BaseResponse<List<AcquiredBadgeResponse>>
 }

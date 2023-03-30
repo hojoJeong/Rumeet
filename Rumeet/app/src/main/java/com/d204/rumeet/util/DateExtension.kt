@@ -7,3 +7,8 @@ fun Long.toMinute() : String{
     val simpleDateFormat = SimpleDateFormat("mm:ss",Locale.KOREA)
     return simpleDateFormat.format(this)
 }
+
+fun Long.toDate() : String{
+    val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd")
+    return simpleDateFormat.format(this)
+}
