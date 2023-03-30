@@ -1,4 +1,4 @@
-package com.d204.rumeet.ui.running.fragment
+package com.d204.rumeet.ui.running
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,21 +12,21 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.running.RunningViewModel
 
-class RunningFragment : BaseFragment<FragmentRunningBinding, BaseViewModel>() {
+class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>() {
+
     private val runningViewModel by activityViewModels<RunningViewModel>()
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_running
-    override val viewModel: BaseViewModel
-        get() = runningViewModel
+    override val layoutResourceId: Int get() = R.layout.fragment_running
+    override val viewModel: RunningViewModel get() = runningViewModel
 
     override fun initStartView() {
+
     }
 
     override fun initDataBinding() {
+
     }
 
     override fun initAfterBinding() {
+
     }
-
-
 }

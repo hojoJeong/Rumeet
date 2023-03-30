@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -108,3 +109,5 @@ fun RecyclerView.scrollToBottom() {
         }
     }
 }
+
+fun jsonToString(json : Any): String? = Gson().toJson(json)

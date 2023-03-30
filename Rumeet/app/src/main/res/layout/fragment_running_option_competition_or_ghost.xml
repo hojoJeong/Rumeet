@@ -13,8 +13,8 @@
             layout="@layout/content_running_option_distance"
             android:id="@+id/content_running_option_distance"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
+
         <include
             android:id="@+id/content_running_option_with"
             android:layout_width="match_parent"

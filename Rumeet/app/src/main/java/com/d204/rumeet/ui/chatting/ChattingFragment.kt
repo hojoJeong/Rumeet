@@ -1,15 +1,10 @@
 package com.d204.rumeet.ui.chatting
 
-import android.util.JsonReader
 import android.util.Log
 import android.view.View
-import android.view.View.OnFocusChangeListener
-import androidx.core.os.HandlerCompat.postDelayed
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentChattingBinding
 import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
@@ -17,16 +12,12 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.chatting.adapter.ChattingItemAdapter
 import com.d204.rumeet.ui.chatting.model.ChattingMessageUiModel
 import com.d204.rumeet.ui.chatting.model.toUiModel
-import com.d204.rumeet.util.AMQPManager
+import com.d204.rumeet.util.amqp.ChattingAMQPMananer
 import com.d204.rumeet.util.scrollToBottom
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.util.logging.Handler
 
 @AndroidEntryPoint
 class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel>() {
@@ -55,28 +46,32 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                             binding.rvChattingContent.adapter = chattingAdapter
                         }
                         is ChattingSideEffect.SendChatting -> {
-                            if (args.chattingRoomId == 0) {
-                                toastMessage("채팅 오류가 발생하였습니다.")
-                                findNavController().popBackStack()
-                            } else {
-                                if (binding.editChattingInput.text.toString().isNotEmpty()) {
-                                    val message = ChattingMessageModel(
-                                        roomId = args.chattingRoomId,
-                                        //에게
-                                        toUserId = viewModel.chattingUserId.value,
-                                        //가
-                                        fromUserId = viewModel.userId.value,
-                                        content = binding.editChattingInput.text.toString(),
-                                        System.currentTimeMillis()
-                                    )
-                                    AMQPManager.sendMessage(Gson().toJson(message))
-                                    val list = chattingAdapter.currentList.toMutableList()
-                                    list.add(message.toUiModel(false))
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(400)
+                                if (viewModel.chattingUserId.value == 0 || args.chattingRoomId == 0 || viewModel.userId.value == 0) {
+                                    toastMessage("채팅 오류가 발생하였습니다.")
+                                } else {
+                                    if (binding.editChattingInput.text.toString().isNotEmpty()) {
+                                        val message = ChattingMessageModel(
+                                            roomId = args.chattingRoomId,
+                                            //에게
+                                            toUserId = viewModel.chattingUserId.value,
+                                            //가
+                                            fromUserId = viewModel.userId.value,
+                                            content = binding.editChattingInput.text.toString(),
+                                            System.currentTimeMillis()
+                                        )
+                                        withContext(Dispatchers.IO){
+                                            ChattingAMQPMananer.sendMessage(Gson().toJson(message))
+                                        }
+                                        val list = chattingAdapter.currentList.toMutableList()
+                                        list.add(message.toUiModel(false))
 
-                                    chattingAdapter.submitList(null)
-                                    chattingAdapter.submitList(list.toList())
-                                    binding.rvChattingContent.scrollToBottom()
-                                    binding.editChattingInput.setText("")
+                                        chattingAdapter.submitList(null)
+                                        chattingAdapter.submitList(list.toList())
+                                        binding.rvChattingContent.scrollToBottom()
+                                        binding.editChattingInput.setText("")
+                                    }
                                 }
                             }
                         }
@@ -115,6 +110,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
 
     override fun onDestroyView() {
         super.onDestroyView()
-        AMQPManager.unSubscribeChatting()
+        ChattingAMQPMananer.unSubscribeChatting()
     }
 }

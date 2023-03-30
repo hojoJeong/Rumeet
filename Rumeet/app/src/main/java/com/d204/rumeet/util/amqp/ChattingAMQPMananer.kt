@@ -1,4 +1,4 @@
-package com.d204.rumeet.util
+package com.d204.rumeet.util.amqp
 
 import android.util.Log
 import com.rabbitmq.client.*
@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-object AMQPManager {
+object ChattingAMQPMananer {
 
     val factory = ConnectionFactory().apply {
         host = "j8d204.p.ssafy.io"
@@ -18,14 +18,12 @@ object AMQPManager {
 
     var chattingQueueName: String = ""
     var userQueueName : String = ""
-    var chattingChanel: Channel? = null
-    var userChannel: Channel? = null
     var chattingChannelTag = ""
+    var chattingChanel: Channel? = null
 
     fun initChannel() {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             chattingChanel = factory.newConnection().createChannel()
-            userChannel = factory.newConnection().createChannel()
         }
     }
 
@@ -47,7 +45,7 @@ object AMQPManager {
 
     fun setChattingListReceive(callback : DefaultConsumer){
         CoroutineScope(Dispatchers.IO).launch {
-            userChannel?.basicConsume(userQueueName,true, callback)
+            chattingChanel?.basicConsume(userQueueName,true, callback)
         }
     }
 

@@ -1,6 +1,5 @@
-package com.d204.rumeet.ui.running.fragment
+package com.d204.rumeet.ui.running.option.multi
 
-import android.view.View
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningOptionCompetitionOrGhostBinding
 import com.d204.rumeet.ui.base.BaseFragment
@@ -11,25 +10,22 @@ class RunningOptionCompetitionOrGhostFragment :
     BaseFragment<FragmentRunningOptionCompetitionOrGhostBinding, BaseViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_running_option_competition_or_ghost
-    override val viewModel: BaseViewModel
-        get() = RunningViewModel()
+
+    override val viewModel: RunningViewModel get() = RunningViewModel()
 
     override fun initStartView() {
-        initMutiMode()
+        initMultiMode()
     }
 
     override fun initDataBinding() {
+
     }
 
     override fun initAfterBinding() {
+
     }
 
-    private fun initSingleMode() {
-        binding.contentRunningOptionWith.btnRunningOptionCompetitionFriend.text = "나"
-        binding.contentRunningOptionWith.tvRunningOptionCompetitionMessage.visibility = View.GONE
-    }
-
-    private fun initMutiMode() {
+    private fun initMultiMode() {
         with(binding.contentRunningOptionWith.tvRunningOptionCompetitionMessage) {
             binding.contentRunningOptionWith.btnRunningOptionCompetitionFriend.setOnClickListener {
                 text = getString(R.string.content_message_selected_friend)

@@ -7,7 +7,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class RunningViewModel: BaseViewModel() {
-    private val _runningInfo: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Loading)
-    val runningInfoerName: StateFlow<UiState<String>>
-        get() = _runningInfo.asStateFlow()
+
+
+    // state = 1 싱글, state = 2 멀티
+    fun setGameType(state : Int){
+
+    }
 }

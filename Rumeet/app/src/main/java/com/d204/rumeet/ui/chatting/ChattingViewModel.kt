@@ -10,7 +10,7 @@ import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.chatting.model.ChattingMessageUiModel
 import com.d204.rumeet.ui.chatting.model.toUiList
-import com.d204.rumeet.util.AMQPManager
+import com.d204.rumeet.util.amqp.ChattingAMQPMananer
 import com.google.gson.Gson
 import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.DefaultConsumer
@@ -48,18 +48,20 @@ class ChattingViewModel @Inject constructor(
                 .onSuccess {
                     _userId.emit(getUserIdUseCase())
                     _chattingUserId.emit(otherUserId)
-                    repeatDelete = noReadCnt
-                    AMQPManager.chattingQueueName = "chat.queue.${roomId}.${userId.value}"
-                    startSubscribe()
                     _chattingSideEffect.emit(ChattingSideEffect.SuccessChattingData(userId = userId.value))
                     _chattingDataList.emit(UiState.Success(it.chat.toUiList()))
+
+                    repeatDelete = noReadCnt
+                    ChattingAMQPMananer.chattingQueueName = "chat.queue.${roomId}.${userId.value}"
+                    startSubscribe()
+
                 }
                 .onError { e -> catchError(e) }
         }
     }
 
     private fun startSubscribe() {
-        AMQPManager.setReceiveMessage(object : DefaultConsumer(AMQPManager.chattingChanel) {
+        ChattingAMQPMananer.setReceiveMessage(object : DefaultConsumer(ChattingAMQPMananer.chattingChanel) {
             override fun handleDelivery(
                 consumerTag: String?,
                 envelope: Envelope?,
@@ -72,7 +74,7 @@ class ChattingViewModel @Inject constructor(
                     try {
                         val message = Gson().fromJson(String(body), ChattingMessageModel::class.java)
                         val check = _chattingSideEffect.tryEmit(ChattingSideEffect.ReceiveChatting(message))
-                        Log.d("TAG", "handleDelivery: $check")
+                        Log.d("chatting", "handleDelivery: $check")
                     }catch (e : Exception){
                         Log.e("chatting", "handleDelivery: ${e.message}")
                     }
@@ -89,6 +91,6 @@ class ChattingViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        AMQPManager.unSubscribeChatting()
+        ChattingAMQPMananer.unSubscribeChatting()
     }
 }

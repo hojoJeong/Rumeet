@@ -1,6 +1,5 @@
 package com.d204.rumeet.ui.chatting.chatting_list
 
-import android.os.Build.VERSION_CODES.P
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -9,9 +8,12 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentChattingListBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.chatting.chatting_list.adapter.ChattingListAdapter
-import com.d204.rumeet.util.AMQPManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 private const val TAG = "ChattingListFragment"
 
@@ -53,8 +55,13 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         )
                     }
                     is ChattingListSideEffect.SuccessNewChattingList -> {
+                        binding.rvChattingRoom.visibility = View.INVISIBLE
                         chattingListAdapter.submitList(null)
                         chattingListAdapter.submitList(it.chattingRoomInfo.toList())
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(300)
+                            binding.rvChattingRoom.visibility = View.VISIBLE
+                        }
                     }
                 }
             }

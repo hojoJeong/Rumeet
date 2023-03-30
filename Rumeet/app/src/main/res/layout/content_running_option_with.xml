@@ -1,71 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools">
-    <data>
-    </data>
+
+    <data></data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/tv_running_option_competition_with_title"
+            style="@style/base_font_bold_16_dim_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
             android:text="@string/title_option_with"
-            style="@style/base_font_bold_16_dim_gray"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cdv_running_option_competition_with"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_option_competition_with_title"
             android:layout_marginTop="@dimen/base_vertical_title_to_content"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_option_competition_with_title">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:singleSelection="true"
                 android:layout_margin="16dp"
                 app:checkedButton="@+id/btn_running_option_competition_friend"
-                app:selectionRequired="true">
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_running_option_competition_friend"
+                    style="@style/toggleButtonCustom"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/content_option_with_friend"
-                    app:strokeWidth="1dp"
                     app:strokeColor="@color/navy_blue"
-                    style="@style/toggleButtonCustom"/>
+                    app:strokeWidth="1dp" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_running_option_competition_random"
+                    style="@style/toggleButtonCustom"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/content_option_with_random"
-                    app:strokeWidth="1dp"
                     app:strokeColor="@color/navy_blue"
-                    style="@style/toggleButtonCustom"/>
+                    app:strokeWidth="1dp" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
         </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tv_running_option_competition_message"
+            style="@style/base_font_medium_14_dim_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/cdv_running_option_competition_with"
-            app:layout_constraintTop_toBottomOf="@+id/cdv_running_option_competition_with"
             android:layout_marginTop="@dimen/base_vertical_title_to_content"
-            style="@style/base_font_medium_14_dim_gray"
-            android:text="@string/content_message_selected_friend"/>
+            android:text="@string/content_message_selected_friend"
+            app:layout_constraintStart_toStartOf="@+id/cdv_running_option_competition_with"
+            app:layout_constraintTop_toBottomOf="@+id/cdv_running_option_competition_with" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

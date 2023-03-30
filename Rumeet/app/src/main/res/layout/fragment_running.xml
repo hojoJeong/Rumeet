@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/prussian_blue"
-        tools:context=".ui.running.fragment.RunningFragment">
+        tools:context=".ui.running.RunningFragment">
 
         <TextView
             android:id="@+id/tv_running_mode"

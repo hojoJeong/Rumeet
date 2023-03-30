@@ -1,7 +1,6 @@
 package com.d204.rumeet
 
 import android.app.Application
-import com.d204.rumeet.util.AMQPManager
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 

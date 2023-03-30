@@ -18,16 +18,30 @@
     </fragment>
     <fragment
         android:id="@+id/runningOptionFragment"
-        android:name="com.d204.rumeet.ui.running.fragment.RunningOptionFragment"
-        android:label="RunningOptionContainerFragment">
+        android:name="com.d204.rumeet.ui.running.option.RunningOptionFragment"
+        android:label="RunningOptionContainerFragment"
+        tools:layout="@layout/fragment_running_option">
+
+        <argument
+            android:name="runningType"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
         <action
             android:id="@+id/action_runningOptionContainerFragment_to_runningFragment"
             app:destination="@id/runningFragment" />
+        <action
+            android:id="@+id/action_runningOptionFragment_to_runningMatchingFragment"
+            app:destination="@id/runningMatchingFragment"
+            app:popUpTo="@id/runningOptionFragment"
+            app:popUpToInclusive="false"/>
     </fragment>
     <fragment
         android:id="@+id/runningFragment"
-        android:name="com.d204.rumeet.ui.running.fragment.RunningFragment"
-        android:label="RunningFragment" />
+        android:name="com.d204.rumeet.ui.running.RunningFragment"
+        android:label="RunningFragment"
+        tools:layout="@layout/fragment_running" />
+
 
     <navigation
         android:id="@+id/navigation_mypage"
@@ -200,12 +214,12 @@
         <argument
             android:name="noReadCnt"
             android:defaultValue="0"
-            app:argType="integer"/>
+            app:argType="integer" />
 
         <argument
             android:name="otherUserId"
             android:defaultValue="0"
-            app:argType="integer"/>
+            app:argType="integer" />
 
     </fragment>
 
@@ -218,5 +232,27 @@
             android:id="@+id/action_chattingListFragment_to_chattingFragment"
             app:destination="@id/chattingFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/runningMatchingFragment"
+        android:name="com.d204.rumeet.ui.running.matching.RunningMatchingFragment"
+        android:label="RunningMatchingFragment"
+        tools:layout="@layout/fragment_running_matching">
+        <action
+            android:id="@+id/action_runningMatchingFragment_to_runningFragment"
+            app:destination="@id/runningFragment" />
+        <action
+            android:id="@+id/action_runningMatchingFragment_to_runningMatchingFailFragment"
+            app:destination="@id/runningMatchingFailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/runningMatchingFailFragment"
+        android:name="com.d204.rumeet.ui.running.matching.RunningMatchingFailFragment"
+        android:label="RunningMatchingFailFragment"
+        tools:layout="@layout/fragment_running_matching_fail">
+        <action
+            android:id="@+id/action_runningMatchingFailFragment_to_runningOptionFragment"
+            app:destination="@id/runningOptionFragment" />
+    </fragment>
+
 
 </navigation>

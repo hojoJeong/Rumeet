@@ -12,6 +12,6 @@ fun getMultipartData(file : File?): MultipartBody.Part? {
     return file?.let {
         val mediaType = "image/*".toMediaTypeOrNull()
         val requestFile = file.asRequestBody(mediaType)
-        MultipartBody.Part.createFormData("profile", file.name, requestFile)
+        MultipartBody.Part.createFormData("profile_img", file.name, requestFile)
     }
 }
