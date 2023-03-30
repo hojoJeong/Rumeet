@@ -84,6 +84,9 @@ dependencies {
     implementation 'org.codehaus.janino:commons-compiler:3.0.16'
     implementation 'org.codehaus.janino:janino:3.0.16'
 
+    // FCM
+    implementation 'com.google.firebase:firebase-admin:8.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 }
 
 tasks.named('test') {
