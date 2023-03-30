@@ -10,5 +10,6 @@ public interface RecordMapper {
     RecordDto getRecord(int userId);
     void updateRecord(int userId, float pace, float km, long elapsedTime, int teamSuccess, int completeSuccess);
     void addRaceInfo(RaceInfoDto raceInfo);
+    RaceInfoDto getRaceInfo(int userId);
 
 }

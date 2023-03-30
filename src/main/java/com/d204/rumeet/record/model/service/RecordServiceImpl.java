@@ -49,22 +49,28 @@ public class RecordServiceImpl implements RecordService{
             teamSuccess++;
         }
 
-        int cnt = 0;
-        for (int i = 1; i <= 5; i++) {
-            String paceNo = "pace" + i;
-            if (data.containsKey(paceNo)) {
-                cnt++;
-            }
+        float km = 1;
+        switch (mode % 4) {
+            case 0:
+                break;
+            case 1:
+                km = 2;
+                break;
+            case 2:
+                km = 3;
+                break;
+            case 3:
+                km = 5;
+                break;
         }
 
-        float newPace = (cnt == 0 || elapsedTime == 0) ? 0 : (float) elapsedTime / cnt;
+        float newPace = (km == 0 || elapsedTime == 0) ? 0 : (float) elapsedTime / km;
 
         if (originPace == 0) {
             averagePace = newPace;
         } else {
             averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
         }
-        float km = (float) cnt;
         recordMapper.updateRecord(userId, averagePace, km, elapsedTime, teamSuccess, completeSuccess);
 
     }
@@ -121,8 +127,11 @@ public class RecordServiceImpl implements RecordService{
 
     }
 
-
-
+    @Override
+    public RaceInfoDto getRaceInfo(int userId) {
+        RaceInfoDto race = recordMapper.getRaceInfo(userId);
+        return race;
+    }
 
 
 }
