@@ -96,6 +96,7 @@ public class KafkaServiceImpl implements KafkaService {
         } catch (IOException e) {
             System.out.println("e = " + e);
         }
+        System.out.println(responseBody);
         GamePaceDto user = new Gson().fromJson(responseBody, GamePaceDto.class);
 
         return user;
