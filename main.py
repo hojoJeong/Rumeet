@@ -43,13 +43,13 @@ async def rootd(km, id):
                 .collect()
             pace = filtered
             print(filtered)
-        # elif km == "5": # 5km
-        #     filtered = pace5_avg.filter(pace5_avg["user_id"] == id) \
-        #         .select('avg_pace1', 'avg_pace2', 'avg_pace3', 'avg_pace4', 'avg_pace5') \
-        #         .rdd.flatMap(lambda x: x) \
-        #         .collect()
-        #     pace = filtered
-        #     print(filtered)
+        elif km == "5": # 5km
+            filtered = pace5_avg.filter(pace5_avg["user_id"] == id) \
+                .select('avg_pace1', 'avg_pace2', 'avg_pace3', 'avg_pace4', 'avg_pace5') \
+                .rdd.flatMap(lambda x: x) \
+                .collect()
+            pace = filtered
+            print(filtered)
         return {"id": id,
                 "pace": pace}
 
@@ -111,24 +111,24 @@ async def root():
         pace3_avg = new_pace3_avg.cache()
         pace3_avg.show()
 
-        # if df_5km is not None:
-        #     df_5km.unpersist()
-        # new_df_5km = spark.read \
-        #         .format("parquet") \
-        #         .option("header", "true") \
-        #         .load("hdfs://13.125.218.237:9000/user/spark/output/5km")
-        # df_5km = new_df_5km.cache()
-        #
-        # if pace5_avg is not None:
-        #     pace5_avg.unpersist()
-        # new_pace5_avg = df_5km.groupBy('user_id') \
-        #     .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
-        #          (mean('pace2').cast('integer')).alias('avg_pace2'),
-        #          (mean('pace3').cast('integer')).alias('avg_pace3'),
-        #          (mean('pace4').cast('integer')).alias('avg_pace4'),
-        #          (mean('pace5').cast('integer')).alias('avg_pace5'))
-        # pace5_avg = new_pace5_avg.cache()
-        # pace5_avg.show()
+        if df_5km is not None:
+            df_5km.unpersist()
+        new_df_5km = spark.read \
+                .format("parquet") \
+                .option("header", "true") \
+                .load("hdfs://13.125.218.237:9000/user/spark/output/5km")
+        df_5km = new_df_5km.cache()
+
+        if pace5_avg is not None:
+            pace5_avg.unpersist()
+        new_pace5_avg = df_5km.groupBy('user_id') \
+            .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
+                 (mean('pace2').cast('integer')).alias('avg_pace2'),
+                 (mean('pace3').cast('integer')).alias('avg_pace3'),
+                 (mean('pace4').cast('integer')).alias('avg_pace4'),
+                 (mean('pace5').cast('integer')).alias('avg_pace5'))
+        pace5_avg = new_pace5_avg.cache()
+        pace5_avg.show()
 
         return {"flag":"success"}
 
@@ -137,3 +137,4 @@ async def root():
 async def root():
     return {"message": "무냉"}
 
+~
