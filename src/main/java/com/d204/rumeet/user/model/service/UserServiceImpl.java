@@ -124,6 +124,8 @@ public class UserServiceImpl implements UserService{
         user.setProfile(url);
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
+        userMapper.joinUserToRecord(user.getId());
+
         kafkaService.createTopic("user." + user.getId());
 
         StringBuilder sb = new StringBuilder();

@@ -94,5 +94,8 @@
         SELECT id FROM user WHERE email = #{email}
     </select>
 
-
+    <insert id="joinUserToRecord" parameterType="int">
+        INSERT INTO record (user_id)
+        VALUES (#{userId})
+    </insert>
 </mapper>
