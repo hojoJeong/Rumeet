@@ -118,21 +118,36 @@ public class UserServiceImpl implements UserService{
         }
         return url;
     }
+    //큐를 생성한다.
+    void initQueue(int id) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("user.").append(id);
+        Queue queue = QueueBuilder.durable("user.queue." + id).build();
+        amqpAdmin.declareQueue(queue);
+        Binding binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("user.exchange"))
+                .with(sb.toString());
+        amqpAdmin.declareBinding(binding);
+
+        sb = new StringBuilder();
+        sb.append("user.").append(id);
+        queue = QueueBuilder.durable("matching.queue." + id).build();
+        amqpAdmin.declareQueue(queue);
+        binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("game.exchange"))
+                .with(sb.toString());
+        amqpAdmin.declareBinding(binding);
+    }
+
     @Override
     public void joinUser(JoinUserDto user, MultipartFile profile) {
         String url = this.uploadFile(profile,"https://kr.object.ncloudstorage.com/rumeet/base_profile.png");
         user.setProfile(url);
         user.setDate(System.currentTimeMillis());
         userMapper.joinUser(user);
-        kafkaService.createTopic("user." + user.getId());
+//        kafkaService.createTopic("user." + user.getId());
+        initQueue(user.getId());
 
-        StringBuilder sb = new StringBuilder();
-        Queue queue = QueueBuilder.durable("user.queue." + user.getId()).build();
-        amqpAdmin.declareQueue(queue);
-        Binding binding = BindingBuilder.bind(queue)
-                .to(new TopicExchange("user.exchange"))
-                .with(sb.toString());
-        amqpAdmin.declareBinding(binding);
     }
     @Override
     public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {
@@ -150,15 +165,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(pwd);
         user.setDate(System.currentTimeMillis());
         userMapper.joinKakaoUser(user);
-        kafkaService.createTopic("user." + user.getId());
-
-        StringBuilder sb = new StringBuilder();
-        Queue queue = QueueBuilder.durable("user.queue." + user.getId()).build();
-        amqpAdmin.declareQueue(queue);
-        Binding binding = BindingBuilder.bind(queue)
-                .to(new TopicExchange("user.exchange"))
-                .with(sb.toString());
-        amqpAdmin.declareBinding(binding);
+        initQueue(user.getId());
     }
 
     @Override
