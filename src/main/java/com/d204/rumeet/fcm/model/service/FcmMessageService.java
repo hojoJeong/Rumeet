@@ -14,6 +14,7 @@ import okhttp3.Response;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 @Log4j
 @Component
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FcmMessageService {
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/rumeet-16daa/messages:send";

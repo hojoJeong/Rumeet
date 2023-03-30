@@ -19,7 +19,7 @@ import java.io.IOException;
 
 @Log4j
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/fcm")
 public class FcmTokenController {
     @Autowired
