@@ -10,4 +10,6 @@ public class RecordDto {
     float total_km;
     float average_pace;
 
+
+
 }
