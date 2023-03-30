@@ -34,21 +34,20 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
             viewModel.chattingListSideEffect.collectLatest {
                 when (it) {
                     is ChattingListSideEffect.SuccessGetChattingList -> {
-                        AMQPManager
                         setNoResult(it.isEmpty)
                     }
                     is ChattingListSideEffect.NavigateChattingRoom -> {
                         navigate(
                             ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(
                                 profile = it.profile,
-                                chattingRoomId = it.chattingRoomId
+                                chattingRoomId = it.chattingRoomId,
+                                otherUserId = it.otherUserId
                             )
                         )
                     }
                     is ChattingListSideEffect.SuccessNewChattingList -> {
                         chattingListAdapter.submitList(null)
                         chattingListAdapter.submitList(it.chattingRoomInfo.toList())
-                        toastMessage("확인")
                     }
                 }
             }
@@ -65,6 +64,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
     override fun initAfterBinding() {
         chattingListAdapter = ChattingListAdapter(viewModel)
         binding.rvChattingRoom.adapter = chattingListAdapter
+        binding.rvChattingRoom.itemAnimator = null
 
         binding.contentNoResultChattingList.tvContentNoResultMessage.text = "채팅내역이 존재하지 않습니다"
     }

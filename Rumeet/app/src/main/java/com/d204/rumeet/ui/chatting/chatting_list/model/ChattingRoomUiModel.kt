@@ -4,18 +4,20 @@ import com.d204.rumeet.domain.model.chatting.ChattingRoomModel
 
 data class ChattingRoomUiModel(
     val roomId : Int,
-    val noReadCount : Int,
-    val senderNickName : String,
-    val senderProfileImg : String,
-    val lastContent : String,
-    val lastDate : Long
+    val noReadCnt : Int,
+    val nickname : String,
+    val profile : String,
+    val content : String,
+    val date : Long,
+    val otherUserId : Int
 )
 
 fun ChattingRoomModel.toUiModel() = ChattingRoomUiModel(
     roomId = this.roomId,
-    noReadCount = this.noReadCnt,
-    senderNickName = this.senderNickName,
-    senderProfileImg = this.senderProfileImg,
-    lastContent = this.lastContent,
-    lastDate = this.lastDate
+    noReadCnt = this.noReadCnt,
+    nickname = this.senderNickName,
+    profile = this.senderProfileImg,
+    content = this.lastContent,
+    date = this.lastDate,
+    otherUserId = this.userId
 )

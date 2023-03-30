@@ -197,6 +197,11 @@
             android:defaultValue="0"
             app:argType="integer" />
 
+        <argument
+            android:name="otherUserId"
+            android:defaultValue="0"
+            app:argType="integer"/>
+
     </fragment>
 
     <fragment

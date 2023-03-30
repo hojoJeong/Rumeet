@@ -17,6 +17,9 @@ import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.DefaultConsumer
 import com.rabbitmq.client.Envelope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,9 +56,9 @@ class ChattingListViewModel @Inject constructor(
         }
     }
 
-    override fun onChattingRoomClick(roomId: Int, profile : String) {
+    override fun onChattingRoomClick(roomId: Int, profile : String, otherUserId : Int) {
         baseViewModelScope.launch {
-            _chattingListSideEffect.emit(ChattingListSideEffect.NavigateChattingRoom(roomId,profile))
+            _chattingListSideEffect.emit(ChattingListSideEffect.NavigateChattingRoom(roomId,profile,otherUserId))
         }
     }
 
@@ -69,7 +72,9 @@ class ChattingListViewModel @Inject constructor(
             ) {
                 try {
                     val message = Gson().fromJson(String(body), Array<ChattingRoomUiModel>::class.java).toList()
-                    _chattingListSideEffect.tryEmit(ChattingListSideEffect.SuccessNewChattingList(message))
+                    CoroutineScope(Dispatchers.IO).launch {
+                        _chattingListSideEffect.tryEmit(ChattingListSideEffect.SuccessNewChattingList(message))
+                    }
                 }catch (e : Exception){
                     Log.e("chattinglist", "handleDelivery: ${e.message}")
                 }

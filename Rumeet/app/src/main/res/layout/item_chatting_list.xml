@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/base_horizontal_margin"
         android:paddingVertical="@dimen/base_vertical_title_to_content"
-        app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId, chattingRoomData.senderProfileImg)}">
+        app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId, chattingRoomData.profile, chattingRoomData.otherUserId)}">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_item_chatting_list_profile"
@@ -28,7 +28,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_app_main_logo"
             app:civ_circle_background_color="@color/trans40_dim_gray"
-            app:imgByUrl="@{chattingRoomData.senderProfileImg}"
+            app:imgByUrl="@{chattingRoomData.profile}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_horizontal_margin"
-            android:text="@{chattingRoomData.senderNickName}"
+            android:text="@{chattingRoomData.nickname}"
             app:layout_constraintStart_toEndOf="@+id/iv_item_chatting_list_profile"
             app:layout_constraintTop_toTopOf="@+id/iv_item_chatting_list_profile"
             tools:text="닉네임 닉네임" />
@@ -52,7 +52,7 @@
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLength="14"
-            android:text="@{chattingRoomData.lastContent}"
+            android:text="@{chattingRoomData.content}"
             app:layout_constraintStart_toStartOf="@+id/tv_item_chatting_list_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_chatting_list_name"
             tools:text="엽떡에 허니콤보먹고싶다진심을 다해서" />
@@ -62,7 +62,7 @@
             style="@style/base_font_medium_14_nobel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chatting_date="@{chattingRoomData.lastDate}"
+            app:chatting_date="@{chattingRoomData.date}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_item_chatting_list_name"
             tools:text="2023.03.03" />

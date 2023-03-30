@@ -40,16 +40,16 @@ class ChattingViewModel @Inject constructor(
     private val _chattingUserId : MutableStateFlow<Int> = MutableStateFlow(-1)
     val chattingUserId : StateFlow<Int> get() = _chattingUserId.asStateFlow()
 
-    fun requestChattingData(roomId: Int) {
+    fun requestChattingData(roomId: Int, otherUserId : Int) {
         baseViewModelScope.launch {
             getChattingDataUseCase(roomId)
                 .onSuccess {
                     _userId.emit(getUserIdUseCase())
-                    _chattingUserId.emit(it.user1)
+                    _chattingUserId.emit(otherUserId)
                     AMQPManager.chattingQueueName = "chat.queue.${roomId}.${userId.value}"
+                    startSubscribe()
                     _chattingSideEffect.emit(ChattingSideEffect.SuccessChattingData(userId = userId.value))
                     _chattingDataList.emit(UiState.Success(it.chat.toUiList()))
-                    startSubscribe()
                 }
                 .onError { e -> catchError(e) }
         }
@@ -65,7 +65,8 @@ class ChattingViewModel @Inject constructor(
             ) {
                 try {
                     val message = Gson().fromJson(String(body), ChattingMessageModel::class.java)
-                    _chattingSideEffect.tryEmit(ChattingSideEffect.ReceiveChatting(message))
+                    val check = _chattingSideEffect.tryEmit(ChattingSideEffect.ReceiveChatting(message))
+                    Log.d("TAG", "handleDelivery: $check")
                 }catch (e : Exception){
                     Log.e("chatting", "handleDelivery: ${e.message}")
                 }

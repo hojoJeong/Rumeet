@@ -31,7 +31,7 @@ fun TextView.bindAuthenticationVisibility(state: Boolean) {
 @BindingAdapter("chatting_date")
 fun TextView.bindChattingDate(date : Long){
     //오늘 = 시간
-    val timeSimpleDateFormat = SimpleDateFormat("mm:ss", Locale.KOREA)
+    val timeSimpleDateFormat = SimpleDateFormat("hh:mm", Locale.KOREA)
     // 사흘부터
     val dateSimpleDateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
 
@@ -53,8 +53,8 @@ fun TextView.bindChattingDate(date : Long){
 
 @BindingAdapter("time")
 fun TextView.bindTime(date : Long){
-    val timeSimpleDateFormat = SimpleDateFormat("mm:ss", Locale.KOREA)
-    text = timeSimpleDateFormat.format(date)
+    val timeSimpleDateFormat = SimpleDateFormat("yyyy:MM:dd:hh:mm", Locale.KOREA)
+    text = timeSimpleDateFormat.format(date).substring(11)
 }
 
 

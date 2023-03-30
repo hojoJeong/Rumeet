@@ -1,6 +1,6 @@
 package com.d204.rumeet.data.di
 
-import com.d204.rumeet.common.Constants.BASE_URL2
+import com.d204.rumeet.common.Constants.BASE_URL
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.interceptor.BearerInterceptor
@@ -75,7 +75,7 @@ internal object NetworkModule {
         @Named("NoAuthHttpClient") okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL2)
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -89,7 +89,7 @@ internal object NetworkModule {
         @Named("AuthHttpClient") okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL2)
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())

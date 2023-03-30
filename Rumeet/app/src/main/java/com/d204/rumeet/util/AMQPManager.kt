@@ -1,5 +1,6 @@
 package com.d204.rumeet.util
 
+import android.util.Log
 import com.rabbitmq.client.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,11 @@ object AMQPManager {
 
     fun sendMessage(message: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            chattingChanel?.basicPublish("", chattingQueueName, null, message.toByteArray())
+            try {
+                chattingChanel?.basicPublish("", "chat.queue", null, message.toByteArray())
+            }catch (e : Exception){
+                Log.e("TAG", "sendMessage: ${e.message}", )
+            }
         }
     }
 
