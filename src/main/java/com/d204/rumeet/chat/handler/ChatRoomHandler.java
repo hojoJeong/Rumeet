@@ -22,6 +22,9 @@ public class ChatRoomHandler {
     public void chatControl(Message message) {
         // Json : String -> Object : ChatDto
         ChatDto chat = chatService.convertChat(message);
+        if(chat.getRoomId() == 0) {
+            return;
+        }
         //비즈니스 로직 (mongodb 저장, 채팅 보내기)
         chatService.saveChat(chat);
         chatService.doChat(chat, message);
