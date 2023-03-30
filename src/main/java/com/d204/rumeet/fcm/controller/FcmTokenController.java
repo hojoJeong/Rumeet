@@ -36,8 +36,12 @@ public class FcmTokenController {
         RespData<Void>data = new RespData<>();
         if(fcmService.updateUserToken(token) == 1) {
             data.setFlag("success");
+            data.setMsg("FCM Token 등록 완료");
+            data.setCode(0);
         } else {
             data.setFlag("fail");
+            data.setMsg("일치하는 회원이 없습니다.");
+            data.setCode(1);
         }
         return data.builder();
     }
