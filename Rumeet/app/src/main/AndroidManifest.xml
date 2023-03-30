@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".ApplicationClass"
@@ -16,11 +18,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rumeet"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
 
-        <activity android:name=".ui.activities.StartActivity"
-            android:theme="@style/Theme.Rumeet.Splash"
-            android:exported="true">
+        <activity
+            android:name=".ui.activities.StartActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Rumeet.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,8 +32,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".ui.activities.MainActivity"/>
+        <activity android:name=".ui.activities.MainActivity" />
 
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
@@ -46,7 +48,7 @@
                     android:scheme="@string/KAKAO_MANIFEST_KEY" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.LoginActivity"/>
+        <activity android:name=".ui.activities.LoginActivity" />
     </application>
 
 </manifest>

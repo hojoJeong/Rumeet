@@ -157,6 +157,16 @@
                 app:argType="boolean"
                 app:nullable="false"
                 android:defaultValue="false"/>
+            <argument
+                android:name="userName"
+                app:argType="string"
+                app:nullable="false"
+                android:defaultValue=""/>
+            <argument
+                android:name="userId"
+                app:argType="integer"
+                app:nullable="false"
+                android:defaultValue="-1"/>
         </fragment>
 
     </navigation>

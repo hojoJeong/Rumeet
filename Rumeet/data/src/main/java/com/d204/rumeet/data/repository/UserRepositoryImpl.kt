@@ -5,12 +5,16 @@ import android.util.Log
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.UserApi
 import com.d204.rumeet.data.remote.api.handleApi
+import com.d204.rumeet.data.remote.dto.request.user.ModifyNickNameRequest
+import com.d204.rumeet.data.remote.dto.request.user.ModifyProfileAndNickNameRequest
 import com.d204.rumeet.data.remote.dto.response.user.AcquiredBadgeResponse
 import com.d204.rumeet.data.remote.dto.response.user.UserInfoResponse
 import com.d204.rumeet.data.remote.mapper.toDomainModel
 import com.d204.rumeet.data.remote.mapper.toRequestDto
+import com.d204.rumeet.data.util.getMultipartData
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.model.user.AcquiredBadgeListDomainModel
+import com.d204.rumeet.domain.model.user.ModifyProfileAndNickNameDomainModel
 import com.d204.rumeet.domain.model.user.ModifyUserDetailInfoDomainModel
 import com.d204.rumeet.domain.model.user.UserInfoDomainModel
 import com.d204.rumeet.domain.repository.UserRepository
@@ -62,5 +66,12 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun logout() {
         userDataStorePreferences.clearUserInfo()
+    }
+
+    override suspend fun modifyProfileImgAndNickName(profile: ModifyProfileAndNickNameDomainModel): Boolean {
+        val user = ModifyNickNameRequest(profile.id, profile.name, profile.curProfile)
+        val file = getMultipartData(profile.profile)
+        Log.d(TAG, "modifyProfileImgAndNickName: $user , $file")
+        return userApi.modifyProfileAndNickName(user, file).flag == "success"
     }
 }

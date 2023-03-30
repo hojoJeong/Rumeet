@@ -1,12 +1,15 @@
 package com.d204.rumeet.ui.join
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import com.d204.rumeet.data.remote.dto.DuplicateInfoException
+import com.d204.rumeet.domain.model.user.ModifyProfileAndNickNameDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.sign.CheckDuplicateInfoUseCase
 import com.d204.rumeet.domain.usecase.sign.EmailSignUpUseCase
 import com.d204.rumeet.domain.usecase.sign.SocialSignUpUseCase
+import com.d204.rumeet.domain.usecase.user.ModifyProfileImgAndNickNameUseCase
 import com.d204.rumeet.domain.usecase.user.ModifyUserDetailInfoUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.join.addtional_info.AdditionalInfoAction
@@ -26,7 +29,8 @@ class JoinViewModel @Inject constructor(
     private val checkDuplicateInfoUseCase: CheckDuplicateInfoUseCase,
     private val emailSignUpUseCase: EmailSignUpUseCase,
     private val socialSignUpUseCase: SocialSignUpUseCase,
-    private val modifyUserDetailInfoUseCase: ModifyUserDetailInfoUseCase
+    private val modifyUserDetailInfoUseCase: ModifyUserDetailInfoUseCase,
+    private val modifyProfileImgAndNickNameUseCase: ModifyProfileImgAndNickNameUseCase
 ) : BaseViewModel() {
 
     private val _joinIdAction: MutableSharedFlow<JoinIdAction> = MutableSharedFlow()
@@ -44,9 +48,13 @@ class JoinViewModel @Inject constructor(
     private val _editUserInfoEvent: MutableSharedFlow<EditUserInfoAction> = MutableSharedFlow()
     val editUserInfoEvent: SharedFlow<EditUserInfoAction> get() = _editUserInfoEvent.asSharedFlow()
 
+
+    private val _resultEditUserProfile: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val resultEditUserProfile: StateFlow<Boolean> get() = _resultEditUserProfile.asStateFlow()
+
     val joinInfo: JoinModel = JoinModel()
     val editUserInfo: UserDetailInfoUiModel = UserDetailInfoUiModel()
-
+    val editProfile: EditProfile = EditProfile()
 
     /**
      * 아이디 중복체크
@@ -145,6 +153,19 @@ class JoinViewModel @Inject constructor(
                 dismissLoading()
             } else {
                 Log.d("TAG", "editUserInfo: 회원 정보 수정 오류")
+            }
+        }
+    }
+
+    fun editProfile(){
+        baseViewModelScope.launch {
+            showLoading()
+            if(modifyProfileImgAndNickNameUseCase.invoke(editProfile.toDoMainModel())){
+                Log.d(TAG, "성공: $editProfile")
+                _resultEditUserProfile.value = true
+                dismissLoading()
+            } else {
+                Log.d("TAG", "editProfile: 프로필 수정 오류")
             }
         }
     }

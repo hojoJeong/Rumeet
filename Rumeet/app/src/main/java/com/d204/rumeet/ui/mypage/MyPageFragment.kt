@@ -42,7 +42,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                 }
             }
             launch {
-                viewModel.userInfo.collect(){
+                viewModel.userInfo.collect() {
                     initText()
                     initProfile()
                 }
@@ -121,8 +121,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                     MyPageAction.EditProfile -> navigate(
                         MyPageFragmentDirections.actionMyPageFragmentToJoinNicknameFragment2(
                             1,
-                            "",
-                            true
+                            viewModel.userInfo.value.successOrNull()?.profile ?: "",
+                            true,
+                            viewModel.userInfo.value.successOrNull()?.nickname ?: "",
+                            viewModel.userId.value.successOrNull() ?: -1
                         )
                     )
                     MyPageAction.FriendList -> navigate(MyPageFragmentDirections.actionMyPageFragmentToFriendListFragment())

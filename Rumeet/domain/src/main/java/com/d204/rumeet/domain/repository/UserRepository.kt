@@ -2,6 +2,7 @@ package com.d204.rumeet.domain.repository
 
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.model.user.AcquiredBadgeListDomainModel
+import com.d204.rumeet.domain.model.user.ModifyProfileAndNickNameDomainModel
 import com.d204.rumeet.domain.model.user.ModifyUserDetailInfoDomainModel
 import com.d204.rumeet.domain.model.user.UserInfoDomainModel
 import java.io.File
@@ -15,4 +16,5 @@ interface UserRepository {
     suspend fun withdrawal(userId: Int): Boolean
     suspend fun getAcquiredBadgeList(userId: Int): NetworkResult<List<AcquiredBadgeListDomainModel>>
     suspend fun logout()
+    suspend fun modifyProfileImgAndNickName(profile: ModifyProfileAndNickNameDomainModel): Boolean
 }
