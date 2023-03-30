@@ -7,5 +7,4 @@ sealed class SettingAction {
     object SettingNotification : SettingAction()
     object Privacy : SettingAction()
     object ServiceTerms : SettingAction()
-    object LogOut : SettingAction()
 }

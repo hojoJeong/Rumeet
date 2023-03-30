@@ -14,4 +14,5 @@ interface UserRepository {
     suspend fun modifyUserDetailInfo(userInfo: ModifyUserDetailInfoDomainModel): Boolean
     suspend fun withdrawal(userId: Int): Boolean
     suspend fun getAcquiredBadgeList(userId: Int): NetworkResult<List<AcquiredBadgeListDomainModel>>
+    suspend fun logout()
 }

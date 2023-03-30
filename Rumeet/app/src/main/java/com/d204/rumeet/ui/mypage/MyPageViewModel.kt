@@ -6,10 +6,7 @@ import android.util.LogPrinter
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
-import com.d204.rumeet.domain.usecase.user.GetAcquiredBadgeListUseCase
-import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
-import com.d204.rumeet.domain.usecase.user.GetUserInfoUseCase
-import com.d204.rumeet.domain.usecase.user.WithdrawalUseCase
+import com.d204.rumeet.domain.usecase.user.*
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
@@ -26,7 +23,8 @@ class MyPageViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val withdrawalUseCase: WithdrawalUseCase,
-    private val getAcquiredBadgeListUseCase: GetAcquiredBadgeListUseCase
+    private val getAcquiredBadgeListUseCase: GetAcquiredBadgeListUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : BaseViewModel(), MyPageEventHandler {
     private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
     val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
@@ -87,7 +85,6 @@ class MyPageViewModel @Inject constructor(
                 settingOptionList[1] -> _settingNavigationEvent.emit(SettingAction.SettingNotification)
                 settingOptionList[3] -> _settingNavigationEvent.emit(SettingAction.Privacy)
                 settingOptionList[4] -> _settingNavigationEvent.emit(SettingAction.ServiceTerms)
-                settingOptionList[5] -> _settingNavigationEvent.emit(SettingAction.LogOut)
 
                 userInfoOptionList[5] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetDetailInfo)
                 userInfoOptionList[6] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetPassword)
@@ -160,6 +157,12 @@ class MyPageViewModel @Inject constructor(
                     dismissLoading()
                     catchError(it)
                 }
+        }
+    }
+
+    fun logout(){
+        baseViewModelScope.launch {
+            logoutUseCase.invoke()
         }
     }
 

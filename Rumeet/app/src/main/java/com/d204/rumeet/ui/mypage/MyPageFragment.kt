@@ -5,7 +5,6 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,11 +15,8 @@ import com.d204.rumeet.ui.base.*
 import com.d204.rumeet.ui.mypage.adapter.MyPageMenuAdapter
 import com.d204.rumeet.ui.mypage.model.MyPageMenuUiModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
@@ -148,6 +144,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             )
         ).apply {
             setCancelButtonVisibility(true)
+            setLogoutState(true, viewModel)
         }
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }

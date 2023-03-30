@@ -59,4 +59,8 @@ internal class UserRepositoryImpl @Inject constructor(
     override suspend fun getAcquiredBadgeList(userId: Int): NetworkResult<List<AcquiredBadgeListDomainModel>> {
         return handleApi { userApi.getAcquiredBadgeList(userId) }.toDomainResult<List<AcquiredBadgeResponse>, List<AcquiredBadgeListDomainModel>> { it.map { model -> model.toDomainModel() } }
     }
+
+    override suspend fun logout() {
+        userDataStorePreferences.clearUserInfo()
+    }
 }
