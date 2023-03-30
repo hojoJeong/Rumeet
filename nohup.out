@@ -8937,3 +8937,233 @@ INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
 INFO:     Finished server process [1356628]
 INFO:     Stopping reloader process [1093322]
+INFO:     Will watch for changes in these directories: ['/home/ubuntu/S08P22D204']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [1507871] using StatReload
+INFO:     Started server process [1507873]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/home/ubuntu/spark-3.3.2-bin-hadoop3/conf/spark-env.sh: line 70: export: `-Dspark.worker.cleanup.interval=1800': not a valid identifier
+/home/ubuntu/spark-3.3.2-bin-hadoop3/conf/spark-env.sh: line 70: export: `-Dspark.worker.cleanup.appDataTtl=86400': not a valid identifier
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/home/ubuntu/spark-3.3.2-bin-hadoop3/jars/spark-streaming-kafka-0-10-assembly_2.12-3.3.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/home/ubuntu/spark-3.3.2-bin-hadoop3/jars/log4j-slf4j-impl-2.17.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+23/03/30 07:17:10 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[Stage 0:>                                                          (0 + 1) / 1]                                                                                [Stage 1:>                                                          (0 + 1) / 1]                                                                                [Stage 4:=============================>                             (2 + 2) / 4]                                                                                [Stage 8:============>                                           (22 + 4) / 100][Stage 8:================>                                       (30 + 4) / 100][Stage 8:======================>                                 (40 + 4) / 100][Stage 8:=============================>                          (52 + 4) / 100][Stage 8:==================================>                     (62 + 4) / 100][Stage 8:========================================>               (73 + 4) / 100][Stage 8:=============================================>          (82 + 4) / 100][Stage 8:=====================================================>  (95 + 4) / 100]                                                                                [Stage 10:================================>                       (44 + 4) / 75][Stage 10:===========================================>            (58 + 4) / 75][Stage 10:======================================================> (73 + 2) / 75]                                                                                [Stage 11:>                                                         (0 + 1) / 1]                                                                                [Stage 12:>                                                         (0 + 4) / 4][Stage 12:=============================>                            (2 + 2) / 4]                                                                                [Stage 19:==================>                                    (34 + 4) / 100][Stage 19:============================>                          (52 + 5) / 100][Stage 19:=======================================>               (71 + 4) / 100][Stage 19:=================================================>     (90 + 4) / 100]                                                                                [Stage 21:================================================>       (65 + 4) / 75]                                                                                [Stage 30:====================>                                  (37 + 4) / 100][Stage 30:==============================>                        (55 + 4) / 100][Stage 30:=========================================>             (76 + 4) / 100][Stage 30:=====================================================> (97 + 3) / 100]                                                                                [Stage 32:====================================>                   (49 + 4) / 75]                                                                                +-------+---------+
+|user_id|avg_pace1|
++-------+---------+
++-------+---------+
+
++-------+---------+---------+
+|user_id|avg_pace1|avg_pace2|
++-------+---------+---------+
+|     31|      455|      590|
+|     28|      185|      335|
+|     27|      215|      210|
+|     29|      340|      220|
+|     32|      595|      455|
+|     30|      540|      537|
++-------+---------+---------+
+
++-------+---------+---------+---------+
+|user_id|avg_pace1|avg_pace2|avg_pace3|
++-------+---------+---------+---------+
+|     31|      590|      459|      547|
+|     28|      283|      239|      193|
+|     27|      189|      226|      263|
+|     29|      259|      284|      267|
+|     32|      552|      534|      490|
+|     30|      555|      571|      559|
++-------+---------+---------+---------+
+
+INFO:     14.46.142.211:51213 - "GET /cache HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/uvicorn/protocols/http/h11_impl.py", line 429, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/uvicorn/middleware/proxy_headers.py", line 78, in __call__
+    return await self.app(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/applications.py", line 276, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/applications.py", line 122, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/middleware/errors.py", line 184, in __call__
+    raise exc
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/middleware/errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/middleware/exceptions.py", line 79, in __call__
+    raise exc
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/middleware/exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/middleware/asyncexitstack.py", line 21, in __call__
+    raise e
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/routing.py", line 66, in app
+    response = await func(request)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/routing.py", line 237, in app
+    raw_response = await run_endpoint_function(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/routing.py", line 163, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/home/ubuntu/S08P22D204/main.py", line 116, in root
+    new_df_5km = spark.read \
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/pyspark/sql/readwriter.py", line 177, in load
+    return self._df(self._jreader.load(path))
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/py4j/java_gateway.py", line 1321, in __call__
+    return_value = get_return_value(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/pyspark/sql/utils.py", line 190, in deco
+    return f(*a, **kw)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling o95.load.
+: java.lang.IllegalStateException: hdfs://13.125.218.237:9000/user/spark/output/5km/_spark_metadata/9.compact doesn't exist (latestId: 18, compactInterval: 10)
+	at org.apache.spark.sql.execution.streaming.CompactibleFileStreamLog.$anonfun$allFiles$4(CompactibleFileStreamLog.scala:267)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.execution.streaming.CompactibleFileStreamLog.$anonfun$allFiles$2(CompactibleFileStreamLog.scala:265)
+	at org.apache.spark.sql.execution.streaming.CompactibleFileStreamLog.$anonfun$allFiles$2$adapted(CompactibleFileStreamLog.scala:263)
+	at scala.collection.TraversableLike.$anonfun$flatMap$1(TraversableLike.scala:293)
+	at scala.collection.immutable.NumericRange.foreach(NumericRange.scala:75)
+	at scala.collection.TraversableLike.flatMap(TraversableLike.scala:293)
+	at scala.collection.TraversableLike.flatMap$(TraversableLike.scala:290)
+	at scala.collection.AbstractTraversable.flatMap(Traversable.scala:108)
+	at org.apache.spark.sql.execution.streaming.CompactibleFileStreamLog.allFiles(CompactibleFileStreamLog.scala:263)
+	at org.apache.spark.sql.execution.streaming.MetadataLogFileIndex.<init>(MetadataLogFileIndex.scala:53)
+	at org.apache.spark.sql.execution.datasources.DataSource.resolveRelation(DataSource.scala:373)
+	at org.apache.spark.sql.DataFrameReader.loadV1Source(DataFrameReader.scala:228)
+	at org.apache.spark.sql.DataFrameReader.$anonfun$load$2(DataFrameReader.scala:210)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:210)
+	at org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:185)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:357)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+INFO:     14.46.142.211:51214 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+[Stage 41:=============================>                         (53 + 4) / 100][Stage 41:====================================>                  (66 + 4) / 100][Stage 41:==========================================>            (78 + 4) / 100][Stage 41:====================================================>  (95 + 4) / 100]                                                                                [Stage 43:==========================>                             (35 + 4) / 75][Stage 43:===================================>                    (47 + 4) / 75][Stage 43:==========================================>             (57 + 4) / 75][Stage 43:======================================================> (73 + 2) / 75]                                                                                [Stage 52:==============================================>        (85 + 4) / 100]                                                                                [Stage 54:=============================================>          (61 + 5) / 75]                                                                                [Stage 63:=====================================>                 (68 + 4) / 100][Stage 63:====================================================>  (96 + 4) / 100]                                                                                [Stage 65:=====================================================>  (71 + 4) / 75]                                                                                +-------+---------+
+|user_id|avg_pace1|
++-------+---------+
+|     27|      220|
++-------+---------+
+
++-------+---------+---------+
+|user_id|avg_pace1|avg_pace2|
++-------+---------+---------+
+|     31|      455|      590|
+|     28|      185|      335|
+|     27|      215|      210|
+|     29|      340|      220|
+|     32|      595|      455|
+|     30|      540|      537|
++-------+---------+---------+
+
++-------+---------+---------+---------+
+|user_id|avg_pace1|avg_pace2|avg_pace3|
++-------+---------+---------+---------+
+|     31|      590|      459|      547|
+|     28|      283|      239|      193|
+|     27|      189|      226|      263|
+|     29|      259|      284|      267|
+|     32|      552|      534|      490|
+|     30|      555|      571|      559|
++-------+---------+---------+---------+
+
+INFO:     14.46.142.211:51266 - "GET /cache HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/uvicorn/protocols/http/h11_impl.py", line 429, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/uvicorn/middleware/proxy_headers.py", line 78, in __call__
+    return await self.app(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/applications.py", line 276, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/applications.py", line 122, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/middleware/errors.py", line 184, in __call__
+    raise exc
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/middleware/errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/middleware/exceptions.py", line 79, in __call__
+    raise exc
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/middleware/exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/middleware/asyncexitstack.py", line 21, in __call__
+    raise e
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/starlette/routing.py", line 66, in app
+    response = await func(request)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/routing.py", line 237, in app
+    raw_response = await run_endpoint_function(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/fastapi/routing.py", line 163, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/home/ubuntu/S08P22D204/main.py", line 116, in root
+    new_df_5km = spark.read \
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/pyspark/sql/readwriter.py", line 177, in load
+    return self._df(self._jreader.load(path))
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/py4j/java_gateway.py", line 1321, in __call__
+    return_value = get_return_value(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/pyspark/sql/utils.py", line 190, in deco
+    return f(*a, **kw)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling o170.load.
+: java.lang.IllegalStateException: hdfs://13.125.218.237:9000/user/spark/output/5km/_spark_metadata/9.compact doesn't exist (latestId: 18, compactInterval: 10)
+	at org.apache.spark.sql.execution.streaming.CompactibleFileStreamLog.$anonfun$allFiles$4(CompactibleFileStreamLog.scala:267)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.execution.streaming.CompactibleFileStreamLog.$anonfun$allFiles$2(CompactibleFileStreamLog.scala:265)
+	at org.apache.spark.sql.execution.streaming.CompactibleFileStreamLog.$anonfun$allFiles$2$adapted(CompactibleFileStreamLog.scala:263)
+	at scala.collection.TraversableLike.$anonfun$flatMap$1(TraversableLike.scala:293)
+	at scala.collection.immutable.NumericRange.foreach(NumericRange.scala:75)
+	at scala.collection.TraversableLike.flatMap(TraversableLike.scala:293)
+	at scala.collection.TraversableLike.flatMap$(TraversableLike.scala:290)
+	at scala.collection.AbstractTraversable.flatMap(Traversable.scala:108)
+	at org.apache.spark.sql.execution.streaming.CompactibleFileStreamLog.allFiles(CompactibleFileStreamLog.scala:263)
+	at org.apache.spark.sql.execution.streaming.MetadataLogFileIndex.<init>(MetadataLogFileIndex.scala:53)
+	at org.apache.spark.sql.execution.datasources.DataSource.resolveRelation(DataSource.scala:373)
+	at org.apache.spark.sql.DataFrameReader.loadV1Source(DataFrameReader.scala:228)
+	at org.apache.spark.sql.DataFrameReader.$anonfun$load$2(DataFrameReader.scala:210)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:210)
+	at org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:185)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:357)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1507873]
+INFO:     Started server process [1510452]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
