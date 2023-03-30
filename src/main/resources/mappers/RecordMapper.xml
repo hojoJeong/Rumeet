@@ -8,9 +8,11 @@
         <result column="user_id" property="user_id"/>
         <result column="total_count" property="total_count"/>
         <result column="total_km" property="total_km"/>
+        <result column="total_time" property="total_time"/>
         <result column="average_pace" property="average_pace"/>
+        <result column="team_success_count" property="team_success_count"/>
+        <result column="competition_success_count" property="competition_success_count"/>
     </resultMap>
-
     <select id="getRecord" parameterType="int" resultMap="record">
         SELECT * FROM record WHERE user_id = #{userId};
     </select>
@@ -20,10 +22,21 @@
         SET
             total_count = total_count + 1,
             total_km = total_km + #{km},
-            average_pace = #{pace}
+            average_pace = #{pace},
+            total_time = total_time + #{elapsedTime},
+            team_success_count = #{teamSuccess},
+            competition_success_count = #{completeSuccess}
         WHERE user_id = #{userId}
     </update>
 
+    <insert id="addRaceInfo">
+        INSERT INTO race_info (race_id, user_id, velocity, km, time, heart_rate, kcal, success, date)
+        VALUES (#{race_id}, #{user_id}, #{velocity}, #{km}, #{time}, #{heart_rate}, #{kcal}, #{success}, #{date})
+    </insert>
+
+    <select id="getRaceInfo" resultType="raceInfoDto">
+        SELECT * FROM race_info WHERE user_id = #{userId}
+    </select>
 
 
 </mapper>
