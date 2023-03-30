@@ -22,6 +22,7 @@ public class RecordServiceImpl implements RecordService{
 
     @Override
     public void updateRecord(String jsonData) throws org.json.simple.parser.ParseException {
+        //{"user_id":1,"pace1":192, "pace2":241, "pace3":268}
         JSONParser jsonParser = new JSONParser();
         JSONObject data = (JSONObject) jsonParser.parse(jsonData);
 

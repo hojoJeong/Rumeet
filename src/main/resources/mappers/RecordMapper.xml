@@ -12,11 +12,11 @@
     </resultMap>
 
     <select id="getRecord" parameterType="int" resultMap="record">
-        SELECT * FROM total_record WHERE user_id = #{userId};
+        SELECT * FROM record WHERE user_id = #{userId};
     </select>
 
     <update id="updateRecord">
-        UPDATE total_record
+        UPDATE record
         SET
             total_count = total_count + 1,
             total_km = total_km + #{km},
