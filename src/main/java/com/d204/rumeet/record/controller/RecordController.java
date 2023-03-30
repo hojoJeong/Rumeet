@@ -1,6 +1,7 @@
 package com.d204.rumeet.record.controller;
 
 import com.d204.rumeet.data.RespData;
+import com.d204.rumeet.record.model.dto.RaceInfoDto;
 import com.d204.rumeet.record.model.dto.RecordDto;
 import com.d204.rumeet.record.model.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -42,6 +45,15 @@ public class RecordController {
         recordService.addRaceInfo(json_data);
         RespData<RecordDto> data = new RespData<>();
         data.setMsg("기록 추가 완료");
+        return data.builder();
+    }
+
+    @Operation(summary = "raceInfo 조회")
+    @PostMapping("/race/{userId}")
+    public ResponseEntity<?> addRaceInfo(@PathVariable int userId) throws ParseException, org.json.simple.parser.ParseException {
+        List<RaceInfoDto> race = recordService.getRaceInfo(userId);
+        RespData<List> data = new RespData<>();
+        data.setData(race);
         return data.builder();
     }
 

@@ -34,5 +34,9 @@
         VALUES (#{race_id}, #{user_id}, #{velocity}, #{km}, #{time}, #{heart_rate}, #{kcal}, #{success}, #{date})
     </insert>
 
+    <select id="getRaceInfo" resultType="raceInfoDto">
+        SELECT * FROM race_info WHERE user_id = #{userId}
+    </select>
+
 
 </mapper>

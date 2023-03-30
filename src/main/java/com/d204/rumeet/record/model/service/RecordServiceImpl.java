@@ -10,6 +10,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RecordServiceImpl implements RecordService{
@@ -26,7 +28,7 @@ public class RecordServiceImpl implements RecordService{
     @Override
     public void updateRecord(String jsonData) throws org.json.simple.parser.ParseException {
 
-        //{"user_id":1, "pace1":192, "pace2":241 , "pace3":268 , "mode":2, "success":1, "elapsed_time":1234}
+        //{"user_id":1, "mode":2, "success":1, "elapsed_time":1234}
         JSONParser jsonParser = new JSONParser();
         JSONObject data = (JSONObject) jsonParser.parse(jsonData);
 
@@ -128,8 +130,8 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public RaceInfoDto getRaceInfo(int userId) {
-        RaceInfoDto race = recordMapper.getRaceInfo(userId);
+    public List<RaceInfoDto> getRaceInfo(int userId) {
+        List<RaceInfoDto> race = recordMapper.getRaceInfo(userId);
         return race;
     }
 
