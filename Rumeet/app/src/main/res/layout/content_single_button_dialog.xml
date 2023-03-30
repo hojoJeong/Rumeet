@@ -47,12 +47,26 @@
             style="@style/base_font_medium_16_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_margin="@dimen/base_horizontal_margin"
             android:text="@{alertModel.content}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/div_title"
             tools:text="content" />
+
+        <DatePicker
+            android:id="@+id/dp_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:datePickerMode="spinner"
+            app:layout_constraintTop_toBottomOf="@id/div_title"
+            app:layout_constraintBottom_toTopOf="@+id/btn_okay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginVertical="10dp"
+            android:calendarViewShown="false"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_okay"
@@ -84,6 +98,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_okay"
+            tools:visibility="gone"
             android:visibility="@{cancelState ? View.VISIBLE : View.GONE}"/>
 
 

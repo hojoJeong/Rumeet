@@ -12,3 +12,8 @@ fun Long.toDate() : String{
     val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd")
     return simpleDateFormat.format(this)
 }
+
+fun String.toDate() : Long{
+    val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd")
+    return simpleDateFormat.parse(this).time
+}

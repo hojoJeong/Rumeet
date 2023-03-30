@@ -1,11 +1,14 @@
 package com.d204.rumeet.ui.base
 
-import androidx.fragment.app.viewModels
+import android.view.View
+import android.widget.DatePicker
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentSingleButtonDialogBinding
+import com.d204.rumeet.databinding.FragmentRunningRecordBinding
 import com.d204.rumeet.ui.activities.LoginActivity
 import com.d204.rumeet.ui.mypage.MyPageViewModel
 import com.d204.rumeet.util.startActivityAfterClearBackStack
+import com.d204.rumeet.util.toDate
 
 data class AlertModel(
     val title: String,
@@ -21,6 +24,10 @@ class DefaultAlertDialog(
 
     private var cancelButtonVisibility = false
     private var logoutState = false
+    private var datePickerVisibility = false
+    private var initDate: Long = 0
+    private var isStartDate = ""
+    private lateinit var parentBinding: FragmentRunningRecordBinding
 
     private lateinit var myPageViewModel: MyPageViewModel
 
@@ -29,26 +36,88 @@ class DefaultAlertDialog(
         binding.alertModel = alertModel
         binding.btnOkay.setOnClickListener { dismissAllowingStateLoss() }
         binding.btnCancel.setOnClickListener { dismissAllowingStateLoss() }
-        addLogoutBtnClickListener()
+
+        if (logoutState) {
+            addLogoutBtnClickListener()
+        }
+
+        if (datePickerVisibility) {
+            setDatePickerVisibility(datePickerVisibility)
+            initDatePicker(initDate)
+            addDateBtnListener(isStartDate, parentBinding)
+        }
     }
 
     override fun initDataBinding() {}
 
     override fun initAfterBinding() {}
 
-    fun setCancelButtonVisibility(state: Boolean){
+    fun setCancelButtonVisibility(state: Boolean) {
         cancelButtonVisibility = state
     }
 
-    fun setLogoutState(state: Boolean, viewModel: MyPageViewModel){
+    private fun setDatePickerVisibility(state: Boolean) {
+        if (state) {
+            binding.tvDialogContent.visibility = View.GONE
+            binding.dpDialog.visibility = View.VISIBLE
+        }
+    }
+
+    fun setLogoutState(state: Boolean, viewModel: MyPageViewModel) {
         logoutState = state
         myPageViewModel = viewModel
     }
 
-    private fun addLogoutBtnClickListener(){
+    private fun addLogoutBtnClickListener() {
         binding.btnOkay.setOnClickListener {
             myPageViewModel.logout()
             requireActivity().startActivityAfterClearBackStack(LoginActivity::class.java)
+        }
+    }
+
+    fun setInitDatePickerData(
+        state: Boolean,
+        initDate: Long,
+        isStartDate: String,
+        parentBinding: FragmentRunningRecordBinding
+    ) {
+        datePickerVisibility = state
+        this.initDate = initDate
+        this.isStartDate = isStartDate
+        this.parentBinding = parentBinding
+    }
+
+    private fun initDatePicker(initDate: Long) {
+        val year = initDate.toDate().substring(0, 4).toInt()
+        val month = initDate.toDate().substring(5, 7).toInt()
+        val day = initDate.toDate().substring(8).toInt()
+        binding.dpDialog.init(year, month, day, DatePicker.OnDateChangedListener { _, _, _, _ ->  })
+
+    }
+
+    private fun addDateBtnListener(
+        isStartDate: String,
+        parentBinding: FragmentRunningRecordBinding
+    ) {
+        binding.btnOkay.setOnClickListener {
+            if (datePickerVisibility) {
+                val year = binding.dpDialog.year
+                val month = binding.dpDialog.month + 1
+                val day = binding.dpDialog.dayOfMonth
+                val date = "$year.$month.$day"
+
+                val dateForLongType = date.toDate()
+                //TODO 날짜 서버통신
+
+                if (isStartDate == "시작") {
+                    parentBinding.tvRunningRecordStartDate.text = date
+                } else {
+                    parentBinding.tvRunningRecordEndDate.text = date
+                }
+                binding.dpDialog.init(year, month-1, day, DatePicker.OnDateChangedListener { _, _, _, _ ->  })
+
+                dismissAllowingStateLoss()
+            }
         }
     }
 }
