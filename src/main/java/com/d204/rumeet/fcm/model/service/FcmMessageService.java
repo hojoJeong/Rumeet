@@ -7,12 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+
+import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.*;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
@@ -93,16 +92,27 @@ public class FcmMessageService {
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
         String message = makeMessage(targetToken, title, body);
         log.info("message : "+ message);
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(getAccessToken());
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        headers.setBearerAuth(getAccessToken());
+//
+//        HttpEntity<String> entity = new HttpEntity<>(message, headers);
+//        ResponseEntity<Void> response = restTemplate.exchange(API_URL, HttpMethod.POST, entity, Void.class, "rumeet-16daa");
+//
+//        System.out.println(response.getStatusCode());
+//        System.out.println(response.getBody().toString());
 
-        HttpEntity<String> entity = new HttpEntity<>(message, headers);
-        ResponseEntity<Void> response = restTemplate.exchange(API_URL, HttpMethod.POST, entity, Void.class, "your_project_id");
-
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody().toString());
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+        Response response = client.newCall(request).execute();
+        log.info(response.body().string());
     }
 
 }
