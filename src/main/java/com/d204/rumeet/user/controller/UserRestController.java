@@ -161,7 +161,7 @@ public class UserRestController {
             RespData<LoginUserDto> data = new RespData<>();
             data.setFlag("fail");
             data.setCode(ErrorEnum.DELETED_USER.code);
-            data.setMsg("이미 탈퇴한 회원");
+            data.setMsg("이미 탈퇴한 회원입니다.");
             data.setData(null);
             return data.builder();
         }
@@ -181,6 +181,14 @@ public class UserRestController {
             data.setCode(2);
             data.setMsg("회원가입");
             data.setData(new KakaoUserJoinDto(naverUserDto.getResponse().getId(), naverUserDto.getResponse().getProfile_image()));
+            return data.builder();
+        }
+        if(user.getState() == -1) {
+            RespData<LoginUserDto> data = new RespData<>();
+            data.setFlag("fail");
+            data.setCode(ErrorEnum.DELETED_USER.code);
+            data.setMsg("이미 탈퇴한 회원입니다.");
+            data.setData(null);
             return data.builder();
         }
         RespData<LoginUserDto> data = new RespData<>();
