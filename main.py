@@ -136,5 +136,3 @@ async def root():
 @app.get("/munang")
 async def root():
     return {"message": "무냉"}
-
-~
