@@ -22,7 +22,6 @@ import java.io.IOException;
 @CrossOrigin("*")
 @RequestMapping("/fcm")
 public class FcmTokenController {
-
     @Autowired
     FcmTokenService fcmService;
 
