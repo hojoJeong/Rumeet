@@ -24,14 +24,15 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "ChattingListViewModel"
+
 @HiltViewModel
 class ChattingListViewModel @Inject constructor(
     private val getChattingRoomUseCase: GetChattingRoomUseCase,
     private val getUserIdUseCase: GetUserIdUseCase
 ) : BaseViewModel(), ChattingRoomClickListener {
 
-    private val _chattingListSideEffect: MutableSharedFlow<ChattingListSideEffect> =
-        MutableSharedFlow()
+    private val _chattingListSideEffect: MutableSharedFlow<ChattingListSideEffect> = MutableSharedFlow()
     val chattingListSideEffect: SharedFlow<ChattingListSideEffect> get() = _chattingListSideEffect.asSharedFlow()
 
     private val _chattingList: MutableStateFlow<UiState<List<ChattingRoomUiModel>>> =
@@ -41,14 +42,13 @@ class ChattingListViewModel @Inject constructor(
     private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
     val userId: StateFlow<Int> get() = _userId.asStateFlow()
 
-    private var flag = false
-
     fun requestChattingRoom() {
         baseViewModelScope.launch {
             showLoading()
             _userId.emit(getUserIdUseCase())
             getChattingRoomUseCase(userId.value)
                 .onSuccess { result ->
+                    Log.d(TAG, "requestChattingRoom: Success on")
                     AMQPManager.userQueueName = "user.queue.${userId.value}"
                     startChattingListSubscribe()
                     _chattingListSideEffect.emit(
@@ -65,8 +65,14 @@ class ChattingListViewModel @Inject constructor(
         }
     }
 
-    override fun onChattingRoomClick(roomId: Int, profile: String, otherUserId: Int, noReadCnt : Int) {
+    override fun onChattingRoomClick(
+        roomId: Int,
+        profile: String,
+        otherUserId: Int,
+        noReadCnt: Int
+    ) {
         baseViewModelScope.launch {
+            Log.d(TAG, "onChattingRoomClick: navigate chatting room")
             _chattingListSideEffect.emit(
                 ChattingListSideEffect.NavigateChattingRoom(
                     roomId,
@@ -87,21 +93,10 @@ class ChattingListViewModel @Inject constructor(
                 body: ByteArray
             ) {
                 try {
-                    if (flag) {
-                        val message =
-                            Gson().fromJson(String(body), Array<ChattingRoomUiModel>::class.java)
-                                .toList()
-                        CoroutineScope(Dispatchers.IO).launch {
-                            _chattingListSideEffect.tryEmit(
-                                ChattingListSideEffect.SuccessNewChattingList(
-                                    message
-                                )
-                            )
-                        }
-                    } else {
-                        flag = true
-                    }
-
+                    val message =
+                        Gson().fromJson(String(body), Array<ChattingRoomUiModel>::class.java).toList()
+                    val response = _chattingListSideEffect.tryEmit(ChattingListSideEffect.SuccessNewChattingList(message))
+                    Log.d("TAG", "handleDelivery: ${response}")
                 } catch (e: Exception) {
                     Log.e("chattinglist", "handleDelivery: ${e.message}")
                 }

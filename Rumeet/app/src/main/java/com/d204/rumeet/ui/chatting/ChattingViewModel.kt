@@ -86,4 +86,9 @@ class ChattingViewModel @Inject constructor(
             _chattingSideEffect.emit(ChattingSideEffect.SendChatting)
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        AMQPManager.unSubscribeChatting()
+    }
 }

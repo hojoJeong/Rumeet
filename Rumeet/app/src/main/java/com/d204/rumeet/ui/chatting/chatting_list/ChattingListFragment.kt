@@ -1,6 +1,7 @@
 package com.d204.rumeet.ui.chatting.chatting_list
 
 import android.os.Build.VERSION_CODES.P
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,8 @@ import com.d204.rumeet.util.AMQPManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
+private const val TAG = "ChattingListFragment"
+
 @AndroidEntryPoint
 class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingListViewModel>() {
     override val layoutResourceId: Int
@@ -19,6 +22,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
 
     override val viewModel: ChattingListViewModel by viewModels()
     private lateinit var chattingListAdapter: ChattingListAdapter
+    private var flag = false
 
     override fun initStartView() {
         with(binding) {
@@ -37,6 +41,8 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         setNoResult(it.isEmpty)
                     }
                     is ChattingListSideEffect.NavigateChattingRoom -> {
+                        Log.d(TAG, "initDataBinding: $flag")
+
                         navigate(
                             ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(
                                 profile = it.profile,
@@ -69,4 +75,5 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
 
         binding.contentNoResultChattingList.tvContentNoResultMessage.text = "채팅내역이 존재하지 않습니다"
     }
+
 }

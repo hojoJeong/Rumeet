@@ -66,7 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     binding.bvnMain.root.visibility = View.VISIBLE
                     with(binding.tbToolbar) {
                         visibility = View.VISIBLE
-                        setToolbarType(RumeetToolbar.ToolbarType.TEXT, "채팅")
+                        setToolbarType(RumeetToolbar.ToolbarType.TEXT, "채팅 목록")
                     }
                 }
                 R.id.chattingFragment -> {

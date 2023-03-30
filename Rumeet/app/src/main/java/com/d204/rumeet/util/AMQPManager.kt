@@ -20,6 +20,7 @@ object AMQPManager {
     var userQueueName : String = ""
     var chattingChanel: Channel? = null
     var userChannel: Channel? = null
+    var chattingChannelTag = ""
 
     fun initChannel() {
         CoroutineScope(Dispatchers.Default).launch {
@@ -40,13 +41,19 @@ object AMQPManager {
 
     fun setReceiveMessage(callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
-            chattingChanel?.basicConsume(chattingQueueName, true, callback)
+            chattingChannelTag = chattingChanel?.basicConsume(chattingQueueName, true, callback) ?: ""
         }
     }
 
     fun setChattingListReceive(callback : DefaultConsumer){
         CoroutineScope(Dispatchers.IO).launch {
             userChannel?.basicConsume(userQueueName,true, callback)
+        }
+    }
+
+    fun unSubscribeChatting(){
+        CoroutineScope(Dispatchers.IO).launch {
+            chattingChanel?.basicCancel(chattingChannelTag)
         }
     }
 }

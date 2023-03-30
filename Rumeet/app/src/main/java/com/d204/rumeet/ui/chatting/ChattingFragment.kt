@@ -112,4 +112,9 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
         }
         binding.rvChattingContent.addOnLayoutChangeListener(event)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        AMQPManager.unSubscribeChatting()
+    }
 }
