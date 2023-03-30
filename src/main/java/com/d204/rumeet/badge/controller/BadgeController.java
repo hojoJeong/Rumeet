@@ -39,7 +39,7 @@ public class BadgeController {
         return data.builder();
     }
 
-    @Operation(summary = "취득한 뱃지 조회 (타입별로)")
+    @Operation(summary = "취득한 배지 조회")
     @GetMapping("/list/{userId}")
     public ResponseEntity<?> getAllBadgesByUserId(@PathVariable("userId") int userId){
         List<BadgeDto> badges = badgeService.getAllBadgesByUserId(userId);
