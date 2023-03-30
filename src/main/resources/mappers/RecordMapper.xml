@@ -5,37 +5,51 @@
 <mapper namespace="com.d204.rumeet.record.model.mapper.RecordMapper">
 
     <resultMap id="record" type="RecordDto">
-        <result column="user_id" property="user_id"/>
-        <result column="total_count" property="total_count"/>
-        <result column="total_km" property="total_km"/>
-        <result column="total_time" property="total_time"/>
-        <result column="average_pace" property="average_pace"/>
-        <result column="team_success_count" property="team_success_count"/>
-        <result column="competition_success_count" property="competition_success_count"/>
+        <result column="user_id" property="userId"/>
+        <result column="total_count" property="totalCount"/>
+        <result column="total_km" property="totalKm"/>
+        <result column="total_time" property="totalTime"/>
+        <result column="average_pace" property="averagePace"/>
+        <result column="team_success_count" property="teamSuccessCount"/>
+        <result column="competition_success_count" property="competitionSuccessCount"/>
+    </resultMap>
+
+    <resultMap id="raceInfo" type="RaceModeInfoDto">
+        <result column="race_id" property="raceId"/>
+        <result column="user_id" property="userId"/>
+        <result column="velocity" property="velocity"/>
+        <result column="km" property="km"/>
+        <result column="time" property="time"/>
+        <result column="heart_rate" property="heartRate"/>
+        <result column="kcal" property="kcal"/>
+        <result column="success" property="success"/>
+        <result column="polyline" property="polyline"/>
+        <result column="date" property="date"/>
+        <result column="mode" property="mode"/>
     </resultMap>
 
     <select id="getRecord" parameterType="int" resultMap="record">
         SELECT * FROM record WHERE user_id = #{userId};
     </select>
 
-    <update id="updateRecord">
+    <update id="updateRecord" parameterType="RecordDto">
         UPDATE record
         SET
-            total_count = total_count + 1,
-            total_km = total_km + #{km},
-            average_pace = #{pace},
-            total_time = total_time + #{elapsedTime},
-            team_success_count = #{teamSuccess},
-            competition_success_count = #{completeSuccess}
+            total_count = #{totalCount},
+            total_km = #{totalKm},
+            average_pace = #{averagePace},
+            total_time = #{totalTime},
+            team_success_count = #{teamSuccessCount},
+            competition_success_count = #{competitionSuccessCount}
         WHERE user_id = #{userId}
     </update>
 
-    <insert id="addRaceInfo">
-        INSERT INTO race_info (race_id, user_id, velocity, km, time, heart_rate, kcal, success, date)
-        VALUES (#{race_id}, #{user_id}, #{velocity}, #{km}, #{time}, #{heart_rate}, #{kcal}, #{success}, #{date})
+    <insert id="addRaceInfo" parameterType="RaceInfoDto">
+        INSERT INTO race_info (race_id, user_id, velocity, km, time, heart_rate, kcal, success, polyline, date)
+        VALUES (#{raceId}, #{userId}, #{velocity}, #{km}, #{time}, #{heartRate}, #{kcal}, #{success}, #{polyline},#{date})
     </insert>
 
-    <select id="getRaceInfo" resultType="raceDateInfoDto">
+    <select id="getRaceInfo" resultMap="raceInfo">
         SELECT ri.*, r.mode FROM race_info ri JOIN race r ON r.id = ri.race_id WHERE ri.user_id = #{userId}
     </select>
 

@@ -2,15 +2,22 @@ package com.d204.rumeet.record.model.service;
 
 import com.d204.rumeet.badge.model.service.BadgeService;
 import com.d204.rumeet.record.model.dto.RaceInfoDto;
+import com.d204.rumeet.record.model.dto.RaceInfoReqDto;
+import com.d204.rumeet.record.model.dto.RaceModeInfoDto;
 import com.d204.rumeet.record.model.dto.RecordDto;
 import com.d204.rumeet.record.model.mapper.RecordMapper;
+import com.d204.rumeet.tools.OSUpload;
 import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.service.UserService;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -19,7 +26,8 @@ public class RecordServiceImpl implements RecordService{
 
     private final RecordMapper recordMapper;
     private final UserService userService;
-
+    final String bucketName = "rumeet";
+    private final OSUpload osUpload;
     @Override
     public RecordDto getRecord(int userId) {
         RecordDto record = recordMapper.getRecord(userId);
@@ -27,24 +35,21 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public void updateRecord(String jsonData) throws org.json.simple.parser.ParseException {
+    public void updateRecord(RaceInfoReqDto raceInfoReqDto)  {
 
         //{"user_id":1, "mode":2, "success":1, "elapsed_time":1234}
-        JSONParser jsonParser = new JSONParser();
-        JSONObject data = (JSONObject) jsonParser.parse(jsonData);
+        int mode = raceInfoReqDto.getMode();
 
-        int userId = Integer.parseInt(data.get("user_id").toString());
-        int mode = Integer.parseInt(data.get("mode").toString());
-        int success = Integer.parseInt(data.get("success").toString());
-        int elapsedTime = Integer.parseInt(data.get("elapsed_time").toString());
-
+        int userId = raceInfoReqDto.getUserId();
+        int success = raceInfoReqDto.getSuccess();
+        int elapsedTime = raceInfoReqDto.getTime();
         // 기존 정보
-        RecordDto originRecord = recordMapper.getRecord(userId);
-        float originPace = originRecord.getAverage_pace();
-        int originCount = originRecord.getTotal_count();
-        int completeSuccess = originRecord.getCompetition_success_count();
-        int teamSuccess = originRecord.getTeam_success_count();
-        float averagePace;
+        RecordDto record = recordMapper.getRecord(userId);
+        double originPace = record.getAveragePace();
+        int originCount = record.getTotalCount();
+        int completeSuccess = record.getCompetitionSuccessCount();
+        int teamSuccess = record.getTeamSuccessCount();
+        double averagePace = 0.0;
 
         if (mode >= 4 && mode <= 7 && success == 1) { //경쟁모드 승리
             completeSuccess++;
@@ -52,10 +57,8 @@ public class RecordServiceImpl implements RecordService{
             teamSuccess++;
         }
 
-        float km = 1;
+        double km = 1;
         switch (mode % 4) {
-            case 0:
-                break;
             case 1:
                 km = 2;
                 break;
@@ -67,30 +70,31 @@ public class RecordServiceImpl implements RecordService{
                 break;
         }
 
-        float newPace = (km == 0 || elapsedTime == 0) ? 0 : (float) elapsedTime / km;
+        double newPace = (km == 0 || elapsedTime == 0) ? 0 : (double) elapsedTime / km;
 
         if (originPace == 0) {
             averagePace = newPace;
         } else {
             averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
         }
-        recordMapper.updateRecord(userId, averagePace, km, elapsedTime, teamSuccess, completeSuccess);
+        record = new RecordDto(userId,record.getTotalCount()+1,
+                record.getTotalKm()+km,record.getTotalTime()+elapsedTime,
+                averagePace,teamSuccess,completeSuccess);
+        recordMapper.updateRecord(record);
 
     }
 
     @Override
-    public void addRaceInfo(String jsonData) throws org.json.simple.parser.ParseException {
+    public void addRaceInfo(RaceInfoReqDto raceInfoReqDto, MultipartFile poly) {
         //{"user_id":1, "race_id":999, "mode":2, "velocity":23, "elapsed_time":701,"average_heart_rate":150, "success":1}
-        JSONParser jsonParser = new JSONParser();
-        JSONObject data = (JSONObject) jsonParser.parse(jsonData);
 
-        int userId = Integer.parseInt(data.get("user_id").toString());
-        int mode = Integer.parseInt(data.get("mode").toString());
+        String url = this.getUrl(poly);
+
+        int userId = raceInfoReqDto.getUserId();
+        int mode = raceInfoReqDto.getMode();
 
         float km = 1;
         switch (mode % 4) {
-            case 0:
-                break;
             case 1:
                 km = 2;
                 break;
@@ -101,7 +105,6 @@ public class RecordServiceImpl implements RecordService{
                 km = 5;
                 break;
         }
-
 
         // 소모 칼로리
         // (10 × 몸무게) + (6.25 × 키) – (5 × 나이)
@@ -116,23 +119,55 @@ public class RecordServiceImpl implements RecordService{
         }
 
         RaceInfoDto raceInfo = new RaceInfoDto();
-        raceInfo.setUser_id(userId);
-        raceInfo.setRace_id(Integer.parseInt(data.get("race_id").toString()));
-        raceInfo.setVelocity(Float.parseFloat(data.get("velocity").toString()));
-        raceInfo.setSuccess(Integer.parseInt(data.get("success").toString()));
-        raceInfo.setHeart_rate(Integer.parseInt(data.get("average_heart_rate").toString()));
-        raceInfo.setTime(Integer.parseInt(data.get("elapsed_time").toString()));
+        raceInfo.setUserId(userId);
+        raceInfo.setRaceId(raceInfoReqDto.getRaceId());
+        raceInfo.setVelocity(raceInfoReqDto.getVelocity());
+        raceInfo.setSuccess(raceInfoReqDto.getSuccess());
+        raceInfo.setHeartRate(raceInfoReqDto.getHeartRate());
+        raceInfo.setTime(raceInfoReqDto.getTime());
         raceInfo.setDate(System.currentTimeMillis());
         raceInfo.setKm(km);
         raceInfo.setKcal(kcal);
-
+        raceInfo.setPolyline(url);
         recordMapper.addRaceInfo(raceInfo);
+    }
 
+
+    private String getUrl(MultipartFile poly) {
+        String url = "";
+        if(poly != null && !poly.isEmpty()) {
+            String [] formats = {".jpeg", ".png", ".bmp", ".jpg", ".PNG", ".JPEG"};
+            // 원래 파일 이름 추출
+            String origName = poly.getOriginalFilename();
+
+            // 확장자 추출(ex : .png)
+            String extension = origName.substring(origName.lastIndexOf("."));
+
+            String folderName = "polyline";
+            for(int i = 0; i < formats.length; i++) {
+                if (extension.equals(formats[i])){
+                    // user email과 확장자 결합
+                    File uploadFile = null;
+                    try {
+                        uploadFile = osUpload.convert(poly)        // 파일 생성
+                                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File convert fail"));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String fileName = folderName + "/" + System.nanoTime() + extension;
+                    osUpload.put(bucketName, fileName, uploadFile);
+
+                    url = "https://kr.object.ncloudstorage.com/"+bucketName+"/"+fileName;
+                    break;
+                }
+            }
+        }
+        return url;
     }
 
     @Override
-    public List<RaceInfoDto> getRaceInfo(int userId) {
-        List<RaceInfoDto> race = recordMapper.getRaceInfo(userId);
+    public List<RaceModeInfoDto> getRaceInfo(int userId) {
+        List<RaceModeInfoDto> race = recordMapper.getRaceInfo(userId);
         return race;
     }
 
