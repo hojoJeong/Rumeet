@@ -87,7 +87,7 @@
     </insert>
 
     <update id="modifyUserProfile" parameterType="ProfileUserDto">
-        UPDATE user SET profile_img = #{profile} WHERE id = #{id};
+        UPDATE user SET nickname = #{nickname},profile_img = #{profile} WHERE id = #{id};
     </update>
 
     <select id="checkExistsUseByEmail" parameterType="String" resultType="int">

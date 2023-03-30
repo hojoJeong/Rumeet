@@ -7,6 +7,8 @@ import com.d204.rumeet.game.model.service.GameService;
 import com.d204.rumeet.game.model.service.KafkaService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,8 +18,9 @@ public class MatchingTool {
 
     private final LinkedList[] lists = new LinkedList[20];
     private final KafkaService kafkaService;
-
+    private final AmqpAdmin amqpAdmin;
     private final GameService gameService;
+    private final RabbitTemplate rabbitTemplate;
 
     //이번
     // 매칭 시작하는 것
@@ -56,8 +59,10 @@ public class MatchingTool {
             raceDto.setPartnerId(target.getId());
             gameService.makeRace(raceDto);
             String json = new Gson().toJson(raceDto);
-            kafkaService.sendMessage("user."+top_user.getId(), json);
-            kafkaService.sendMessage("user."+target.getId(), json);
+            createQueue(raceDto.getId(), top_user.getId(), target.getId());
+            rabbitTemplate.convertAndSend("game.exchange","user."+top_user.getId(),new Gson().toJson(raceDto));
+            rabbitTemplate.convertAndSend("game.exchange","user."+target.getId(),new Gson().toJson(raceDto));
+
             System.out.println("top_user = " + top_user);
             System.out.println("target = " + target);
         } else {
@@ -68,6 +73,7 @@ public class MatchingTool {
     }
 
     public void doCancel(GameDto gameDto) {
+        if(lists[gameDto.getMode()]==null|| lists[gameDto.getMode()].head==null) return;
         lists[gameDto.getMode()].remove(gameDto.getUserId());
         lists[gameDto.getMode()].print();
     }
@@ -81,5 +87,23 @@ public class MatchingTool {
 
         return 1 / (1 + Math.sqrt(distance));
     }
+    void createQueue(int gameId,int id, int id2){
+        StringBuilder sb = new StringBuilder();
+        sb.append("user.").append(id);
+        Queue queue = QueueBuilder.durable("game." + gameId+"."+id).build();
+        amqpAdmin.declareQueue(queue);
+        Binding binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("running.exchange"))
+                .with(sb.toString());
+        amqpAdmin.declareBinding(binding);
 
+        sb = new StringBuilder();
+        sb.append("user.").append(id2);
+        queue = QueueBuilder.durable("game." + gameId+"."+id2).build();
+        amqpAdmin.declareQueue(queue);
+        binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("running.exchange"))
+                .with(sb.toString());
+        amqpAdmin.declareBinding(binding);
+    }
 }

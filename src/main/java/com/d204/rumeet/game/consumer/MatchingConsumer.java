@@ -1,4 +1,4 @@
-package com.d204.rumeet.game.model.consumer;
+package com.d204.rumeet.game.consumer;
 
 import com.d204.rumeet.game.model.dto.GameDto;
 import com.d204.rumeet.tools.MatchingTool;
@@ -23,7 +23,7 @@ public class MatchingConsumer {
     }
 
     @KafkaListener(topics = "rumeet.game.cancel", groupId = "game")
-    public void listenCancle(String message) {
+    public void listenCancel(String message) {
         GameDto info = new Gson().fromJson(message, GameDto.class);
         matchingTool.doCancel(info);
     }
