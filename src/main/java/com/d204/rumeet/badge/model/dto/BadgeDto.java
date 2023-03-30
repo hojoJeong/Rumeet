@@ -9,6 +9,5 @@ import lombok.Data;
 @Data
 public class BadgeDto {
     int id;
-    String name;
     int code;
 }
