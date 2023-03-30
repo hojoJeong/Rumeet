@@ -10,7 +10,6 @@ public class RecordDto {
     float total_km;
     long total_time;
     float average_pace;
-
     int team_success_count;
     int competition_success_count;
 

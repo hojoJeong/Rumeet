@@ -23,29 +23,38 @@ public class RecordServiceImpl implements RecordService{
     @Override
     public void updateRecord(String jsonData) throws org.json.simple.parser.ParseException {
 
-        //{"user_id":1,"race_id":999,"pace1":192, "pace2":241 , "pace3":268 , "elapsed_time":701}
+        //{"user_id":1, "pace1":192, "pace2":241 , "pace3":268 , "mode":2, "success":1, "elapsed_time":1234}
         JSONParser jsonParser = new JSONParser();
         JSONObject data = (JSONObject) jsonParser.parse(jsonData);
 
         int userId = Integer.parseInt(data.get("user_id").toString());
-        long time = Long.parseLong(data.get("elapsed_time").toString());
+        int mode = Integer.parseInt(data.get("mode").toString());
+        int success = Integer.parseInt(data.get("success").toString());
+        int elapsedTime = Integer.parseInt(data.get("elapsed_time").toString());
 
+        // 기존 정보
         RecordDto originRecord = recordMapper.getRecord(userId);
-        Float originPace = originRecord.getAverage_pace();
-        Integer originCount = originRecord.getTotal_count();
+        float originPace = originRecord.getAverage_pace();
+        int originCount = originRecord.getTotal_count();
+        int completeSuccess = originRecord.getCompetition_success_count();
+        int teamSuccess = originRecord.getTeam_success_count();
         float averagePace;
 
+        if (mode >= 4 && mode <= 7 && success == 1) { //경쟁모드 승리
+            completeSuccess++;
+        } else if (mode >= 8 && mode <= 11 && success == 1) { //협동모드 승리
+            teamSuccess++;
+        }
+
         int cnt = 0;
-        int total = 0;
         for (int i = 1; i <= 5; i++) {
             String paceNo = "pace" + i;
             if (data.containsKey(paceNo)) {
                 cnt++;
-                total += Integer.parseInt(data.get(paceNo).toString());
             }
         }
 
-        float newPace = (cnt == 0 || total == 0) ? 0 : (float) total / cnt;
+        float newPace = (cnt == 0 || elapsedTime == 0) ? 0 : (float) elapsedTime / cnt;
 
         if (originPace == 0) {
             averagePace = newPace;
@@ -53,14 +62,13 @@ public class RecordServiceImpl implements RecordService{
             averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
         }
         float km = (float) cnt;
-        recordMapper.updateRecord(userId, averagePace, km, time);
+        recordMapper.updateRecord(userId, averagePace, km, elapsedTime, teamSuccess, completeSuccess);
 
     }
 
     @Override
     public void updateRaceInfo(String jsonData) throws org.json.simple.parser.ParseException {
-        //{"user_id":1, "race_id":999, "mode":2, "velocity":23, "elapsed_time":701,"average_heart_rate":150, "success":1}
-
+        
     }
 
 

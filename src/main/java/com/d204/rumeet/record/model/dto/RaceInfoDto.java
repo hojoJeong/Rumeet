@@ -13,4 +13,5 @@ public class RaceInfoDto {
     int heart_rate;
     int success;
     long date;
+
 }
