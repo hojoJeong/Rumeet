@@ -56,8 +56,7 @@ public class MatchingTool {
             raceDto.setPartnerId(target.getId());
             gameService.makeRace(raceDto);
             String json = new Gson().toJson(raceDto);
-            kafkaService.sendMessage("user."+top_user.getId(), json);
-            kafkaService.sendMessage("user."+target.getId(), json);
+
             System.out.println("top_user = " + top_user);
             System.out.println("target = " + target);
         } else {
