@@ -44,7 +44,7 @@ public class RecordServiceImpl implements RecordService{
 
         float newPace = (cnt == 0 || total == 0) ? 0 : (float) total / cnt;
 
-        if (originPace == null) {
+        if (originPace == 0) {
             averagePace = newPace;
         } else {
             averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
