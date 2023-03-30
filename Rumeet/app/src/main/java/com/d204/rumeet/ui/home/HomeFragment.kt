@@ -24,11 +24,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
     }
 
     override fun initStartView() {
-        //TODO(러닝 페이지 이동 임시)
-        binding.tvHomeWelcomeMessage.setOnClickListener {
-            navigate(HomeFragmentDirections.actionHomeFragmentToRunningOptionContainerFragment())
-        }
-
 
     }
 

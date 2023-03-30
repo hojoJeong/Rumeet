@@ -23,49 +23,60 @@ import javax.inject.Inject
 class RunningMatchingViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase
 ) : BaseViewModel() {
-    private val _runningMatchingSideEffect : MutableSharedFlow<RunningMatchingSideEffect> = MutableSharedFlow()
-    val runningMatchingSideEffect : SharedFlow<RunningMatchingSideEffect> get() = _runningMatchingSideEffect.asSharedFlow()
+    private val _runningMatchingSideEffect: MutableSharedFlow<RunningMatchingSideEffect> =
+        MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
+    val runningMatchingSideEffect: SharedFlow<RunningMatchingSideEffect> get() = _runningMatchingSideEffect.asSharedFlow()
 
-    private val _userId : MutableStateFlow<Int> = MutableStateFlow(-1)
-    val userId : StateFlow<Int> get() = _userId.asStateFlow()
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
 
-    private val _gameType : MutableStateFlow<Int> = MutableStateFlow(-1)
-    val gameType : StateFlow<Int> get() = _gameType.asStateFlow()
+    private val _gameType: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val gameType: StateFlow<Int> get() = _gameType.asStateFlow()
 
-    private val _matchingResult : MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val matchingState : StateFlow<Boolean> get() = _matchingResult.asStateFlow()
+    private val _matchingResult: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val matchingState: StateFlow<Boolean> get() = _matchingResult.asStateFlow()
 
-    private val _otherPlayerId : MutableStateFlow<Int> = MutableStateFlow(-1)
-    val otherPlayer : StateFlow<Int> get() = _otherPlayerId.asStateFlow()
+    private val _otherPlayerId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val otherPlayer: StateFlow<Int> get() = _otherPlayerId.asStateFlow()
 
-    fun startMatching(gameType : Int){
+    private lateinit var timer: CountDownTimer
+
+    fun startMatching(gameType: Int) {
         baseViewModelScope.launch {
-//            _userId.emit(getUserIdUseCase())
-//            _gameType.emit(gameType)
-//
+            _userId.emit(getUserIdUseCase())
+            _gameType.emit(gameType)
+
 //            val startModel = RunningMatchingRequestModel(userId.value, gameType)
-//            RunningAMQPManager.startMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
-//
-//            startMatchingSubscribe()
-//            startTimer()
+            val startModel = RunningMatchingRequestModel(27, 5)
+            RunningAMQPManager.startMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
+
+            startMatchingSubscribe()
+            startTimer()
         }
     }
 
-    private fun startTimer(){
-        object : CountDownTimer(30000, 1000){
-            override fun onTick(millisUntilFinished: Long){}
-            override fun onFinish() {
-                val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
-                RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
-
-                _matchingResult.tryEmit(false)
-                _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
+    private fun startTimer() {
+        timer = object : CountDownTimer(10000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                Log.d(TAG, "onTick: ${millisUntilFinished}")
             }
-        }
+
+            override fun onFinish() {
+//                val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
+                val startModel = RunningMatchingRequestModel(27, 5)
+                RunningAMQPManager.failMatching(
+                    jsonToString(startModel) ?: throw Exception("NO TYPE")
+                )
+                _matchingResult.tryEmit(false)
+                val response =
+                    _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
+                Log.d(TAG, "onFinish: $response")
+            }
+        }.start()
     }
 
-    private fun startMatchingSubscribe(){
-        RunningAMQPManager.subscribeMatching(object :
+    private fun startMatchingSubscribe() {
+        RunningAMQPManager.subscribeMatching(userId.value, object :
             DefaultConsumer(RunningAMQPManager.runningChannel) {
             override fun handleDelivery(
                 consumerTag: String?,
@@ -73,21 +84,23 @@ class RunningMatchingViewModel @Inject constructor(
                 properties: AMQP.BasicProperties?,
                 body: ByteArray
             ) {
-                // 매칭 완료, 3 2 1 후 게임 시작 -> 데이터 2개 넘어옴, 상대와 내 것
                 try {
+                    timer.cancel()
                     val response = Gson().fromJson(String(body), RunningRaceModel::class.java)
-                    if(response.id != userId.value){
-                        _otherPlayerId.tryEmit(response.id)
+                    if (response.userId != userId.value) {
+                        _otherPlayerId.tryEmit(response.partnerId)
+                    } else{
+                        _otherPlayerId.tryEmit(response.userId)
                     }
-
-                    val test = _matchingResult.tryEmit(true)
-                    _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.SuccessMatching)
-
-                    Log.d("runningviewmodel", "handleDelivery: $test")
-                }catch (e : Exception){
-                    Log.e("runningviewmodel", "handleDelivery: ${e.message}", )
+                    _matchingResult.tryEmit(true)
+                    _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.SuccessMatching(_userId.value, response.id, _otherPlayerId.value))
+                    Log.d(TAG, "handleDelivery: ")
+                } catch (e: Exception) {
+                    Log.e(TAG, "handleDelivery: ${e.message}")
                 }
             }
         })
     }
 }
+
+private const val TAG = "RunningMatchingViewModel"

@@ -45,14 +45,28 @@ object RunningAMQPManager {
     }
 
     // 구독 시작, 연결이 되면 callback 발생
-    fun subscribeMatching(callback: DefaultConsumer) {
+    fun subscribeMatching(userId : Int, callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                //27은 userid
+                // runningChannel?.basicConsume("matching.queue.${userId}",true, callback)
                 runningChannel?.basicConsume("matching.queue.27",true, callback)
             }catch (e : Exception){
                 Log.e(TAG, "subscribeMatching: ${e.message}", )
             }
+        }
+    }
+
+    fun sendRunning(partnerId : Int, roomId : Int, message : String){
+        CoroutineScope(Dispatchers.IO).launch {
+//            runningChannel?.basicPublish("","game.${roomId}.${partnerId}", null, message.toByteArray())
+            runningChannel?.basicPublish("","game.${roomId}.2", null, message.toByteArray())
+        }
+    }
+
+    fun receiveRunning(roomId : Int, userId : Int, callback : DefaultConsumer){
+        CoroutineScope(Dispatchers.IO).launch {
+//            runningChannel?.basicConsume("game.${roomId}.${userId}",callback)
+            runningChannel?.basicConsume("game.${roomId}.27",callback)
         }
     }
 }

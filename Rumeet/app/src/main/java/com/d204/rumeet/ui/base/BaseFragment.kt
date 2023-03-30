@@ -200,7 +200,6 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
                 ?: (controller.currentDestination as? DialogFragmentNavigator.Destination)?.className
         if (currentDestination == this.javaClass.name) {
             controller.navigate(directions)
-            Log.d("TAG", "navigate: navige")
         }
     }
 

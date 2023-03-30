@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools">
 
-    <data></data>
+    <data>
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,7 +15,7 @@
             style="@style/base_font_bold_16_dim_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
+            android:layout_marginTop="22dp"
             android:text="@string/title_option_with"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +31,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_running_option_competition_with_title">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/group_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"

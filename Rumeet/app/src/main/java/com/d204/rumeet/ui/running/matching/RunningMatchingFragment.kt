@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningMatchingBinding
 import com.d204.rumeet.ui.base.AlertModel
@@ -31,11 +32,10 @@ class RunningMatchingFragment :
         get() = R.layout.fragment_running_matching
 
     override val viewModel: RunningMatchingViewModel by viewModels()
-    private var matchingState = false
-
+    private val args by navArgs<RunningMatchingFragmentArgs>()
 
     override fun initStartView() {
-        viewModel.startMatching(3)
+        viewModel.startMatching(args.gameType)
     }
 
     override fun initDataBinding() {
@@ -44,9 +44,19 @@ class RunningMatchingFragment :
                 when (it) {
                     is RunningMatchingSideEffect.FailMatching -> {
                         // 매칭 실패,  프래그먼트 이동 후 러닝옵션으로 pop
+                        navigate(RunningMatchingFragmentDirections.actionRunningMatchingFragmentToRunningMatchingFailFragment())
                     }
                     is RunningMatchingSideEffect.SuccessMatching -> {
                         // 매칭 성공, 달리기 3초 후 시작
+                        Log.d(TAG, "runningMatchingSideEffect: navigate ${args.gameType}")
+                        navigate(
+                            RunningMatchingFragmentDirections.actionRunningMatchingFragmentToRunningLoadingFragment(
+                                myId = it.userId,
+                                gameType = args.gameType,
+                                roomId = it.roomId,
+                                partnerId = it.partnerId
+                            )
+                        )
                     }
                 }
             }
@@ -55,48 +65,7 @@ class RunningMatchingFragment :
 
 
     override fun initAfterBinding() {
-        CoroutineScope(Dispatchers.IO).launch {
-            RunningAMQPManager.startMatching(
-                Gson().toJson(RunningMatchingRequestModel(27, 5))
-            )
-            test()
-        }
 
-        object : CountDownTimer(30000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                if (matchingState) cancel()
-            }
-
-            override fun onFinish() {
-                Log.d(TAG, "onFinish: fail")
-                RunningAMQPManager.failMatching(
-                    Gson().toJson(RunningMatchingRequestModel(27, 5))
-                )
-            }
-        }.start()
-    }
-
-    private fun test() {
-        CoroutineScope(Dispatchers.IO).launch {
-            RunningAMQPManager.subscribeMatching(object :
-                DefaultConsumer(RunningAMQPManager.runningChannel) {
-                override fun handleDelivery(
-                    consumerTag: String?,
-                    envelope: Envelope?,
-                    properties: AMQP.BasicProperties?,
-                    body: ByteArray
-                ) {
-                    // 매칭 완료, 3 2 1 후 게임 시작 -> 2
-                    try {
-                        val response = Gson().fromJson(String(body), RunningRaceModel::class.java)
-//                        matchingState = true
-                        Log.d(TAG, "handleDelivery: $response")
-                    } catch (e: Exception) {
-                        Log.e(TAG, "handleDelivery: ${e.message}")
-                    }
-                }
-            })
-        }
     }
 }
 

@@ -1,35 +1,43 @@
 package com.d204.rumeet.ui.running.option
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningOptionBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.ui.running.option.adapter.RunningOptionViewPagerAdapter
+import com.d204.rumeet.ui.running.option.model.RunningDistance
+import com.d204.rumeet.ui.running.option.model.RunningType
 import com.d204.rumeet.ui.running.option.multi.RunningOptionCompetitionOrGhostFragment
 import com.d204.rumeet.ui.running.option.multi.RunningOptionTeamPlayFragment
 import com.d204.rumeet.ui.running.option.single.RunningGhostSingleFragment
 import com.d204.rumeet.ui.running.option.single.RunningSingleFragment
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, RunningViewModel>() {
 
     private lateinit var tabList: List<String>
     private lateinit var vpFragmentList: List<Fragment>
 
     override val layoutResourceId: Int get() = R.layout.fragment_running_option
-    override val viewModel: RunningViewModel by viewModels()
+    override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running) { defaultViewModelProviderFactory }
 
-    private val args by navArgs<RunningOptionFragmentArgs>()
+    private val runningType by lazy { arguments?.getInt("type") }
 
     override fun initStartView() {
         // 싱글
-        if (args.runningType == 1) initSingleModeView()
+        if (runningType == 1) {
+            initSingleModeView()
+        }
         // 멀티
-        else initMultiModeView()
-        setRunningStartBtnClickListener()
+        else {
+            initMultiModeView()
+        }
     }
 
     override fun initDataBinding() {
@@ -37,17 +45,28 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
     }
 
     override fun initAfterBinding() {
+        binding.btnRunningOptionStartRunning.setOnClickListener {
+            //single
+            if (viewModel.runningTypeModel.runningType == RunningType.SINGLE) {
 
+            } else {
+                navigate(
+                    RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
+                        gameType = getRunningType()
+                    )
+                )
+            }
+        }
     }
 
     private fun initSingleModeView() {
         tabList = listOf(
-            "싱글 모드","고스트 모드"
+            "싱글 모드", "고스트 모드"
         )
 
         vpFragmentList = listOf(
             RunningSingleFragment(),
-            RunningOptionCompetitionOrGhostFragment(),
+            RunningGhostSingleFragment(),
         )
 
         val vpAdapter = RunningOptionViewPagerAdapter(this).apply {
@@ -55,6 +74,15 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
         }
 
         binding.vpgRunningOption.adapter = vpAdapter
+        binding.vpgRunningOption.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (position == 0) viewModel.setGameType(RunningType.SINGLE)
+                else viewModel.setGameType(RunningType.SINGLE_GHOST)
+            }
+        })
+
         TabLayoutMediator(binding.tblyRunningOption, binding.vpgRunningOption) { tab, position ->
             tab.text = tabList[position]
         }.attach()
@@ -75,15 +103,80 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
         }
 
         binding.vpgRunningOption.adapter = vpAdapter
+        binding.vpgRunningOption.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (position == 0) viewModel.setGameType(RunningType.MULTI_COMPETITIVE)
+                else viewModel.setGameType(RunningType.MULTI_COLLABORATION)
+            }
+        })
 
         TabLayoutMediator(binding.tblyRunningOption, binding.vpgRunningOption) { tab, position ->
             tab.text = tabList[position]
         }.attach()
     }
 
-    private fun setRunningStartBtnClickListener() {
-        binding.btnRunningOptionStartRunning.setOnClickListener {
-            navigate(RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment())
+    // 난이도와 고스트는 후순위
+    private fun getRunningType(): Int {
+        var type = -1
+        //멀티
+        with(viewModel.runningTypeModel) {
+            when (this.runningType) {
+                RunningType.SINGLE_GHOST -> {
+                    // 추가 구현 필요
+                }
+                RunningType.SINGLE -> {
+                    type = when (this.distance) {
+                        RunningDistance.ONE -> {
+                            0
+                        }
+                        RunningDistance.TWO -> {
+                            1
+                        }
+                        RunningDistance.THREE -> {
+                            2
+                        }
+                        RunningDistance.FIVE -> {
+                            3
+                        }
+                    }
+                }
+                RunningType.MULTI_COLLABORATION -> {
+                    type = when (this.distance) {
+                        RunningDistance.ONE -> {
+                            8
+                        }
+                        RunningDistance.TWO -> {
+                            9
+                        }
+                        RunningDistance.THREE -> {
+                            10
+                        }
+                        RunningDistance.FIVE -> {
+                            11
+                        }
+                    }
+                }
+                RunningType.MULTI_COMPETITIVE -> {
+                    type = when (this.distance) {
+                        RunningDistance.ONE -> {
+                            4
+                        }
+                        RunningDistance.TWO -> {
+                            5
+                        }
+                        RunningDistance.THREE -> {
+                            6
+                        }
+                        RunningDistance.FIVE -> {
+                            7
+                        }
+                    }
+                }
+            }
         }
+        return type
     }
+
 }

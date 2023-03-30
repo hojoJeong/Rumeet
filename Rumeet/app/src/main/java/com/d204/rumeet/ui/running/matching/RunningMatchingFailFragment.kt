@@ -4,7 +4,9 @@ import androidx.fragment.app.viewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningMatchingFailBinding
 import com.d204.rumeet.ui.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RunningMatchingFailFragment : BaseFragment<FragmentRunningMatchingFailBinding, RunningMatchingViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_running_matching_fail
@@ -21,7 +23,8 @@ class RunningMatchingFailFragment : BaseFragment<FragmentRunningMatchingFailBind
 
     override fun initAfterBinding() {
         binding.contentNoResult.tvContentNoResultMessage.text = "매칭에 실패하였습니다"
-        binding.btnOkay.setOnClickListener {
+        binding.btnOkay.setContent("확인")
+        binding.btnOkay.addClickListener {
             navigate(RunningMatchingFailFragmentDirections.actionRunningMatchingFailFragmentToRunningOptionFragment())
         }
     }

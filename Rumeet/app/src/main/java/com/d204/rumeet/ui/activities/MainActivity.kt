@@ -1,8 +1,11 @@
 package com.d204.rumeet.ui.activities
 
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ActivityMainBinding
@@ -38,11 +41,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
 
         binding.btnSingle.setOnClickListener {
-            navController.navigate(HomeFragmentDirections.actionHomeFragmentToRunningOptionContainerFragment(1))
+            navController.navigate(R.id.navigation_running, bundleOf("type" to 1))
         }
 
         binding.btnMulti.setOnClickListener {
-            navController.navigate(HomeFragmentDirections.actionHomeFragmentToRunningOptionContainerFragment(2))
+            navController.navigate(R.id.navigation_running, bundleOf("type" to 2))
         }
     }
 
@@ -116,6 +119,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }
                 }
 
+                R.id.runningOptionFragment -> {
+                    binding.bvnMain.root.visibility = View.VISIBLE
+                }
+
                 R.id.runningFragment -> {
                     binding.bvnMain.root.visibility = View.GONE
                 }
@@ -123,7 +130,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 R.id.runningMatchingFragment -> {
                     binding.bvnMain.root.visibility = View.GONE
                 }
+                R.id.runningLoadingFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                }
+                R.id.runningMatchingFailFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                }
+
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (findNavController(R.id.fcv_main).currentDestination?.id == R.id.runningMatchingFailFragment) {
+            findNavController(R.id.fcv_main).popBackStack(R.id.runningOptionFragment, false)
+        } else {
+            super.onBackPressed()
         }
     }
 
