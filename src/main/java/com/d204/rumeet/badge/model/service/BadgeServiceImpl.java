@@ -28,7 +28,6 @@ public class BadgeServiceImpl implements BadgeService{
         return badge;
     }
 
-
     @Override
     public void addBadge(int userId, int badgeId) {
         long date = System.currentTimeMillis();

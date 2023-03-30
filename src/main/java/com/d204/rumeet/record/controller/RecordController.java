@@ -21,7 +21,7 @@ import java.util.List;
 public class RecordController {
 
     private final RecordService recordService;
-    @Operation(summary = "기록 조회")
+    @Operation(summary = "메인페이지 기록 조회")
     @GetMapping("/{userId}")
     public ResponseEntity<?> getRecord(@PathVariable int userId) {
         RecordDto record = recordService.getRecord(userId);
@@ -49,7 +49,7 @@ public class RecordController {
     }
 
     @Operation(summary = "raceInfo 조회")
-    @PostMapping("/race/{userId}")
+    @GetMapping("/race/{userId}")
     public ResponseEntity<?> addRaceInfo(@PathVariable int userId) throws ParseException, org.json.simple.parser.ParseException {
         List<RaceInfoDto> race = recordService.getRaceInfo(userId);
         RespData<List> data = new RespData<>();
