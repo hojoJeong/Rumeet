@@ -31,9 +31,9 @@ public class BadgeController {
     }
 
     @Operation(summary = "뱃지 추가")
-    @PostMapping("/add")
-    public ResponseEntity<?> addBadge(@RequestParam("userId") int userId, @RequestParam("badgeId") int badgeId){
-        badgeService.addBadge(userId, badgeId);
+    @PostMapping("/add/{userId}")
+    public ResponseEntity<?> addBadge(@PathVariable("userId") int userId){
+        badgeService.addBadge(userId);
         RespData<Void> data = new RespData<>();
         data.setMsg("뱃지 추가 완료");
         return data.builder();

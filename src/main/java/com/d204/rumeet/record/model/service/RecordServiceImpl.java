@@ -1,5 +1,6 @@
 package com.d204.rumeet.record.model.service;
 
+import com.d204.rumeet.badge.model.service.BadgeService;
 import com.d204.rumeet.record.model.dto.RaceInfoDto;
 import com.d204.rumeet.record.model.dto.RecordDto;
 import com.d204.rumeet.record.model.mapper.RecordMapper;
