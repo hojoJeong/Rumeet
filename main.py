@@ -58,7 +58,7 @@ async def root():
         global pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
     # SparkSession 생성
         spark = SparkSession.builder \
-        .appName("ReadParquetFromHDFS") \
+        .appName("ReadParquetFromHDFS2") \
         .master("spark://j8d204.p.ssafy.io:7077") \
         .getOrCreate()
 
@@ -118,7 +118,7 @@ async def root():
         #         .option("header", "true") \
         #         .load("hdfs://13.125.218.237:9000/user/spark/output/5km")
         # df_5km = new_df_5km.cache()
-        # 
+        #
         # if pace5_avg is not None:
         #     pace5_avg.unpersist()
         # new_pace5_avg = df_5km.groupBy('user_id') \
