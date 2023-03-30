@@ -92,7 +92,7 @@
                            app:layout_constraintEnd_toEndOf="@+id/tv_running_record_average_distance_title"
                            app:layout_constraintBottom_toTopOf="@+id/tv_running_record_average_distance_title"
                            app:layout_constraintVertical_chainStyle="packed"
-                           tools:text="00km"
+                           android:text="00km"
                            android:layout_marginBottom="6dp"
                            style="@style/base_font_bold_16_black"/>
                        <TextView
@@ -115,7 +115,7 @@
                            app:layout_constraintEnd_toEndOf="@+id/tv_running_record_average_time_title"
                            app:layout_constraintBottom_toTopOf="@+id/tv_running_record_average_time_title"
                            app:layout_constraintVertical_chainStyle="packed"
-                           tools:text="00km"
+                           android:text="00km"
                            android:layout_marginBottom="6dp"
                            style="@style/base_font_bold_16_black"/>
                        <TextView
@@ -138,7 +138,7 @@
                            app:layout_constraintEnd_toEndOf="@+id/tv_running_record_average_pace_title"
                            app:layout_constraintBottom_toTopOf="@+id/tv_running_record_average_pace_title"
                            app:layout_constraintVertical_chainStyle="packed"
-                           tools:text="00km"
+                           android:text="00km"
                            android:layout_marginBottom="6dp"
                            style="@style/base_font_bold_16_black"/>
                        <TextView
@@ -169,7 +169,6 @@
                     android:id="@+id/content_running_record_no_result"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_running_record_activity"

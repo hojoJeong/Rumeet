@@ -14,6 +14,7 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
     override val viewModel: MyPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage){defaultViewModelProviderFactory}
 
     override fun initStartView() {
+        binding.contentRunningRecordNoResult.tvContentNoResultMessage.text = "러닝 데이터가 없습니다."
         initDatePicker()
     }
 
