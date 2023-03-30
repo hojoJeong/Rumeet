@@ -198,6 +198,11 @@
             app:argType="integer" />
 
         <argument
+            android:name="noReadCnt"
+            android:defaultValue="0"
+            app:argType="integer"/>
+
+        <argument
             android:name="otherUserId"
             android:defaultValue="0"
             app:argType="integer"/>

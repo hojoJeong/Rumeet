@@ -41,6 +41,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                             ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(
                                 profile = it.profile,
                                 chattingRoomId = it.chattingRoomId,
+                                noReadCnt = it.noReadCnt,
                                 otherUserId = it.otherUserId
                             )
                         )

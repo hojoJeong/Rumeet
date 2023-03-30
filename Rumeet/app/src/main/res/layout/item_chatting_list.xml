@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/base_horizontal_margin"
         android:paddingVertical="@dimen/base_vertical_title_to_content"
-        app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId, chattingRoomData.profile, chattingRoomData.otherUserId)}">
+        app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId, chattingRoomData.profile, chattingRoomData.otherUserId, chattingRoomData.noReadCnt)}">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_item_chatting_list_profile"
@@ -66,6 +66,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_item_chatting_list_name"
             tools:text="2023.03.03" />
+
+        <TextView
+            android:id="@+id/tv_no_read_cnt"
+            style="@style/base_font_medium_12_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:visibility="gone"
+            android:background="@drawable/bg_oval_transparent_red_round9999_stoke0"
+            android:paddingHorizontal="4dp"
+            app:set_integer="@{chattingRoomData.noReadCnt}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_chatting_list_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

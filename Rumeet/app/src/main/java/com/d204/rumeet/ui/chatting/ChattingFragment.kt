@@ -104,7 +104,7 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
     }
 
     override fun initAfterBinding() {
-        viewModel.requestChattingData(args.chattingRoomId, args.otherUserId)
+        viewModel.requestChattingData(args.chattingRoomId, args.otherUserId, args.noReadCnt)
         binding.rvChattingContent.itemAnimator = null
 
         val event = View.OnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->

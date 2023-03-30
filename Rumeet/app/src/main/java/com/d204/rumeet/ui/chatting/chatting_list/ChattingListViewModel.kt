@@ -30,14 +30,18 @@ class ChattingListViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase
 ) : BaseViewModel(), ChattingRoomClickListener {
 
-    private val _chattingListSideEffect: MutableSharedFlow<ChattingListSideEffect> = MutableSharedFlow()
+    private val _chattingListSideEffect: MutableSharedFlow<ChattingListSideEffect> =
+        MutableSharedFlow()
     val chattingListSideEffect: SharedFlow<ChattingListSideEffect> get() = _chattingListSideEffect.asSharedFlow()
 
-    private val _chattingList: MutableStateFlow<UiState<List<ChattingRoomUiModel>>> = MutableStateFlow(UiState.Loading)
+    private val _chattingList: MutableStateFlow<UiState<List<ChattingRoomUiModel>>> =
+        MutableStateFlow(UiState.Loading)
     val chattingList: StateFlow<UiState<List<ChattingRoomUiModel>>> get() = _chattingList.asStateFlow()
 
     private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
     val userId: StateFlow<Int> get() = _userId.asStateFlow()
+
+    private var flag = false
 
     fun requestChattingRoom() {
         baseViewModelScope.launch {
@@ -47,23 +51,35 @@ class ChattingListViewModel @Inject constructor(
                 .onSuccess { result ->
                     AMQPManager.userQueueName = "user.queue.${userId.value}"
                     startChattingListSubscribe()
-                    _chattingListSideEffect.emit(ChattingListSideEffect.SuccessGetChattingList(result.isEmpty()))
+                    _chattingListSideEffect.emit(
+                        ChattingListSideEffect.SuccessGetChattingList(
+                            result.isEmpty()
+                        )
+                    )
                     _chattingList.emit(UiState.Success(result.map { it.toUiModel() }))
                 }
                 .onError { e ->
-                    catchError(e) }
+                    catchError(e)
+                }
             dismissLoading()
         }
     }
 
-    override fun onChattingRoomClick(roomId: Int, profile : String, otherUserId : Int) {
+    override fun onChattingRoomClick(roomId: Int, profile: String, otherUserId: Int, noReadCnt : Int) {
         baseViewModelScope.launch {
-            _chattingListSideEffect.emit(ChattingListSideEffect.NavigateChattingRoom(roomId,profile,otherUserId))
+            _chattingListSideEffect.emit(
+                ChattingListSideEffect.NavigateChattingRoom(
+                    roomId,
+                    profile,
+                    otherUserId,
+                    noReadCnt
+                )
+            )
         }
     }
 
-    private fun startChattingListSubscribe(){
-        AMQPManager.setChattingListReceive(object : DefaultConsumer(AMQPManager.userChannel){
+    private fun startChattingListSubscribe() {
+        AMQPManager.setChattingListReceive(object : DefaultConsumer(AMQPManager.userChannel) {
             override fun handleDelivery(
                 consumerTag: String?,
                 envelope: Envelope?,
@@ -71,11 +87,22 @@ class ChattingListViewModel @Inject constructor(
                 body: ByteArray
             ) {
                 try {
-                    val message = Gson().fromJson(String(body), Array<ChattingRoomUiModel>::class.java).toList()
-                    CoroutineScope(Dispatchers.IO).launch {
-                        _chattingListSideEffect.tryEmit(ChattingListSideEffect.SuccessNewChattingList(message))
+                    if (flag) {
+                        val message =
+                            Gson().fromJson(String(body), Array<ChattingRoomUiModel>::class.java)
+                                .toList()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            _chattingListSideEffect.tryEmit(
+                                ChattingListSideEffect.SuccessNewChattingList(
+                                    message
+                                )
+                            )
+                        }
+                    } else {
+                        flag = true
                     }
-                }catch (e : Exception){
+
+                } catch (e: Exception) {
                     Log.e("chattinglist", "handleDelivery: ${e.message}")
                 }
             }

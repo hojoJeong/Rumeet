@@ -40,12 +40,15 @@ class ChattingViewModel @Inject constructor(
     private val _chattingUserId : MutableStateFlow<Int> = MutableStateFlow(-1)
     val chattingUserId : StateFlow<Int> get() = _chattingUserId.asStateFlow()
 
-    fun requestChattingData(roomId: Int, otherUserId : Int) {
+    private var repeatDelete = 0
+
+    fun requestChattingData(roomId: Int, otherUserId : Int, noReadCnt : Int) {
         baseViewModelScope.launch {
             getChattingDataUseCase(roomId)
                 .onSuccess {
                     _userId.emit(getUserIdUseCase())
                     _chattingUserId.emit(otherUserId)
+                    repeatDelete = noReadCnt
                     AMQPManager.chattingQueueName = "chat.queue.${roomId}.${userId.value}"
                     startSubscribe()
                     _chattingSideEffect.emit(ChattingSideEffect.SuccessChattingData(userId = userId.value))
@@ -63,12 +66,16 @@ class ChattingViewModel @Inject constructor(
                 properties: AMQP.BasicProperties?,
                 body: ByteArray
             ) {
-                try {
-                    val message = Gson().fromJson(String(body), ChattingMessageModel::class.java)
-                    val check = _chattingSideEffect.tryEmit(ChattingSideEffect.ReceiveChatting(message))
-                    Log.d("TAG", "handleDelivery: $check")
-                }catch (e : Exception){
-                    Log.e("chatting", "handleDelivery: ${e.message}")
+                if(repeatDelete != 0){
+                    repeatDelete--
+                } else{
+                    try {
+                        val message = Gson().fromJson(String(body), ChattingMessageModel::class.java)
+                        val check = _chattingSideEffect.tryEmit(ChattingSideEffect.ReceiveChatting(message))
+                        Log.d("TAG", "handleDelivery: $check")
+                    }catch (e : Exception){
+                        Log.e("chatting", "handleDelivery: ${e.message}")
+                    }
                 }
             }
         })
