@@ -15,7 +15,7 @@
         SELECT * FROM total_record WHERE user_id = #{userId};
     </select>
 
-    <update id="updateRecord" parameterType="float">
+    <update id="updateRecord">
         UPDATE total_record
         SET
             total_count = total_count + 1,

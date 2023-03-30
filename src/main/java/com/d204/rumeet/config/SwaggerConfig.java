@@ -76,4 +76,22 @@ public class SwaggerConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi group5() {
+        return GroupedOpenApi.builder()
+                .group("badge")
+                .packagesToScan("com.d204.rumeet.badge") // package 필터 설정
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi group6() {
+        return GroupedOpenApi.builder()
+                .group("record")
+                .packagesToScan("com.d204.rumeet.record") // package 필터 설정
+                .build();
+    }
+
+
+
 }

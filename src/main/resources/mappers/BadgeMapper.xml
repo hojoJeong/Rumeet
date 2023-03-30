@@ -6,12 +6,10 @@
 <mapper namespace="com.d204.rumeet.badge.model.mapper.BadgeMapper">
     <resultMap id="badge" type="BadgeDto">
         <result column="id" property="id"/>
-        <result column="name" property="name"/>
         <result column="code" property="code"/>
     </resultMap>
     <resultMap id="myBadge" type="BadgeDateDto">
         <result column="id" property="id"/>
-        <result column="name" property="name"/>
         <result column="date" property="date"/>
         <result column="name" property="name"/>
     </resultMap>
@@ -32,7 +30,7 @@
     </insert>
 
     <select id="getAllBadgesByUserId" parameterType="int" resultMap="myBadge">
-        SELECT b.id, b.name, b.code, mb.date
+        SELECT b.id, b.code, mb.date
         FROM badge b
         JOIN my_badge mb ON b.id = mb.badge_id
         WHERE mb.user_id = #{userId};
