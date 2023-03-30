@@ -3,18 +3,17 @@ package com.d204.rumeet.record.model.dto;
 import lombok.Data;
 
 @Data
-public class RaceDateInfoDto {
+public class RaceModeInfoDto {
 
-    int race_id;
-    int user_id;
+    int raceId;
+    int userId;
     int mode;
-    float velocity;
+    double velocity;
     float km;
     long time;
-    int heart_rate;
-    float kcal;
+    int heartRate;
+    double kcal;
     int success;
+    String polyline;
     long date;
-
-
 }

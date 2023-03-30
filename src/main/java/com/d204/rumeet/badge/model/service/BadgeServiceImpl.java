@@ -37,10 +37,10 @@ public class BadgeServiceImpl implements BadgeService{
     @Override
     public void addBadge(int userId) {
         RecordDto record = recordService.getRecord(userId);
-        float km = record.getTotal_km();
-        long time = record.getTotal_time();
-        int competitionCount = record.getCompetition_success_count();
-        int teamCount = record.getTeam_success_count();
+        double km = record.getTotalKm();
+        long time = record.getTotalTime();
+        int competitionCount = record.getCompetitionSuccessCount();
+        int teamCount = record.getTeamSuccessCount();
         long date = System.currentTimeMillis();
 
         // 경쟁 뱃지
