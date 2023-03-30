@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.d204.rumeet.record.model.mapper.RecordMapper">
+
+    <resultMap id="record" type="RecordDto">
+        <result column="user_id" property="user_id"/>
+        <result column="total_count" property="total_count"/>
+        <result column="total_km" property="total_km"/>
+        <result column="average_pace" property="average_pace"/>
+    </resultMap>
+
+    <select id="getRecord" parameterType="int" resultMap="record">
+        SELECT * FROM total_record WHERE user_id = #{userId};
+    </select>
+
+    <update id="updateRecord" parameterType="float">
+        UPDATE total_record
+        SET
+            total_count = total_count + 1,
+            total_km = total_km + #{km},
+            average_pace = #{pace}
+        WHERE user_id = #{userId}
+    </update>
+
+
+
+</mapper>
