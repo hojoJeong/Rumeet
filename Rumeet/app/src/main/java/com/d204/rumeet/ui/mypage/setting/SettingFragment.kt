@@ -1,9 +1,5 @@
 package com.d204.rumeet.ui.mypage.setting
 
-import android.app.ProgressDialog.show
-import android.content.ContentValues.TAG
-import android.util.Log
-import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,33 +9,32 @@ import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.DefaultAlertDialog
-import com.d204.rumeet.ui.mypage.MypageViewModel
+import com.d204.rumeet.ui.mypage.MyPageViewModel
 import com.d204.rumeet.ui.mypage.adapter.SettingItemListAdapter
 import com.d204.rumeet.ui.mypage.model.SettingOptionUiMdel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
-
+@AndroidEntryPoint
 class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
-    private val myPageViewModel by navGraphViewModels<MypageViewModel>(R.id.navigation_mypage)
-
     override val layoutResourceId: Int
         get() = R.layout.fragment_setting
-    override val viewModel: BaseViewModel
-        get() = myPageViewModel
+    override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage){defaultViewModelProviderFactory}
+
 
     override fun initStartView() {
         initView()
     }
 
     override fun initDataBinding() {
-        myPageViewModel.setOptionList(
+        viewModel.setSettingMenuTitleList(
             resources.getStringArray(R.array.title_setting_content).toList()
         )
         lifecycleScope.launchWhenResumed {
-            myPageViewModel.settingNavigationEvent.collectLatest { action ->
+            viewModel.settingNavigationEvent.collectLatest { action ->
                 when (action) {
                     SettingAction.UserInfo -> {
-                        navigate(SettingFragmentDirections.actionSettingFragmentToSettingUserInfoFragment())
+                        navigate(SettingFragmentDirections.actionSettingFragmentToUserInfoFragment())
                     }
                     SettingAction.SettingNotification -> {
                         navigate(SettingFragmentDirections.actionSettingFragmentToNotificationSettingFragment())
@@ -67,9 +62,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
         settingOptionList[titleList.indexOf(resources.getStringArray(R.array.title_setting_content)[2])].content =
             "v 0.0.1"
 
-        val settingContentAdapter = SettingItemListAdapter().apply {
+        val settingContentAdapter = SettingItemListAdapter(viewModel).apply {
             submitList(settingOptionList)
-            viewModel = myPageViewModel
         }
 
         with(binding.rvSetting) {

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="handler"
+            type="com.d204.rumeet.ui.mypage.MyPageEventHandler" />
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="img"
+            type="int" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="4dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@drawable/bg_rect_navyblue_white_round20_stroke1"
+        android:onClick="@{() -> handler.onClick(title)}">
+
+        <ImageView
+            android:id="@+id/iv_item_mypage_menu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_item_mypage_menu"
+            tools:src="@drawable/ic_setting"
+            app:setImageResource="@{img}"/>
+        <TextView
+            android:id="@+id/tv_item_mypage_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_item_mypage_menu"
+            tools:text="설정"
+            android:text="@{title}"
+            style="@style/base_font_medium_14_dim_gray"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

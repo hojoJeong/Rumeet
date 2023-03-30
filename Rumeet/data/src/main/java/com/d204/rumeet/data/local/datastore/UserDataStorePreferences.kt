@@ -19,9 +19,9 @@ internal class UserDataStorePreferences(val context: Context) {
     private val userId = intPreferencesKey("USER_ID")
     private val fcmToken = stringPreferencesKey("FCM_TOKEN")
 
-    suspend fun setUserId(userId : Int){
+    suspend fun setUserId(id : Int){
         context.datastore.edit { preference ->
-            preference[this.userId] = userId
+            preference[userId] = id
         }
     }
 
@@ -68,12 +68,14 @@ internal class UserDataStorePreferences(val context: Context) {
 
     suspend fun getAccessToken() : String?{
         return context.datastore.data.first().let {
+            Log.d("DataStore", "getAccessToken: ${it[accessToken]}")
             it[accessToken]
         }
     }
 
     suspend fun getRefreshToken() : String?{
         return context.datastore.data.first().let {
+            Log.d("DataStore", "getRefreshToken: ${it[refreshToken]}")
             it[refreshToken]
         }
     }

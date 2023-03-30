@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment() {
 
     private var _binding: T? = null
-    val binding get()= requireNotNull(_binding)
+    val binding get() = requireNotNull(_binding)
 
     /**
      * setContentView로 호출할 Layout의 리소스 Id.
@@ -101,12 +101,13 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
             launch {
                 viewModel.loadingEvent.collectLatest {
-                    if(it) showLoadingDialog()
+                    if (it) showLoadingDialog()
                     else dismissLoadingDialog()
                 }
             }
 
-            launch {                viewModel.needLoginEvent.collectLatest { loginCheck() }
+            launch {
+                viewModel.needLoginEvent.collectLatest { loginCheck() }
             }
         }
     }
@@ -167,7 +168,7 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     // 로딩 다이얼로그, 즉 로딩창을 띄워줌.
     // 네트워크가 시작될 때 사용자가 무작정 기다리게 하지 않기 위해 작성.
     private fun showLoadingDialog() {
-        if(!mLoadingDialog.isAdded) mLoadingDialog.show(childFragmentManager, mLoadingDialog.tag)
+        if (!mLoadingDialog.isAdded) mLoadingDialog.show(childFragmentManager, mLoadingDialog.tag)
     }
 
     // 띄워 놓은 로딩 다이얼로그를 없앰.
@@ -180,7 +181,9 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     // Toast Message 관련 함수
     protected fun showToastMessage(e: Throwable?) {
         toast?.cancel()
-        toast = Toast.makeText(activity, e?.cause?.message ?: "알 수 없는 에러가 발생했습니다.", Toast.LENGTH_SHORT)?.apply { show() }
+        toast =
+            Toast.makeText(activity, e?.cause?.message ?: "알 수 없는 에러가 발생했습니다.", Toast.LENGTH_SHORT)
+                ?.apply { show() }
     }
 
     // Toast Message 관련 함수
@@ -192,8 +195,9 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     // navigation 중복체크 관리 <- checkNavigation 대신 사용할것
     protected fun Fragment.navigate(directions: NavDirections) {
         val controller = findNavController()
-        val currentDestination = (controller.currentDestination as? FragmentNavigator.Destination)?.className
-            ?: (controller.currentDestination as? DialogFragmentNavigator.Destination)?.className
+        val currentDestination =
+            (controller.currentDestination as? FragmentNavigator.Destination)?.className
+                ?: (controller.currentDestination as? DialogFragmentNavigator.Destination)?.className
         if (currentDestination == this.javaClass.name) {
             controller.navigate(directions)
         }
@@ -203,7 +207,7 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     protected fun navigateToHomeFragment(navOptions: NavOptions? = null) {
         val mainFragmentId = com.d204.rumeet.R.id.homeFragment
         if (findNavController().currentDestination?.id != mainFragmentId) {
-             findNavController().popBackStack(mainFragmentId, false)
+            findNavController().popBackStack(mainFragmentId, false)
         }
     }
 

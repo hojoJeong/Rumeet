@@ -12,14 +12,14 @@
             type="String" />
 
         <variable
-            name="vm"
-            type="com.d204.rumeet.ui.mypage.MypageViewModel" />
+            name="handler"
+            type="com.d204.rumeet.ui.mypage.MyPageEventHandler" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> vm.setSettingNavigate(title)}">
+        android:onClick="@{() -> handler.onClick(title)}">
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/dv_item_setting_content_top"

@@ -1,5 +1,6 @@
 package com.d204.rumeet.data.di
 
+import com.d204.rumeet.data.remote.api.*
 import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.api.FriendApiService
 import com.d204.rumeet.data.remote.api.SignApiService
@@ -9,13 +10,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-internal object ServiceModule {
+internal object ApiModule {
 
     @Provides
     @Singleton
@@ -47,5 +47,13 @@ internal object ServiceModule {
         @Named("Auth") retrofit : Retrofit
     ) : FriendApiService{
         return retrofit.create(FriendApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChattingApiService(
+        @Named("Auth") retrofit: Retrofit
+    ) : ChattingApiService{
+        return retrofit.create(ChattingApiService::class.java)
     }
 }
