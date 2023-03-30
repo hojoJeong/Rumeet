@@ -29,6 +29,10 @@
         WHERE user_id = #{userId}
     </update>
 
+    <insert id="addRaceInfo">
+        INSERT INTO race_info (race_id, user_id, velocity, km, time, heart_rate, kcal, success, date)
+        VALUES (#{race_id}, #{user_id}, #{velocity}, #{km}, #{time}, #{heart_rate}, #{kcal}, #{success}, #{date})
+    </insert>
 
 
 </mapper>

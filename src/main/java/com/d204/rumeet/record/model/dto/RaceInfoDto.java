@@ -11,6 +11,7 @@ public class RaceInfoDto {
     float km;
     long time;
     int heart_rate;
+    float kcal;
     int success;
     long date;
 

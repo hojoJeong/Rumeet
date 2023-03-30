@@ -9,6 +9,6 @@ public interface RecordService {
 
     void updateRecord(String data) throws ParseException, org.json.simple.parser.ParseException;
 
-    void updateRaceInfo(String data) throws ParseException, org.json.simple.parser.ParseException;
+    void addRaceInfo(String data) throws ParseException, org.json.simple.parser.ParseException;
 
 }

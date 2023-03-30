@@ -27,12 +27,21 @@ public class RecordController {
         return data.builder();
     }
 
-    @Operation(summary = "기록 업데이트")
+    @Operation(summary = "record 업데이트")
     @PutMapping
     public ResponseEntity<?> updateRecord(@RequestBody String json_data) throws ParseException, org.json.simple.parser.ParseException {
         recordService.updateRecord(json_data);
         RespData<RecordDto> data = new RespData<>();
         data.setMsg("기록 업데이트 완료");
+        return data.builder();
+    }
+
+    @Operation(summary = "raceInfo 업데이트")
+    @PostMapping("/race")
+    public ResponseEntity<?> addRaceInfo(@RequestBody String json_data) throws ParseException, org.json.simple.parser.ParseException {
+        recordService.addRaceInfo(json_data);
+        RespData<RecordDto> data = new RespData<>();
+        data.setMsg("기록 추가 완료");
         return data.builder();
     }
 
