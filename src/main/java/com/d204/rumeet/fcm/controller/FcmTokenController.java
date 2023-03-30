@@ -8,6 +8,7 @@ import com.d204.rumeet.user.model.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +20,13 @@ import java.io.IOException;
 @Log4j
 @RestController
 @CrossOrigin("*")
-@RequiredArgsConstructor
 @RequestMapping("/fcm")
 public class FcmTokenController {
 
+    @Autowired
     FcmTokenService fcmService;
+
+    @Autowired
     FcmMessageService fcmMessageService;
 
     @PostMapping("/token")
