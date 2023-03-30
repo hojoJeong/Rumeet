@@ -37,10 +37,4 @@ public class GameHandler {
         gameService.endGameToKafka(message);
     }
 
-    @RabbitListener(queues = "result.queue")
-    public void resultHandler(Message message) {
-        // TODO
-//        gameService.endGameToKafka(message);
-    }
-
 }

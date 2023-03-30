@@ -5,16 +5,15 @@ import lombok.Data;
 @Data
 public class RaceInfoDto {
 
-    int race_id;
-    int user_id;
-    float velocity;
+    int raceId;
+    int userId;
+    double velocity;
     float km;
     long time;
-    int heart_rate;
-    float kcal;
+    int heartRate;
+    double kcal;
     int success;
-    long date;
-
     String polyline;
+    long date;
 
 }
