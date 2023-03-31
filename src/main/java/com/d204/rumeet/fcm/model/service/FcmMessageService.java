@@ -61,7 +61,7 @@ public class FcmMessageService {
      * @return
      * @throws JsonProcessingException
      */
-    private String makeMessage(String targetToken, String title, String body, int friendId, int mode, Long date) throws JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body, int type) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
@@ -74,9 +74,7 @@ public class FcmMessageService {
                         .data(new HashMap<String, String>() {{
                             put("title", title);
                             put("body", body);
-                            put("date", Long.toString(date));
-                            put("mode", Integer.toString(mode));
-                            put("friendId", Integer.toString(friendId));
+                            put("type", Integer.toString(type));
                         }})
                         .build()
                 ).validate_only(false).build();
@@ -92,9 +90,8 @@ public class FcmMessageService {
      * @param body
      * @throws IOException
      */
-    public void sendMessageTo(String targetToken, String title, String body, int friendId, int mode, Long date) throws IOException {
-        String message = makeMessage(targetToken, title, body, friendId, mode, date);
-        log.info("message : "+ message);
+    public void sendMessageTo(String targetToken, String title, String body, int type) throws IOException {
+        String message = makeMessage(targetToken, title, body, type);
 //        RestTemplate restTemplate = new RestTemplate();
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_JSON);
@@ -115,7 +112,8 @@ public class FcmMessageService {
                 .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
                 .build();
         Response response = client.newCall(request).execute();
-        log.info(response.body().string());
+        log.info("#########resp:"+response.message());
+        log.info("###########response: "+response.body().string());
     }
 
 }
