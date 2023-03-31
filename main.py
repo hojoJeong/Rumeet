@@ -197,11 +197,46 @@ def calculateEuclideanSimilarity(user1_pace_list, user2_pace_list):
     return 1 / (1 + math.sqrt(distance))
 
 
-@app.get("/test/{user_id}")
-async def test(user_id):
-    global pace5_avg
-    other_users_5km_paces = get_other_users_paces(user_id, pace5_avg, 5)
-    print(other_users_5km_paces)
-    return {
-        "test": other_users_5km_paces,
+@app.get("/test/{user_id}/{mode}")
+async def search_similar_users_paces(user_id, mode):
+    global pace1_avg, pace2_avg, pace3_avg, pace5_avg
+
+    km = set_distance(mode)
+    if km == 1:
+        result = get_paces(user_id, pace1_avg, km)
+    elif km == 2:
+        result = get_paces(user_id, pace2_avg, km)
+    elif km == 3:
+        result = get_paces(user_id, pace3_avg, km)
+    elif km == 5:
+        result = get_paces(user_id, pace5_avg, km)
+    return result
+
+
+# 1. 게임 요청을 시작한 모드에 대한 모든 유저의 페이스 데이터 조회
+# 2. 조회하면서 내 페이스와 가장 유사한 유저페이스로 정렬
+# 3. 가장 유사한 유저 페이스부터 조회하면서 해당 페이스에 게임 요청을 시작한 모드의 페이스가 있는지 확인
+def get_paces(user_id, cached_pace_list, km):
+    users_paces = get_user_paces(user_id, cached_pace_list, km)
+    other_users_paces = get_other_users_paces(user_id, cached_pace_list, km)
+
+    space = km
+    race_list = []
+    for pace in range(0, len(other_users_paces), space):
+        similarities = calculateEuclideanSimilarity(users_paces, other_users_paces[pace:pace+space])
+        ghost_users_paces = other_users_paces[pace:pace+space]
+        ghost_id = int(pace / space)
+        race_list.append((similarities, ghost_id, ghost_users_paces))
+    race_list.sort(key=lambda x: x[0], reverse=True)    
+
+    for race in race_list:
+        paces = race[2]
+        if len(paces) == km:
+            result = {
+                'highest_similarity_paces': paces,
+            }    
+            return result
+    result = {
+        'flag': 'fail',
     }
+    return result
