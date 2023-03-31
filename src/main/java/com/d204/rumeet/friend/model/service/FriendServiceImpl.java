@@ -12,6 +12,7 @@ import com.d204.rumeet.user.model.dto.SimpleUserFcmDto;
 import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -26,6 +27,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FriendServiceImpl implements FriendService {
 
     private final MongoTemplate mongoTemplate;
@@ -76,7 +78,12 @@ public class FriendServiceImpl implements FriendService {
         int fromId = friendRequestDto.getFromUserId();
         int toId = friendRequestDto.getToUserId();
 
-        SimpleUserDto toUser = userService.getSimpleUserById(toId);
+        SimpleUserFcmDto toUser = userService.getSimpleUserFcmInfoById(toId);
+        SimpleUserFcmDto fromUser = userService.getSimpleUserFcmInfoById(fromId);
+
+        log.info("##################fromUser:"+fromUser.toString());
+        log.info("##################toUser"+toUser.toString());
+
 
         Query query1 = new Query(Criteria.where("fromUserId").is(fromId)
                 .and("toUserId").is(toId));
@@ -103,14 +110,15 @@ public class FriendServiceImpl implements FriendService {
                     .build();
             mongoTemplate.insert(friendRequest);
         }
+
+        log.info("##################fromUser:"+fromUser.toString());
+        log.info("##################toUser"+toUser.toString());
         // toUserId인 유저의 친구 요청 알림 수신 여부 확인
-        SimpleUserFcmDto me = userService.getSimpleUserFcmInfoById(fromId);
-        SimpleUserFcmDto friend = userService.getSimpleUserFcmInfoById(toId);
         try{
-            if (friend.getFriendAlarm() == 1) { // toUserId인 유저에게 FCM 전송
-                fcmMessageService.sendMessageTo(friend.getFcmToken(),
+            if (toUser.getFriendAlarm() == 1) { // toUserId인 유저에게 FCM 전송
+                fcmMessageService.sendMessageTo(toUser.getFcmToken(),
                         "친구 요청",
-                        me.getNickname()+"님으로부터 친구요청이 왔습니다.",
+                        fromUser.getNickname()+"님으로부터 친구요청이 왔습니다.",
                         1);
             }
         } catch (IOException e) {
