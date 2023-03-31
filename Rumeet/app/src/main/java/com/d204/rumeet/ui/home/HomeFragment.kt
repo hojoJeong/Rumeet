@@ -1,40 +1,46 @@
 package com.d204.rumeet.ui.home
 
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.navGraphViewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentHomeBinding
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.base.BaseViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
-    private val homeViewModel by activityViewModels<HomeViewModel>()
+@AndroidEntryPoint
+class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_home
-    override val viewModel: BaseViewModel
-        get() = HomeViewModel()
+    override val viewModel: HomeViewModel by navGraphViewModels<HomeViewModel>(R.id.navigation_main) { defaultViewModelProviderFactory }
 
-    override fun initDataBinding() {
-        with(homeViewModel) {
-            getUserNameForHome()
+    override fun initStartView() {
+        with(viewModel) {
+            getUserIdByUseCase()
+            getHomeData()
             getBestRecordListForHome()
             getBadgeListForHome()
             getRecommendFriendListForHome()
         }
-        binding.vm = homeViewModel
+        binding.vm = viewModel
     }
 
-    override fun initStartView() {
-        //TODO(러닝 페이지 이동 임시)
-        binding.tvHomeWelcomeMessage.setOnClickListener {
-            navigate(HomeFragmentDirections.actionHomeFragmentToRunningOptionContainerFragment())
+    override fun initDataBinding() {
+        lifecycleScope.launchWhenStarted {
+            launch {
+                viewModel.userId.collect{
+                    viewModel.registFcmToken()
+                }
+            }
         }
-
-
     }
 
     override fun initAfterBinding() {
 
     }
+
+
 
     companion object {
         private const val TAG = "러밋_HomeFragment"

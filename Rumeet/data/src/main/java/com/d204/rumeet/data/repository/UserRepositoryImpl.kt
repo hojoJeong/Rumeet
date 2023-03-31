@@ -5,18 +5,15 @@ import android.util.Log
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.UserApi
 import com.d204.rumeet.data.remote.api.handleApi
+import com.d204.rumeet.data.remote.dto.request.user.FcmTokenRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.ModifyNickNameRequest
-import com.d204.rumeet.data.remote.dto.request.user.ModifyProfileAndNickNameRequest
-import com.d204.rumeet.data.remote.dto.response.user.AcquiredBadgeResponse
-import com.d204.rumeet.data.remote.dto.response.user.UserInfoResponse
+import com.d204.rumeet.data.remote.dto.request.user.ModifyNotificationStateRequestDto
+import com.d204.rumeet.data.remote.dto.response.user.*
 import com.d204.rumeet.data.remote.mapper.toDomainModel
 import com.d204.rumeet.data.remote.mapper.toRequestDto
 import com.d204.rumeet.data.util.getMultipartData
 import com.d204.rumeet.domain.NetworkResult
-import com.d204.rumeet.domain.model.user.AcquiredBadgeListDomainModel
-import com.d204.rumeet.domain.model.user.ModifyProfileAndNickNameDomainModel
-import com.d204.rumeet.domain.model.user.ModifyUserDetailInfoDomainModel
-import com.d204.rumeet.domain.model.user.UserInfoDomainModel
+import com.d204.rumeet.domain.model.user.*
 import com.d204.rumeet.domain.repository.UserRepository
 import com.d204.rumeet.domain.toDomainResult
 import java.io.IOException
@@ -73,5 +70,35 @@ internal class UserRepositoryImpl @Inject constructor(
         val file = getMultipartData(profile.profile)
         Log.d(TAG, "modifyProfileImgAndNickName: $user , $file")
         return userApi.modifyProfileAndNickName(user, file).flag == "success"
+    }
+
+    override suspend fun registFcmToken(userId: Int, token: String): Boolean {
+        val request = FcmTokenRequestDto(userId, token)
+        return userApi.registFcmToken(request).flag == "success"
+    }
+
+    override suspend fun modifyNotificationSettingState(
+        userId: Int,
+        target: Int,
+        state: Int
+    ): Boolean {
+        val request = ModifyNotificationStateRequestDto(userId, target, state)
+        return userApi.modifyNotificationSettingState(request).flag == "success"
+    }
+
+    override suspend fun getNotificationSettingState(userId: Int): NetworkResult<NotificationStateDomainModel> {
+        return handleApi { userApi.getNotificationSettingState(userId) }.toDomainResult<NotificationSettingStateResponseDto, NotificationStateDomainModel> { it.toDomainModel() }
+    }
+
+    override suspend fun getRunningRecord(
+        userId: Int,
+        startDate: Long,
+        endDate: Long
+    ): NetworkResult<RunningRecordDomainModel> {
+        return handleApi { userApi.getRunningRecord(userId, startDate, endDate) }.toDomainResult<RunningRecordResponseDto, RunningRecordDomainModel> { it.toDomainModel() }
+    }
+
+    override suspend fun getHomeData(userId: Int): NetworkResult<HomeDataDomainModel> {
+        return handleApi { userApi.getHomeData(userId) }.toDomainResult<HomeDataResponseDto, HomeDataDomainModel> { it.toDomainModel() }
     }
 }

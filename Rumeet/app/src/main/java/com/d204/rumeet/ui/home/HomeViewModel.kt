@@ -1,13 +1,29 @@
 package com.d204.rumeet.ui.home
 
+import android.content.ContentValues
+import android.util.Log
+import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
+import com.d204.rumeet.domain.usecase.user.RegistFcmTokenUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
+import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
+import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : BaseViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val getUserIdUseCase: GetUserIdUseCase,
+    private val registFcmTokenUseCase: RegistFcmTokenUseCase
+) : BaseViewModel() {
+    private val _userId: MutableStateFlow<UiState<Int>> = MutableStateFlow(UiState.Loading)
+    val userId: StateFlow<UiState<Int>>
+        get() = _userId
+
     private val _userName: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Loading)
     val userName: StateFlow<UiState<String>>
         get() = _userName.asStateFlow()
@@ -27,7 +43,19 @@ class HomeViewModel : BaseViewModel() {
     val recommendFriendList: StateFlow<UiState<List<RecommendFriendUiModel>>>
         get() = _recommendFriendList.asStateFlow()
 
-    fun getUserNameForHome() {
+    fun getUserIdByUseCase() {
+        baseViewModelScope.launch {
+            try {
+                val response = getUserIdUseCase()
+                _userId.value = UiState.Success(response)
+            } catch (e: Exception) {
+                _userId.value = UiState.Error(e.cause)
+                catchError(e)
+            }
+        }
+    }
+
+    fun getHomeData() {
         baseViewModelScope.launch {
             //TODO(서버 통신)
             try {
@@ -69,6 +97,15 @@ class HomeViewModel : BaseViewModel() {
                 _recommendFriendList.value = UiState.Success(response)
             } catch (e: Exception) {
                 _recommendFriendList.value = UiState.Error(e.cause)
+            }
+        }
+    }
+
+    fun registFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+            Log.d(ContentValues.TAG, "initFcm: userId: ${userId.value.successOrNull()}, FCM Token : $token")
+            baseViewModelScope.launch {
+                registFcmTokenUseCase(userId.value.successOrNull() ?: -1, token)
             }
         }
     }

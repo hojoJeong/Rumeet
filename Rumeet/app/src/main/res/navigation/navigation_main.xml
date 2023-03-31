@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_homeFragment_to_navigation_mypage"
             app:destination="@id/navigation_mypage" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
     <fragment
         android:id="@+id/runningOptionFragment"
@@ -170,7 +173,16 @@
         </fragment>
 
     </navigation>
-
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.d204.rumeet.ui.notification.NotificationFragment"
+        android:label="NotificationFragment">
+        <argument
+            android:name="type"
+            app:argType="integer"
+            app:nullable="false"
+            android:defaultValue="0"/>
+    </fragment>
 
 
 </navigation>

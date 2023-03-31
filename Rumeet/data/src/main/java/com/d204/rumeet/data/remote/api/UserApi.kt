@@ -1,10 +1,11 @@
 package com.d204.rumeet.data.remote.api
 
+import com.d204.rumeet.data.remote.dto.request.user.FcmTokenRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.ModifyNickNameRequest
+import com.d204.rumeet.data.remote.dto.request.user.ModifyNotificationStateRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.ModifyUserDetailInfoRequestDto
 import com.d204.rumeet.data.remote.dto.response.BaseResponse
-import com.d204.rumeet.data.remote.dto.response.user.AcquiredBadgeResponse
-import com.d204.rumeet.data.remote.dto.response.user.UserInfoResponse
+import com.d204.rumeet.data.remote.dto.response.user.*
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -28,4 +29,20 @@ internal interface UserApi {
         @Part("user") request: ModifyNickNameRequest,
         @Part profileImg : MultipartBody.Part?
     ): BaseResponse<Boolean>
+
+
+    @POST("fcm/token")
+    suspend fun registFcmToken(@Body token: FcmTokenRequestDto): BaseResponse<Boolean>
+
+    @GET("users/alarm/{userId}")
+    suspend fun getNotificationSettingState(@Path("userId") userId: Int): BaseResponse<NotificationSettingStateResponseDto>
+
+    @PUT("users/alarm")
+    suspend fun modifyNotificationSettingState(@Body requestDto: ModifyNotificationStateRequestDto): BaseResponse<Boolean>
+
+    @GET("record/race/{userId}/{startDate}/{endDate}")
+    suspend fun getRunningRecord(@Path("userId") userId: Int, @Path("startDate") startDate: Long, @Path("endDate") endDate: Long): BaseResponse<RunningRecordResponseDto>
+
+    @GET("record/{userId}")
+    suspend fun getHomeData(@Path("userId") userId: Int) : BaseResponse<HomeDataResponseDto>
 }

@@ -27,6 +27,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
@@ -49,6 +51,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.LoginActivity" />
-    </application>
 
+        <service android:name=".util.FcmSettingTool"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+    </application>
 </manifest>

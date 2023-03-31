@@ -11,10 +11,9 @@ import com.d204.rumeet.ui.notification.adapter.NotificationContainerAdapter
 import com.d204.rumeet.ui.notification.adapter.NotificationFriendListAdapter
 import com.d204.rumeet.ui.notification.adapter.NotificationRunningListAdapter
 
-class NotificationContainerFragment :
+class NotificationContainerFragment(private val viewInfo: String) :
     BaseFragment<FragmentNotificationContainerBinding, BaseViewModel>() {
     private val notificationViewModel by activityViewModels<NotificationViewModel>()
-    private lateinit var viewInfo: String
     override val layoutResourceId: Int
         get() = R.layout.fragment_notification_container
     override val viewModel: BaseViewModel
@@ -55,9 +54,5 @@ class NotificationContainerFragment :
         val friendAdapter = NotificationFriendListAdapter().apply {
 
         }
-    }
-
-    fun setViewInfo(info: String) {
-        viewInfo = info
     }
 }

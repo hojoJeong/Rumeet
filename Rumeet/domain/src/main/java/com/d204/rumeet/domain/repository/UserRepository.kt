@@ -1,11 +1,7 @@
 package com.d204.rumeet.domain.repository
 
 import com.d204.rumeet.domain.NetworkResult
-import com.d204.rumeet.domain.model.user.AcquiredBadgeListDomainModel
-import com.d204.rumeet.domain.model.user.ModifyProfileAndNickNameDomainModel
-import com.d204.rumeet.domain.model.user.ModifyUserDetailInfoDomainModel
-import com.d204.rumeet.domain.model.user.UserInfoDomainModel
-import java.io.File
+import com.d204.rumeet.domain.model.user.*
 
 interface UserRepository {
     suspend fun setUserFirstRunCheck(): Boolean
@@ -17,4 +13,9 @@ interface UserRepository {
     suspend fun getAcquiredBadgeList(userId: Int): NetworkResult<List<AcquiredBadgeListDomainModel>>
     suspend fun logout()
     suspend fun modifyProfileImgAndNickName(profile: ModifyProfileAndNickNameDomainModel): Boolean
+    suspend fun registFcmToken(userId: Int, token: String): Boolean
+    suspend fun modifyNotificationSettingState(userId: Int, target: Int, state: Int): Boolean
+    suspend fun getNotificationSettingState(userId: Int): NetworkResult<NotificationStateDomainModel>
+    suspend fun getRunningRecord(userId: Int, startDate: Long, endDate: Long): NetworkResult<RunningRecordDomainModel>
+    suspend fun getHomeData(userId: Int): NetworkResult<HomeDataDomainModel>
 }
