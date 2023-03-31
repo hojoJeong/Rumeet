@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.d204.rumeet.exception.ErrorEnum.NO_USER_ERROR;
+
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @RestController
@@ -217,6 +219,35 @@ public class UserRestController {
             data.setData(0);
         }
         data.setData(userId);
+        return data.builder();
+    }
+
+    @Operation(summary = "유저의 친구초대, 매칭 알림 수신 여부를 전송한다.")
+    @GetMapping("/alarm/{userId}")
+    public ResponseEntity<?> getAlarmState(@PathVariable int userId) {
+        RespData<AlarmStateDto> data = new RespData<>();
+        log.info("@###########################userId:"+userId);
+        AlarmStateDto alarmStateDto = userService.getAlarmState(userId);
+        log.info("result: "+alarmStateDto);
+        if(alarmStateDto != null) {
+            data.setData(alarmStateDto);
+            data.setMsg("알림 수신여부");
+            return data.builder();
+        }
+        data = new RespData<>(NO_USER_ERROR); // 실패
+        return data.builder();
+    }
+
+    @Operation(summary = "유저의 친구초대(type = 0), 매칭 알림(type=1) 수신 여부(0=false, 1=true)를 수정한다.")
+    @PutMapping("/alarm")
+    public ResponseEntity<?> modifyAlarmState(@RequestBody ModifyAlarmStateDto modifyAlarmStateDto) {
+        RespData<Void> data = new RespData<>();
+        if (userService.modifyAlarmState(modifyAlarmStateDto) == 1) { // 성공
+            data.setMsg("알림 설정 수정을 성공했습니다.");
+            data.setData(null);
+            return data.builder();
+        }
+        data = new RespData<>(NO_USER_ERROR); // 실패
         return data.builder();
     }
 }

@@ -17,6 +17,9 @@
         <result column="oauth" property="oauth"/>
         <result column="date" property="date"/>
         <result column="state" property="state"/>
+        <result column="fcm_token" property="fcmToken"/>
+        <result column="friend_alarm" property="friendAlarm"/>
+        <result column="matching_alarm" property="matchingAlarm"/>
     </resultMap>
     <resultMap id="simple_user" type="simpleUserDto">
         <result column="id" property="id"/>
@@ -27,6 +30,7 @@
         <result column="profile_img" property="profileImg"/>
         <result column="date" property="date"/>
         <result column="state" property="state"/>
+        <result column="fcm_token" property="fcmToken"/>
     </resultMap>
 
     <select id="doLogin" parameterType="LoginDto" resultMap="user">
@@ -55,7 +59,7 @@
     <update id="delUser" parameterType="int">
         UPDATE user SET state = -1 WHERE (id = #{id});
     </update>
-    
+
     <select id="checkDuplication" parameterType="CheckDto" resultType="int">
         SELECT COUNT(*) FROM user
         <where>
@@ -87,15 +91,24 @@
     </insert>
 
     <update id="modifyUserProfile" parameterType="ProfileUserDto">
-        UPDATE user SET nickname = #{nickname},profile_img = #{profile} WHERE id = #{id};
+        UPDATE user SET profile_img = #{profile} WHERE id = #{id};
     </update>
 
     <select id="checkExistsUseByEmail" parameterType="String" resultType="int">
         SELECT id FROM user WHERE email = #{email}
     </select>
 
-    <insert id="joinUserToRecord" parameterType="int">
-        INSERT INTO record (user_id)
-        VALUES (#{userId})
-    </insert>
+    <select id="getAlarmState" parameterType="int" resultType="AlarmStateDto">
+        SELECT friend_alarm, matching_alarm FROM user WHERE id = #{id};
+    </select>
+
+    <update id="modifyFriendAlarmState" parameterType="int">
+        UPDATE user SET friend_alarm = ${state} WHERE id =#{id};
+    </update>
+
+    <update id="modifyMatchingAlarmState" parameterType="int">
+        UPDATE user SET matching_alarm = ${state} WHERE id =#{id};
+    </update>
+
+
 </mapper>
