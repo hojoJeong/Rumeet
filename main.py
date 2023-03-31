@@ -157,6 +157,6 @@ async def get_ghost_user(user_id, mode):
 def search_similarity(km, user_id, cached_pace_list):
     print("searching similarity")
     print(km, user_id, cached_pace_list)
-    filterd = cached_pace_list.filter(cached_pace_list["user_id"] == user_id)
+    filterd = cached_pace_list.filter(cached_pace_list["user_id"] != user_id).select('avg_pace1', 'avg_pace2').rdd.flatMap(lambda x: x).collect()
     print('filter', filterd)
 
