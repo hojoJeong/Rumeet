@@ -30,7 +30,6 @@
         <result column="profile_img" property="profileImg"/>
         <result column="date" property="date"/>
         <result column="state" property="state"/>
-        <result column="fcm_token" property="fcmToken"/>
     </resultMap>
 
     <select id="doLogin" parameterType="LoginDto" resultMap="user">
@@ -41,7 +40,9 @@
         SELECT * FROM user_view WHERE id = #{id};
     </select>
 
-
+    <select id="getSimpleUserFcmInfoById" parameterType="int" resultType="SimpleUserFcmDto">
+        SELECT id, nickname, fcm_token, friend_alarm, matching_alarm FROM user_view WHERE id=#{id}
+    </select>
 
     <select id="getSimpleUserById" parameterType="int" resultMap="simple_user">
         SELECT id, email, nickname, age, gender, profile_img, date, state FROM user_view WHERE id = #{id};
