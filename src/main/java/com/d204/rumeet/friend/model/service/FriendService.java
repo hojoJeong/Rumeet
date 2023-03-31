@@ -10,6 +10,8 @@ public interface FriendService {
 
     List<SimpleUserDto> getFriendsByUserId(int userId);
 
+    List<SimpleUserDto> getFilteredFriendsByUserId(int userId, int type);
+
     void deleteFriend(int userId, int friendId);
 
     void requestFriend(FriendRequestDto friendRequestDto);

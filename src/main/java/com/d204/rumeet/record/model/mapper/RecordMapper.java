@@ -17,6 +17,4 @@ public interface RecordMapper {
     MatchInfoSummaryDto getMatchInfoSummary(int userId);
     List<MatchInfoDto> getMatchInfo(int userId);
 
-
-
 }

@@ -1,24 +1,16 @@
 package com.d204.rumeet.friend.controller;
 
 import com.d204.rumeet.data.RespData;
-import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
 import com.d204.rumeet.friend.model.service.FriendService;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
-import com.d204.rumeet.user.model.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +20,10 @@ public class FriendController {
     private final FriendService friendService;
 
     // 달리기 한 뒤에 정렬 추가하기
-    @Operation(summary = "내 친구 전체 조회", description = "친구 전체 조회 (전체 (닉네임순), 최근 같이 뛴 친구, 함께 많이 달린 친구) ... 아직 전체로 조회만 됨")
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<?> searchByUserId(@PathVariable int userId) {
-        List<SimpleUserDto> list = friendService.getFriendsByUserId(userId);
+    @Operation(summary = "내 친구 전체 조회", description = "친구 전체 조회 (타입 1 : 전체, 2 : 최근 같이 뛴 친구, 3:함께 많이 달린 친구) ... 아직 전체로 조회만 됨")
+    @GetMapping("/list/{userId}/{type}")
+    public ResponseEntity<?> searchByUserId(@PathVariable int userId, @PathVariable int type) {
+        List<SimpleUserDto> list = friendService.getFilteredFriendsByUserId(userId, type);
         RespData<List> data = new RespData<>();
         data.setData(list);
         return data.builder();
