@@ -171,7 +171,7 @@ def search_similarity(km, user_id, cached_pace_list):
             ghost_users_paces = other_users_paces[pace:pace+space]
             ghost_id = int(pace / space) 
     result = {
-        'ghost_user_id': cached_pace_list.loc[ghost_id, 'user_ud']
+        'ghost_user_id': cached_pace_list.loc[ghost_id, 'user_ud'],
         'ghost_users_paces': ghost_users_paces,
     }
     return result
