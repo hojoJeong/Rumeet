@@ -147,13 +147,13 @@ async def get_ghost_user(user_id, mode):
     distance_idx = int(mode) % 4
     km = distances[distance_idx]
 
-    if km == 0:
+    if km == 1:
         result = search_similarity(0, user_id, pace1_avg)
-    elif km == 1:
-        result = search_similarity(1, user_id, pace2_avg)
     elif km == 2:
-        result = search_similarity(2, user_id, pace3_avg)
+        result = search_similarity(1, user_id, pace2_avg)
     elif km == 3:
+        result = search_similarity(2, user_id, pace3_avg)
+    elif km == 5:
         result = search_similarity(5, user_id, pace5_avg)
     return result
 
