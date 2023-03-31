@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.d204.rumeet.friend.model.mapper.FriendMapper">
+    <select id="getFriendMatch" resultType="FriendMatchDto">
+        SELECT #{userId} AS userId,
+               #{friendId} AS friendId,
+               u.nickname AS friendName,
+               COUNT(*) AS count,
+                MAX(r.date) as latestDate
+        FROM race r
+        JOIN user u
+        ON (r.user_id = u.id OR r.partner_id = u.id)
+        WHERE ((r.user_id = #{userId} AND r.partner_id = #{friendId})
+        OR (r.user_id = #{friendId} AND r.partner_id =  #{userId}))
+        AND (r.user_id=#{friendId})
+        GROUP BY u.nickname, u.id;
+    </select>
+
+
+</mapper>
