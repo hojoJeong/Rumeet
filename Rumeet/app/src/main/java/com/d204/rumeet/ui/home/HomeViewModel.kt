@@ -1,7 +1,16 @@
 package com.d204.rumeet.ui.home
 
+import android.app.Application
 import android.content.ContentValues
+import android.content.Context
 import android.util.Log
+import androidx.core.content.ContextCompat
+import com.d204.rumeet.R
+import com.d204.rumeet.domain.model.user.HomeBadgeDomainModel
+import com.d204.rumeet.domain.model.user.HomeDataDomainModel
+import com.d204.rumeet.domain.onError
+import com.d204.rumeet.domain.onSuccess
+import com.d204.rumeet.domain.usecase.user.GetHomeDataUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.domain.usecase.user.RegistFcmTokenUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
@@ -9,8 +18,14 @@ import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
+import com.d204.rumeet.util.toCount
+import com.d204.rumeet.util.toDate
+import com.d204.rumeet.util.toDistance
+import com.d204.rumeet.util.toRecord
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
-    private val registFcmTokenUseCase: RegistFcmTokenUseCase
+    private val registFcmTokenUseCase: RegistFcmTokenUseCase,
+    private val getHomeDataUseCase: GetHomeDataUseCase
 ) : BaseViewModel() {
     private val _userId: MutableStateFlow<UiState<Int>> = MutableStateFlow(UiState.Loading)
     val userId: StateFlow<UiState<Int>>
@@ -55,39 +71,40 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getHomeData() {
+    fun getHomeData(context: Context) {
         baseViewModelScope.launch {
-            //TODO(서버 통신)
-            try {
-                val response = "배달전문 박정은"
-                _userName.value = UiState.Success(response)
-            } catch (e: Exception) {
-                _userName.value = UiState.Error(e.cause)
-            }
+            showLoading()
+            getHomeDataUseCase(userId.value.successOrNull() ?: -1)
+                .onSuccess { response ->
+                    dismissLoading()
+                    _userName.value = UiState.Success(response.record.nickname ?: "")
+
+                    setHomeRecord(response)
+
+                    val badgeList = listOf(
+                        context.resources.getStringArray(R.array.url_badge)[context.resources.getStringArray(R.array.code_badge).indexOf(response.badge[0].code.toString())],
+                        context.resources.getStringArray(R.array.url_badge)[context.resources.getStringArray(R.array.code_badge).indexOf(response.badge[1].code.toString())],
+                        context.resources.getStringArray(R.array.url_badge)[context.resources.getStringArray(R.array.code_badge).indexOf(response.badge[2].code.toString())],
+                        )
+                    _badgeList.value = UiState.Success(badgeList)
+                }
+                .onError {
+                    dismissLoading()
+                    catchError(it)
+                }
         }
     }
 
-    fun getBestRecordListForHome() {
-        baseViewModelScope.launch {
-            try {
-                //TODO(서버 통신, 초기 상태로 임시 처리, 체력데이터가 있다면 data layer mapper에서 형식에 맞게 변환해서 도메인 레이어로 가져올 것)
-                val response = emptyList<BestRecordUiModel>()
-                _bestRecord.value = UiState.Success(response)
-            } catch (e: Exception) {
-                _bestRecord.value = UiState.Error(e.cause)
-            }
-        }
-    }
-
-    fun getBadgeListForHome() {
-        baseViewModelScope.launch {
-            try {
-                val response = emptyList<String>()
-                _badgeList.value = UiState.Success(response)
-            } catch (e: Exception) {
-                _badgeList.value = UiState.Error(e.cause)
-            }
-        }
+    private fun setHomeRecord(response: HomeDataDomainModel){
+        val totalCount = response.record.totalCount?.toCount()
+        val totalDistance = response.record.totalKm?.toDistance()
+        val pace = response.record.averagePace?.toLong()?.toRecord()
+        val myRecord = listOf(
+            BestRecordUiModel(totalCount ?: "", "누적 횟수"),
+            BestRecordUiModel(totalDistance ?: "", "누적 거리"),
+            BestRecordUiModel(pace?:"", "평균 페이스")
+        )
+        _bestRecord.value = UiState.Success(myRecord)
     }
 
     fun getRecommendFriendListForHome() {
@@ -103,7 +120,10 @@ class HomeViewModel @Inject constructor(
 
     fun registFcmToken() {
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-            Log.d(ContentValues.TAG, "initFcm: userId: ${userId.value.successOrNull()}, FCM Token : $token")
+            Log.d(
+                ContentValues.TAG,
+                "initFcm: userId: ${userId.value.successOrNull()}, FCM Token : $token"
+            )
             baseViewModelScope.launch {
                 registFcmTokenUseCase(userId.value.successOrNull() ?: -1, token)
             }

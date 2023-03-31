@@ -12,6 +12,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentHomeCardviewBinding
+import com.d204.rumeet.domain.model.user.HomeRecordDomainModel
+import com.d204.rumeet.home.adapter.BestRecordAdapter
+import com.d204.rumeet.ui.home.adapter.BadgeAdapter
+import com.d204.rumeet.ui.home.model.BestRecordUiModel
 
 class CardViewHome @JvmOverloads constructor(
     context: Context,
@@ -59,6 +63,16 @@ class CardViewHome @JvmOverloads constructor(
         }
     }
 
+    fun setRecordItem(list: List<BestRecordUiModel>){
+        val adapter = BestRecordAdapter().apply { submitList(list) }
+        binding.rvContentHome.adapter = adapter
+    }
+
+    fun setBadgeItem(list: List<String>){
+        val adapter = BadgeAdapter().apply { submitList(list) }
+        binding.rvContentHome.adapter = adapter
+    }
+
     private fun setButton(visible: Boolean, title: String?, img: Drawable?) {
         if (visible) {
             with(binding.btnContentHome) {
@@ -99,5 +113,7 @@ class CardViewHome @JvmOverloads constructor(
             binding.tvContentHomeMessage.visibility = View.GONE
         }
     }
+
+
 
 }

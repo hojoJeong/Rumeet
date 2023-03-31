@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.home
 
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
@@ -18,9 +19,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun initStartView() {
         with(viewModel) {
             getUserIdByUseCase()
-            getHomeData()
-            getBestRecordListForHome()
-            getBadgeListForHome()
+            getHomeData(requireContext())
             getRecommendFriendListForHome()
         }
         binding.vm = viewModel
@@ -33,11 +32,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                     viewModel.registFcmToken()
                 }
             }
+            
+            launch { 
+                viewModel.userName.collect {
+                    Log.d(TAG, "initDataBinding: ")
+                }
+            }
         }
     }
 
     override fun initAfterBinding() {
 
+    }
+
+    private fun initAdapter(){
     }
 
 

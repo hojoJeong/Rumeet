@@ -58,6 +58,15 @@ internal fun RunningRecordResponseDto.toDomainModel() = RunningRecordDomainModel
     summaryData = summaryData.toDomainModel()
 )
 
-internal fun HomeDataResponseDto.toDomainModel() = HomeDataDomainModel(
+internal fun HomeBadgeResponseDto.toDomainModel() = HomeBadgeDomainModel(
+    id, code, date
+)
+
+internal fun HomeRecordResponseDto.toDomainModel() = HomeRecordDomainModel(
     averagePace, nickname, totalCount, totalKm, userId
+)
+
+internal fun HomeDataResponseDto.toDomainModel() = HomeDataDomainModel(
+    badge = badgeList.map { it.toDomainModel() },
+    record = record?.toDomainModel()!!
 )

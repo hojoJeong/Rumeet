@@ -14,6 +14,7 @@ import com.d204.rumeet.data.remote.mapper.toRequestDto
 import com.d204.rumeet.data.util.getMultipartData
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.model.user.*
+import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.repository.UserRepository
 import com.d204.rumeet.domain.toDomainResult
 import java.io.IOException
@@ -99,6 +100,8 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getHomeData(userId: Int): NetworkResult<HomeDataDomainModel> {
-        return handleApi { userApi.getHomeData(userId) }.toDomainResult<HomeDataResponseDto, HomeDataDomainModel> { it.toDomainModel() }
+        val response =  handleApi { userApi.getHomeData(userId) }.toDomainResult<HomeDataResponseDto, HomeDataDomainModel> { it.toDomainModel() }
+        Log.d(TAG, "getHomeData: ${response}")
+        return response
     }
 }

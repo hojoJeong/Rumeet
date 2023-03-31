@@ -17,20 +17,22 @@ fun FilledEditText.bindIsEnable(state : Boolean){
 @BindingAdapter("setBestRecordView")
 fun CardViewHome.setBestRecordView(uiState: UiState<List<BestRecordUiModel>>){
     val title = context.getString(R.string.title_best_record)
-    if(uiState.successOrNull()!!.isEmpty()){
+    if(uiState.successOrNull() == null){
         setViewWhenEmptyData(title, context.getString(R.string.content_no_best_record))
     } else {
-        setViewContent(title, null)
+        setViewContent(title,  null)
+        setRecordItem(uiState.successOrNull() ?: emptyList())
     }
 }
 
 @BindingAdapter("setBadgeView")
 fun CardViewHome.setBadgeView(uiState: UiState<List<String>>){
     val title = context.getString(R.string.title_my_badge)
-    if(uiState.successOrNull()!!.isEmpty()){
+    if(uiState.successOrNull() == null){
         setViewWhenEmptyData(title, context.getString(R.string.content_no_badge))
     } else {
         setViewContent(title, context.getDrawable(R.drawable.ic_arrow_right)!!)
+        setBadgeItem(uiState.successOrNull() ?: emptyList())
     }
 }
 

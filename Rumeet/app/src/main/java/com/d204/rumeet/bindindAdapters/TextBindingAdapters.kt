@@ -21,7 +21,7 @@ fun TextView.bindAuthenticationVisibility(state: Boolean) {
 
 @BindingAdapter("setWelcomeMessage")
 fun TextView.setWelcomeMessage(userName: UiState<String>) {
-    val name = userName.successOrNull()!!
+    val name = userName.successOrNull() ?: ""
     val content = resources.getString(R.string.content_welcome_message, name)
     val builder = SpannableStringBuilder(content).apply {
         setSpan(
