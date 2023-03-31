@@ -143,9 +143,7 @@ async def root():
 async def get_ghost_user(user_id, mode):
     global pace1_avg, pace2_avg, pace3_avg, pace5_avg
     
-    distances = [1, 2, 3, 5]
-    distance_idx = int(mode) % 4
-    km = distances[distance_idx]
+    km = set_distance(mode)
 
     if km == 1:
         result = search_similarity(1, user_id, pace1_avg)
@@ -156,6 +154,13 @@ async def get_ghost_user(user_id, mode):
     elif km == 5:
         result = search_similarity(5, user_id, pace5_avg)
     return result
+
+
+def set_distance(mode):
+    distances = [1, 2, 3, 5]
+    distance_idx = int(mode) % 4
+    km = distances[distance_idx]
+    return km
 
 
 def search_similarity(km, user_id, cached_pace_list):
