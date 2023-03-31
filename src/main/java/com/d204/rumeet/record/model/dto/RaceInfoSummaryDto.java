@@ -6,5 +6,5 @@ import lombok.Data;
 public class RaceInfoSummaryDto {
     long total_km;
     long total_time;
-    long avg_pace;
+    int avg_pace;
 }
