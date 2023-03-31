@@ -3,7 +3,6 @@ package com.d204.rumeet.badge.model.service;
 import com.d204.rumeet.badge.model.dto.BadgeDto;
 import com.d204.rumeet.badge.model.mapper.BadgeMapper;
 import com.d204.rumeet.exception.NoBadgeDataException;
-import com.d204.rumeet.record.model.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

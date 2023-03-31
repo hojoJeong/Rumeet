@@ -3,19 +3,39 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.d204.rumeet.friend.model.mapper.FriendMapper">
-    <select id="getFriendMatch" resultType="FriendMatchDto">
-        SELECT #{userId} AS userId,
-               #{friendId} AS friendId,
-               u.nickname AS friendName,
-               COUNT(*) AS count,
-                MAX(r.date) as latestDate
+    <select id="getMatchCount" resultType="int">
+        SELECT COUNT(*)
+        FROM race
+        WHERE ((user_id = #{userId} AND partner_id = #{friendId})
+            OR (user_id = #{friendId} AND partner_id =  #{userId}))
+    </select>
+    <select id="getFriend" resultType="FriendListDto">
+        SELECT u.id AS userId,
+               u.nickname,
+               u.profile_img AS profileImg,
+               0 AS matchCount,
+               0 AS latestDate,
+               r.average_pace AS pace
+        FROM record r
+                 JOIN user u ON r.user_id = u.id
+        WHERE r.user_id = #{userId}
+    </select>
+    <select id="getRunningFriend" resultType="FriendListDto">
+        SELECT
+            u.id AS userId,
+            u.nickname,
+            u.profile_img AS profileImg,
+            COUNT(*) AS matchCount,
+            MAX(r.date) AS latestDate,
+            rec.average_pace AS pace
         FROM race r
-        JOIN user u
-        ON (r.user_id = u.id OR r.partner_id = u.id)
+                 JOIN user u ON (r.user_id = u.id OR r.partner_id = u.id)
+                 JOIN record rec ON (u.id = rec.user_id)
         WHERE ((r.user_id = #{userId} AND r.partner_id = #{friendId})
         OR (r.user_id = #{friendId} AND r.partner_id =  #{userId}))
-        AND (r.user_id=#{friendId})
-        GROUP BY u.nickname, u.id;
+        AND (u.id=#{friendId})
+        GROUP BY u.nickname, u.id
+        ORDER BY u.nickname;
     </select>
 
 
