@@ -1,3 +1,4 @@
+import math
 from fastapi import FastAPI
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
@@ -141,22 +142,55 @@ async def root():
 @app.get("/ghost/{user_id}/{mode}")
 async def get_ghost_user(user_id, mode):
     global pace1_avg, pace2_avg, pace3_avg, pace5_avg
-
-    km = int(mode) % 4
+    
+    distances = [1, 2, 3, 5]
+    distance_idx = int(mode) % 4
+    km = distances[distance_idx]
 
     if km == 0:
-        search_similarity(0, user_id, pace1_avg)
+        result = search_similarity(0, user_id, pace1_avg)
     elif km == 1:
-        search_similarity(1, user_id, pace2_avg)
+        result = search_similarity(1, user_id, pace2_avg)
     elif km == 2:
-        search_similarity(2, user_id, pace3_avg)
+        result = search_similarity(2, user_id, pace3_avg)
     elif km == 3:
-        search_similarity(5, user_id, pace5_avg)
+        result = search_similarity(5, user_id, pace5_avg)
+    return result
 
 
 def search_similarity(km, user_id, cached_pace_list):
-    print("searching similarity")
-    print(km, user_id, cached_pace_list)
-    filterd = cached_pace_list.filter(cached_pace_list["user_id"] != user_id).select('avg_pace1', 'avg_pace2').rdd.flatMap(lambda x: x).collect()
-    print('filter', filterd)
+    unit = km
+    users_paces = get_user_paces(user_id, cached_pace_list, km)
+    other_users_paces = get_other_users_paces(user_id, cached_pace_list, km)
+    top_val = 0
+    for pace in range(len(other_users_paces) - unit + 1):
+        similarities = calculateEuclideanSimilarity(users_paces, other_users_paces[pace:pace+unit])
+        if similarities >= 0.01 and top_val < similarities:
+            top_val = similarities
+            users_paces = other_users_paces[pace:pace+unit]
+    result = {
+        'user_id': user_id,
+        'users_paces': users_paces,
+    }
+    return result
+
+
+def get_user_paces(user_id, cached_pace_list, km):
+    paces_col = [f"avg_pace{i}" for i in range(1, km+1)]
+    users_paces = cached_pace_list.filter(cached_pace_list["user_id"] == user_id).select(*paces_col).rdd.flatMap(lambda x: x).collect()
+    return users_paces
+
+
+def get_other_users_paces(user_id, cached_pace_list, km):
+    paces_col = [f"avg_pace{i}" for i in range(1, km+1)]
+    other_users_paces = cached_pace_list.filter(cached_pace_list["user_id"] != user_id).select(*paces_col).rdd.flatMap(lambda x: x).collect()
+    return other_users_paces
+
+
+def calculateEuclideanSimilarity(user1_pace_list, user2_pace_list):
+    distance = 0
+    for i in range(len(user1_pace_list)):
+        distance += math.pow(user1_pace_list[i] - user2_pace_list[i], 2)
+    return 1 / (1 + math.sqrt(distance))
+
 
