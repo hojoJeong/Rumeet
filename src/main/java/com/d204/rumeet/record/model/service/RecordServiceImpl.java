@@ -1,15 +1,13 @@
 package com.d204.rumeet.record.model.service;
 
+import com.d204.rumeet.badge.model.dto.BadgeDto;
 import com.d204.rumeet.badge.model.service.BadgeService;
 import com.d204.rumeet.record.model.dto.*;
 import com.d204.rumeet.record.model.mapper.RecordMapper;
 import com.d204.rumeet.tools.OSUpload;
 import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.service.UserService;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,12 +23,28 @@ public class RecordServiceImpl implements RecordService{
 
     private final RecordMapper recordMapper;
     private final UserService userService;
+
+    private final BadgeService badgeService;
+
+
+
     final String bucketName = "rumeet";
     private final OSUpload osUpload;
     @Override
     public RecordDto getRecord(int userId) {
         RecordDto record = recordMapper.getRecord(userId);
         return record;
+    }
+
+    @Override
+    public Map<String, Object> getMainRecord(int userId) {
+        Map<String, Object> result = new HashMap<>();
+
+        MainRecordDto record = recordMapper.getMainRecord(userId);
+        result.put("record", record);
+        List<BadgeDto> badge = badgeService.getRecentBadgesByUserId(userId);
+        result.put("badge", badge);
+        return result;
     }
 
     @Override
@@ -44,11 +58,11 @@ public class RecordServiceImpl implements RecordService{
         int elapsedTime = raceInfoReqDto.getTime();
         // 기존 정보
         RecordDto record = recordMapper.getRecord(userId);
-        double originPace = record.getAveragePace();
+        int originPace = record.getAveragePace();
         int originCount = record.getTotalCount();
         int completeSuccess = record.getCompetitionSuccessCount();
         int teamSuccess = record.getTeamSuccessCount();
-        double averagePace = 0.0;
+        int averagePace;
 
         if (mode >= 4 && mode <= 7 && success == 1) { //경쟁모드 승리
             completeSuccess++;
@@ -56,7 +70,7 @@ public class RecordServiceImpl implements RecordService{
             teamSuccess++;
         }
 
-        double km = 1;
+        int km = 1;
         switch (mode % 4) {
             case 1:
                 km = 2;
@@ -69,7 +83,7 @@ public class RecordServiceImpl implements RecordService{
                 break;
         }
 
-        double newPace = (km == 0 || elapsedTime == 0) ? 0 : (double) elapsedTime / km;
+        int newPace = (km == 0 || elapsedTime == 0) ? 0 : (int) elapsedTime / km;
 
         if (originPace == 0) {
             averagePace = newPace;
@@ -177,13 +191,6 @@ public class RecordServiceImpl implements RecordService{
 
         return result;
     }
-
-    @Override
-    public RaceInfoSummaryDto getRaceInfoSummary(int userId, long startDate, long endDate) {
-        RaceInfoSummaryDto data = recordMapper.getRaceInfoSummary(userId, startDate, endDate);
-        return data;
-    }
-
 
 
 }

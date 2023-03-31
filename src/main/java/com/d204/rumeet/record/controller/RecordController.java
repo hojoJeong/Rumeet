@@ -23,12 +23,13 @@ public class RecordController {
 
     private final RecordService recordService;
 
+
     @Operation(summary = "메인페이지 기록 조회")
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getRecord(@PathVariable int userId) {
-        RecordDto record = recordService.getRecord(userId);
-        RespData<RecordDto> data = new RespData<>();
-        data.setData(record);
+    public ResponseEntity<?> getMainRecord(@PathVariable int userId) {
+        Map<String, Object> info = recordService.getMainRecord(userId);
+        RespData<Map> data = new RespData<>();
+        data.setData(info);
         return data.builder();
     }
 

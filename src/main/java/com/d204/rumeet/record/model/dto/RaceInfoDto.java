@@ -8,7 +8,7 @@ public class RaceInfoDto {
     int raceId;
     int userId;
     double velocity;
-    float km;
+    double km;
     long time;
     int heartRate;
     double kcal;

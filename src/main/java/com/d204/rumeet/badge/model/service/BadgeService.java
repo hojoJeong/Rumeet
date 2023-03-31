@@ -13,4 +13,7 @@ public interface BadgeService {
     void addBadge(int userId);
 
     List<BadgeDto> getAllBadgesByUserId(int userId);
+
+    List<BadgeDto> getRecentBadgesByUserId(int userId);
+
 }
