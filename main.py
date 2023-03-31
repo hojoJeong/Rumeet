@@ -170,8 +170,9 @@ def search_similarity(km, user_id, cached_pace_list):
             top_val = similarities
             ghost_users_paces = other_users_paces[pace:pace+space]
             ghost_id = int(pace / space) 
+    ghost_user_id = cached_pace_list.limit(ghost_id+1).collect()[ghost_id]
     result = {
-        'ghost_user_id': cached_pace_list.loc[ghost_id, 'user_ud'],
+        'ghost_user_id': ghost_user_id,
         'ghost_users_paces': ghost_users_paces,
     }
     return result
