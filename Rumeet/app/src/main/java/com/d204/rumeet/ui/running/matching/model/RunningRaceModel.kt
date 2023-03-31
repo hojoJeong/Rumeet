@@ -5,5 +5,6 @@ data class RunningRaceModel(
     val userId : Int,
     val partnerId : Int,
     val mode : Int,
-    val date : Long
+    val date : Long,
+    val state : Int
 )

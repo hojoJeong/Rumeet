@@ -56,17 +56,26 @@ object RunningAMQPManager {
         }
     }
 
+    // 게임 시작, 보내기
     fun sendRunning(partnerId : Int, roomId : Int, message : String){
         CoroutineScope(Dispatchers.IO).launch {
 //            runningChannel?.basicPublish("","game.${roomId}.${partnerId}", null, message.toByteArray())
-            runningChannel?.basicPublish("","game.${roomId}.2", null, message.toByteArray())
+            runningChannel?.basicPublish("","game.${roomId}.27", null, message.toByteArray())
         }
     }
 
+    // 게임 관련 데이터 받기
     fun receiveRunning(roomId : Int, userId : Int, callback : DefaultConsumer){
         CoroutineScope(Dispatchers.IO).launch {
 //            runningChannel?.basicConsume("game.${roomId}.${userId}",callback)
-            runningChannel?.basicConsume("game.${roomId}.27",callback)
+            runningChannel?.basicConsume("game.${roomId}.2",callback)
+        }
+    }
+
+    // 게임 종료 보내기
+    fun sendEndGame(message : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            runningChannel?.basicPublish("", "end.queue", null, message.toByteArray())
         }
     }
 }

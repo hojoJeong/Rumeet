@@ -7,23 +7,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningMatchingBinding
-import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.base.DefaultAlertDialog
-import com.d204.rumeet.ui.chatting.chatting_list.model.ChattingRoomUiModel
-import com.d204.rumeet.ui.find_account.FindAccountAction
-import com.d204.rumeet.ui.running.matching.model.RunningMatchingRequestModel
-import com.d204.rumeet.ui.running.matching.model.RunningRaceModel
-import com.d204.rumeet.util.amqp.RunningAMQPManager
-import com.google.gson.Gson
-import com.rabbitmq.client.AMQP
-import com.rabbitmq.client.DefaultConsumer
-import com.rabbitmq.client.Envelope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class RunningMatchingFragment :

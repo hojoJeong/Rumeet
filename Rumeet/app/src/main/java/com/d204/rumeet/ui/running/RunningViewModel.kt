@@ -3,14 +3,40 @@ package com.d204.rumeet.ui.running
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.running.option.model.*
+import com.d204.rumeet.util.amqp.RunningAMQPManager
+import com.rabbitmq.client.AMQP
+import com.rabbitmq.client.DefaultConsumer
+import com.rabbitmq.client.Envelope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class RunningViewModel : BaseViewModel() {
 
+    private val _runningSideEffect : MutableSharedFlow<RunningSideEffect> = MutableSharedFlow(replay = 1, extraBufferCapacity = 100)
+    val runningSideEffect : SharedFlow<RunningSideEffect> get() = _runningSideEffect.asSharedFlow()
+
     val runningTypeModel = RunningTypeModel()
+
+    fun startRun(userId : Int, roomId : Int){
+        baseViewModelScope.launch {
+            startRunningSubscribe(userId,roomId)
+        }
+    }
+
+    private fun startRunningSubscribe(userId : Int, roomId: Int){
+        RunningAMQPManager.receiveRunning(roomId, userId, object : DefaultConsumer(RunningAMQPManager.runningChannel){
+            override fun handleDelivery(
+                consumerTag: String?,
+                envelope: Envelope?,
+                properties: AMQP.BasicProperties?,
+                body: ByteArray
+            ) {
+                val distance = String(body)
+                _runningSideEffect.tryEmit(RunningSideEffect.SuccessRunning(distance.toInt()))
+            }
+        })
+    }
 
     // state = 1 싱글, state = 2 멀티
     fun setGameType(state: RunningType) {
