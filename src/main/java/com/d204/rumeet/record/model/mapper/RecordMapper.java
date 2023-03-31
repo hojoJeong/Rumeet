@@ -14,7 +14,7 @@ public interface RecordMapper {
     RecordDto getRecord(int userId);
     void updateRecord(RecordDto record);
     void addRaceInfo(RaceInfoDto raceInfo);
-    List<RaceModeInfoDto> getRaceInfo(int userId);
+    List<RaceModeInfoDto> getRaceInfo(int userId, long startDate, long endDate);
 
     RaceInfoSummaryDto getRaceInfoSummary(int userId, long startDate, long endDate);
 

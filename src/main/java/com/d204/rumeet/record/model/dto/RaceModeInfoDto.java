@@ -4,13 +4,10 @@ import lombok.Data;
 
 @Data
 public class RaceModeInfoDto {
-
     int raceId;
     int userId;
     int mode;
-    double velocity;
-    float km;
-    long time;
+    float avgPace;
     int heartRate;
     double kcal;
     int success;

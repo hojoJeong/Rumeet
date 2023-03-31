@@ -5,6 +5,7 @@ import org.apache.tomcat.util.json.ParseException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RecordService {
 
@@ -14,7 +15,7 @@ public interface RecordService {
 
     void addRaceInfo(RaceInfoReqDto data, MultipartFile poly);
 
-    List<RaceModeInfoDto> getRaceInfo(int userid);
+    Map<String, Object> getRaceInfo(int userId, long startDate, long endDate);
 
     RaceInfoSummaryDto getRaceInfoSummary(int userId, long startDate, long endDate);
 

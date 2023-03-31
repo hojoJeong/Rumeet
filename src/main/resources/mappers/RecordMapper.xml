@@ -17,9 +17,6 @@
     <resultMap id="raceInfo" type="RaceModeInfoDto">
         <result column="race_id" property="raceId"/>
         <result column="user_id" property="userId"/>
-        <result column="velocity" property="velocity"/>
-        <result column="km" property="km"/>
-        <result column="time" property="time"/>
         <result column="heart_rate" property="heartRate"/>
         <result column="kcal" property="kcal"/>
         <result column="success" property="success"/>
@@ -49,8 +46,12 @@
         VALUES (#{raceId}, #{userId}, #{velocity}, #{km}, #{time}, #{heartRate}, #{kcal}, #{success}, #{polyline},#{date})
     </insert>
 
-    <select id="getRaceInfo" resultMap="raceInfo">
-        SELECT ri.*, r.mode FROM race_info ri JOIN race r ON r.id = ri.race_id WHERE ri.user_id = #{userId}
+    <select id="getRaceInfo" resultType="RaceModeInfoDto">
+        SELECT ri.race_id, ri.user_id, r.mode, ri.time/ri.km as avg_pace, ri.heart_rate, ri.kcal, ri.success, ri.polyline, ri.date
+        FROM race_info ri
+        JOIN race r ON r.id = ri.race_id
+        WHERE ri.user_id = #{userId} AND ri.date between #{startDate} and #{endDate}
+        ORDER BY ri.date DESC
     </select>
 
     <select id="getRaceInfoSummary" resultType="RaceInfoSummaryDto">

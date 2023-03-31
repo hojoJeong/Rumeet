@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -52,21 +53,13 @@ public class RecordController {
     }
 
     @Operation(summary = "raceInfo 조회")
-    @GetMapping("/race/{userId}")
-    public ResponseEntity<?> addRaceInfo(@PathVariable int userId) throws ParseException, org.json.simple.parser.ParseException {
-        List<RaceModeInfoDto> race = recordService.getRaceInfo(userId);
-        RespData<List> data = new RespData<>();
-        data.setData(race);
-        return data.builder();
-    }
-
-    @Operation(summary = "raceInfo 날짜별 요약 정보")
     @GetMapping("/race/{userId}/{startDate}/{endDate}")
-    public ResponseEntity<?> addRaceInfo(@PathVariable int userId, @PathVariable long startDate, @PathVariable long endDate){
-        RaceInfoSummaryDto info = recordService.getRaceInfoSummary(userId, startDate, endDate);
-        RespData<RaceInfoSummaryDto> data = new RespData<>();
+    public ResponseEntity<?> getRaceInfo(@PathVariable int userId, @PathVariable long startDate, @PathVariable long endDate){
+        Map<String, Object> info = recordService.getRaceInfo(userId, startDate, endDate);
+        RespData<Map> data = new RespData<>();
         data.setData(info);
         return data.builder();
     }
+
 
 }

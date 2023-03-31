@@ -15,7 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -163,9 +165,17 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public List<RaceModeInfoDto> getRaceInfo(int userId) {
-        List<RaceModeInfoDto> race = recordMapper.getRaceInfo(userId);
-        return race;
+    public Map<String, Object> getRaceInfo(int userId, long startDate, long endDate) {
+        Map<String, Object> result = new HashMap<>();
+
+        // 레이스 정보 리스트 가져오기
+        List<RaceModeInfoDto> raceList = recordMapper.getRaceInfo(userId, startDate, endDate);
+        result.put("raceList", raceList);
+        // 레이스 정보 요약 데이터 가져오기
+        RaceInfoSummaryDto summaryData = recordMapper.getRaceInfoSummary(userId, startDate, endDate);
+        result.put("summaryData", summaryData);
+
+        return result;
     }
 
     @Override
