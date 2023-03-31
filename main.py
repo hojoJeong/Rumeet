@@ -233,7 +233,7 @@ def get_paces(user_id, cached_pace_list, km):
         ghost_id = int(pace / space)
         race_list.append((similarities, ghost_id, ghost_users_paces))
     race_list.sort(key=lambda x: x[0], reverse=True)    
-
+    print(race_list)
     for race in race_list:
         paces = race[2]
         if len(paces) == km:
