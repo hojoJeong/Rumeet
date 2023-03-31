@@ -4,15 +4,10 @@ import com.d204.rumeet.badge.model.dto.BadgeDto;
 import com.d204.rumeet.badge.model.dto.MyBadgeDto;
 import com.d204.rumeet.badge.model.mapper.BadgeMapper;
 import com.d204.rumeet.exception.NoBadgeDataException;
-import com.d204.rumeet.exception.NoUserDataException;
-import com.d204.rumeet.record.model.dto.RaceInfoDto;
 import com.d204.rumeet.record.model.dto.RecordDto;
 import com.d204.rumeet.record.model.service.RecordService;
-import com.d204.rumeet.user.model.dto.JoinUserDto;
-import com.d204.rumeet.user.model.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

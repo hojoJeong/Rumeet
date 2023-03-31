@@ -1,10 +1,7 @@
 package com.d204.rumeet.record.model.service;
 
 import com.d204.rumeet.badge.model.service.BadgeService;
-import com.d204.rumeet.record.model.dto.RaceInfoDto;
-import com.d204.rumeet.record.model.dto.RaceInfoReqDto;
-import com.d204.rumeet.record.model.dto.RaceModeInfoDto;
-import com.d204.rumeet.record.model.dto.RecordDto;
+import com.d204.rumeet.record.model.dto.*;
 import com.d204.rumeet.record.model.mapper.RecordMapper;
 import com.d204.rumeet.tools.OSUpload;
 import com.d204.rumeet.user.model.dto.UserDto;
@@ -170,6 +167,13 @@ public class RecordServiceImpl implements RecordService{
         List<RaceModeInfoDto> race = recordMapper.getRaceInfo(userId);
         return race;
     }
+
+    @Override
+    public RaceInfoSummaryDto getRaceInfoSummary(int userId, long startDate, long endDate) {
+        RaceInfoSummaryDto data = recordMapper.getRaceInfoSummary(userId, startDate, endDate);
+        return data;
+    }
+
 
 
 }

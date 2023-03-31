@@ -1,10 +1,7 @@
 package com.d204.rumeet.record.controller;
 
 import com.d204.rumeet.data.RespData;
-import com.d204.rumeet.record.model.dto.RaceInfoDto;
-import com.d204.rumeet.record.model.dto.RaceInfoReqDto;
-import com.d204.rumeet.record.model.dto.RaceModeInfoDto;
-import com.d204.rumeet.record.model.dto.RecordDto;
+import com.d204.rumeet.record.model.dto.*;
 import com.d204.rumeet.record.model.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +57,15 @@ public class RecordController {
         List<RaceModeInfoDto> race = recordService.getRaceInfo(userId);
         RespData<List> data = new RespData<>();
         data.setData(race);
+        return data.builder();
+    }
+
+    @Operation(summary = "raceInfo 날짜별 요약 정보")
+    @GetMapping("/race/{userId}/{startDate}/{endDate}")
+    public ResponseEntity<?> addRaceInfo(@PathVariable int userId, @PathVariable long startDate, @PathVariable long endDate){
+        RaceInfoSummaryDto info = recordService.getRaceInfoSummary(userId, startDate, endDate);
+        RespData<RaceInfoSummaryDto> data = new RespData<>();
+        data.setData(info);
         return data.builder();
     }
 

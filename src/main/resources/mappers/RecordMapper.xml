@@ -53,5 +53,10 @@
         SELECT ri.*, r.mode FROM race_info ri JOIN race r ON r.id = ri.race_id WHERE ri.user_id = #{userId}
     </select>
 
+    <select id="getRaceInfoSummary" resultType="RaceInfoSummaryDto">
+        SELECT SUM(km) AS total_km, SUM(time) AS total_time, AVG(time/km) AS avg_pace
+        FROM race_info
+        WHERE user_id = #{userId} AND date between #{startDate} and #{endDate}
+    </select>
 
 </mapper>
