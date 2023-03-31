@@ -49,6 +49,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.LoginActivity"/>
+        <service android:name=".service.RunningService"/>
     </application>
 
 </manifest>

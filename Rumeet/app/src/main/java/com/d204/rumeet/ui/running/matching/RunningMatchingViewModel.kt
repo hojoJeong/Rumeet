@@ -47,7 +47,7 @@ class RunningMatchingViewModel @Inject constructor(
             _gameType.emit(gameType)
 
 //            val startModel = RunningMatchingRequestModel(userId.value, gameType)
-            val startModel = RunningMatchingRequestModel(27, 5)
+            val startModel = RunningMatchingRequestModel(2, 5)
             RunningAMQPManager.startMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
 
             startMatchingSubscribe()
@@ -56,17 +56,15 @@ class RunningMatchingViewModel @Inject constructor(
     }
 
     private fun startTimer() {
-        timer = object : CountDownTimer(10000, 1000) {
+        timer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 Log.d(TAG, "onTick: ${millisUntilFinished}")
             }
 
             override fun onFinish() {
 //                val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
-                val startModel = RunningMatchingRequestModel(27, 5)
-                RunningAMQPManager.failMatching(
-                    jsonToString(startModel) ?: throw Exception("NO TYPE")
-                )
+                val startModel = RunningMatchingRequestModel(2, 5)
+                RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
                 _matchingResult.tryEmit(false)
                 val response =
                     _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
@@ -93,8 +91,8 @@ class RunningMatchingViewModel @Inject constructor(
                         _otherPlayerId.tryEmit(response.userId)
                     }
                     _matchingResult.tryEmit(true)
-                    _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.SuccessMatching(_userId.value, response.id, _otherPlayerId.value))
-                    Log.d(TAG, "handleDelivery: ")
+                    val test = _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.SuccessMatching(_userId.value, response.id, _otherPlayerId.value))
+                    Log.d(TAG, "handleDelivery: $test")
                 } catch (e: Exception) {
                     Log.e(TAG, "handleDelivery: ${e.message}")
                 }

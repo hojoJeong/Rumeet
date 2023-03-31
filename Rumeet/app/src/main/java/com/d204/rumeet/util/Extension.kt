@@ -19,6 +19,7 @@ import com.google.gson.Gson
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
+import java.text.DecimalFormat
 
 
 fun Context.startActivityAfterClearBackStack(classType: Class<out Activity>) {
@@ -108,6 +109,11 @@ fun RecyclerView.scrollToBottom() {
             layoutManager.scrollToPositionWithOffset(lastItemPosition, offset)
         }
     }
+}
+
+fun floatTo2f(data : Float) : String{
+    val df = DecimalFormat("##0.00")
+    return df.format(data)
 }
 
 fun jsonToString(json : Any): String? = Gson().toJson(json)

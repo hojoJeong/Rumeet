@@ -15,6 +15,8 @@ import com.d204.rumeet.ui.home.HomeFragmentDirections
 import com.d204.rumeet.util.amqp.ChattingAMQPMananer
 import com.d204.rumeet.util.amqp.RunningAMQPManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {

@@ -49,7 +49,7 @@ object RunningAMQPManager {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // runningChannel?.basicConsume("matching.queue.${userId}",true, callback)
-                runningChannel?.basicConsume("matching.queue.27",true, callback)
+                runningChannel?.basicConsume("matching.queue.2",true, callback)
             }catch (e : Exception){
                 Log.e(TAG, "subscribeMatching: ${e.message}", )
             }
