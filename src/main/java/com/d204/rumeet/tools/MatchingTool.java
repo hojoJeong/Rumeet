@@ -57,6 +57,7 @@ public class MatchingTool {
             raceDto.setDate(System.currentTimeMillis());
             raceDto.setUserId(top_user.getId());
             raceDto.setPartnerId(target.getId());
+            raceDto.setState(0);
             gameService.makeRace(raceDto);
             String json = new Gson().toJson(raceDto);
             createQueue(raceDto.getId(), top_user.getId(), target.getId());

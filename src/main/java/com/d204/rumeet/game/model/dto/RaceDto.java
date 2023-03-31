@@ -9,4 +9,5 @@ public class RaceDto {
     int partnerId;
     int mode;
     long date;
+    int state;
 }
