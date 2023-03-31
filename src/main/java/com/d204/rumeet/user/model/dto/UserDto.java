@@ -20,5 +20,7 @@ public class UserDto {
     String Oauth;
     Long date;
     int state;
-
+    String fcmToken;
+    int friendAlarm;
+    int matchingAlarm;
 }

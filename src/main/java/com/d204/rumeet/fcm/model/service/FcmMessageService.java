@@ -74,6 +74,9 @@ public class FcmMessageService {
                         .data(new HashMap<String, String>() {{
                             put("title", title);
                             put("body", body);
+                            put("date", "1354355122");
+                            put("mode", "-1");
+                            put("friendId", "3");
                         }})
                         .build()
                 ).validate_only(false).build();
