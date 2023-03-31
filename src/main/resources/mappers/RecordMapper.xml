@@ -10,10 +10,18 @@
         <result column="total_km" property="totalKm"/>
         <result column="total_time" property="totalTime"/>
         <result column="average_pace" property="averagePace"/>
+        <result column="match_count" property="matchCount"/>
         <result column="team_success_count" property="teamSuccessCount"/>
         <result column="competition_success_count" property="competitionSuccessCount"/>
     </resultMap>
 
+    <resultMap id="mainRecord" type="MainRecordDto">
+        <result column="user_id" property="userId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="average_pace" property="averagePace"/>
+        <result column="total_km" property="totalKm"/>
+        <result column="total_count" property="totalCount"/>
+    </resultMap>
 
     <resultMap id="raceInfo" type="RaceModeInfoDto">
         <result column="race_id" property="raceId"/>
@@ -33,6 +41,13 @@
         SELECT * FROM record WHERE user_id = #{userId};
     </select>
 
+    <select id="getMainRecord" parameterType="int" resultMap="mainRecord">
+        SELECT r.*, u.nickname
+        FROM record r
+                 JOIN user u ON r.user_id = u.id
+        WHERE r.user_id = #{userId}
+    </select>
+
     <update id="updateRecord" parameterType="RecordDto">
         UPDATE record
         SET
@@ -40,6 +55,7 @@
             total_km = #{totalKm},
             average_pace = #{averagePace},
             total_time = #{totalTime},
+            match_count = #{matchCount},
             team_success_count = #{teamSuccessCount},
             competition_success_count = #{competitionSuccessCount}
         WHERE user_id = #{userId}
@@ -63,5 +79,37 @@
         FROM race_info
         WHERE user_id = #{userId} AND date between #{startDate} and #{endDate}
     </select>
+
+    <select id="getMatchInfoSummary" resultType="MatchInfoSummaryDto">
+        SELECT
+            user_id AS userId,
+            match_count AS matchCount,
+            team_success_count+competition_success_count AS success,
+            match_count-team_success_count-competition_success_count AS fail
+        FROM
+            record
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="getMatchInfo" resultType="MatchInfoDto">
+        SELECT u.nickname AS partnerName,
+               ri.race_id AS raceId,
+               ri.user_id ,
+               r.mode,
+               ri.time/ri.km as pace,
+               ri.time,
+               ri.km,
+               ri.heart_rate as heartRate,
+               ri.kcal,
+               ri.success,
+               ri.polyline,
+               ri.date
+        FROM race r
+                 INNER JOIN race_info ri ON r.id = ri.race_id
+                 INNER JOIN user u ON r.partner_id = u.id
+        WHERE ri.user_id = #{userId} AND NOT r.partner_id = -1;
+    </select>
+
 
 </mapper>

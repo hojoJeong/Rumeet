@@ -1,15 +1,13 @@
 package com.d204.rumeet.record.model.service;
 
+import com.d204.rumeet.badge.model.dto.BadgeDto;
 import com.d204.rumeet.badge.model.service.BadgeService;
 import com.d204.rumeet.record.model.dto.*;
 import com.d204.rumeet.record.model.mapper.RecordMapper;
 import com.d204.rumeet.tools.OSUpload;
 import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.service.UserService;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +23,11 @@ public class RecordServiceImpl implements RecordService{
 
     private final RecordMapper recordMapper;
     private final UserService userService;
+
+    private final BadgeService badgeService;
+
+
+
     final String bucketName = "rumeet";
     private final OSUpload osUpload;
     @Override
@@ -34,29 +37,46 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
+    public Map<String, Object> getMainRecord(int userId) {
+        Map<String, Object> result = new HashMap<>();
+
+        MainRecordDto record = recordMapper.getMainRecord(userId);
+        result.put("record", record);
+        List<BadgeDto> badge = badgeService.getRecentBadgesByUserId(userId);
+        result.put("badge", badge);
+        return result;
+    }
+
+    @Override
     public void updateRecord(RaceInfoReqDto raceInfoReqDto)  {
 
-        //{"user_id":1, "mode":2, "success":1, "elapsed_time":1234}
+        //{"userId":1, "raceId":999, "mode":2, "velocity":23, "time":701,"heartRate":150, "success":1}
         int mode = raceInfoReqDto.getMode();
-
         int userId = raceInfoReqDto.getUserId();
         int success = raceInfoReqDto.getSuccess();
         int elapsedTime = raceInfoReqDto.getTime();
         // 기존 정보
         RecordDto record = recordMapper.getRecord(userId);
-        double originPace = record.getAveragePace();
+        int originPace = record.getAveragePace();
         int originCount = record.getTotalCount();
+        int matchCount = record.getMatchCount();
         int completeSuccess = record.getCompetitionSuccessCount();
         int teamSuccess = record.getTeamSuccessCount();
-        double averagePace = 0.0;
+        int averagePace;
 
-        if (mode >= 4 && mode <= 7 && success == 1) { //경쟁모드 승리
-            completeSuccess++;
-        } else if (mode >= 8 && mode <= 11 && success == 1) { //협동모드 승리
-            teamSuccess++;
+        if (mode >= 4) {
+            matchCount++;
+            if (success == 1) {
+                if (mode >= 4 && mode <= 7) { // 경쟁모드 승리
+                    completeSuccess++;
+                } else if (mode >= 8 && mode <= 11) { // 협동모드 승리
+                    teamSuccess++;
+                }
+            }
         }
 
-        double km = 1;
+
+        int km = 1;
         switch (mode % 4) {
             case 1:
                 km = 2;
@@ -69,16 +89,17 @@ public class RecordServiceImpl implements RecordService{
                 break;
         }
 
-        double newPace = (km == 0 || elapsedTime == 0) ? 0 : (double) elapsedTime / km;
+        int newPace = (km == 0 || elapsedTime == 0) ? 0 : (int) elapsedTime / km;
 
         if (originPace == 0) {
             averagePace = newPace;
         } else {
             averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
         }
+
         record = new RecordDto(userId,record.getTotalCount()+1,
                 record.getTotalKm()+km,record.getTotalTime()+elapsedTime,
-                averagePace,teamSuccess,completeSuccess);
+                averagePace, matchCount, teamSuccess,completeSuccess);
         recordMapper.updateRecord(record);
 
     }
@@ -179,11 +200,14 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public RaceInfoSummaryDto getRaceInfoSummary(int userId, long startDate, long endDate) {
-        RaceInfoSummaryDto data = recordMapper.getRaceInfoSummary(userId, startDate, endDate);
-        return data;
+    public Map<String, Object> getMatchInfo(int userId){
+        Map<String, Object> result = new HashMap<>();
+        // 요약 정보
+        MatchInfoSummaryDto summaryData = recordMapper.getMatchInfoSummary(userId);
+        result.put("summaryData",summaryData);
+        // 매칭 레이스 정보
+        List<MatchInfoDto> raceList = recordMapper.getMatchInfo(userId);
+        result.put("raceList", raceList);
+        return result;
     }
-
-
-
 }

@@ -35,4 +35,14 @@
         JOIN my_badge mb ON b.id = mb.badge_id
         WHERE mb.user_id = #{userId};
     </select>
+
+
+    <select id="getRecentBadgesByUserId" parameterType="int" resultMap="myBadge">
+        SELECT b.id, b.code, mb.date
+        FROM badge b
+        JOIN my_badge mb ON b.id = mb.badge_id
+        WHERE mb.user_id = #{userId}
+        ORDER BY mb.date DESC
+        LIMIT 3;
+    </select>
 </mapper>

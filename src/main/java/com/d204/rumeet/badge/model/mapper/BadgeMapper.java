@@ -13,4 +13,7 @@ public interface BadgeMapper {
     void addBadge(MyBadgeDto myBadge);
 
     List<BadgeDto> getAllBadgesByUserId(int userId);
+
+    List<BadgeDto> getRecentBadgesByUserId(int userId);
+
 }
