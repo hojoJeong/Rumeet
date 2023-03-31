@@ -108,7 +108,7 @@
         FROM race r
                  INNER JOIN race_info ri ON r.id = ri.race_id
                  INNER JOIN user u ON r.partner_id = u.id
-        WHERE ri.user_id = #{userId};
+        WHERE ri.user_id = #{userId} AND NOT r.partner_id = -1;
     </select>
 
 
