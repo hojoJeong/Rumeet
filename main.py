@@ -157,5 +157,6 @@ async def get_ghost_user(user_id, mode):
 def search_similarity(km, user_id, cached_pace_list):
     print("searching similarity")
     print(km, user_id, cached_pace_list)
-        
+    for pace in cached_pace_list:
+        print('pace', pace)        
 
