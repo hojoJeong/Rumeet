@@ -6,4 +6,6 @@ import lombok.Data;
 public class FriendRequestDto {
     int fromUserId;
     int toUserId;
+
+    String toUserName;
 }

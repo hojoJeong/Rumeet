@@ -15,13 +15,16 @@ public class FriendRequestDao {
     private String id;
     private Integer fromUserId;
     private Integer toUserId;
+
+    private String toUserName;
     private Long date;
 
     @Builder
-    public FriendRequestDao(String id, Integer fromUserId, Integer toUserId, Long date) {
+    public FriendRequestDao(String id, Integer fromUserId, Integer toUserId, String toUserName, Long date) {
         this.id = id;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
+        this.toUserName = toUserName;
         this.date = date;
     }
 
