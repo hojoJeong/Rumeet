@@ -142,7 +142,7 @@ async def root():
 async def get_ghost_user(user_id, mode):
     global pace1_avg, pace2_avg, pace3_avg, pace5_avg
 
-    km = mode % 4
+    km = int(mode) % 4
 
     if km == 0:
         search_similarity(0, user_id, pace1_avg)
