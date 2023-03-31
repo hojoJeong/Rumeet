@@ -80,6 +80,36 @@
         WHERE user_id = #{userId} AND date between #{startDate} and #{endDate}
     </select>
 
+    <select id="getMatchInfoSummary" resultType="MatchInfoSummaryDto">
+        SELECT
+            user_id AS userId,
+            match_count AS matchCount,
+            team_success_count+competition_success_count AS success,
+            match_count-team_success_count-competition_success_count AS fail
+        FROM
+            record
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="getMatchInfo" resultType="MatchInfoDto">
+        SELECT u.nickname AS partnerName,
+               ri.race_id AS raceId,
+               ri.user_id ,
+               r.mode,
+               ri.time/ri.km as pace,
+               ri.time,
+               ri.km,
+               ri.heart_rate as heartRate,
+               ri.kcal,
+               ri.success,
+               ri.polyline,
+               ri.date
+        FROM race r
+                 INNER JOIN race_info ri ON r.id = ri.race_id
+                 INNER JOIN user u ON r.partner_id = u.id
+        WHERE ri.user_id = #{userId};
+    </select>
 
 
 </mapper>

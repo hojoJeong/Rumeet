@@ -7,7 +7,6 @@ public class MainRecordDto {
     int userId;
     String nickname;
     int averagePace;
-
     int totalCount;
     double totalKm;
 }

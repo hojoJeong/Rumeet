@@ -199,5 +199,15 @@ public class RecordServiceImpl implements RecordService{
         return result;
     }
 
-
+    @Override
+    public Map<String, Object> getMatchInfo(int userId){
+        Map<String, Object> result = new HashMap<>();
+        // 요약 정보
+        MatchInfoSummaryDto summaryData = recordMapper.getMatchInfoSummary(userId);
+        result.put("summaryData",summaryData);
+        // 매칭 레이스 정보
+        List<MatchInfoDto> raceList = recordMapper.getMatchInfo(userId);
+        result.put("raceList", raceList);
+        return result;
+    }
 }

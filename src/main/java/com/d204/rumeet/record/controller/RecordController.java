@@ -50,7 +50,7 @@ public class RecordController {
         return data.builder();
     }
 
-    @Operation(summary = "raceInfo 조회")
+    @Operation(summary = "날짜별 운동 기록 조회")
     @GetMapping("/race/{userId}/{startDate}/{endDate}")
     public ResponseEntity<?> getRaceInfo(@PathVariable int userId, @PathVariable long startDate, @PathVariable long endDate){
         Map<String, Object> info = recordService.getRaceInfo(userId, startDate, endDate);
@@ -59,5 +59,12 @@ public class RecordController {
         return data.builder();
     }
 
-
+    @Operation(summary = "매칭 기록 조회")
+    @GetMapping("/match/{userId}")
+    public ResponseEntity<?> getMatchInfo(@PathVariable int userId) {
+        Map<String, Object> info = recordService.getMatchInfo(userId);
+        RespData<Map> data = new RespData<>();
+        data.setData(info);
+        return data.builder();
+    }
 }

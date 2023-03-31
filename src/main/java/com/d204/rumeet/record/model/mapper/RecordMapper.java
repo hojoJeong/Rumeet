@@ -9,11 +9,14 @@ import java.util.List;
 public interface RecordMapper {
 
     RecordDto getRecord(int userId);
-
     MainRecordDto getMainRecord(int userId);
     void updateRecord(RecordDto record);
     void addRaceInfo(RaceInfoDto raceInfo);
     List<RaceModeInfoDto> getRaceInfo(int userId, long startDate, long endDate);
     RaceInfoSummaryDto getRaceInfoSummary(int userId, long startDate, long endDate);
+    MatchInfoSummaryDto getMatchInfoSummary(int userId);
+    List<MatchInfoDto> getMatchInfo(int userId);
+
+
 
 }
