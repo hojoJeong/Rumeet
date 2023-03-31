@@ -159,16 +159,16 @@ async def get_ghost_user(user_id, mode):
 
 
 def search_similarity(km, user_id, cached_pace_list):
-    unit = km
+    space = km
     users_paces = get_user_paces(user_id, cached_pace_list, km)
     other_users_paces = get_other_users_paces(user_id, cached_pace_list, km)
     top_val = 0
     ghost_id = 0
-    for pace in range(0, len(other_users_paces), unit):
-        similarities = calculateEuclideanSimilarity(users_paces, other_users_paces[pace:pace+unit])
+    for pace in range(0, len(other_users_paces), space):
+        similarities = calculateEuclideanSimilarity(users_paces, other_users_paces[pace:pace+space])
         if similarities >= 0.01 and top_val < similarities:
             top_val = similarities
-            ghost_users_paces = other_users_paces[pace:pace+unit]
+            ghost_users_paces = other_users_paces[pace:pace+space]
             ghost_id = pace           
     result = {
         'ghost_user_id': ghost_id,
