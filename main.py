@@ -163,14 +163,16 @@ def search_similarity(km, user_id, cached_pace_list):
     users_paces = get_user_paces(user_id, cached_pace_list, km)
     other_users_paces = get_other_users_paces(user_id, cached_pace_list, km)
     top_val = 0
-    for pace in range(len(other_users_paces) - unit + 1):
+    ghost_id = 0
+    for pace in range(0, len(other_users_paces), unit):
         similarities = calculateEuclideanSimilarity(users_paces, other_users_paces[pace:pace+unit])
         if similarities >= 0.01 and top_val < similarities:
             top_val = similarities
-            users_paces = other_users_paces[pace:pace+unit]
+            ghost_users_paces = other_users_paces[pace:pace+unit]
+            
     result = {
-        'user_id': user_id,
-        'users_paces': users_paces,
+        'ghost_user_id': ghost_id,
+        'ghost_users_paces': ghost_users_paces,
     }
     return result
 
