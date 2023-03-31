@@ -3,10 +3,13 @@ import com.d204.rumeet.exception.DuplicateFriendRequestException;
 import com.d204.rumeet.exception.ExistingFriendException;
 import com.d204.rumeet.exception.NoFriendDataException;
 import com.d204.rumeet.exception.NoRequestException;
+import com.d204.rumeet.fcm.model.service.FcmMessageService;
 import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
+import com.d204.rumeet.user.model.dto.SimpleUserFcmDto;
+import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -14,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +31,8 @@ public class FriendServiceImpl implements FriendService {
     private final MongoTemplate mongoTemplate;
 
     private final UserService userService;
+
+    private final FcmMessageService fcmMessageService;
 
 
     @Override
@@ -80,6 +86,8 @@ public class FriendServiceImpl implements FriendService {
 
         FriendDao existingFriend = mongoTemplate.findOne(query2, FriendDao.class);
 
+        Long current = System.currentTimeMillis();
+
         if (existingRequest != null) {
             throw new DuplicateFriendRequestException();
         } else if (existingFriend!=null){
@@ -88,9 +96,22 @@ public class FriendServiceImpl implements FriendService {
             FriendRequestDao friendRequest = FriendRequestDao.builder()
                     .fromUserId(fromId)
                     .toUserId(toId)
-                    .date(System.currentTimeMillis())
+                    .date(current)
                     .build();
             mongoTemplate.insert(friendRequest);
+        }
+        // toUserId인 유저의 친구 요청 알림 수신 여부 확인
+        SimpleUserFcmDto me = userService.getSimpleUserFcmInfoById(fromId);
+        SimpleUserFcmDto friend = userService.getSimpleUserFcmInfoById(toId);
+        try{
+            if (friend.getFriendAlarm() == 1) { // toUserId인 유저에게 FCM 전송
+                fcmMessageService.sendMessageTo(friend.getFcmToken(),
+                        "친구 요청",
+                        me.getNickname()+"님으로부터 친구요청이 왔습니다.",
+                        fromId, -1, current);
+            }
+        } catch (IOException e) {
+
         }
     }
 
