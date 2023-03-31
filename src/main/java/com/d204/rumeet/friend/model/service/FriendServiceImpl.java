@@ -81,8 +81,8 @@ public class FriendServiceImpl implements FriendService {
         SimpleUserFcmDto toUser = userService.getSimpleUserFcmInfoById(toId);
         SimpleUserFcmDto fromUser = userService.getSimpleUserFcmInfoById(fromId);
 
-        log.info("##################fromUser:"+fromUser.toString());
-        log.info("##################toUser"+toUser.toString());
+        log.warn("##################fromUser:"+fromUser.toString());
+        log.warn("##################toUser"+toUser.toString());
 
 
         Query query1 = new Query(Criteria.where("fromUserId").is(fromId)
@@ -105,14 +105,14 @@ public class FriendServiceImpl implements FriendService {
             FriendRequestDao friendRequest = FriendRequestDao.builder()
                     .fromUserId(fromId)
                     .toUserId(toId)
-                    .toUserName(toUser.getNickname())
+                    .fromUserName(fromUser.getNickname())
                     .date(current)
                     .build();
             mongoTemplate.insert(friendRequest);
         }
 
-        log.info("##################fromUser:"+fromUser.toString());
-        log.info("##################toUser"+toUser.toString());
+        log.warn("##################fromUser:"+fromUser.toString());
+        log.warn("##################toUser"+toUser.toString());
         // toUserId인 유저의 친구 요청 알림 수신 여부 확인
         try{
             if (toUser.getFriendAlarm() == 1) { // toUserId인 유저에게 FCM 전송
