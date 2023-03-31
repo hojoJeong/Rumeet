@@ -197,3 +197,11 @@ def calculateEuclideanSimilarity(user1_pace_list, user2_pace_list):
     return 1 / (1 + math.sqrt(distance))
 
 
+@app.get("/test/{user_id}")
+async def test(user_id):
+    global pace5_avg
+    other_users_5km_paces = get_other_users_paces(user_id, pace5_avg, 5)
+    print(other_users_5km_paces)
+    return {
+        "test": other_users_5km_paces,
+    }
