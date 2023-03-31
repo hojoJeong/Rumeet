@@ -6,6 +6,7 @@ import com.d204.rumeet.exception.NoRequestException;
 import com.d204.rumeet.fcm.model.service.FcmMessageService;
 import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
+import com.d204.rumeet.friend.model.dto.FriendListDto;
 import com.d204.rumeet.friend.model.dto.FriendMatchDto;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
 import com.d204.rumeet.friend.model.mapper.FriendMapper;
@@ -37,7 +38,7 @@ public class FriendServiceImpl implements FriendService {
     private final FriendMapper friendMapper;
 
     @Override
-    public List<SimpleUserDto> getFilteredFriendsByUserId(int userId, int type){
+    public List<FriendListDto> getFilteredFriendsByUserId(int userId, int type){
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
         List<FriendDao> friends = mongoTemplate.find(query, FriendDao.class, "friend");
@@ -46,41 +47,33 @@ public class FriendServiceImpl implements FriendService {
         for (FriendDao friend : friends) {
             friendIds.add(friend.getFriendId());
         }
-        List<FriendMatchDto> list = new ArrayList<>();
+        System.out.println(friendIds);
+        List<FriendListDto> friendList = new ArrayList<>();
         for (int friendId : friendIds) {
-            FriendMatchDto friend = friendMapper.getFriendMatch(userId,friendId);
-            list.add(friend);
+            int cnt = friendMapper.getMatchCount(userId, friendId);
+            if (cnt > 0) {
+                System.out.println(friendId+"cnt있음"+ cnt);
+                FriendListDto friend = friendMapper.getRunningFriend(userId, friendId);
+                if (friend != null) {
+                    friendList.add(friend);
+                }
+            } else {
+                System.out.println(friendId+"cnt없음"+ cnt);
+                FriendListDto friend = friendMapper.getFriend(friendId);
+                System.out.println(friend);
+                if (friend != null) {
+                    friendList.add(friend);
+                }
+            }
         }
-        if (type == 2) {
-            Collections.sort(list, (x,y) -> -Integer.compare(x.getCount(),y.getCount()));
-        } else if (type == 3) {
-            Collections.sort(list, (x,y) -> -Long.compare(x.getLatestDate(),y.getLatestDate()));
-        }
-        List<SimpleUserDto> filteredFriends = new ArrayList<>();
-        for (FriendMatchDto friend : list) {
-            filteredFriends.add(userService.getSimpleUserById(friend.getFriendId()));
-        }
+            if (type == 2) {
+                Collections.sort(friendList, (x, y) -> -Long.compare(x.getLatestDate(), y.getLatestDate()));
+            } else if (type == 3) {
+                Collections.sort(friendList, (x, y) -> -Integer.compare(x.getMatchCount(), y.getMatchCount()));
+            }
 
-        return filteredFriends;
-    }
-    @Override
-    public List<SimpleUserDto> getFriendsByUserId(int userId) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("userId").is(userId));
-        List<FriendDao> friends = mongoTemplate.find(query, FriendDao.class, "friend");
-
-        Set<Integer> friendIds = new HashSet<>();
-        for (FriendDao friend : friends) {
-            friendIds.add(friend.getFriendId());
+            return friendList;
         }
-
-        List<SimpleUserDto> filteredFriends = new ArrayList<>();
-        for (int friendId : friendIds) {
-            filteredFriends.add(userService.getSimpleUserById(friendId));
-        }
-        return filteredFriends;
-    }
-
 
     @Override
     public void deleteFriend(int userId, int friendId) {
