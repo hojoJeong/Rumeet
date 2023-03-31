@@ -9,7 +9,7 @@ public class RaceModeInfoDto {
     int mode;
     long time;
     float km;
-    float pace;
+    int pace;
     int heartRate;
     double kcal;
     int success;
