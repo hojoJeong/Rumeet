@@ -1,13 +1,11 @@
 package com.d204.rumeet.record.model.service;
 
-import com.d204.rumeet.record.model.dto.RaceInfoDto;
-import com.d204.rumeet.record.model.dto.RaceInfoReqDto;
-import com.d204.rumeet.record.model.dto.RaceModeInfoDto;
-import com.d204.rumeet.record.model.dto.RecordDto;
+import com.d204.rumeet.record.model.dto.*;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RecordService {
 
@@ -17,6 +15,8 @@ public interface RecordService {
 
     void addRaceInfo(RaceInfoReqDto data, MultipartFile poly);
 
-    List<RaceModeInfoDto> getRaceInfo(int userid);
+    Map<String, Object> getRaceInfo(int userId, long startDate, long endDate);
+
+    RaceInfoSummaryDto getRaceInfoSummary(int userId, long startDate, long endDate);
 
 }

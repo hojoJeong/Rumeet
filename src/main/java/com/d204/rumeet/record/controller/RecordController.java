@@ -1,10 +1,7 @@
 package com.d204.rumeet.record.controller;
 
 import com.d204.rumeet.data.RespData;
-import com.d204.rumeet.record.model.dto.RaceInfoDto;
-import com.d204.rumeet.record.model.dto.RaceInfoReqDto;
-import com.d204.rumeet.record.model.dto.RaceModeInfoDto;
-import com.d204.rumeet.record.model.dto.RecordDto;
+import com.d204.rumeet.record.model.dto.*;
 import com.d204.rumeet.record.model.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -55,12 +53,13 @@ public class RecordController {
     }
 
     @Operation(summary = "raceInfo 조회")
-    @GetMapping("/race/{userId}")
-    public ResponseEntity<?> addRaceInfo(@PathVariable int userId) throws ParseException, org.json.simple.parser.ParseException {
-        List<RaceModeInfoDto> race = recordService.getRaceInfo(userId);
-        RespData<List> data = new RespData<>();
-        data.setData(race);
+    @GetMapping("/race/{userId}/{startDate}/{endDate}")
+    public ResponseEntity<?> getRaceInfo(@PathVariable int userId, @PathVariable long startDate, @PathVariable long endDate){
+        Map<String, Object> info = recordService.getRaceInfo(userId, startDate, endDate);
+        RespData<Map> data = new RespData<>();
+        data.setData(info);
         return data.builder();
     }
+
 
 }
