@@ -95,7 +95,7 @@
     <select id="getMatchInfo" resultType="MatchInfoDto">
         SELECT u.nickname AS partnerName,
                ri.race_id AS raceId,
-               ri.user_id ,
+               ri.user_id,
                r.mode,
                ri.time/ri.km as pace,
                ri.time,

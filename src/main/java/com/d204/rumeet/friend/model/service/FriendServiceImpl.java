@@ -6,10 +6,11 @@ import com.d204.rumeet.exception.NoRequestException;
 import com.d204.rumeet.fcm.model.service.FcmMessageService;
 import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
+import com.d204.rumeet.friend.model.dto.FriendMatchDto;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
+import com.d204.rumeet.friend.model.mapper.FriendMapper;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
 import com.d204.rumeet.user.model.dto.SimpleUserFcmDto;
-import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -36,7 +34,35 @@ public class FriendServiceImpl implements FriendService {
 
     private final FcmMessageService fcmMessageService;
 
+    private final FriendMapper friendMapper;
 
+    @Override
+    public List<SimpleUserDto> getFilteredFriendsByUserId(int userId, int type){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userId));
+        List<FriendDao> friends = mongoTemplate.find(query, FriendDao.class, "friend");
+
+        Set<Integer> friendIds = new HashSet<>();
+        for (FriendDao friend : friends) {
+            friendIds.add(friend.getFriendId());
+        }
+        List<FriendMatchDto> list = new ArrayList<>();
+        for (int friendId : friendIds) {
+            FriendMatchDto friend = friendMapper.getFriendMatch(userId,friendId);
+            list.add(friend);
+        }
+        if (type == 2) {
+            Collections.sort(list, (x,y) -> -Integer.compare(x.getCount(),y.getCount()));
+        } else if (type == 3) {
+            Collections.sort(list, (x,y) -> -Long.compare(x.getLatestDate(),y.getLatestDate()));
+        }
+        List<SimpleUserDto> filteredFriends = new ArrayList<>();
+        for (FriendMatchDto friend : list) {
+            filteredFriends.add(userService.getSimpleUserById(friend.getFriendId()));
+        }
+
+        return filteredFriends;
+    }
     @Override
     public List<SimpleUserDto> getFriendsByUserId(int userId) {
         Query query = new Query();
