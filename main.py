@@ -169,7 +169,7 @@ def search_similarity(km, user_id, cached_pace_list):
         if similarities >= 0.01 and top_val < similarities:
             top_val = similarities
             ghost_users_paces = other_users_paces[pace:pace+unit]
-            
+            ghost_id = pace           
     result = {
         'ghost_user_id': ghost_id,
         'ghost_users_paces': ghost_users_paces,
