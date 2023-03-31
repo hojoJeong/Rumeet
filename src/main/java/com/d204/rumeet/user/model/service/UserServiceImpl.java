@@ -370,6 +370,11 @@ public class UserServiceImpl implements UserService{
         return 0;
     }
 
+    @Override
+    public SimpleUserFcmDto getSimpleUserFcmInfoById(int id) {
+        return userMapper.getSimpleUserFcmInfoById(id);
+    }
+
     public String createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();

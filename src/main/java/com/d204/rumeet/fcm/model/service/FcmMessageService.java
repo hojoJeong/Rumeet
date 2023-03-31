@@ -61,7 +61,7 @@ public class FcmMessageService {
      * @return
      * @throws JsonProcessingException
      */
-    private String makeMessage(String targetToken, String title, String body) throws JsonProcessingException {
+    private String makeMessage(String targetToken, String title, String body, int friendId, int mode, Long date) throws JsonProcessingException {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
@@ -74,9 +74,9 @@ public class FcmMessageService {
                         .data(new HashMap<String, String>() {{
                             put("title", title);
                             put("body", body);
-                            put("date", "1354355122");
-                            put("mode", "-1");
-                            put("friendId", "3");
+                            put("date", Long.toString(date));
+                            put("mode", Integer.toString(mode));
+                            put("friendId", Integer.toString(friendId));
                         }})
                         .build()
                 ).validate_only(false).build();
@@ -92,8 +92,8 @@ public class FcmMessageService {
      * @param body
      * @throws IOException
      */
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
-        String message = makeMessage(targetToken, title, body);
+    public void sendMessageTo(String targetToken, String title, String body, int friendId, int mode, Long date) throws IOException {
+        String message = makeMessage(targetToken, title, body, friendId, mode, date);
         log.info("message : "+ message);
 //        RestTemplate restTemplate = new RestTemplate();
 //        HttpHeaders headers = new HttpHeaders();
