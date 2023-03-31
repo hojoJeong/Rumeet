@@ -219,6 +219,7 @@ public class UserServiceImpl implements UserService{
         throw new BindingException();
     }
 
+
     @Override
     public void modifyPwd(ModifyPwdDto dto) {
         int count = userMapper.modifyPwd(dto);
@@ -351,6 +352,22 @@ public class UserServiceImpl implements UserService{
         message.setFrom(new InternetAddress("gch03944@gmail.com","rummmet"));//보내는 사람
 
         return message;
+    }
+
+
+    @Override
+    public AlarmStateDto getAlarmState(int id) {
+        return userMapper.getAlarmState(id);
+    }
+
+    @Override
+    public int modifyAlarmState(ModifyAlarmStateDto alarmState) {
+        if(alarmState.getTarget() == 0) { // friend alarm
+            return userMapper.modifyFriendAlarmState(alarmState.getUserId(), alarmState.getState());
+        } else if (alarmState.getTarget() == 1) { // match alarm
+            return userMapper.modifyMatchingAlarmState(alarmState.getUserId(), alarmState.getState());
+        }
+        return 0;
     }
 
     public String createKey() {

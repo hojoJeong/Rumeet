@@ -41,6 +41,8 @@ public interface UserService {
 
     int checkExistsUser(String email);
 
+    AlarmStateDto getAlarmState(int id);
 
+    int modifyAlarmState (ModifyAlarmStateDto alarmState);
 
 }

@@ -13,7 +13,7 @@ public enum ErrorEnum {
     DUPLICATE_USER("fail","중복 되는 이메일/닉네임이 있습니다.",2),
     DELETED_USER("fail", "이미 탈퇴한 회원입니다.", 2),
 
-    NO_DATA_ERROR("success","데이터가 없습니다." , 0),
+    NO_DATA_ERROR("fail","데이터가 없습니다." , 0),
     SQL_ERROR("fail","SQL 오류입니다.",1),
     DUPLICATE_REQUEST_ERROR("fail","이미 친구요청을 보낸 상태입니다.",1),
     NO_REQUEST_ERROR("fail", "해당 친구요청이 존재하지 않습니다." , 1 ),

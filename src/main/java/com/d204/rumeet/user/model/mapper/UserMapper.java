@@ -36,4 +36,10 @@ public interface UserMapper {
     int checkExistsUseByEmail(String email);
 
     void joinUserToRecord(int id);
+
+    AlarmStateDto getAlarmState(int id);
+
+    int modifyFriendAlarmState (int id, int state);
+
+    int modifyMatchingAlarmState (int id, int state);
 }
