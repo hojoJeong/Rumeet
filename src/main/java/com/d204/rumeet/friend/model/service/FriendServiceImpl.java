@@ -96,6 +96,7 @@ public class FriendServiceImpl implements FriendService {
             FriendRequestDao friendRequest = FriendRequestDao.builder()
                     .fromUserId(fromId)
                     .toUserId(toId)
+                    .toUserName(friendRequestDto.getToUserName())
                     .date(current)
                     .build();
             mongoTemplate.insert(friendRequest);
@@ -108,7 +109,7 @@ public class FriendServiceImpl implements FriendService {
                 fcmMessageService.sendMessageTo(friend.getFcmToken(),
                         "친구 요청",
                         me.getNickname()+"님으로부터 친구요청이 왔습니다.",
-                        fromId, -1, current);
+                        1);
             }
         } catch (IOException e) {
 
