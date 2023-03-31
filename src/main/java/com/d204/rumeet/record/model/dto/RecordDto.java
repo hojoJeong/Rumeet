@@ -12,6 +12,7 @@ public class RecordDto {
     double totalKm;
     long totalTime;
     int averagePace;
+    int matchCount;
     int teamSuccessCount;
     int competitionSuccessCount;
 

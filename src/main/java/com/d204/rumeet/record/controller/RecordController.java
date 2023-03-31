@@ -6,12 +6,9 @@ import com.d204.rumeet.record.model.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 import java.util.Map;
 
 
@@ -35,10 +32,10 @@ public class RecordController {
 
     @Operation(summary = "record 업데이트")
     @PutMapping
-    public ResponseEntity<?> updateRecord(@RequestBody String json_data) throws ParseException, org.json.simple.parser.ParseException {
-//        recordService.updateRecord(json_data);
+    public ResponseEntity<?> updateRecord(@RequestBody RaceInfoReqDto info) {
+        recordService.updateRecord(info);
         RespData<RecordDto> data = new RespData<>();
-        data.setMsg("기록 업데이트 완료");
+        data.setMsg("record 기록 업데이트 완료");
         return data.builder();
     }
 
@@ -49,7 +46,7 @@ public class RecordController {
         recordService.addRaceInfo(raceInfoReqDto, poly);
         recordService.updateRecord(raceInfoReqDto);
         RespData<RecordDto> data = new RespData<>();
-        data.setMsg("기록 추가 완료");
+        data.setMsg("raceInfo 기록 추가 완료");
         return data.builder();
     }
 

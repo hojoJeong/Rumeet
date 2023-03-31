@@ -10,6 +10,7 @@
         <result column="total_km" property="totalKm"/>
         <result column="total_time" property="totalTime"/>
         <result column="average_pace" property="averagePace"/>
+        <result column="match_count" property="matchCount"/>
         <result column="team_success_count" property="teamSuccessCount"/>
         <result column="competition_success_count" property="competitionSuccessCount"/>
     </resultMap>
@@ -36,7 +37,7 @@
         <result column="mode" property="mode"/>
     </resultMap>
 
-    <select id="getRecord" parameterType="int" resultType="RecordDto">
+    <select id="getRecord" parameterType="int" resultMap="record">
         SELECT * FROM record WHERE user_id = #{userId};
     </select>
 
@@ -54,6 +55,7 @@
             total_km = #{totalKm},
             average_pace = #{averagePace},
             total_time = #{totalTime},
+            match_count = #{matchCount},
             team_success_count = #{teamSuccessCount},
             competition_success_count = #{competitionSuccessCount}
         WHERE user_id = #{userId}
@@ -77,5 +79,7 @@
         FROM race_info
         WHERE user_id = #{userId} AND date between #{startDate} and #{endDate}
     </select>
+
+
 
 </mapper>

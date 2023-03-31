@@ -20,4 +20,6 @@ public interface RecordService {
     Map<String, Object> getRaceInfo(int userId, long startDate, long endDate);
 
 
+
+
 }

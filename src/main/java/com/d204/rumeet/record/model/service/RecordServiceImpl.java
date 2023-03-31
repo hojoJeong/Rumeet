@@ -50,9 +50,8 @@ public class RecordServiceImpl implements RecordService{
     @Override
     public void updateRecord(RaceInfoReqDto raceInfoReqDto)  {
 
-        //{"user_id":1, "mode":2, "success":1, "elapsed_time":1234}
+        //{"userId":1, "raceId":999, "mode":2, "velocity":23, "time":701,"heartRate":150, "success":1}
         int mode = raceInfoReqDto.getMode();
-
         int userId = raceInfoReqDto.getUserId();
         int success = raceInfoReqDto.getSuccess();
         int elapsedTime = raceInfoReqDto.getTime();
@@ -60,15 +59,22 @@ public class RecordServiceImpl implements RecordService{
         RecordDto record = recordMapper.getRecord(userId);
         int originPace = record.getAveragePace();
         int originCount = record.getTotalCount();
+        int matchCount = record.getMatchCount();
         int completeSuccess = record.getCompetitionSuccessCount();
         int teamSuccess = record.getTeamSuccessCount();
         int averagePace;
 
-        if (mode >= 4 && mode <= 7 && success == 1) { //경쟁모드 승리
-            completeSuccess++;
-        } else if (mode >= 8 && mode <= 11 && success == 1) { //협동모드 승리
-            teamSuccess++;
+        if (mode >= 4) {
+            matchCount++;
+            if (success == 1) {
+                if (mode >= 4 && mode <= 7) { // 경쟁모드 승리
+                    completeSuccess++;
+                } else if (mode >= 8 && mode <= 11) { // 협동모드 승리
+                    teamSuccess++;
+                }
+            }
         }
+
 
         int km = 1;
         switch (mode % 4) {
@@ -90,9 +96,10 @@ public class RecordServiceImpl implements RecordService{
         } else {
             averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
         }
+
         record = new RecordDto(userId,record.getTotalCount()+1,
                 record.getTotalKm()+km,record.getTotalTime()+elapsedTime,
-                averagePace,teamSuccess,completeSuccess);
+                averagePace, matchCount, teamSuccess,completeSuccess);
         recordMapper.updateRecord(record);
 
     }
