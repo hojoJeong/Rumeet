@@ -76,6 +76,8 @@ public class FriendServiceImpl implements FriendService {
         int fromId = friendRequestDto.getFromUserId();
         int toId = friendRequestDto.getToUserId();
 
+        SimpleUserDto toUser = userService.getSimpleUserById(toId);
+
         Query query1 = new Query(Criteria.where("fromUserId").is(fromId)
                 .and("toUserId").is(toId));
 
@@ -96,7 +98,7 @@ public class FriendServiceImpl implements FriendService {
             FriendRequestDao friendRequest = FriendRequestDao.builder()
                     .fromUserId(fromId)
                     .toUserId(toId)
-                    .toUserName(friendRequestDto.getToUserName())
+                    .toUserName(toUser.getNickname())
                     .date(current)
                     .build();
             mongoTemplate.insert(friendRequest);
