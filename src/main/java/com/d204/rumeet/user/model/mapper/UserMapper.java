@@ -42,4 +42,6 @@ public interface UserMapper {
     int modifyFriendAlarmState (int id, int state);
 
     int modifyMatchingAlarmState (int id, int state);
+
+    SimpleUserFcmDto getSimpleUserFcmInfoById(int id);
 }

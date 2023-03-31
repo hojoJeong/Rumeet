@@ -45,4 +45,5 @@ public interface UserService {
 
     int modifyAlarmState (ModifyAlarmStateDto alarmState);
 
+    SimpleUserFcmDto getSimpleUserFcmInfoById(int id);
 }
