@@ -44,9 +44,9 @@ public class FcmTokenController {
     }
 
     @PostMapping("/sendMessageTo")
-    public void sendMessageTo(String token, String title, String body) throws IOException {
+    public void sendMessageTo(String token, String title, String body, int type) throws IOException {
         log.info("sendMessageTo : token:"+token+", title:"+title+", body:"+body);
-        fcmMessageService.sendMessageTo(token, title, body, 0);
+        fcmMessageService.sendMessageTo(token, title, body, type);
     }
 
 }
