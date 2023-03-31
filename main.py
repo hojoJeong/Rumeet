@@ -136,3 +136,26 @@ async def root():
 @app.get("/munang")
 async def root():
     return {"message": "무냉"}
+
+
+@app.get("/ghost/{user_id}/{mode}")
+async def get_ghost_user(user_id, mode):
+    global pace1_avg, pace2_avg, pace3_avg, pace5_avg
+
+    km = mode % 4
+
+    if km == 0:
+        search_similarity(0, user_id, pace1_avg)
+    elif km == 1:
+        search_similarity(1, user_id, pace2_avg)
+    elif km == 2:
+        search_similarity(2, user_id, pace3_avg)
+    elif km == 3:
+        search_similarity(5, user_id, pace5_avg)
+
+
+def search_similarity(km, user_id, cached_pace_list):
+    print("searching similarity")
+    print(km, user_id, cached_pace_list)
+        
+
