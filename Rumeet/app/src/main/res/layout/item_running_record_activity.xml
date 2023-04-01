@@ -2,9 +2,13 @@
 <layout>
 
     <data>
-
+        <variable
+            name="activity"
+            type="com.d204.rumeet.ui.mypage.model.RunningActivityUiModel" />
+        <variable
+            name="index"
+            type="String" />
     </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -33,6 +37,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:text="@{activity.date}"
                     tools:text="2023.03.03" />
 
                 <TextView
@@ -44,8 +49,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_date"
                     app:layout_constraintStart_toEndOf="@+id/tv_item_running_record_date"
                     tools:text="싱글"
+                    app:setMode="@{activity.mode}"
                     android:layout_marginStart="10dp"/>
-                    <!--app:setMode="@{}"/>-->
 
                 <TextView
                     android:id="@+id/tv_item_running_record_title"
@@ -54,7 +59,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_item_running_record_date"
-                    tools:text="나의 1번째 러닝" />
+                    tools:text="나의 1번째 러닝"
+                    app:setActivityTitle="@{index}"/>
 
                 <TextView
                     android:id="@+id/tv_item_running_record_distance_title"
@@ -73,7 +79,8 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_item_running_record_distance_title"
-                    tools:text="00km" />
+                    tools:text="00km"
+                    android:text="@{activity.distance}"/>
 
                 <TextView
                     android:id="@+id/tv_item_running_record_pace_title"
@@ -94,7 +101,8 @@
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_running_record_distance"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_distance"
                     app:layout_constraintStart_toStartOf="@+id/tv_item_running_record_pace_title"
-                    tools:text="00'00''" />
+                    tools:text="00'00''"
+                    android:text="@{activity.pace}"/>
 
                 <TextView
                     android:id="@+id/tv_item_running_record_time_title"
@@ -115,7 +123,8 @@
                     app:layout_constraintBaseline_toBaselineOf="@id/tv_item_running_record_pace"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_pace"
                     app:layout_constraintStart_toStartOf="@+id/tv_item_running_record_time_title"
-                    tools:text="00:00" />
+                    tools:text="00:00"
+                    android:text="@{activity.time}"/>
 
                 <ImageView
                     android:id="@+id/iv_item_running_record"
@@ -123,7 +132,8 @@
                     android:layout_height="86dp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_time"
                     app:layout_constraintEnd_toEndOf="parent"
-                    tools:src="@drawable/ic_launcher_background" />
+                    tools:src="@drawable/ic_launcher_background"
+                    app:setImageByGlide="@{activity.polyLine}"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

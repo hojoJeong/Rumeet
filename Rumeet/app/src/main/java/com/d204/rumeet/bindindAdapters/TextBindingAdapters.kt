@@ -82,5 +82,23 @@ fun TextView.setBadgeText(url: String, title: String){
 
 @BindingAdapter("setMode")
 fun TextView.setMode(mode: String) {
-    //TODO 운동기록과 매칭 기록에서 모드,승패 여부에 따라 text 처리
+    when(mode.substring(0, 2)){
+        "싱글" -> {
+            setTextColor(context.getColor(R.color.navy_blue))
+            text = mode
+        }
+        "경쟁"-> {
+            setTextColor(context.getColor(R.color.red))
+            text = mode
+        }
+        "협동" -> {
+            setTextColor(context.getColor(R.color.dandelion))
+            text = mode
+        }
+    }
+}
+
+@BindingAdapter("setActivityTitle")
+fun TextView.setActivityTitle(index: String) {
+    text = "나의 ${index}째 러닝"
 }

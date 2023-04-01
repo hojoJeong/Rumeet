@@ -1,12 +1,20 @@
 package com.d204.rumeet.ui.mypage
 
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningRecordBinding
 import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.DefaultAlertDialog
+import com.d204.rumeet.ui.base.successOrNull
+import com.d204.rumeet.ui.mypage.adapter.RunningActivityListAdapter
+import com.d204.rumeet.ui.mypage.model.RunningActivityUiModel
+import com.d204.rumeet.ui.mypage.model.toUiModel
 import com.d204.rumeet.util.toDate
+import com.d204.rumeet.util.toRecord
+import kotlinx.coroutines.launch
 
 class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageViewModel>() {
     override val layoutResourceId: Int
@@ -19,9 +27,33 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
     }
 
     override fun initDataBinding() {
+        lifecycleScope.launchWhenStarted {
+            launch {
+                viewModel.runningRecord.collect{
+                    val summaryData = it.successOrNull()?.summaryData
+                    binding.tvRunningRecordAverageDistance.text =  summaryData?.totalDistance.toString()
+                    binding.tvRunningRecordAverageTime.text = summaryData?.totalTime.toString()
+                    binding.tvRunningRecordAveragePace.text = summaryData?.averagePace?.toRecord()
+
+                    val activityList = it.successOrNull()?.raceList?.map { model -> model.toUiModel() } ?: emptyList()
+                    initActivityListAdapter(activityList)
+                }
+            }
+        }
     }
 
     override fun initAfterBinding() {
+    }
+
+    private fun initActivityListAdapter(list: List<RunningActivityUiModel>){
+        val activityAdapter = RunningActivityListAdapter().apply {
+            submitList(list)
+        }
+
+        with(binding.rvRunningRecordActivity){
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = activityAdapter
+        }
     }
 
     private fun initDatePicker(){
@@ -52,6 +84,7 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
             )
         ).apply {
             setInitDatePickerData(true, initDate,title, parentBinding)
+            setViewModel(viewModel)
         }
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }

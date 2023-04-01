@@ -71,3 +71,27 @@ fun checkEmailValidate(email : String) : Boolean{
     val pattern = android.util.Patterns.EMAIL_ADDRESS
     return pattern.matcher(email).matches()
 }
+
+fun Int.toMode() : String{
+    var mode = ""
+    when(this){
+        0 -> mode = "싱글 1km"
+        1 -> mode = "싱글 2km"
+        2 -> mode = "싱글 3km"
+        3 -> mode = "싱글 5km"
+        4 -> mode = "경쟁 1km"
+        5 -> mode = "경쟁 2km"
+        6 -> mode = "경쟁 3km"
+        7 -> mode = "경쟁 5km"
+        8 -> mode = "협동 1km"
+        9 -> mode = "협동 2km"
+        10 -> mode = "협동 3km"
+        11 -> mode = "협동 5km"
+    }
+    return mode
+}
+
+fun Int.toSuccess(): String{
+    if(this == 0) return "패배"
+    else return "승리"
+}

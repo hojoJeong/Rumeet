@@ -83,6 +83,7 @@ class HomeViewModel @Inject constructor(
                 .onSuccess { response ->
                     _userName.value = UiState.Success(response.record.nickname.toString())
                     setHomeRecord(response.record)
+                    //TODO 친구 추천 서버 통신
                     dismissLoading()
                 }
                 .onError {

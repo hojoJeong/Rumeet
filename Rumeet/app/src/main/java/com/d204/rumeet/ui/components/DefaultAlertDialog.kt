@@ -28,6 +28,7 @@ class DefaultAlertDialog(
     private var initDate: Long = 0
     private var isStartDate = ""
     private lateinit var parentBinding: FragmentRunningRecordBinding
+    private lateinit var viewModel: MyPageViewModel
 
     private lateinit var myPageViewModel: MyPageViewModel
 
@@ -75,6 +76,10 @@ class DefaultAlertDialog(
         }
     }
 
+    fun setViewModel(viewModel: MyPageViewModel){
+        this.viewModel = viewModel
+    }
+
     fun setInitDatePickerData(
         state: Boolean,
         initDate: Long,
@@ -111,8 +116,14 @@ class DefaultAlertDialog(
 
                 if (isStartDate == "시작") {
                     parentBinding.tvRunningRecordStartDate.text = date
+                    val endDateText = parentBinding.tvRunningRecordEndDate.text.toString()
+                    val endDate = if(endDateText == "종료 날짜") System.currentTimeMillis() else endDateText.toDate()
+                    viewModel.getRunningRecord(dateForLongType, endDate)
                 } else {
                     parentBinding.tvRunningRecordEndDate.text = date
+                    val startDateText = parentBinding.tvRunningRecordStartDate.text.toString()
+                    val startDate = if(startDateText == "시작 날짜") System.currentTimeMillis() else startDateText.toDate()
+                    viewModel.getRunningRecord(startDate, dateForLongType)
                 }
                 binding.dpDialog.init(year, month-1, day, DatePicker.OnDateChangedListener { _, _, _, _ ->  })
 

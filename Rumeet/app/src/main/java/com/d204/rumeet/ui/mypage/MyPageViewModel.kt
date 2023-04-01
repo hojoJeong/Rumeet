@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import android.util.LogPrinter
 import com.d204.rumeet.domain.NetworkResult
+import com.d204.rumeet.domain.model.user.RunningRecordDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.user.*
@@ -24,7 +25,8 @@ class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val withdrawalUseCase: WithdrawalUseCase,
     private val getAcquiredBadgeListUseCase: GetAcquiredBadgeListUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val getRunningRecordUseCase: GetRunningRecordUseCase
 ) : BaseViewModel(), MyPageEventHandler {
     private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
     val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
@@ -69,6 +71,10 @@ class MyPageViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val acquiredBadgeList: StateFlow<UiState<List<AcquiredBadgeUiModel>>>
         get() = _acquiredBadgeList.asStateFlow()
+
+    private val _runningRecord: MutableStateFlow<UiState<RunningRecordDomainModel>> = MutableStateFlow(UiState.Loading)
+    val runningRecord: StateFlow<UiState<RunningRecordDomainModel>>
+        get() = _runningRecord
 
     fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
@@ -157,6 +163,15 @@ class MyPageViewModel @Inject constructor(
                     dismissLoading()
                     catchError(it)
                 }
+        }
+    }
+
+    fun getRunningRecord(startDate: Long, endDate: Long){
+        baseViewModelScope.launch {
+            showLoading()
+            getRunningRecordUseCase(userId.value.successOrNull()!!, startDate, endDate)
+                .onSuccess {  }
+                .onError {  }
         }
     }
 
