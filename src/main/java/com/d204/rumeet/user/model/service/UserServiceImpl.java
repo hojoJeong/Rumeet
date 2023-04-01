@@ -137,6 +137,14 @@ public class UserServiceImpl implements UserService{
                 .to(new TopicExchange("game.exchange"))
                 .with(sb.toString());
         amqpAdmin.declareBinding(binding);
+
+        // 친구 매칭용 큐
+        queue = QueueBuilder.durable("friend.user." + id+".").build();
+        amqpAdmin.declareQueue(queue);
+        binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("friend.user.exchange"))
+                .with(queue.getName());
+        amqpAdmin.declareBinding(binding);
     }
 
     @Override
