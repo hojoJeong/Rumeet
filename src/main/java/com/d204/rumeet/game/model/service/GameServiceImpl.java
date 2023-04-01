@@ -98,7 +98,7 @@ public class GameServiceImpl implements GameService {
             throw new InvalidRunningException();
         } else { // friend.queue에 raceId 넣어주기
             Gson gson = new Gson();
-            rabbitTemplate.convertAndSend("friend.exchange", "friend.queue", gson.toJson(raceId));
+            rabbitTemplate.convertAndSend("friend.queue.exchange", "friend.queue", gson.toJson(raceId));
         }
     }
 
