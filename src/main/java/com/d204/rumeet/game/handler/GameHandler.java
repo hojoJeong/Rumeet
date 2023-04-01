@@ -1,14 +1,17 @@
 package com.d204.rumeet.game.handler;
 
-import com.d204.rumeet.chat.model.dto.ChatDto;
 import com.d204.rumeet.game.model.dto.GameDto;
+import com.d204.rumeet.game.model.dto.FriendRaceDto;
 import com.d204.rumeet.game.model.service.GameService;
-import com.d204.rumeet.game.model.service.KafkaService;
+import com.d204.rumeet.tools.FriendMatchingTool;
 import com.d204.rumeet.tools.MatchingTool;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +20,8 @@ public class GameHandler {
 
     private final GameService gameService;
     private final MatchingTool matchingTool;
+    private final FriendMatchingTool friendMatchingTool;
+    private final MongoTemplate mongoTemplate;
 
     @RabbitListener(queues = "matching.queue")
     public void matchingHandler(Message message) {
@@ -35,6 +40,26 @@ public class GameHandler {
     @RabbitListener(queues = "end.queue")
     public void endHandler(Message message) {
         gameService.endGameToKafka(message);
+    }
+
+
+    // 초대 수락시 roomId가 여기 들어옴
+    @RabbitListener(queues ="friend.queue")
+    public void matchingWithFriendHandler(Message message) {
+        // 큐에 있는 roomId 확인한 뒤에 mongoDB 에 담긴 유저 보고
+        // friend.user.{userId} , friend.user.{partnerId} 여기로
+        // 레이스 정보 보내주기
+        String msg = new String(message.getBody());
+        int raceId = Integer.parseInt(msg); // raceId만 있으므로
+        System.out.println("#########################################friend.queue에 들어온 raceId : "+raceId);
+        // mongoDB에서 정보 읽어오기
+        FriendRaceDto friendRaceDto = mongoTemplate.findOne(Query.query(
+                Criteria.where("raceId").is(raceId)),
+                FriendRaceDto.class
+        );
+        if (friendRaceDto.getState() == 0) { // 달리기 시작
+            friendMatchingTool.doRunning(friendRaceDto);
+        }
     }
 
 }

@@ -1,28 +1,126 @@
 package com.d204.rumeet.game.model.service;
 
+import com.d204.rumeet.exception.InvalidRunningException;
+import com.d204.rumeet.fcm.model.service.FcmMessageService;
+import com.d204.rumeet.friend.model.dao.FriendRequestDao;
+import com.d204.rumeet.game.model.dto.FriendRaceDto;
 import com.d204.rumeet.game.model.dto.RaceDto;
 import com.d204.rumeet.game.model.mapper.GameMapper;
+import com.d204.rumeet.tools.FriendMatchingTool;
+import com.d204.rumeet.user.model.dto.SimpleUserDto;
+import com.d204.rumeet.user.model.dto.SimpleUserFcmDto;
+import com.d204.rumeet.user.model.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.Message;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
 
     private final GameMapper gameMapper;
     private final KafkaService kafkaService;
-    public void makeRace(RaceDto raceDto) {
 
+    @Autowired
+    private final FcmMessageService fcmMessageService;
+
+    private final UserService userService;
+
+    private final MongoTemplate mongoTemplate;
+
+    private final RabbitTemplate rabbitTemplate;
+
+    private final FriendMatchingTool friendMatchingTool;
+
+
+    public void makeRace(RaceDto raceDto) {
         gameMapper.makeRace(raceDto);
+    }
+
+    @Override
+    public void inviteRace(RaceDto raceDto) {
+        // DB에 state 0으로 추가
+        raceDto.setState(0);
+        gameMapper.makeRace(raceDto);
+
+        int userId = raceDto.getId();
+        int partnerId = raceDto.getPartnerId();
+
+        SimpleUserDto user = userService.getSimpleUserById(userId);
+        SimpleUserFcmDto target = userService.getSimpleUserFcmInfoById(partnerId);
+
+        // mongoDB에 초대 저장하기
+        FriendRaceDto matchRequest = FriendRaceDto.builder()
+                .raceId(raceDto.getId())
+                .userId(userId)
+                .partnerId(partnerId)
+                .mode(raceDto.getMode())
+                .date(raceDto.getDate())
+                .state(0) // default state : 0
+                .build();
+        mongoTemplate.insert(matchRequest);
+
+        if(target.getMatchingAlarm() == 1) { // 알람 수신 허용일 경우에만 FCM 전송
+            try {
+                // 생성된 race ID로 fcm 보내기
+                fcmMessageService.sendMessageTo(
+                        target.getFcmToken(),
+                        "매칭 초대",
+                        user.getNickname()+"님이 함께 달리자고 합니다!",
+                        0
+                );
+            } catch (Exception e) { }
+        }
+    }
+
+    @Override
+    public void acceptRace(int raceId) {
+        // mongoDB에서 roomId로 매칭 정보 가져오기
+        FriendRaceDto request = mongoTemplate.findOne(
+                Query.query(Criteria.where("roomId").is(raceId)),
+                FriendRaceDto.class
+        );
+        if(request.getState() == -1) {
+            throw new InvalidRunningException();
+        } else { // friend.queue에 raceId 넣어주기
+            Gson gson = new Gson();
+            rabbitTemplate.convertAndSend("friend.exchange", "friend.queue", gson.toJson(raceId));
+        }
+    }
+
+    @Override
+    public void denyRace(int raceId) {
+        // 러닝 초대 거부 (state -1로 변경)
+        gameMapper.denyRace(raceId);
+    }
+
+
+    @Override
+    public int getRaceState(int raceId) {
+        return gameMapper.getRaceState(raceId);
+    }
+
+    @Override
+    public List<FriendRaceDto> getInvitationList(int userId) {
+        List<FriendRaceDto> requests = mongoTemplate.find (
+                Query.query(Criteria.where("userId").is(userId)),
+                FriendRaceDto.class
+        );
+        return requests;
     }
 
     @Override

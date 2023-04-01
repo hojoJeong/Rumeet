@@ -94,4 +94,11 @@ public class ErrorHandler {
         data.setData(null);
         return data.builder();
     }
+
+    @ExceptionHandler(InvalidRunningException.class)
+    public ResponseEntity<?> InvalidRunningException() {
+        RespData<Void> data = new RespData(ErrorEnum.INVALID_RUNNING_ROOM_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
 }
