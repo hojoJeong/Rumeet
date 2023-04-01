@@ -1,8 +1,11 @@
 package com.d204.rumeet.ui.running
 
 import android.content.*
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.Location
-import android.os.Build.VERSION_CODES.P
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -21,19 +24,20 @@ import com.d204.rumeet.ui.running.model.RunningModel3pace
 import com.d204.rumeet.ui.running.model.RunningModel5pace
 import com.d204.rumeet.util.amqp.RunningAMQPManager
 import com.d204.rumeet.util.floatTo2f
+import com.d204.rumeet.util.getCalorie
 import com.d204.rumeet.util.toMinute
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
-class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>() {
-
-    private val runningViewModel by navGraphViewModels<RunningViewModel>(R.id.navigation_running)
+class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>(), SensorEventListener {
 
     override val layoutResourceId: Int get() = R.layout.fragment_running
-    override val viewModel: RunningViewModel get() = runningViewModel
+    override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running) {defaultViewModelProviderFactory}
+
+    private lateinit var sensorManager : SensorManager
+    private lateinit var altitudeSensor : Sensor
 
     private val args by navArgs<RunningFragmentArgs>()
     private var bindState = false
@@ -54,6 +58,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var pace3Flag = false
     private var pace5Flag = false
 
+    private var gender = -1
+    private var weight = 0f
+    private var age = 0
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as RunningService.RunningBinder
@@ -69,15 +77,22 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             // 10m마다 값을 불러온다. 나오는 값은 10.123123123...
-            val runningDistance = intent?.getFloatExtra("distance", 0f) ?: 0f
+            val runningDistance = intent?.getFloatExtra("distance", 0f)?.div(1000f) ?: 0f
             val runningLocation = intent?.getParcelableExtra<Location>("location")
 
             // km으로 변환 10.234134 -> 0.01
-            binding.tvRunningDistance.text = "${floatTo2f(runningDistance / 1000)}"
+            binding.tvRunningDistance.text = floatTo2f(runningDistance)
             locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
 
+            // km로 변환된 값을 통해 속력을 구함
+            val kmPerHour = runningDistance.times(1000).div(time.div(1000).times(3600))
+            toastMessage("속력 $kmPerHour")
+
+            binding.tvRunningPace.text = floatTo2f(kmPerHour)
+            binding.tvRunningCalorie.text = getCalorie(gender, age, weight, time)
+
             // 페이스 기록
-            if(runningDistance >= 1 && !pace1Flag){
+            if(runningDistance >= 1f && !pace1Flag){
                 pace1 = time.div(1000).toInt()
                 pace1Flag = true
             } else if(runningDistance >= 2 && !pace2Flag){
@@ -148,9 +163,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     }
 
     override fun initStartView() {
+        viewModel.getUserInfo(args.myId)
+        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        altitudeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
         initRunningMode()
-        viewModel.startRun(2, args.roomId)
-//        viewModel.startRun(args.myId, args.roomId)
     }
 
     override fun initDataBinding() {
@@ -163,6 +179,24 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     }
                     is RunningSideEffect.EndRunning -> {
 
+                    }
+
+                    is RunningSideEffect.SuccessUserInfo -> {
+                        //viewModel.startRun(args.myId, args.roomId)
+                        viewModel.startRun(2, args.roomId)
+                        Log.d("TAG", "SuccessUserInfo: start")
+
+                        gender = it.userInfo.gender
+                        age = it.userInfo.age
+                        weight = it.userInfo.weight.toFloat()
+
+                        if(!bindState){
+                            Log.d("bindState", "SuccessUserInfo: start")
+                            val testIntent = Intent(activity, RunningService::class.java)
+                            requireActivity().bindService(testIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+                        } else{
+                            Log.d("bindState", "initDataBinding: already start")
+                        }
                     }
                 }
             }
@@ -289,16 +323,15 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     override fun onResume() {
         super.onResume()
-        val testIntent = Intent(activity, RunningService::class.java)
-        requireActivity().bindService(testIntent, serviceConnection, Context.BIND_AUTO_CREATE)
-
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(receiver, IntentFilter("custom-event"))
+        sensorManager.registerListener(this,altitudeSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onPause() {
         super.onPause()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
+        sensorManager.unregisterListener(this);
     }
 
     override fun onDestroyView() {
@@ -306,5 +339,20 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         handler.removeCallbacks(timer)
         activity?.unbindService(serviceConnection)
         requireActivity().unbindService(serviceConnection)
+    }
+
+    override fun onSensorChanged(p0: SensorEvent) {
+        if(p0.sensor.type == Sensor.TYPE_PRESSURE){
+            val altitude = SensorManager.getAltitude(
+                SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
+                p0.values[0]
+            )
+            toastMessage("고도 $altitude" )
+            binding.tvRunningHeight.text = "${altitude}m"
+        }
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+
     }
 }

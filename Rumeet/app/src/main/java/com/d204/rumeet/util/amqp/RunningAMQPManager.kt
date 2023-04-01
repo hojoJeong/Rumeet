@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private const val TAG = "RunningAMQPManager"
+
 object RunningAMQPManager {
     val factory = ConnectionFactory().apply {
         host = "j8d204.p.ssafy.io"
@@ -17,7 +18,7 @@ object RunningAMQPManager {
         password = "guest"
     }
 
-    var runningChannel : Channel? = null
+    var runningChannel: Channel? = null
 
     fun initChannel() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -26,54 +27,67 @@ object RunningAMQPManager {
     }
 
     // 내아이디와, mode를 보냄
-    fun startMatching(data : String) {
+    fun startMatching(data: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            runningChannel?.basicPublish("game.exchange","matching", null, data.toByteArray())
+            runningChannel?.basicPublish("game.exchange", "matching", null, data.toByteArray())
         }
     }
 
     // 실패를 보냄
-    fun failMatching(data : String) {
+    fun failMatching(data: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // 27은 userid, matching과 동일한 형태로 보내기
                 runningChannel?.basicPublish("game.exchange", "cancel", null, data.toByteArray())
-            }catch (e : Exception){
-                Log.e(TAG, "sendMessage: ${e.message}", )
+            } catch (e: Exception) {
+                Log.e(TAG, "sendMessage: ${e.message}")
             }
         }
     }
 
     // 구독 시작, 연결이 되면 callback 발생
-    fun subscribeMatching(userId : Int, callback: DefaultConsumer) {
+    fun subscribeMatching(userId: Int, callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // runningChannel?.basicConsume("matching.queue.${userId}",true, callback)
+                // 27이 매칭을 시작
+//                runningChannel?.basicConsume("matching.queue.27", true, callback)
+
+                // 2가 매칭 시작
                 runningChannel?.basicConsume("matching.queue.2",true, callback)
-            }catch (e : Exception){
-                Log.e(TAG, "subscribeMatching: ${e.message}", )
+
+                // runningChannel?.basicConsume("matching.queue.${userId}",true, callback)
+            } catch (e: Exception) {
+                Log.e(TAG, "subscribeMatching: ${e.message}")
             }
         }
     }
 
     // 게임 시작, 보내기
-    fun sendRunning(partnerId : Int, roomId : Int, message : String){
+    fun sendRunning(partnerId: Int, roomId: Int, message: String) {
         CoroutineScope(Dispatchers.IO).launch {
-//            runningChannel?.basicPublish("","game.${roomId}.${partnerId}", null, message.toByteArray())
+            // 27이 2한테 러닝 보내기
+//            runningChannel?.basicPublish("", "game.${roomId}.2", null, message.toByteArray())
+            // 2가 27한테 러닝 정보 보내기
             runningChannel?.basicPublish("","game.${roomId}.27", null, message.toByteArray())
+
+
+            // runningChannel?.basicPublish("","game.${roomId}.${partnerId}", null, message.toByteArray())
         }
     }
 
     // 게임 관련 데이터 받기
-    fun receiveRunning(roomId : Int, userId : Int, callback : DefaultConsumer){
+    fun receiveRunning(roomId: Int, userId: Int, callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
-//            runningChannel?.basicConsume("game.${roomId}.${userId}",callback)
-            runningChannel?.basicConsume("game.${roomId}.2",callback)
+            // 2한테 온 데이터 27이 받기
+//            runningChannel?.basicConsume("game.${roomId}.27", callback)
+            // 27한테 온 데이터 2가 받기
+            runningChannel?.basicConsume("game.${roomId}.2", callback)
+
+            //            runningChannel?.basicConsume("game.${roomId}.${userId}",callback)
         }
     }
 
     // 게임 종료 보내기
-    fun sendEndGame(message : String){
+    fun sendEndGame(message: String) {
         CoroutineScope(Dispatchers.IO).launch {
             runningChannel?.basicPublish("", "end.queue", null, message.toByteArray())
         }

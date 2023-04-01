@@ -47,6 +47,11 @@ class RunningMatchingViewModel @Inject constructor(
             _gameType.emit(gameType)
 
 //            val startModel = RunningMatchingRequestModel(userId.value, gameType)
+
+            //27이 매칭 시작
+//            val startModel = RunningMatchingRequestModel(27, 5)
+
+            //2가 매칭 시작
             val startModel = RunningMatchingRequestModel(2, 5)
             RunningAMQPManager.startMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
 
@@ -63,7 +68,12 @@ class RunningMatchingViewModel @Inject constructor(
 
             override fun onFinish() {
 //                val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
-                val startModel = RunningMatchingRequestModel(2, 5)
+
+                // 27이 매칭 종료
+                val startModel = RunningMatchingRequestModel(27, 5)
+
+                // 2가 매칭 종료
+//                val startModel = RunningMatchingRequestModel(2, 5)
                 RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
                 _matchingResult.tryEmit(false)
                 val response =

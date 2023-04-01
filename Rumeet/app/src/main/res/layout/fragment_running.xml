@@ -134,21 +134,9 @@
             android:textSize="20sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_calorie"
             app:layout_constraintBottom_toBottomOf="@+id/tv_running_calorie"
-            app:layout_constraintEnd_toStartOf="@+id/tv_running_heartbeat"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_running_calorie"
             tools:text="9m" />
-
-        <TextView
-            android:id="@+id/tv_running_heartbeat"
-            style="@style/base_font_bold_16_white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_height"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_running_height"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_running_height"
-            tools:text="112bpm" />
 
         <TextView
             android:id="@+id/tv_running_pace_title"
@@ -180,25 +168,15 @@
             app:layout_constraintStart_toStartOf="@+id/tv_running_height"
             app:layout_constraintTop_toBottomOf="@+id/tv_running_height" />
 
-        <TextView
-            android:id="@+id/tv_running_heartbeat_title"
-            style="@style/base_font_medium_12_white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_running_heartbeat"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_heartbeat"
-            app:layout_constraintStart_toStartOf="@+id/tv_running_heartbeat"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_heartbeat" />
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_running_pause"
             android:layout_width="@dimen/size_btn_running"
+            android:layout_marginTop="78dp"
             android:layout_height="@dimen/size_btn_running"
-            android:layout_marginTop="80dp"
             android:background="@drawable/bg_layerlist_pause_oval_dandelion_stroke0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_heartbeat_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_pace_title" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_running_stop"

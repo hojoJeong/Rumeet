@@ -1,6 +1,9 @@
 package com.d204.rumeet.ui.running
 
+import com.d204.rumeet.domain.model.user.UserInfoDomainModel
+
 sealed class RunningSideEffect{
     class SuccessRunning(val distance : Int) : RunningSideEffect()
-    class EndRunning() : RunningSideEffect()
+    object EndRunning : RunningSideEffect()
+    class SuccessUserInfo(val userInfo : UserInfoDomainModel) : RunningSideEffect()
 }

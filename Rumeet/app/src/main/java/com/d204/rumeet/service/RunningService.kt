@@ -66,8 +66,4 @@ class RunningService : Service(), LocationListener {
         }
         lastLocation = location
     }
-
-    fun getDistance(): Float {
-        return totalDistance
-    }
 }

@@ -52,6 +52,8 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
         // Android 12 부터 SplashScreen으로 대체
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             initSplashScreen()
+        }else {
+
         }
         if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
             && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED

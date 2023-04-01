@@ -6,6 +6,7 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningLoadingBinding
 import com.d204.rumeet.ui.base.BaseFragment
@@ -18,7 +19,7 @@ class RunningLoadingFragment : BaseFragment<FragmentRunningLoadingBinding, Runni
     override val layoutResourceId: Int
         get() = R.layout.fragment_running_loading
 
-    override val viewModel: RunningViewModel by viewModels()
+    override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running)
     private val args by navArgs<RunningLoadingFragmentArgs>()
 
     override fun initStartView() {

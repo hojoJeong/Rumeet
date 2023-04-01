@@ -74,29 +74,6 @@ fun checkEmailValidate(email : String) : Boolean{
     return pattern.matcher(email).matches()
 }
 
-fun resizeImage(imageFile: File, targetWidth: Int, targetHeight: Int): Bitmap {
-    // 이미지 파일 로드
-    val options = BitmapFactory.Options().apply {
-        inJustDecodeBounds = true // 이미지 정보만 가져오기 위해 inJustDecodeBounds 옵션을 true로 설정
-    }
-    BitmapFactory.decodeFile(imageFile.path, options)
-
-    // 이미지 리사이징
-    val width = options.outWidth
-    val height = options.outHeight
-    var scaleFactor = 1
-    if (width > targetWidth || height > targetHeight) {
-        val widthRatio = width.toFloat() / targetWidth.toFloat()
-        val heightRatio = height.toFloat() / targetHeight.toFloat()
-        scaleFactor = Math.min(widthRatio, heightRatio).toInt()
-    }
-    val scaledOptions = BitmapFactory.Options().apply {
-        inSampleSize = scaleFactor // 이미지 리사이징 옵션 설정
-    }
-
-    return BitmapFactory.decodeFile(imageFile.path, scaledOptions)
-}
-
 fun RecyclerView.scrollToBottom() {
     // scroll to last item to get the view of last item
     val layoutManager = layoutManager as LinearLayoutManager?
@@ -117,3 +94,14 @@ fun floatTo2f(data : Float) : String{
 }
 
 fun jsonToString(json : Any): String? = Gson().toJson(json)
+
+fun getCalorie(gender : Int, age : Int, weight : Float, time : Long) : String{
+    val minute = (time/1000/60)
+    val calcAge = age.toFloat().times(0.2017f)
+    // 파운드 기준
+    val calcWeight = weight.times(2.20462f).times(0.09036f)
+    val calcHeart = 140f.times(0.6309f)
+
+    val firstCalc : Float = (calcAge + calcWeight + calcHeart - 55.0969f) * 60f
+    return floatTo2f(firstCalc.div(4.184f))
+}
