@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 @Component
 @RequiredArgsConstructor
 public class FriendMatchingTool {
-    private final AmqpAdmin amqpAdmin;
     private final RabbitTemplate rabbitTemplate;
 
     public void doRunning(FriendRaceDto friendRaceDto) {
