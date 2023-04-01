@@ -380,7 +380,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public SimpleUserFcmDto getSimpleUserFcmInfoById(int id) {
-        return userMapper.getSimpleUserFcmInfoById(id);
+        SimpleUserFcmDto user = userMapper.getSimpleUserFcmInfoById(id);
+        if(user == null) {
+            throw new NoUserDataException();
+        }
+        return user;
     }
 
     public String createKey() {

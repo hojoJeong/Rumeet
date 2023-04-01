@@ -57,19 +57,21 @@ public class GameServiceImpl implements GameService {
         raceDto.setState(0);
         gameMapper.makeRace(raceDto);
 
-        int userId = raceDto.getId();
+        int userId = raceDto.getUserId();
         int partnerId = raceDto.getPartnerId();
 
         SimpleUserDto user = userService.getSimpleUserById(userId);
         SimpleUserFcmDto target = userService.getSimpleUserFcmInfoById(partnerId);
 
+        long current = System.currentTimeMillis();
+
         // mongoDB에 초대 저장하기
         FriendRaceDto matchRequest = FriendRaceDto.builder()
-                .raceId(raceDto.getId())
+                .raceId(raceDto.getId()) // Mysql에 저장된 id
                 .userId(userId)
                 .partnerId(partnerId)
                 .mode(raceDto.getMode())
-                .date(raceDto.getDate())
+                .date(current)
                 .state(0) // default state : 0
                 .build();
         mongoTemplate.insert(matchRequest);
@@ -105,7 +107,10 @@ public class GameServiceImpl implements GameService {
     @Override
     public void denyRace(int raceId) {
         // 러닝 초대 거부 (state -1로 변경)
-        gameMapper.denyRace(raceId);
+        int result = gameMapper.denyRace(raceId);
+        if (result != 1) {
+            throw new InvalidRunningException();
+        }
     }
 
 
@@ -117,7 +122,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<FriendRaceDto> getInvitationList(int userId) {
         List<FriendRaceDto> requests = mongoTemplate.find (
-                Query.query(Criteria.where("userId").is(userId)),
+                Query.query(Criteria.where("partnerId").is(userId)),
                 FriendRaceDto.class
         );
         return requests;
