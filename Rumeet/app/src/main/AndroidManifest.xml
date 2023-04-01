@@ -30,6 +30,10 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
+            <meta-data
+                android:name="com.kakao.sdk.AppKey"
+                android:value="@string/KAKAO_NATIVE_KEY"/>
         </activity>
         <activity
             android:name=".ui.activities.MainActivity"/>

@@ -25,6 +25,7 @@ import com.d204.rumeet.ui.running.model.RunningModel5pace
 import com.d204.rumeet.util.amqp.RunningAMQPManager
 import com.d204.rumeet.util.floatTo2f
 import com.d204.rumeet.util.getCalorie
+import com.d204.rumeet.util.roundDigit
 import com.d204.rumeet.util.toMinute
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,6 +63,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var weight = 0f
     private var age = 0
 
+    private var sensorTime = 0
+    private var currentHeight = 0f
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as RunningService.RunningBinder
@@ -76,19 +80,22 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            // 10m마다 값을 불러온다. 나오는 값은 10.123123123...
+            // 10m마다 값을 불러온다. 나오는 값은 10.123123123... -> 0.001....
             val runningDistance = intent?.getFloatExtra("distance", 0f)?.div(1000f) ?: 0f
             val runningLocation = intent?.getParcelableExtra<Location>("location")
 
-            // km으로 변환 10.234134 -> 0.01
             binding.tvRunningDistance.text = floatTo2f(runningDistance)
             locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
 
-            // km로 변환된 값을 통해 속력을 구함
-            val kmPerHour = runningDistance.times(1000).div(time.div(1000).times(3600))
-            toastMessage("속력 $kmPerHour")
+            // km을 다시 m로
+            val speed = (roundDigit(runningDistance.toDouble(), 2)).times(1000)
 
-            binding.tvRunningPace.text = floatTo2f(kmPerHour)
+            // km를 ((밀리초 / 1000) * 3600 = 1시간)을 나눔 -> 시속
+            val kmPerHour = runningDistance.toDouble().div(time.div(1000.0).times(3600.0))
+            toastMessage("속력 $kmPerHour")
+            toastMessage("내 속도 ${speed}")
+
+            binding.tvRunningPace.text = floatTo2f(speed.toFloat())
             binding.tvRunningCalorie.text = getCalorie(gender, age, weight, time)
 
             // 페이스 기록
@@ -103,14 +110,12 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 pace2Flag = true
             }
 
-
             // 메시지 전달(파트너에게 나의 정보를 전송)
 //            RunningAMQPManager.sendRunning(args.partnerId, args.roomId, runningDistance.toInt().toString())
             RunningAMQPManager.sendRunning(27, args.roomId, runningDistance.toInt().toString())
 
             //  러닝 종료
             if (maxDistance <= runningDistance) {
-
                 // 5인경우 기록
                 if(!pace5Flag) pace5 = time.div(1000).toInt()
 
@@ -342,13 +347,20 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     }
 
     override fun onSensorChanged(p0: SensorEvent) {
-        if(p0.sensor.type == Sensor.TYPE_PRESSURE){
+        if(p0.sensor.type == Sensor.TYPE_PRESSURE && sensorTime == 120){
             val altitude = SensorManager.getAltitude(
                 SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
                 p0.values[0]
             )
-            toastMessage("고도 $altitude" )
-            binding.tvRunningHeight.text = "${altitude}m"
+            sensorTime = 0
+            // 초기값 생성
+            if(currentHeight == 0f) currentHeight = altitude
+            // 100 -> 99면 1, 99 -> 100이면 -1
+            val calcHeight = currentHeight - altitude
+            val printHeight = calcHeight - (calcHeight*2f)
+            binding.tvRunningHeight.text = "${printHeight.toInt()}"
+        } else{
+            sensorTime++
         }
     }
 

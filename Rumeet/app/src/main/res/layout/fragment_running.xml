@@ -29,7 +29,6 @@
 
         <CheckBox
             android:id="@+id/btn_running_sound"
-            android:visibility="gone"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/base_horizontal_margin"
@@ -37,6 +36,7 @@
             android:background="@drawable/bg_btn_sound"
             android:button="@null"
             android:buttonTint="@color/white"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,11 +47,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_horizontal_margin"
+            android:text="00:00"
             android:textSize="36sp"
             app:layout_constraintEnd_toStartOf="@+id/ly_distance"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_mode"
-            android:text="00:00" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_mode" />
 
         <LinearLayout
             android:id="@+id/ly_distance"
@@ -70,8 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                android:textSize="36sp"
-                android:text="0.00" />
+                android:text="0.00"
+                android:textSize="36sp" />
 
             <TextView
                 android:id="@+id/tv_running_distance_km"
@@ -102,41 +102,87 @@
             app:layout_constraintStart_toStartOf="@+id/ly_distance"
             app:layout_constraintTop_toBottomOf="@+id/ly_distance" />
 
-        <TextView
-            android:id="@+id/tv_running_pace"
-            style="@style/base_font_bold_16_white"
+        <LinearLayout
+            android:id="@+id/ly_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_running_calorie"
+            android:layout_marginTop="36dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/ly_calorie"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_time_title"
-            tools:text="5'13''" />
+            app:layout_constraintTop_toBottomOf="@id/tv_running_time_title">
 
-        <TextView
-            android:id="@+id/tv_running_calorie"
-            style="@style/base_font_bold_16_white"
+            <TextView
+                android:id="@+id/tv_running_pace"
+                style="@style/base_font_bold_16_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_pace_speed"
+                style="@style/base_font_medium_10_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="km/h" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_calorie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_pace"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_running_pace"
-            app:layout_constraintEnd_toStartOf="@+id/tv_running_height"
-            app:layout_constraintStart_toEndOf="@+id/tv_running_pace"
-            tools:text="230kcal" />
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/ly_speed"
+            app:layout_constraintEnd_toStartOf="@id/ly_height"
+            app:layout_constraintStart_toEndOf="@id/ly_speed"
+            app:layout_constraintTop_toTopOf="@id/ly_speed">
 
-        <TextView
-            android:id="@+id/tv_running_height"
-            style="@style/base_font_bold_16_white"
+            <TextView
+                android:id="@+id/tv_running_calorie"
+                style="@style/base_font_bold_16_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_calorie"
+                style="@style/base_font_medium_10_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kcal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_height"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_running_calorie"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_running_calorie"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/ly_speed"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_running_calorie"
-            tools:text="9m" />
+            app:layout_constraintStart_toEndOf="@id/ly_calorie"
+            app:layout_constraintTop_toTopOf="@id/ly_speed">
+
+
+            <TextView
+                android:id="@+id/tv_running_height"
+                style="@style/base_font_bold_16_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp" />
+
+            <TextView
+                style="@style/base_font_medium_10_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="m" />
+
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tv_running_pace_title"
@@ -144,9 +190,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_pace"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_pace"
-            app:layout_constraintStart_toStartOf="@id/tv_running_pace"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_pace" />
+            app:layout_constraintEnd_toEndOf="@+id/ly_speed"
+            app:layout_constraintStart_toStartOf="@id/ly_speed"
+            app:layout_constraintTop_toBottomOf="@+id/ly_speed" />
 
         <TextView
             android:id="@+id/tv_running_calorie_title"
@@ -154,9 +200,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_calorie"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_calorie"
-            app:layout_constraintStart_toStartOf="@id/tv_running_calorie"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_calorie" />
+            app:layout_constraintEnd_toEndOf="@+id/ly_calorie"
+            app:layout_constraintStart_toStartOf="@id/ly_calorie"
+            app:layout_constraintTop_toBottomOf="@+id/ly_calorie" />
 
         <TextView
             android:id="@+id/tv_running_height_title"
@@ -164,15 +210,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_running_height"
-            app:layout_constraintEnd_toEndOf="@+id/tv_running_height"
-            app:layout_constraintStart_toStartOf="@+id/tv_running_height"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_height" />
+            app:layout_constraintEnd_toEndOf="@+id/ly_height"
+            app:layout_constraintStart_toStartOf="@+id/ly_height"
+            app:layout_constraintTop_toBottomOf="@+id/ly_height" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_running_pause"
             android:layout_width="@dimen/size_btn_running"
-            android:layout_marginTop="78dp"
             android:layout_height="@dimen/size_btn_running"
+            android:layout_marginTop="78dp"
             android:background="@drawable/bg_layerlist_pause_oval_dandelion_stroke0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -97,11 +97,15 @@ fun jsonToString(json : Any): String? = Gson().toJson(json)
 
 fun getCalorie(gender : Int, age : Int, weight : Float, time : Long) : String{
     val minute = (time/1000/60)
-    val calcAge = age.toFloat().times(0.2017f)
+    val calcAge = roundDigit(age.toDouble().times(0.2017), 2)
     // 파운드 기준
-    val calcWeight = weight.times(2.20462f).times(0.09036f)
-    val calcHeart = 140f.times(0.6309f)
+    val calcWeight = roundDigit(weight.times(2.20462).times(0.09036), 2)
+    val calcHeart = roundDigit(140.times(0.6309), 2)
 
-    val firstCalc : Float = (calcAge + calcWeight + calcHeart - 55.0969f) * 60f
-    return floatTo2f(firstCalc.div(4.184f))
+    val firstCalc : Double = roundDigit((calcAge + calcWeight + calcHeart - 55.0969) * minute.toDouble(), 2)
+    return floatTo2f(roundDigit(firstCalc.div(4.184) ,2).toFloat())
+}
+
+fun roundDigit(number : Double, digits : Int): Double {
+    return Math.round(number * Math.pow(10.0, digits.toDouble())) / Math.pow(10.0, digits.toDouble())
 }
