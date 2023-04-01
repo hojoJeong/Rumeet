@@ -1,6 +1,8 @@
 package com.d204.rumeet.record.model.service;
 
 import com.d204.rumeet.badge.model.dto.BadgeDto;
+import com.d204.rumeet.badge.model.dto.MyBadgeDto;
+import com.d204.rumeet.badge.model.mapper.BadgeMapper;
 import com.d204.rumeet.badge.model.service.BadgeService;
 import com.d204.rumeet.record.model.dto.*;
 import com.d204.rumeet.record.model.mapper.RecordMapper;
@@ -22,8 +24,8 @@ import java.util.Map;
 public class RecordServiceImpl implements RecordService{
 
     private final RecordMapper recordMapper;
+    private final BadgeMapper badgeMapper;
     private final UserService userService;
-
     private final BadgeService badgeService;
 
 
@@ -50,16 +52,13 @@ public class RecordServiceImpl implements RecordService{
     @Override
     public void updateRecord(RaceInfoReqDto raceInfoReqDto)  {
 
-        //{"userId":1, "raceId":999, "mode":2, "velocity":23, "time":701,"heartRate":150, "success":1}
-        System.out.println("들어온거"+raceInfoReqDto);
-
         int mode = raceInfoReqDto.getMode();
         int userId = raceInfoReqDto.getUserId();
         int success = raceInfoReqDto.getSuccess();
         int elapsedTime = raceInfoReqDto.getTime();
-        // 기존 정보
+
+        // 레코드 추가
         RecordDto record = recordMapper.getRecord(userId);
-        System.out.println("기존"+record);
 
         int originPace = record.getAveragePace();
         int originCount = record.getTotalCount();
@@ -105,6 +104,61 @@ public class RecordServiceImpl implements RecordService{
                 record.getTotalKm()+km,record.getTotalTime()+elapsedTime,
                 averagePace, matchCount, teamSuccess,completeSuccess);
         recordMapper.updateRecord(record);
+
+
+        // 뱃지 추가
+        double totalKm = record.getTotalKm();
+        long totalTime = record.getTotalTime();
+        long date = System.currentTimeMillis();
+
+        // 경쟁 뱃지
+        int[] competitionCounts = {30, 20, 10};
+        int[] competitionBadges = {3, 2, 1};
+
+        if (completeSuccess == 1){
+            MyBadgeDto myBadge = new MyBadgeDto(userId, 7, date); //경쟁 첫번째 승리
+            badgeMapper.addBadge(myBadge);
+        } else {
+            for (int i = 0; i < competitionCounts.length; i++) {
+                if (completeSuccess >= competitionCounts[i]) {
+                    MyBadgeDto myBadge = new MyBadgeDto(userId, competitionBadges[i], date);
+                    badgeMapper.addBadge(myBadge);
+                    break;
+                }
+            }
+        }
+
+        // 협동 뱃지
+        int[] teamCounts = {30, 20, 10};
+        int[] teamBadges = {16, 15, 14};
+        for (int i = 0; i < teamCounts.length; i++) {
+            if (teamSuccess >= teamCounts[i]) {
+                MyBadgeDto myBadge = new MyBadgeDto(userId, teamBadges[i], date);
+                badgeMapper.addBadge(myBadge);
+                break;
+            }
+        }
+
+        // km 뱃지
+        int[] kmGoals = {1000, 500, 100};
+        int[] kmBadges = {5, 6, 4};
+        for (int i = 0; i < kmGoals.length; i++) {
+            if (totalKm >= kmGoals[i]) {
+                MyBadgeDto myBadge = new MyBadgeDto(userId, kmBadges[i], date);
+                badgeMapper.addBadge(myBadge);
+                break;
+            }
+        }
+        // time 뱃지
+        int[] timeGoals = {180000, 72000, 36000}; //50시간, 20시간, 10시간
+        int[] timeBadges = {10, 9, 8};
+        for (int i = 0; i < timeGoals.length; i++) {
+            if (totalTime >= timeGoals[i]) {
+                MyBadgeDto myBadge = new MyBadgeDto(userId, timeBadges[i], date);
+                badgeMapper.addBadge(myBadge);
+                break;
+            }
+        }
 
     }
 
