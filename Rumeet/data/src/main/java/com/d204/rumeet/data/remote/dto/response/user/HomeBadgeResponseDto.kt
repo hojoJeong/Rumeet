@@ -7,6 +7,6 @@ data class HomeBadgeResponseDto(
     val id: Int,
     @SerializedName("code")
     val code: Int,
-    @SerializedName("data")
+    @SerializedName("date")
     val date: Long
 )

@@ -12,6 +12,8 @@ import com.d204.rumeet.R
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.components.FilledEditText
+import com.d204.rumeet.ui.home.model.BestRecordUiModel
+import com.d204.rumeet.util.toRecord
 
 @BindingAdapter("authentication_visibility")
 fun TextView.bindAuthenticationVisibility(state: Boolean) {
@@ -35,25 +37,28 @@ fun TextView.setWelcomeMessage(userName: UiState<String>) {
     text = builder
 }
 
-@BindingAdapter("setBestRecord")
-fun TextView.setBestRecord(value: String) {
-    val checkString = value.substring(value.length - 2)
+@BindingAdapter(value = ["recordValue", "recordTitle"])
+fun TextView.setBestRecord(recordValue: UiState<List<BestRecordUiModel>>, recordTitle: String) {
+    val value = if(recordTitle == "누적 횟수") recordValue.successOrNull()?.get(0)?.value
+    else if(recordTitle == "누적 거리") recordValue.successOrNull()?.get(1)?.value
+    else recordValue.successOrNull()?.get(2)?.value
+    val checkString = value?.substring(value.length - 1)
     text = when (checkString) {
-        "km" -> {
+        "m" -> {
             SpannableStringBuilder(value).apply {
                 setSpan(
-                    RelativeSizeSpan(0.6f),
+                    RelativeSizeSpan(0.7f),
                     value.length - 2,
                     value.length,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
             }
         }
-        "al" -> {
+        "회" -> {
             SpannableStringBuilder(value).apply {
                 setSpan(
-                    RelativeSizeSpan(0.6f),
-                    value.length - 4,
+                    RelativeSizeSpan(0.7f),
+                    value.length - 1,
                     value.length,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )

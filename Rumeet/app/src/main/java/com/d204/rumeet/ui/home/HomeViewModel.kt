@@ -1,13 +1,14 @@
 package com.d204.rumeet.ui.home
 
-import android.app.Application
 import android.content.ContentValues
-import android.content.Context
+import android.content.ContentValues.TAG
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.RelativeSizeSpan
 import android.util.Log
-import androidx.core.content.ContextCompat
-import com.d204.rumeet.R
 import com.d204.rumeet.domain.model.user.HomeBadgeDomainModel
 import com.d204.rumeet.domain.model.user.HomeDataDomainModel
+import com.d204.rumeet.domain.model.user.HomeRecordDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.user.GetHomeDataUseCase
@@ -18,16 +19,14 @@ import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
-import com.d204.rumeet.util.toCount
-import com.d204.rumeet.util.toDate
-import com.d204.rumeet.util.toDistance
+import com.d204.rumeet.ui.mypage.model.BadgeDetailUiModel
 import com.d204.rumeet.util.toRecord
 import com.google.firebase.messaging.FirebaseMessaging
-import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,10 +43,10 @@ class HomeViewModel @Inject constructor(
     val userName: StateFlow<UiState<String>>
         get() = _userName.asStateFlow()
 
-    private val _bestRecord: MutableStateFlow<UiState<List<BestRecordUiModel>>> =
+    private val _homeRecord: MutableStateFlow<UiState<List<BestRecordUiModel>>> =
         MutableStateFlow(UiState.Loading)
-    val bestRecord: StateFlow<UiState<List<BestRecordUiModel>>>
-        get() = _bestRecord.asStateFlow()
+    val homeRecord: StateFlow<UiState<List<BestRecordUiModel>>>
+        get() = _homeRecord.asStateFlow()
 
     private val _badgeList: MutableStateFlow<UiState<List<String>>> =
         MutableStateFlow(UiState.Loading)
@@ -58,6 +57,12 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val recommendFriendList: StateFlow<UiState<List<RecommendFriendUiModel>>>
         get() = _recommendFriendList.asStateFlow()
+
+    private val _homeResponse: MutableStateFlow<UiState<HomeDataDomainModel>> =
+        MutableStateFlow(UiState.Loading)
+    val homeResponse: StateFlow<UiState<HomeDataDomainModel>>
+        get() = _homeResponse.asStateFlow()
+
 
     fun getUserIdByUseCase() {
         baseViewModelScope.launch {
@@ -71,22 +76,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getHomeData(context: Context) {
+    fun getHomeData() {
         baseViewModelScope.launch {
             showLoading()
             getHomeDataUseCase(userId.value.successOrNull() ?: -1)
                 .onSuccess { response ->
+                    _userName.value = UiState.Success(response.record.nickname.toString())
+                    setHomeRecord(response.record)
                     dismissLoading()
-                    _userName.value = UiState.Success(response.record.nickname ?: "")
-
-                    setHomeRecord(response)
-
-                    val badgeList = listOf(
-                        context.resources.getStringArray(R.array.url_badge)[context.resources.getStringArray(R.array.code_badge).indexOf(response.badge[0].code.toString())],
-                        context.resources.getStringArray(R.array.url_badge)[context.resources.getStringArray(R.array.code_badge).indexOf(response.badge[1].code.toString())],
-                        context.resources.getStringArray(R.array.url_badge)[context.resources.getStringArray(R.array.code_badge).indexOf(response.badge[2].code.toString())],
-                        )
-                    _badgeList.value = UiState.Success(badgeList)
                 }
                 .onError {
                     dismissLoading()
@@ -95,16 +92,28 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setHomeRecord(response: HomeDataDomainModel){
-        val totalCount = response.record.totalCount?.toCount()
-        val totalDistance = response.record.totalKm?.toDistance()
-        val pace = response.record.averagePace?.toLong()?.toRecord()
-        val myRecord = listOf(
-            BestRecordUiModel(totalCount ?: "", "누적 횟수"),
-            BestRecordUiModel(totalDistance ?: "", "누적 거리"),
-            BestRecordUiModel(pace?:"", "평균 페이스")
-        )
-        _bestRecord.value = UiState.Success(myRecord)
+    private fun setHomeRecord(record: HomeRecordDomainModel){
+        try {
+            val totalCount = "${record.totalCount}회"
+
+            val totalDistance = "${record.totalKm}km"
+            var pace = record.averagePace?.toRecord().toString()
+
+            val myRecord = listOf(
+                BestRecordUiModel(totalCount, "누적 횟수"),
+                BestRecordUiModel(totalDistance, "누적 거리"),
+                BestRecordUiModel(pace, "평균 페이스")
+            )
+            _homeRecord.value = UiState.Success(myRecord)
+            Log.d(TAG, "setHomeRecord 내 기록: ${homeRecord.value.successOrNull()}")
+
+        } catch (e: Exception){
+            _homeRecord.value = UiState.Error(e.cause)
+        }
+    }
+
+    fun setBadgeList(list: List<String>){
+        _badgeList.value = UiState.Success(list)
     }
 
     fun getRecommendFriendListForHome() {

@@ -16,11 +16,6 @@ fun Long.toDate() : String{
     return simpleDateFormat.format(this)
 }
 
-fun Long.toRecord() : String {
-    val simpleDateFormat = SimpleDateFormat("mm'ss''", Locale.KOREA)
-    return simpleDateFormat.format(this)
-}
-
 fun String.toDate() : Long{
     val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd")
     return simpleDateFormat.parse(this).time
@@ -44,4 +39,10 @@ fun Int.toDistance(): String {
         )
     }
     return builder.toString()
+}
+
+
+fun Int.toRecord() : String {
+    val simpleDateFormat = SimpleDateFormat("mm\'ss\"", Locale.KOREA)
+    return simpleDateFormat.format(this*1000)
 }
