@@ -5,10 +5,18 @@
 <mapper namespace="com.d204.rumeet.game.model.mapper.GameMapper">
 
     <insert id="makeRace" parameterType="RaceDto"  useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO race (user_id,partner_id,mode,date) VALUES (#{userId},#{partnerId},#{mode},#{date})
+        INSERT INTO rumeet.race (user_id,partner_id,mode,date) VALUES (#{userId},#{partnerId},#{mode},#{date})
     </insert>
+
+    <update id="denyRace" parameterType="int" >
+        UPDATE rumeet.race SET state = -1 WHERE id = #{raceId};
+    </update>
 
     <select id="getMode" parameterType="int" resultType="int">
         SELECT mode FROM rumeet.race where id = #{raceId}
+    </select>
+
+    <select id="getRaceState" parameterType="int" resultType="int">
+        SELECT state FROM rumeet.race WHERE id = #{raceId}
     </select>
 </mapper>
