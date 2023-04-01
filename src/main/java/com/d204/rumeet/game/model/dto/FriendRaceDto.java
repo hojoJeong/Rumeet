@@ -13,6 +13,6 @@ public class FriendRaceDto {
     int userId;
     int partnerId;
     int mode;
-    Long date;
+    long date;
     int state;
 }

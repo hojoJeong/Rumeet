@@ -8,7 +8,7 @@ import java.util.List;
 public interface GameMapper {
     void makeRace(RaceDto gameDto);
 
-    void denyRace(int raceId);
+    int denyRace(int raceId);
 
     int getRaceState(int raceId);
 
