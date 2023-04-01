@@ -37,6 +37,8 @@ public interface UserMapper {
 
     void joinUserToRecord(int id);
 
+    void joinUserToBadge(int id, long date);
+
     AlarmStateDto getAlarmState(int id);
 
     int modifyFriendAlarmState (int id, int state);

@@ -143,11 +143,13 @@ public class UserServiceImpl implements UserService{
     public void joinUser(JoinUserDto user, MultipartFile profile) {
         String url = this.uploadFile(profile,"https://kr.object.ncloudstorage.com/rumeet/base_profile.png");
         user.setProfile(url);
-        user.setDate(System.currentTimeMillis());
+        long date = System.currentTimeMillis();
+        user.setDate(date);
         userMapper.joinUser(user);
-        userMapper.joinUserToRecord(user.getId());
-        initQueue(user.getId());
-
+        int id = user.getId();
+        userMapper.joinUserToRecord(id);
+        userMapper.joinUserToBadge(id,date);
+        initQueue(id);
     }
     @Override
     public void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile) {

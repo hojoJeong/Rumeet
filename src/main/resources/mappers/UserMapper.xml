@@ -92,8 +92,18 @@
     </insert>
 
     <update id="modifyUserProfile" parameterType="ProfileUserDto">
-        UPDATE user SET profile_img = #{profile} WHERE id = #{id};
+        UPDATE user SET nickname = #{nickname},profile_img = #{profile} WHERE id = #{id};
     </update>
+
+    <insert id="joinUserToRecord" parameterType="int">
+        INSERT INTO record (user_id)
+        VALUES (#{userId});
+    </insert>
+
+    <insert id="joinUserToBadge" parameterType="int">
+        INSERT INTO my_badge (user_id, badge_id, date)
+        VALUES (#{userId}, 17, #{date});
+    </insert>
 
     <select id="checkExistsUseByEmail" parameterType="String" resultType="int">
         SELECT id FROM user WHERE email = #{email}
