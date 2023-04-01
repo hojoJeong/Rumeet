@@ -139,13 +139,11 @@ public class UserServiceImpl implements UserService{
         amqpAdmin.declareBinding(binding);
 
         // 친구 매칭용 큐
-        sb = new StringBuilder();
-        sb.append("friend.user.").append(id);
-        queue = QueueBuilder.durable("friend.queue." + id).build();
+        queue = QueueBuilder.durable("friend.user." + id+".").build();
         amqpAdmin.declareQueue(queue);
         binding = BindingBuilder.bind(queue)
-                .to(new TopicExchange("friend.exchange"))
-                .with(sb.toString());
+                .to(new TopicExchange("friend.user.exchange"))
+                .with(queue.getName());
         amqpAdmin.declareBinding(binding);
     }
 
