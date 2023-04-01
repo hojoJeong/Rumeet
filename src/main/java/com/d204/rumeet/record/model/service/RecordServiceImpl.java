@@ -51,12 +51,16 @@ public class RecordServiceImpl implements RecordService{
     public void updateRecord(RaceInfoReqDto raceInfoReqDto)  {
 
         //{"userId":1, "raceId":999, "mode":2, "velocity":23, "time":701,"heartRate":150, "success":1}
+        System.out.println("들어온거"+raceInfoReqDto);
+
         int mode = raceInfoReqDto.getMode();
         int userId = raceInfoReqDto.getUserId();
         int success = raceInfoReqDto.getSuccess();
         int elapsedTime = raceInfoReqDto.getTime();
         // 기존 정보
         RecordDto record = recordMapper.getRecord(userId);
+        System.out.println("기존"+record);
+
         int originPace = record.getAveragePace();
         int originCount = record.getTotalCount();
         int matchCount = record.getMatchCount();
