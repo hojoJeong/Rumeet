@@ -96,11 +96,22 @@ internal class UserRepositoryImpl @Inject constructor(
         startDate: Long,
         endDate: Long
     ): NetworkResult<RunningRecordDomainModel> {
-        return handleApi { userApi.getRunningRecord(userId, startDate, endDate) }.toDomainResult<RunningRecordResponseDto, RunningRecordDomainModel> { it.toDomainModel() }
+        return handleApi {
+            userApi.getRunningRecord(
+                userId,
+                startDate,
+                endDate
+            )
+        }.toDomainResult<RunningRecordResponseDto, RunningRecordDomainModel> { it.toDomainModel() }
     }
 
     override suspend fun getHomeData(userId: Int): NetworkResult<HomeDataDomainModel> {
-        val response =  handleApi { userApi.getHomeData(userId) }.toDomainResult<HomeDataResponseDto, HomeDataDomainModel> { it.toDomainModel() }
+        val response =
+            handleApi { userApi.getHomeData(userId) }.toDomainResult<HomeDataResponseDto, HomeDataDomainModel> { it.toDomainModel() }
         return response
+    }
+
+    override suspend fun getFriendRequestList(): NetworkResult<List<NotificationListDomainModel>> {
+        return handleApi { userApi.getFriendRequestList() }.toDomainResult<List<NotificationListResponseDto>, List<NotificationListDomainModel>> { it.map { model -> model.toDomainModel() } }
     }
 }

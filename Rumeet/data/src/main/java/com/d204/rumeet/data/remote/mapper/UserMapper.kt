@@ -70,3 +70,7 @@ internal fun HomeDataResponseDto.toDomainModel() = HomeDataDomainModel(
     badge = badgeList.map { it.toDomainModel() },
     record = record?.toDomainModel()!!
 )
+
+internal fun NotificationListResponseDto.toDomainModel() = NotificationListDomainModel(
+    date, fromUserId, id, toUserId
+)

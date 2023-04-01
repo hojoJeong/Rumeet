@@ -18,4 +18,5 @@ interface UserRepository {
     suspend fun getNotificationSettingState(userId: Int): NetworkResult<NotificationStateDomainModel>
     suspend fun getRunningRecord(userId: Int, startDate: Long, endDate: Long): NetworkResult<RunningRecordDomainModel>
     suspend fun getHomeData(userId: Int): NetworkResult<HomeDataDomainModel>
+    suspend fun getFriendRequestList(): NetworkResult<List<NotificationListDomainModel>>
 }

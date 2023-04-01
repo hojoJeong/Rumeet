@@ -45,4 +45,7 @@ internal interface UserApi {
 
     @GET("record/{userId}")
     suspend fun getHomeData(@Path("userId") userId: Int) : BaseResponse<HomeDataResponseDto>
+
+    @GET("friends/from-request")
+    suspend fun getFriendRequestList(): BaseResponse<List<NotificationListResponseDto>>
 }

@@ -12,7 +12,7 @@
         tools:context=".ui.notification.NotificationContainerFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_notification_friend"
+            android:id="@+id/rv_notification"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
