@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import android.util.LogPrinter
 import com.d204.rumeet.domain.NetworkResult
+import com.d204.rumeet.domain.model.user.NotificationStateDomainModel
 import com.d204.rumeet.domain.model.user.RunningRecordDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
@@ -17,6 +18,7 @@ import com.d204.rumeet.ui.mypage.setting.UserInfoAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.lang.Thread.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +28,9 @@ class MyPageViewModel @Inject constructor(
     private val withdrawalUseCase: WithdrawalUseCase,
     private val getAcquiredBadgeListUseCase: GetAcquiredBadgeListUseCase,
     private val logoutUseCase: LogoutUseCase,
-    private val getRunningRecordUseCase: GetRunningRecordUseCase
+    private val getRunningRecordUseCase: GetRunningRecordUseCase,
+    private val getNotificationSettingStateUseCase: GetNotificationSettingStateUseCase,
+    private val modifyNotificationSettingStateUseCase: ModifyNotificationSettingStateUseCase
 ) : BaseViewModel(), MyPageEventHandler {
     private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
     val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
@@ -75,6 +79,10 @@ class MyPageViewModel @Inject constructor(
     private val _runningRecord: MutableStateFlow<UiState<RunningRecordDomainModel>> = MutableStateFlow(UiState.Loading)
     val runningRecord: StateFlow<UiState<RunningRecordDomainModel>>
         get() = _runningRecord
+
+    private val _notificationSettingState: MutableStateFlow<UiState<NotificationStateDomainModel>> = MutableStateFlow(UiState.Loading)
+    val notificationSettingState: StateFlow<UiState<NotificationStateDomainModel>>
+        get() = _notificationSettingState.asStateFlow()
 
     fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
@@ -178,6 +186,29 @@ class MyPageViewModel @Inject constructor(
     fun logout(){
         baseViewModelScope.launch {
             logoutUseCase.invoke()
+        }
+    }
+
+    fun getNotificationSettingState(){
+        baseViewModelScope.launch {
+            showLoading()
+            getNotificationSettingStateUseCase(userId.value.successOrNull()?:-1)
+                .onSuccess {
+                    _notificationSettingState.value = UiState.Success(it)
+                    dismissLoading()
+                }
+                .onError {
+                    _notificationSettingState.value = UiState.Error(it.cause)
+                    dismissLoading()
+                }
+        }
+    }
+
+    fun modifyNotificationState(target: Int, state: Int){
+        baseViewModelScope.launch {
+            showLoading()
+            val response = modifyNotificationSettingStateUseCase(userId.value.successOrNull()?:-1, target, state)
+            if(response) Log.d(TAG, "modifyNotificationState: 알림 변경 완료")
         }
     }
 

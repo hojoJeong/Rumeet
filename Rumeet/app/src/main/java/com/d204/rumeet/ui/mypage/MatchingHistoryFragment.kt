@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.mypage
 
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentMatchingHistoryBinding
@@ -8,6 +9,7 @@ import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.mypage.adapter.MatchingHistoryViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MatchingHistoryFragment : BaseFragment<FragmentMatchingHistoryBinding, BaseViewModel>() {
@@ -22,6 +24,11 @@ class MatchingHistoryFragment : BaseFragment<FragmentMatchingHistoryBinding, Bas
     }
 
     override fun initDataBinding() {
+        lifecycleScope.launchWhenStarted {
+            launch {
+
+            }
+        }
     }
 
     override fun initAfterBinding() {

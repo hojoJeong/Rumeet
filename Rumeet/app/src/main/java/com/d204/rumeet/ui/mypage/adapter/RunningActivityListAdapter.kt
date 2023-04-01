@@ -20,12 +20,11 @@ class RunningActivityListAdapter :
     class RunningActivityItemHolder(private val binding: ItemRunningRecordActivityBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: RunningActivityUiModel) {
-
+            binding.activity = item
         }
     }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunningActivityItemHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunningActivityListAdapter.RunningActivityItemHolder =
         RunningActivityItemHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),

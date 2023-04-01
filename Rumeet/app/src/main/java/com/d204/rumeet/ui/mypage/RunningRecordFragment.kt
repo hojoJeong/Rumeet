@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.mypage
 
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_running_record
-    override val viewModel: MyPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage){defaultViewModelProviderFactory}
+    override val viewModel: MyPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage) { defaultViewModelProviderFactory }
 
     override fun initStartView() {
         binding.contentRunningRecordNoResult.tvContentNoResultMessage.text = "러닝 데이터가 없습니다."
@@ -29,13 +30,19 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
     override fun initDataBinding() {
         lifecycleScope.launchWhenStarted {
             launch {
-                viewModel.runningRecord.collect{
+                viewModel.runningRecord.collect {
                     val summaryData = it.successOrNull()?.summaryData
-                    binding.tvRunningRecordAverageDistance.text =  summaryData?.totalDistance.toString()
+                    binding.tvRunningRecordAverageDistance.text =
+                        summaryData?.totalDistance.toString()
                     binding.tvRunningRecordAverageTime.text = summaryData?.totalTime.toString()
                     binding.tvRunningRecordAveragePace.text = summaryData?.averagePace?.toRecord()
 
-                    val activityList = it.successOrNull()?.raceList?.map { model -> model.toUiModel() } ?: emptyList()
+                    val activityList =
+                        it.successOrNull()?.raceList?.map { model -> model.toUiModel() }
+                            ?: emptyList()
+                    if (activityList.isNotEmpty()) binding.contentRunningRecordNoResult.root.visibility =
+                        View.GONE
+                    else binding.contentRunningRecordNoResult.root.visibility = View.VISIBLE
                     initActivityListAdapter(activityList)
                 }
             }
@@ -45,35 +52,40 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
     override fun initAfterBinding() {
     }
 
-    private fun initActivityListAdapter(list: List<RunningActivityUiModel>){
+    private fun initActivityListAdapter(list: List<RunningActivityUiModel>) {
         val activityAdapter = RunningActivityListAdapter().apply {
             submitList(list)
         }
 
-        with(binding.rvRunningRecordActivity){
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        with(binding.rvRunningRecordActivity) {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = activityAdapter
         }
     }
 
-    private fun initDatePicker(){
+    private fun initDatePicker() {
         var sFirstUse = true
         var eFirstUse = true
         binding.btnRunningRecordStartDate.setOnClickListener {
-            showDatePickerDialog("시작",sFirstUse, binding)
+            showDatePickerDialog("시작", sFirstUse, binding)
             sFirstUse = false
         }
         binding.btnRunningRecordEndDate.setOnClickListener {
-            showDatePickerDialog("종료",eFirstUse, binding)
+            showDatePickerDialog("종료", eFirstUse, binding)
             eFirstUse = false
         }
     }
 
-    private fun showDatePickerDialog(title: String, firstUse: Boolean, parentBinding: FragmentRunningRecordBinding) {
-        val initDate = if(firstUse){
+    private fun showDatePickerDialog(
+        title: String,
+        firstUse: Boolean,
+        parentBinding: FragmentRunningRecordBinding
+    ) {
+        val initDate = if (firstUse) {
             System.currentTimeMillis()
-        } else{
-            if(title == "시작") binding.tvRunningRecordStartDate.text.toString().toDate()
+        } else {
+            if (title == "시작") binding.tvRunningRecordStartDate.text.toString().toDate()
             else binding.tvRunningRecordEndDate.text.toString().toDate()
         }
         val dialog = DefaultAlertDialog(
@@ -83,7 +95,7 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
                 buttonText = "확인"
             )
         ).apply {
-            setInitDatePickerData(true, initDate,title, parentBinding)
+            setInitDatePickerData(true, initDate, title, parentBinding)
             setViewModel(viewModel)
         }
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
