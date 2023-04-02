@@ -28,7 +28,6 @@ public interface UserService {
 
     NaverUserDto naverOauth(String code);
 
-
     UserDto getUserOauth(String tokenId);
 
     void joinKakaoUser(JoinKakaoUserDto user, MultipartFile profile);
