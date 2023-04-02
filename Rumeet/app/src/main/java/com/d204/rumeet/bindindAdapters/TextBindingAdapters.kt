@@ -102,3 +102,8 @@ fun TextView.setMode(mode: String) {
 fun TextView.setActivityTitle(index: String) {
     text = "나의 ${index}째 러닝"
 }
+
+@BindingAdapter("setPartnerName")
+fun TextView.setPartnerName(name: String){
+    text = "vs $name"
+}

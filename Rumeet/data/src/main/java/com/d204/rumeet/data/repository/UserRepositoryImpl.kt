@@ -9,6 +9,7 @@ import com.d204.rumeet.data.remote.dto.request.user.FcmTokenRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.ModifyNickNameRequest
 import com.d204.rumeet.data.remote.dto.request.user.ModifyNotificationStateRequestDto
 import com.d204.rumeet.data.remote.dto.response.user.*
+import com.d204.rumeet.data.remote.mapper.toDomain
 import com.d204.rumeet.data.remote.mapper.toDomainModel
 import com.d204.rumeet.data.remote.mapper.toRequestDto
 import com.d204.rumeet.data.util.getMultipartData
@@ -120,5 +121,11 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getRunningRequestList(userId: Int): NetworkResult<List<RunningRequestDomainModel>> {
         return handleApi { userApi.getRunningRequestList(userId) }.toDomainResult<List<RunningRequestResponse>, List<RunningRequestDomainModel>> { it.map { model -> model.toDomainModel() } }
+    }
+
+    override suspend fun getMatchingHistoryList(userId: Int): NetworkResult<MatchingHistoryDomainModel> {
+        val response = handleApi { userApi.getMatchingHistoryList(userId) }.toDomainResult<MatchingHistoryResponseDto, MatchingHistoryDomainModel> { model -> model.toDomain()}
+        Log.d(TAG, "getMatchingHistoryList: $response")
+        return response
     }
 }

@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import android.util.LogPrinter
 import com.d204.rumeet.domain.NetworkResult
+import com.d204.rumeet.domain.model.user.MatchingHistoryDomainModel
 import com.d204.rumeet.domain.model.user.NotificationStateDomainModel
 import com.d204.rumeet.domain.model.user.RunningRecordDomainModel
 import com.d204.rumeet.domain.onError
@@ -30,7 +31,8 @@ class MyPageViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
     private val getRunningRecordUseCase: GetRunningRecordUseCase,
     private val getNotificationSettingStateUseCase: GetNotificationSettingStateUseCase,
-    private val modifyNotificationSettingStateUseCase: ModifyNotificationSettingStateUseCase
+    private val modifyNotificationSettingStateUseCase: ModifyNotificationSettingStateUseCase,
+    private val getMatchingHistoryUseCase: GetMatchingHistoryUseCase
 ) : BaseViewModel(), MyPageEventHandler {
     private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
     val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
@@ -83,6 +85,10 @@ class MyPageViewModel @Inject constructor(
     private val _notificationSettingState: MutableStateFlow<UiState<NotificationStateDomainModel>> = MutableStateFlow(UiState.Loading)
     val notificationSettingState: StateFlow<UiState<NotificationStateDomainModel>>
         get() = _notificationSettingState.asStateFlow()
+
+    private val _matchingHistoryList: MutableStateFlow<UiState<MatchingHistoryDomainModel>> = MutableStateFlow(UiState.Loading)
+    val matchingHistoryList: StateFlow<UiState<MatchingHistoryDomainModel>>
+        get() = _matchingHistoryList.asStateFlow()
 
     fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
@@ -215,6 +221,21 @@ class MyPageViewModel @Inject constructor(
             showLoading()
             val response = modifyNotificationSettingStateUseCase(userId.value.successOrNull()?:-1, target, state)
             if(response) Log.d(TAG, "modifyNotificationState: 알림 변경 완료")
+        }
+    }
+
+    fun getMatchingHistoryList(){
+        baseViewModelScope.launch {
+            showLoading()
+            getMatchingHistoryUseCase(userId.value.successOrNull()!!)
+                .onSuccess {
+                    dismissLoading()
+                    _matchingHistoryList.value = UiState.Success(it)
+                }
+                .onError {
+                    dismissLoading()
+                    Log.d(TAG, "getMatchingHistoryList: ${it.cause}")
+                }
         }
     }
 

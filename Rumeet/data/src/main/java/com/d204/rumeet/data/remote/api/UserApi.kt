@@ -51,4 +51,7 @@ internal interface UserApi {
 
     @GET("game/invite/{userId}")
     suspend fun getRunningRequestList(@Path("userId") userId: Int): BaseResponse<List<RunningRequestResponse>>
+
+    @GET("record/match/{userId}")
+    suspend fun getMatchingHistoryList(@Path("userId") userId: Int): BaseResponse<MatchingHistoryResponseDto>
 }

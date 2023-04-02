@@ -78,3 +78,20 @@ internal fun NotificationListResponseDto.toDomainModel() = NotificationListDomai
 internal fun RunningRequestResponse.toDomainModel() = RunningRequestDomainModel(
     date, mode, partnerId, raceId, state, userId
 )
+
+internal fun MatchingHistorySummaryDataResponseDto.toDomainModel() =
+    MatchingHistorySummaryDataDomainModel(
+        fail, matchCount, success, userId
+    )
+
+internal fun MatchingHistoryRaceListResponseDto.toDomainModel() =
+    MatchingHistoryRaceListDomainModel(
+        date,
+        heartRate,
+        kcal,
+        km.toInt(), mode, pace, partnerName, polyline, raceId, success, time, userId
+    )
+
+internal fun MatchingHistoryResponseDto.toDomain() = MatchingHistoryDomainModel(
+    raceList.map { it.toDomainModel() }, summaryData.toDomainModel()
+)

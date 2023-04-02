@@ -20,4 +20,5 @@ interface UserRepository {
     suspend fun getHomeData(userId: Int): NetworkResult<HomeDataDomainModel>
     suspend fun getFriendRequestList(userId: Int): NetworkResult<List<NotificationListDomainModel>>
     suspend fun getRunningRequestList(userId: Int): NetworkResult<List<RunningRequestDomainModel>>
+    suspend fun getMatchingHistoryList(userId: Int): NetworkResult<MatchingHistoryDomainModel>
 }
