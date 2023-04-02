@@ -1,11 +1,14 @@
 package com.d204.rumeet.game.model.service;
 
+import com.d204.rumeet.exception.DuplicateFriendRequestException;
 import com.d204.rumeet.exception.InvalidRunningException;
+import com.d204.rumeet.exception.NoUserDataException;
 import com.d204.rumeet.exception.TerminatedRunningException;
 import com.d204.rumeet.fcm.model.service.FcmMessageService;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.game.model.dto.FriendRaceDto;
 import com.d204.rumeet.game.model.dto.RaceDto;
+import com.d204.rumeet.game.model.dto.RaceStateDto;
 import com.d204.rumeet.game.model.mapper.GameMapper;
 import com.d204.rumeet.tools.FriendMatchingTool;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
@@ -119,7 +122,12 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public int getRaceState(int raceId) {
-        return gameMapper.getRaceState(raceId);
+        RaceStateDto result = gameMapper.getRaceState(raceId);
+        System.out.println("################get Race State result: "+result);
+        if (result == null) {
+            throw new InvalidRunningException();
+        }
+        return result.getState();
     }
 
     @Override
@@ -128,6 +136,7 @@ public class GameServiceImpl implements GameService {
                 Query.query(Criteria.where("partnerId").is(userId)),
                 FriendRaceDto.class
         );
+        System.out.println("############### getInvitationList: "+requests);
         return requests;
     }
 
