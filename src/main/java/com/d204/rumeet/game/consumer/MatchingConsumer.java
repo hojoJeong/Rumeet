@@ -16,15 +16,5 @@ public class MatchingConsumer {
 
     private final MatchingTool matchingTool;
 
-    @KafkaListener(topicPattern = "rumeet\\.game\\.matching\\..*", groupId = "*")
-    public void listenMatching(String message) {
-        GameDto info = new Gson().fromJson(message, GameDto.class);
-        matchingTool.doMatching(info);
-    }
 
-    @KafkaListener(topics = "rumeet.game.cancel", groupId = "game")
-    public void listenCancel(String message) {
-        GameDto info = new Gson().fromJson(message, GameDto.class);
-        matchingTool.doCancel(info);
-    }
 }

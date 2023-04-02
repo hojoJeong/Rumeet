@@ -20,7 +20,6 @@ public interface GameService {
 
     List<FriendRaceDto> getInvitationList(int userId);
 
-    void endGameToKafka(Message message);
+    void endGameToKafka(Message message) throws Exception;
 
-    void endGameToKafka2(Message message);
 }
