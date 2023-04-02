@@ -84,7 +84,7 @@ public class KafkaServiceImpl implements KafkaService {
     @Override
     public GamePaceDto messageBYFastApi(int mode, int userId) {
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url("http://j8d204.p.ssafy.io:8000/load/" + mode + "/" + userId).get().build();
+        Request request = new Request.Builder().url("http://119.202.203.157:8001/load/" + mode + "/" + userId).get().build();
         Call call = client.newCall(request);
         String responseBody= "";
         RespData<String> data = new RespData<>();
@@ -96,7 +96,6 @@ public class KafkaServiceImpl implements KafkaService {
         } catch (IOException e) {
             System.out.println("e = " + e);
         }
-        System.out.println(responseBody);
         GamePaceDto user = new Gson().fromJson(responseBody, GamePaceDto.class);
 
         return user;
