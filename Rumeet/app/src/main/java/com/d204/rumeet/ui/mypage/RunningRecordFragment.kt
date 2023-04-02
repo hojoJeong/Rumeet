@@ -38,14 +38,24 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
                 viewModel.runningRecord.collect {
                     Log.d(TAG, "initDataBinding: ${it.successOrNull()}")
                     val summaryData = it.successOrNull()?.summaryData
-                    binding.tvRunningRecordAverageDistance.text =
-                        summaryData?.totalDistance?.toString() ?: "--"
-                    binding.tvRunningRecordAverageTime.text = summaryData?.totalTime?.toString() ?: "--"
-                    binding.tvRunningRecordAveragePace.text = summaryData?.averagePace?.toRecord() ?: "--"
+                    binding.tvRunningRecordAverageDistance.text ="--"
+                    binding.tvRunningRecordAverageTime.text =  "--"
+                    binding.tvRunningRecordAveragePace.text =  "--"
 
-                    val activityList =
+                    val activityList = if(binding.tvRunningRecordStartDate.text == "시작 날짜"){
+                        emptyList()}
+                     else {
                         it.successOrNull()?.raceList?.map { model -> model.toUiModel() }
                             ?: emptyList()
+                    }
+
+                    if(binding.tvRunningRecordStartDate.text != "시작 날짜"){
+                        binding.tvRunningRecordAverageDistance.text =
+                            summaryData?.totalDistance?.toString() ?: "--"
+                        binding.tvRunningRecordAverageTime.text = summaryData?.totalTime?.toString() ?: "--"
+                        binding.tvRunningRecordAveragePace.text = summaryData?.averagePace?.toRecord() ?: "--"
+                    }
+
                     if (activityList.isNotEmpty()) binding.contentRunningRecordNoResult.root.visibility =
                         View.GONE
                     else binding.contentRunningRecordNoResult.root.visibility = View.VISIBLE
