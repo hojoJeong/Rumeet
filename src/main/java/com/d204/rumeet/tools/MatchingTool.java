@@ -61,6 +61,56 @@ public class MatchingTool {
             gameService.makeRace(raceDto);
             String json = new Gson().toJson(raceDto);
             createQueue(raceDto.getId(), top_user.getId(), target.getId());
+
+//            Binding binding = BindingBuilder
+//                    .bind(new Queue("matching.queue."+top_user.getId()))
+//                    .to(new DirectExchange("game.exchange"))
+//                    .with("user."+top_user.getId());
+//
+//            amqpAdmin.removeBinding(binding);
+//            binding = BindingBuilder
+//                    .bind(new Queue("matching.queue."+target.getId()))
+//                    .to(new DirectExchange("game.exchange"))
+//                    .with("user."+target.getId());
+//
+//            amqpAdmin.removeBinding(binding);
+//
+//            amqpAdmin.declareBinding(BindingBuilder
+//                    .bind(new Queue("matching.queue."+top_user.getId()))
+//                    .to(new DirectExchange("game.exchange"))
+//                    .with("race."+raceDto.getId()));
+//            amqpAdmin.declareBinding(BindingBuilder
+//                    .bind(new Queue("matching.queue."+target.getId()))
+//                    .to(new DirectExchange("game.exchange"))
+//                    .with("race."+raceDto.getId()));
+//
+//            rabbitTemplate.convertAndSend("game.exchange","race."+raceDto.getId(),new Gson().toJson(raceDto));
+//
+//            binding = BindingBuilder
+//                    .bind(new Queue("matching.queue."+top_user.getId()))
+//                    .to(new DirectExchange("game.exchange"))
+//                    .with("race."+raceDto.getId());
+//
+//            amqpAdmin.removeBinding(binding);
+//            binding = BindingBuilder
+//                    .bind(new Queue("matching.queue."+target.getId()))
+//                    .to(new DirectExchange("game.exchange"))
+//                    .with("race."+raceDto.getId());
+//
+//            amqpAdmin.removeBinding(binding);
+//
+//            amqpAdmin.declareBinding(BindingBuilder
+//                    .bind(new Queue("matching.queue."+top_user.getId()))
+//                    .to(new DirectExchange("game.exchange"))
+//                    .with("user."+top_user.getId()));
+//
+//            amqpAdmin.declareBinding(BindingBuilder
+//                    .bind(new Queue("matching.queue."+target.getId()))
+//                    .to(new DirectExchange("game.exchange"))
+//                    .with("user."+target.getId()));
+
+
+
             rabbitTemplate.convertAndSend("game.exchange","user."+top_user.getId(),new Gson().toJson(raceDto));
             rabbitTemplate.convertAndSend("game.exchange","user."+target.getId(),new Gson().toJson(raceDto));
 

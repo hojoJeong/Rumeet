@@ -6,12 +6,11 @@ import com.d204.rumeet.exception.NoRequestException;
 import com.d204.rumeet.fcm.model.service.FcmMessageService;
 import com.d204.rumeet.friend.model.dao.FriendDao;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
-import com.d204.rumeet.friend.model.dto.FriendListDto;
-import com.d204.rumeet.friend.model.dto.FriendMatchDto;
-import com.d204.rumeet.friend.model.dto.FriendRequestDto;
+import com.d204.rumeet.friend.model.dto.*;
 import com.d204.rumeet.friend.model.mapper.FriendMapper;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
 import com.d204.rumeet.user.model.dto.SimpleUserFcmDto;
+import com.d204.rumeet.user.model.dto.UserDto;
 import com.d204.rumeet.user.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -147,12 +146,25 @@ public class FriendServiceImpl implements FriendService {
 
 
     @Override
-    public List<FriendRequestDao> getReceiveRequests(int toUserId) {
+    public List<FriendRequestInfoDto> getReceiveRequests(int toUserId) {
+
         List<FriendRequestDao> requests = mongoTemplate.find(
                 Query.query(Criteria.where("toUserId").is(toUserId)),
                 FriendRequestDao.class
         );
-        return requests;
+        List<FriendRequestInfoDto> list = new ArrayList<>();
+        for (FriendRequestDao dto : requests){
+            FriendRequestInfoDto tmp = new FriendRequestInfoDto();
+            UserDto user = userService.getUserById(dto.getFromUserId());
+            tmp.setId(dto.getId());
+            tmp.setFromUserId(user.getId());
+            tmp.setDate(dto.getDate());
+            tmp.setFromUserName(user.getNickname());
+            tmp.setFromUserProfile(user.getProfile());
+            tmp.setToUserId(toUserId);
+            list.add(tmp);
+        }
+        return list;
     }
 
     @Override
