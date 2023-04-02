@@ -23,7 +23,7 @@ pace5_avg = None
 async def recommand(km, id):
         global clustered_data_1km,clustered_data_2km,clustered_data_3km,clustered_data_5km
         global pace1_avg, pace2_avg, pace3_avg, pace5_avg
-        pace = []
+        similar_users = []
         if km == "1": # 1km
             user_id_cluster = clustered_data_1km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
             similar_users = clustered_data_1km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
@@ -69,7 +69,8 @@ async def recommand(km, id):
 
             # 결과 출력
             similar_users.show()
-        return {"id": id}
+        similar_users_list = [row.asDict() for row in similar_users.collect()]
+        return similar_users_list
 
 @app.get("/load/{km}/{id}")
 async def rootd(km, id):
