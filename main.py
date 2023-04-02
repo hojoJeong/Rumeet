@@ -136,7 +136,7 @@ async def root():
         kmeans = KMeans(k=2, seed=1, featuresCol="features", predictionCol="cluster")
         pipeline = Pipeline(stages=[vector_assembler, kmeans])
         model = pipeline.fit(pace1_avg)
-        clustered_data_3km = model.transform(pace1_avg)
+        clustered_data_1km = model.transform(pace1_avg)
         pace1_avg.show()
 
         if df_2km is not None:
@@ -203,7 +203,7 @@ async def root():
         kmeans = KMeans(k=2, seed=1, featuresCol="features", predictionCol="cluster")
         pipeline = Pipeline(stages=[vector_assembler, kmeans])
         model = pipeline.fit(pace5_avg)
-        clustered_data_3km = model.transform(pace5_avg)
+        clustered_data_5km = model.transform(pace5_avg)
         pace5_avg.show()
 
         return {"flag":"success"}
