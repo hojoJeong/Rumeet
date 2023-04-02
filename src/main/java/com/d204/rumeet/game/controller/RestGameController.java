@@ -4,6 +4,7 @@ import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.game.model.dto.FriendRaceDto;
 import com.d204.rumeet.game.model.dto.MatchAcceptDto;
 import com.d204.rumeet.game.model.dto.RaceDto;
+import com.d204.rumeet.game.model.dto.SoloPlayDto;
 import com.d204.rumeet.game.model.service.GameService;
 import com.d204.rumeet.game.model.service.KafkaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +29,7 @@ public class RestGameController {
     @Operation(summary = "친구에게 초대받은 러닝 리스트를 가져옴")
     @GetMapping("/invite/{userId}")
     public ResponseEntity<?> getInvitationList(@PathVariable int userId) {
-        RespData<List<FriendRaceDto>> data = new RespData<>();
+        RespData<List> data = new RespData<>();
         data.setMsg("초대받은 리스트");
         data.setData(gameService.getInvitationList(userId));
         return data.builder();
@@ -67,6 +68,15 @@ public class RestGameController {
         RespData<Integer> data = new RespData<>();
         data.setMsg("러닝 방 상태");
         data.setData(gameService.getRaceState(raceId));
+        return data.builder();
+    }
+
+    @Operation(summary = "솔로플레이 시작 (parameter userId, mode, ghost)")
+    @GetMapping("/solo")
+    public ResponseEntity<?> doSoloPlay(@RequestParam int userId, @RequestParam int mode,@RequestParam int ghost) {
+        RespData<SoloPlayDto> data = new RespData<>();
+        data.setMsg("솔플 시작");
+        data.setData(gameService.doSoloPlay(userId,mode,ghost));
         return data.builder();
     }
 

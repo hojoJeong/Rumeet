@@ -4,6 +4,7 @@ import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.friend.model.dto.FriendListDto;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
+import com.d204.rumeet.friend.model.dto.FriendRequestInfoDto;
 import com.d204.rumeet.friend.model.service.FriendService;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +51,7 @@ public class FriendController {
     @Operation(summary = "받은 친구 요청 조회", description = "나에게 친구요청한 목록 조회")
     @GetMapping("/to-request")
     public ResponseEntity<?> getFriendRequests(@RequestParam("userId") int toUserId) {
-        List<FriendRequestDao> requests = friendService.getReceiveRequests(toUserId);
+        List<FriendRequestInfoDto> requests = friendService.getReceiveRequests(toUserId);
         RespData<List> data = new RespData<>();
         data.setData(requests);
         return data.builder();
