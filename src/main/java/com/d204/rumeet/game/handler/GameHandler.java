@@ -28,18 +28,30 @@ public class GameHandler {
         String msg = new String(message.getBody());
         GameDto info = new Gson().fromJson(msg, GameDto.class);
         System.out.println(info);
-        matchingTool.doMatching(info);
+        try {
+            matchingTool.doMatching(info);
+        } catch (Exception e) {
+            System.out.println("매칭 오류");
+        }
     }
     @RabbitListener(queues = "cancel.queue")
     public void cancelHandler(Message message) {
         String msg = new String(message.getBody());
         GameDto info = new Gson().fromJson(msg, GameDto.class);
-        matchingTool.doCancel(info);
+        try {
+            matchingTool.doCancel(info);
+        } catch (Exception e) {
+            System.out.println("캔슬 오류");
+        }
     }
 
     @RabbitListener(queues = "end.queue")
     public void endHandler(Message message) {
-        gameService.endGameToKafka(message);
+        try {
+            gameService.endGameToKafka(message);
+        } catch (Exception e) {
+            System.out.println("기록저장 오류");
+        }
     }
 
 

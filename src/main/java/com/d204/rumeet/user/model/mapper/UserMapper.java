@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -37,7 +38,7 @@ public interface UserMapper {
 
     void joinUserToRecord(int id);
 
-    void joinUserToBadge(int id, long date);
+    void joinUserToBadge(Map<String,Object> map);
 
     AlarmStateDto getAlarmState(int id);
 

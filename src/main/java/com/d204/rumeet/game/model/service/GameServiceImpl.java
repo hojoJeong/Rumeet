@@ -100,7 +100,7 @@ public class GameServiceImpl implements GameService {
             throw new InvalidRunningException();
         } else { // friend.queue에 raceId 넣어주기
             Gson gson = new Gson();
-            rabbitTemplate.convertAndSend("friend.queue.exchange", "friend.queue", gson.toJson(raceId));
+            rabbitTemplate.convertAndSend("game.exchange", "friend", gson.toJson(raceId));
         }
     }
 
@@ -129,7 +129,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void endGameToKafka(Message message) {
+    public void endGameToKafka(Message message) throws Exception{
         String msg = new String(message.getBody());
         Type type = new TypeToken<Map<String,Integer>>(){}.getType();
         Map<String,Integer> map = new Gson().fromJson(msg,type);
@@ -138,23 +138,4 @@ public class GameServiceImpl implements GameService {
         kafkaService.sendMessage("rumeet.endgame."+km[mode],msg);
     }
 
-    @Override
-    public void endGameToKafka2(Message message) {
-
-    }
-
-    int getRaceId(String msg) {
-        String[] tmp = msg.split("race_id\":");
-        System.out.println(tmp[1]);
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i< tmp[1].length(); i++) {
-            char c = tmp[1].charAt(i);
-            if( c>= '0' && c<='9') {
-                sb.append(c);
-            } else {
-                break;
-            }
-        }
-        return Integer.parseInt(sb.toString());
-    }
 }
