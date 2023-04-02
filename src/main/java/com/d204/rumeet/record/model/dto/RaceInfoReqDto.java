@@ -8,7 +8,7 @@ public class RaceInfoReqDto {
     int userId;
     int raceId;
     int mode;
-    int velocity;
+    double velocity;
     int time;
     int heartRate;
     int success;
