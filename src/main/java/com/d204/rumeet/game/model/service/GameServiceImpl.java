@@ -67,15 +67,13 @@ public class GameServiceImpl implements GameService {
         SimpleUserDto user = userService.getSimpleUserById(userId);
         SimpleUserFcmDto target = userService.getSimpleUserFcmInfoById(partnerId);
 
-        long current = System.currentTimeMillis();
-
         // mongoDB에 초대 저장하기
         FriendRaceDto matchRequest = FriendRaceDto.builder()
                 .raceId(raceDto.getId()) // Mysql에 저장된 id
                 .userId(userId)
                 .partnerId(partnerId)
                 .mode(raceDto.getMode())
-                .date(current)
+                .date(raceDto.getDate())
                 .state(0) // default state : 0
                 .build();
         mongoTemplate.insert(matchRequest);
