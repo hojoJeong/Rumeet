@@ -2,7 +2,10 @@ import math
 from fastapi import FastAPI
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
-from pyspark.sql.functions import mean
+from pyspark.sql.functions import mean, rand
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.clustering import KMeans
+from pyspark.ml import Pipeline
 
 app = FastAPI()
 
@@ -14,6 +17,59 @@ df_5km = None
 pace2_avg = None
 pace3_avg = None
 pace5_avg = None
+
+
+@app.get("/recommand/{km}/{id}")
+async def recommand(km, id):
+        global clustered_data_1km,clustered_data_2km,clustered_data_3km,clustered_data_5km
+        global pace1_avg, pace2_avg, pace3_avg, pace5_avg
+        pace = []
+        if km == "1": # 1km
+            user_id_cluster = clustered_data_1km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
+            similar_users = clustered_data_1km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
+            similar_users = similar_users.select("user_id", "avg_pace1")
+            if similar_users.count() != 3:
+                random_user = pace1_avg.filter(col("user_id") != 1).subtract(similar_users).orderBy(rand()).limit(
+                    3 - similar_users.count())
+                similar_users = similar_users.union(random_user)
+
+            # 결과 출력
+            similar_users.show()
+
+        elif km =="2": # 2km
+            user_id_cluster = clustered_data_2km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
+            similar_users = clustered_data_2km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
+            similar_users = similar_users.select("user_id", "avg_pace1", "avg_pace2")
+            if similar_users.count() != 3:
+                random_user = pace2_avg.filter(col("user_id") != 1).subtract(similar_users).orderBy(rand()).limit(
+                    3 - similar_users.count())
+                similar_users = similar_users.union(random_user)
+
+            # 결과 출력
+            similar_users.show()
+        elif km == "3": # 3km
+            user_id_cluster = clustered_data_3km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
+            similar_users = clustered_data_3km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
+            similar_users = similar_users.select("user_id", "avg_pace1", "avg_pace2", "avg_pace3")
+            if similar_users.count() != 3:
+                random_user = pace3_avg.filter(col("user_id") != 1).subtract(similar_users).orderBy(rand()).limit(
+                    3 - similar_users.count())
+                similar_users = similar_users.union(random_user)
+
+            # 결과 출력
+            similar_users.show()
+        elif km == "5": # 5km
+            user_id_cluster = clustered_data_5km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
+            similar_users = clustered_data_5km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
+            similar_users = similar_users.select("user_id", "avg_pace1", "avg_pace2", "avg_pace3")
+            if similar_users.count() != 3:
+                random_user = pace5_avg.filter(col("user_id") != 1).subtract(similar_users).orderBy(rand()).limit(
+                    3 - similar_users.count())
+                similar_users = similar_users.union(random_user)
+
+            # 결과 출력
+            similar_users.show()
+        return {"id": id}
 
 @app.get("/load/{km}/{id}")
 async def rootd(km, id):
@@ -57,6 +113,7 @@ async def rootd(km, id):
 @app.get("/cache")
 async def root():
         global pace1_avg, df_1km, df_2km, df_3km, df_5km, pace2_avg, pace3_avg, pace5_avg
+        global clustered_data_1km,clustered_data_2km,clustered_data_3km,clustered_data_5km
     # SparkSession 생성
         spark = SparkSession.builder \
         .appName("ReadParquetFromHDFS2") \
@@ -70,12 +127,16 @@ async def root():
         .option("header", "true") \
         .load("hdfs://localhost:9000/user/spark/output/1km")
         df_1km = new_df_1km.cache()
-
         if pace1_avg is not None:
             pace1_avg.unpersist()
         new_pace1_avg = df_1km.groupBy('user_id') \
                 .agg((mean('pace1').cast('integer')).alias('avg_pace1'))
         pace1_avg = new_pace1_avg.cache()
+        vector_assembler = VectorAssembler(inputCols=["avg_pace1"], outputCol="features")
+        kmeans = KMeans(k=2, seed=1, featuresCol="features", predictionCol="cluster")
+        pipeline = Pipeline(stages=[vector_assembler, kmeans])
+        model = pipeline.fit(pace1_avg)
+        clustered_data_3km = model.transform(pace1_avg)
         pace1_avg.show()
 
         if df_2km is not None:
@@ -92,6 +153,11 @@ async def root():
                 .agg((mean('pace1').cast('integer')).alias('avg_pace1'),
                      (mean('pace2').cast('integer')).alias('avg_pace2'))
         pace2_avg = new_pace2_avg.cache()
+        vector_assembler = VectorAssembler(inputCols=["avg_pace1", "avg_pace2"], outputCol="features")
+        kmeans = KMeans(k=2, seed=1, featuresCol="features", predictionCol="cluster")
+        pipeline = Pipeline(stages=[vector_assembler, kmeans])
+        model = pipeline.fit(pace2_avg)
+        clustered_data_2km = model.transform(pace2_avg)
         pace2_avg.show()
 
         if df_3km is not None:
@@ -109,6 +175,11 @@ async def root():
                  (mean('pace2').cast('integer')).alias('avg_pace2'),
                  (mean('pace3').cast('integer')).alias('avg_pace3'))
         pace3_avg = new_pace3_avg.cache()
+        vector_assembler = VectorAssembler(inputCols=["avg_pace1", "avg_pace2", "avg_pace3"], outputCol="features")
+        kmeans = KMeans(k=2, seed=1, featuresCol="features", predictionCol="cluster")
+        pipeline = Pipeline(stages=[vector_assembler, kmeans])
+        model = pipeline.fit(pace3_avg)
+        clustered_data_3km = model.transform(pace3_avg)
         pace3_avg.show()
 
         if df_5km is not None:
@@ -128,6 +199,11 @@ async def root():
                  (mean('pace4').cast('integer')).alias('avg_pace4'),
                  (mean('pace5').cast('integer')).alias('avg_pace5'))
         pace5_avg = new_pace5_avg.cache()
+        vector_assembler = VectorAssembler(inputCols=["avg_pace1", "avg_pace2", "avg_pace3", "avg_pace4", "avg_pace5"], outputCol="features")
+        kmeans = KMeans(k=2, seed=1, featuresCol="features", predictionCol="cluster")
+        pipeline = Pipeline(stages=[vector_assembler, kmeans])
+        model = pipeline.fit(pace5_avg)
+        clustered_data_3km = model.transform(pace5_avg)
         pace5_avg.show()
 
         return {"flag":"success"}
