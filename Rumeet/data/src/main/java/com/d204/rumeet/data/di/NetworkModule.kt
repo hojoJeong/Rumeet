@@ -21,8 +21,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
 
-    const val BASE_URL = "http://j8d204.p.ssafy.io/rumeet/"
-    const val BASE_URL_3 = "http://192.168.137.166:8080/rumeet/"
+    private const val BASE_URL = "http://j8d204.p.ssafy.io/rumeet/"
+    private const val BASE_URL_3 = "http://192.168.137.166:8080/rumeet/"
+    private const val BASE_URL_2 = "http://119.202.203.157/rumeet/"
 
     @Provides
     @Singleton

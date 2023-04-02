@@ -19,6 +19,7 @@ object RunningAMQPManager {
     }
 
     var runningChannel: Channel? = null
+    var runningTag : String = ""
 
     fun initChannel() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -48,13 +49,7 @@ object RunningAMQPManager {
     fun subscribeMatching(userId: Int, callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // 27이 매칭을 시작
-//                runningChannel?.basicConsume("matching.queue.27", true, callback)
-
-                // 2가 매칭 시작
-                runningChannel?.basicConsume("matching.queue.2",true, callback)
-
-                // runningChannel?.basicConsume("matching.queue.${userId}",true, callback)
+                runningChannel?.basicConsume("matching.queue.${userId}", true, callback)
             } catch (e: Exception) {
                 Log.e(TAG, "subscribeMatching: ${e.message}")
             }
@@ -64,25 +59,19 @@ object RunningAMQPManager {
     // 게임 시작, 보내기
     fun sendRunning(partnerId: Int, roomId: Int, message: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            // 27이 2한테 러닝 보내기
-//            runningChannel?.basicPublish("", "game.${roomId}.2", null, message.toByteArray())
-            // 2가 27한테 러닝 정보 보내기
-            runningChannel?.basicPublish("","game.${roomId}.27", null, message.toByteArray())
-
-
-            // runningChannel?.basicPublish("","game.${roomId}.${partnerId}", null, message.toByteArray())
+            runningChannel?.basicPublish(
+                "",
+                "game.${roomId}.${partnerId}",
+                null,
+                message.toByteArray()
+            )
         }
     }
 
     // 게임 관련 데이터 받기
     fun receiveRunning(roomId: Int, userId: Int, callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
-            // 2한테 온 데이터 27이 받기
-//            runningChannel?.basicConsume("game.${roomId}.27", callback)
-            // 27한테 온 데이터 2가 받기
-            runningChannel?.basicConsume("game.${roomId}.2", callback)
-
-            //            runningChannel?.basicConsume("game.${roomId}.${userId}",callback)
+            runningTag = runningChannel?.basicConsume("game.${roomId}.${userId}", callback) ?: ""
         }
     }
 
@@ -90,6 +79,7 @@ object RunningAMQPManager {
     fun sendEndGame(message: String) {
         CoroutineScope(Dispatchers.IO).launch {
             runningChannel?.basicPublish("", "end.queue", null, message.toByteArray())
+            runningChannel?.basicCancel(runningTag)
         }
     }
 }

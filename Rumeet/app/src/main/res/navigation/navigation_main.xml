@@ -36,6 +36,28 @@
         </fragment>
 
         <fragment
+            android:id="@+id/runningFinishFragment"
+            android:name="com.d204.rumeet.ui.running.finish.RunningFinishFragment"
+            android:label="RunningFinishFragment"
+            tools:layout="@layout/fragment_running_finish">
+
+            <argument
+                android:name="locationList"
+                app:argType="android.location.Location[]"
+                app:nullable="false"/>
+
+            <argument
+                android:name="result"
+                app:argType="com.d204.rumeet.ui.running.finish.model.RunningFinishModel"
+                app:nullable="false"/>
+
+            <action
+                android:id="@+id/action_runningFinishFragment_to_homeFragment"
+                app:destination="@id/navigation_main" />
+
+        </fragment>
+
+        <fragment
             android:id="@+id/runningMatchingFragment"
             android:name="com.d204.rumeet.ui.running.matching.RunningMatchingFragment"
             android:label="RunningMatchingFragment"
@@ -123,6 +145,9 @@
                 android:name="partnerId"
                 android:defaultValue="-1"
                 app:argType="integer"/>
+            <action
+                android:id="@+id/action_runningFragment_to_runningFinishFragment"
+                app:destination="@id/runningFinishFragment" />
 
         </fragment>
 

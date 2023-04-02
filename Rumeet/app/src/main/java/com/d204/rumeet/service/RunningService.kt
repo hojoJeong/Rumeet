@@ -8,11 +8,15 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Binder
+import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.location.LocationAvailability
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 
 class RunningService : Service(), LocationListener {
 
@@ -21,6 +25,20 @@ class RunningService : Service(), LocationListener {
     private var totalDistance = 0f
 
     private val binder = RunningBinder()
+
+    private var callback = object : LocationCallback() {
+        override fun onLocationAvailability(p0: LocationAvailability) {
+            if (p0.isLocationAvailable) {
+
+            } else {
+
+            }
+        }
+
+        override fun onLocationResult(p0: LocationResult) {
+            super.onLocationResult(p0)
+        }
+    }
 
     inner class RunningBinder : Binder() {
         fun getService(): RunningService {
@@ -66,4 +84,5 @@ class RunningService : Service(), LocationListener {
         }
         lastLocation = location
     }
+
 }

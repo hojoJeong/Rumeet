@@ -46,13 +46,8 @@ class RunningMatchingViewModel @Inject constructor(
             _userId.emit(getUserIdUseCase())
             _gameType.emit(gameType)
 
-//            val startModel = RunningMatchingRequestModel(userId.value, gameType)
-
-            //27이 매칭 시작
-//            val startModel = RunningMatchingRequestModel(27, 5)
-
-            //2가 매칭 시작
-            val startModel = RunningMatchingRequestModel(2, 5)
+            Log.d(TAG, "startMatching: ${userId.value}")
+            val startModel = RunningMatchingRequestModel(userId.value, gameType)
             RunningAMQPManager.startMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
 
             startMatchingSubscribe()
@@ -67,13 +62,7 @@ class RunningMatchingViewModel @Inject constructor(
             }
 
             override fun onFinish() {
-//                val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
-
-                // 27이 매칭 종료
-                val startModel = RunningMatchingRequestModel(27, 5)
-
-                // 2가 매칭 종료
-//                val startModel = RunningMatchingRequestModel(2, 5)
+                val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
                 RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
                 _matchingResult.tryEmit(false)
                 val response =
@@ -96,9 +85,9 @@ class RunningMatchingViewModel @Inject constructor(
                     timer.cancel()
                     val response = Gson().fromJson(String(body), RunningRaceModel::class.java)
                     if (response.userId != userId.value) {
-                        _otherPlayerId.tryEmit(response.partnerId)
-                    } else{
                         _otherPlayerId.tryEmit(response.userId)
+                    } else{
+                        _otherPlayerId.tryEmit(response.partnerId)
                     }
                     _matchingResult.tryEmit(true)
                     val test = _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.SuccessMatching(_userId.value, response.id, _otherPlayerId.value))

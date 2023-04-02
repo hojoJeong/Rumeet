@@ -6,4 +6,5 @@ sealed class RunningSideEffect{
     class SuccessRunning(val distance : Int) : RunningSideEffect()
     object EndRunning : RunningSideEffect()
     class SuccessUserInfo(val userInfo : UserInfoDomainModel) : RunningSideEffect()
+    class SuccessPartnerInfo(val partnerInfo : UserInfoDomainModel) : RunningSideEffect()
 }

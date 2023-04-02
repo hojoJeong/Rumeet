@@ -81,9 +81,12 @@ dependencies {
 
     // official library
     implementation libs.hilt
+    implementation fileTree(dir: 'src\\main\\jniLibs', include: ['*.aar', '*.jar'], exclude: [])
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
     kapt libs.hilt.compiler
     implementation libs.glide
     kapt libs.glide.compiler
+    implementation "jp.wasabeef:glide-transformations:4.3.0"
 
     // kakao
     implementation libs.kakao.sdk

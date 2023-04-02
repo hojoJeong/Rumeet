@@ -15,6 +15,7 @@ import com.rabbitmq.client.Envelope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,11 +34,31 @@ class RunningViewModel @Inject constructor(
         }
     }
 
+
+    // 레이스 종료후 보내기
+    fun raceRecord(userId : Int, raceId : Int, mode : Int, velocity : Float, time : Long, heartRate : Int = 0, success : Int, polyLine : File?){
+        baseViewModelScope.launch {
+
+        }
+    }
+
     fun getUserInfo(userId : Int){
         baseViewModelScope.launch {
             try {
                 getUserInfoUseCase(userId)
                     .onSuccess { _runningSideEffect.emit(RunningSideEffect.SuccessUserInfo(it)) }
+                    .onError { e -> catchError(e) }
+            }catch (e : Exception){
+                Log.e("TAG", "getUserInfo: catch ${e.message}", )
+            }
+        }
+    }
+
+    fun getPartnerInfo(partnerId : Int){
+        baseViewModelScope.launch {
+            try {
+                getUserInfoUseCase(partnerId)
+                    .onSuccess { _runningSideEffect.emit(RunningSideEffect.SuccessPartnerInfo(it)) }
                     .onError { e -> catchError(e) }
             }catch (e : Exception){
                 Log.e("TAG", "getUserInfo: catch ${e.message}", )
@@ -54,6 +75,7 @@ class RunningViewModel @Inject constructor(
                 body: ByteArray
             ) {
                 val distance = String(body)
+                Log.d("get partner running", "handleDelivery: ${distance}")
                 _runningSideEffect.tryEmit(RunningSideEffect.SuccessRunning(distance.toInt()))
             }
         })

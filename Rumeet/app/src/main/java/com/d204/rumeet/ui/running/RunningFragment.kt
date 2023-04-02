@@ -1,50 +1,70 @@
 package com.d204.rumeet.ui.running
 
 import android.content.*
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
+import android.os.Build.VERSION_CODES.P
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningBinding
 import com.d204.rumeet.service.RunningService
+import com.d204.rumeet.ui.base.AlertModel
 import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.ui.base.DefaultAlertDialog
+import com.d204.rumeet.ui.running.finish.model.RunningFinishModel
 import com.d204.rumeet.ui.running.model.RunningModel1pace
 import com.d204.rumeet.ui.running.model.RunningModel2pace
 import com.d204.rumeet.ui.running.model.RunningModel3pace
 import com.d204.rumeet.ui.running.model.RunningModel5pace
+import com.d204.rumeet.util.*
 import com.d204.rumeet.util.amqp.RunningAMQPManager
-import com.d204.rumeet.util.floatTo2f
-import com.d204.rumeet.util.getCalorie
-import com.d204.rumeet.util.roundDigit
-import com.d204.rumeet.util.toMinute
+import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.coroutines.flow.collectLatest
+import org.apache.commons.lang3.math.NumberUtils.toDouble
+import kotlin.math.roundToInt
+
+
+private const val TAG = "RunningFragment"
 
 @AndroidEntryPoint
-class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>(), SensorEventListener {
+class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>(),
+    SensorEventListener {
 
     override val layoutResourceId: Int get() = R.layout.fragment_running
-    override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running) {defaultViewModelProviderFactory}
+    override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running) { defaultViewModelProviderFactory }
 
-    private lateinit var sensorManager : SensorManager
-    private lateinit var altitudeSensor : Sensor
+    private lateinit var sensorManager: SensorManager
+    private lateinit var altitudeSensor: Sensor
 
     private val args by navArgs<RunningFragmentArgs>()
     private var bindState = false
 
     private lateinit var runningService: RunningService
-    private val locationList = mutableListOf<Location>()
+    private val locationList = ArrayList<Location>()
     private var time = 0L
     private var maxDistance = 0
     private lateinit var runningEndModel: Any
@@ -66,6 +86,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var sensorTime = 0
     private var currentHeight = 0f
 
+    private var kmPerHour: Float = 0f
+    private var currentCalorie = 0f
+    private var gameResult = 0
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as RunningService.RunningBinder
@@ -80,67 +104,89 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            // 10m마다 값을 불러온다. 나오는 값은 10.123123123... -> 0.001....
-            val runningDistance = intent?.getFloatExtra("distance", 0f)?.div(1000f) ?: 0f
+            // 10m마다 값을 불러온다. 나오는 값은 10.123123123...
+            val runningDistance = intent?.getFloatExtra("distance", 0f) ?: 0f
             val runningLocation = intent?.getParcelableExtra<Location>("location")
 
-            binding.tvRunningDistance.text = floatTo2f(runningDistance)
+            binding.tvRunningDistance.text = floatTo2f(roundDigit(runningDistance.toDouble(),2).toFloat())
             locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
 
-            // km을 다시 m로
-            val speed = (roundDigit(runningDistance.toDouble(), 2)).times(1000)
+            // 나의 seekbar 진행률을 올린다
+            binding.sbMyProgress.progress = runningDistance.toInt()
+            Log.d(TAG, "onReceive: currnet my distance : ${runningDistance.toInt()}")
 
-            // km를 ((밀리초 / 1000) * 3600 = 1시간)을 나눔 -> 시속
-            val kmPerHour = runningDistance.toDouble().div(time.div(1000.0).times(3600.0))
-            toastMessage("속력 $kmPerHour")
-            toastMessage("내 속도 ${speed}")
+            // km를 시간으로 나눔
+            kmPerHour = runningLocation.speed * 3.6f
+            currentCalorie += getCalorie(gender, age, weight, time).toFloat()
 
-            binding.tvRunningPace.text = floatTo2f(speed.toFloat())
-            binding.tvRunningCalorie.text = getCalorie(gender, age, weight, time)
+            Log.d(TAG, "onReceive: kmPerHour $kmPerHour")
+            Log.d(TAG, "onReceive: calorie $currentCalorie")
+
+            binding.tvRunningPace.text = floatTo2f(kmPerHour)
+            binding.tvRunningCalorie.text = floatTo2f(currentCalorie)
 
             // 페이스 기록
-            if(runningDistance >= 1f && !pace1Flag){
+            if (runningDistance >= 50f && !pace1Flag) {
                 pace1 = time.div(1000).toInt()
                 pace1Flag = true
-            } else if(runningDistance >= 2 && !pace2Flag){
+                Log.d(TAG, "onReceive: running 1000 finish")
+            } else if (runningDistance >= 2000f && !pace2Flag) {
                 pace2 = time.div(1000).toInt()
                 pace2Flag = true
-            } else if(runningDistance >= 3 && !pace3Flag){
+                Log.d(TAG, "onReceive: running 2000 finish")
+            } else if (runningDistance >= 3000f && !pace3Flag) {
                 pace2 = time.div(1000).toInt()
                 pace2Flag = true
+                Log.d(TAG, "onReceive: running 3000 finish")
             }
 
             // 메시지 전달(파트너에게 나의 정보를 전송)
-//            RunningAMQPManager.sendRunning(args.partnerId, args.roomId, runningDistance.toInt().toString())
-            RunningAMQPManager.sendRunning(27, args.roomId, runningDistance.toInt().toString())
+            RunningAMQPManager.sendRunning(
+                args.partnerId,
+                args.roomId,
+                runningDistance.toInt().toString()
+            )
 
             //  러닝 종료
             if (maxDistance <= runningDistance) {
+                Log.d(TAG, "onReceive: running 5000 end")
                 // 5인경우 기록
-                if(!pace5Flag) pace5 = time.div(1000).toInt()
+                if (!pace5Flag) pace5 = time.div(1000).toInt()
 
                 // 담을 객체 전송
                 val message = when (maxDistance) {
-                    1000 -> {
+                    50 -> {
+                        Log.d(TAG, "onReceive: make 1000 response")
                         val response = runningEndModel as RunningModel1pace
+                        response.userId = args.myId
+                        response.race_Id = args.roomId
                         response.pace1 = pace1
                         Gson().toJson(response)
                     }
                     2000 -> {
+                        Log.d(TAG, "onReceive: make 2000 response")
                         val response = runningEndModel as RunningModel2pace
+                        response.userId = args.myId
+                        response.race_Id = args.roomId
                         response.pace1 = pace1
                         response.pace2 = pace2
                         Gson().toJson(response)
                     }
                     3000 -> {
+                        Log.d(TAG, "onReceive: make 3000 response")
                         val response = runningEndModel as RunningModel3pace
+                        response.userId = args.myId
+                        response.race_Id = args.roomId
                         response.pace1 = pace1
                         response.pace2 = pace2
                         response.pace3 = pace3
                         Gson().toJson(response)
                     }
                     5000 -> {
+                        Log.d(TAG, "onReceive: make 5000 response")
                         val response = runningEndModel as RunningModel5pace
+                        response.userId = args.myId
+                        response.race_Id = args.roomId
                         response.pace1 = pace1
                         response.pace2 = pace2
                         response.pace3 = pace3
@@ -151,9 +197,24 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 }
                 // 게임 종료 보내기
                 RunningAMQPManager.sendEndGame(message)
-                // Todo ViewModel에 전송
-                // Todo navigate
-                toastMessage("end game!")
+                Log.d(TAG, "onReceive: send end game -> navigate")
+
+                // 게임 결과는 러닝 결과에서 api 호출할 것
+                navigate(
+                    RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
+                        locationList = locationList.toTypedArray(),
+                        RunningFinishModel(
+                            success = 1,
+                            velocity = kmPerHour,
+                            calorie = currentCalorie,
+                            height = currentHeight,
+                            userId = args.myId,
+                            raceId = args.roomId,
+                            mode = args.gameType,
+                            time = time
+                        )
+                    )
+                )
             }
         }
     }
@@ -169,6 +230,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     override fun initStartView() {
         viewModel.getUserInfo(args.myId)
+        viewModel.getPartnerInfo(args.partnerId)
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         altitudeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
         initRunningMode()
@@ -179,27 +241,78 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             viewModel.runningSideEffect.collectLatest {
                 when (it) {
                     is RunningSideEffect.SuccessRunning -> {
-                        // progress
-                        toastMessage("상대방 러닝 : ${it.distance}")
+                        Log.d(TAG, "initDataBinding: partner running : ${it.distance}")
+                        binding.sbPartnerProgress.progress = it.distance
+
+                        // 상대방의 거리를 받아 더 커진다면?
+                        if (it.distance >= maxDistance) {
+                            // end queue에 메시지
+                            // dialog 호출
+                            Log.d(TAG, "initDataBinding: end game you lose")
+
+                        }
                     }
                     is RunningSideEffect.EndRunning -> {
 
                     }
 
+                    is RunningSideEffect.SuccessPartnerInfo -> {
+                        Glide.with(requireContext())
+                            .load(it.partnerInfo.profile)
+                            .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
+                            .circleCrop()
+                            .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
+                            .override(100,100)
+                            .into(object : CustomTarget<Drawable>(){
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    transition: Transition<in Drawable>?
+                                ) {
+                                    binding.sbPartnerProgress.thumb = resource
+                                }
+
+                                override fun onLoadCleared(placeholder: Drawable?) {
+
+                                }
+                            })
+                    }
+
                     is RunningSideEffect.SuccessUserInfo -> {
-                        //viewModel.startRun(args.myId, args.roomId)
-                        viewModel.startRun(2, args.roomId)
+                        // sb의 thumb 설정
+                        Glide.with(requireContext())
+                            .load(it.userInfo.profile)
+                            .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
+                            .circleCrop()
+                            .override(100,100)
+                            .into(object : CustomTarget<Drawable>(){
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    transition: Transition<in Drawable>?
+                                ) {
+                                    binding.sbMyProgress.thumb = resource // Thumb 이미지를 설정합니다.
+                                }
+
+                                override fun onLoadCleared(placeholder: Drawable?) {
+
+                                }
+                            })
+
+                        viewModel.startRun(args.myId, args.roomId)
                         Log.d("TAG", "SuccessUserInfo: start")
 
                         gender = it.userInfo.gender
                         age = it.userInfo.age
                         weight = it.userInfo.weight.toFloat()
 
-                        if(!bindState){
+                        if (!bindState) {
                             Log.d("bindState", "SuccessUserInfo: start")
                             val testIntent = Intent(activity, RunningService::class.java)
-                            requireActivity().bindService(testIntent, serviceConnection, Context.BIND_AUTO_CREATE)
-                        } else{
+                            requireActivity().bindService(
+                                testIntent,
+                                serviceConnection,
+                                Context.BIND_AUTO_CREATE
+                            )
+                        } else {
                             Log.d("bindState", "initDataBinding: already start")
                         }
                     }
@@ -251,7 +364,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     userId = args.myId,
                     race_Id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = 50
                 checkCount = 1
                 "경쟁 1km"
             }
@@ -324,13 +437,30 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     override fun initAfterBinding() {
         handler.postDelayed(timer, 1000)
+        binding.btnRunningPause.setOnClickListener {
+            pauseRunning()
+        }
+        binding.btnRunningPlay.setOnClickListener {
+            reStartRunning()
+        }
+        binding.btnRunningStop.setOnClickListener {
+            stopRunning()
+        }
+        binding.sbMyProgress.max = maxDistance
+        binding.sbMyProgress.setOnTouchListener { _, _ ->
+            true
+        }
+        binding.sbPartnerProgress.max = maxDistance
+        binding.sbPartnerProgress.setOnTouchListener { _, _ ->
+            true
+        }
     }
 
     override fun onResume() {
         super.onResume()
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(receiver, IntentFilter("custom-event"))
-        sensorManager.registerListener(this,altitudeSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, altitudeSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onPause() {
@@ -343,28 +473,74 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         super.onDestroyView()
         handler.removeCallbacks(timer)
         activity?.unbindService(serviceConnection)
-        requireActivity().unbindService(serviceConnection)
+        sensorManager.unregisterListener(this)
     }
 
     override fun onSensorChanged(p0: SensorEvent) {
-        if(p0.sensor.type == Sensor.TYPE_PRESSURE && sensorTime == 120){
+        if (p0.sensor.type == Sensor.TYPE_PRESSURE && sensorTime == 120) {
             val altitude = SensorManager.getAltitude(
                 SensorManager.PRESSURE_STANDARD_ATMOSPHERE,
                 p0.values[0]
             )
             sensorTime = 0
             // 초기값 생성
-            if(currentHeight == 0f) currentHeight = altitude
+            if (currentHeight == 0f) currentHeight = altitude
             // 100 -> 99면 1, 99 -> 100이면 -1
             val calcHeight = currentHeight - altitude
-            val printHeight = calcHeight - (calcHeight*2f)
+            val printHeight = calcHeight - (calcHeight * 2f)
             binding.tvRunningHeight.text = "${printHeight.toInt()}"
-        } else{
+        } else {
             sensorTime++
         }
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
+    }
+
+    private fun stopRunning() {
+        val dialog = DefaultAlertDialog(
+            AlertModel("알림 메시지", "러닝을 정지하시겠습니까?\n게임이 종료됩니다.", "확인")
+        ) {
+            // 타이머 중지
+            handler.removeCallbacks(timer)
+            // 거리, 페이스, 속력 중지 -> 서비스 종료
+            runningService.unbindService(serviceConnection)
+            // 고도 중지
+            sensorManager.unregisterListener(this)
+
+            navigate(
+                RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
+                    locationList = locationList.toTypedArray(),
+                    result = RunningFinishModel(
+                        success = 0,
+                        velocity = kmPerHour,
+                        calorie = currentCalorie,
+                        height = currentHeight,
+                        userId = args.myId,
+                        raceId = args.roomId,
+                        mode = args.gameType,
+                        time = time
+                    )
+                )
+            )
+        }
+        dialog.show(childFragmentManager, dialog.tag)
+    }
+
+    private fun pauseRunning() {
+        // 타이머 일시중지
+        handler.removeCallbacks(timer)
+        // 거리, 페이스, 속력 일시중지 -> 브로드캐스트 리시버를 멈춤
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
+        // 고도 일시 중지
+        sensorManager.unregisterListener(this)
+    }
+
+    private fun reStartRunning() {
+        handler.postDelayed(timer, 1000)
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(receiver, IntentFilter("custom-event"))
+        sensorManager.registerListener(this, altitudeSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 }
