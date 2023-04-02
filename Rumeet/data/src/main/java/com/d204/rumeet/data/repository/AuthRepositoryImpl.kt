@@ -1,5 +1,7 @@
 package com.d204.rumeet.data.repository
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.api.handleApi
@@ -54,6 +56,7 @@ internal class AuthRepositoryImpl @Inject constructor(
     ): Boolean {
         try {
             userDataStorePreferences.setToken(accessToken, refreshToken)
+            Log.d(TAG, "setUserToken: $userId")
             userDataStorePreferences.setUserId(userId)
         } catch (e: IOException) {
             return false

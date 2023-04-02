@@ -25,6 +25,12 @@ data class UserInfoResponse(
     val date: Long,
     @SerializedName("state")
     val state: Int,
+    @SerializedName("fcmToken")
+    val fcmToken: String,
     @SerializedName("oauth")
-    val oauth: String
+    val oauth: String?,
+    @SerializedName("friendAlarm")
+    val friendAlarm: Int,
+    @SerializedName("matchingAlarm")
+    val matchingAlarm: Int
 )

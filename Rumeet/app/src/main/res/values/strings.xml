@@ -287,8 +287,8 @@
         <item>12</item>
         <item>12no</item>
 
-        <item>01</item>
-        <item>01no</item>
+        <item>1</item>
+        <item>1no</item>
 
         <item>13</item>
         <item>13no</item>
@@ -317,8 +317,8 @@
         <item>32</item>
         <item>32no</item>
 
-        <item>00</item>
-        <item>00no</item>
+        <item>0</item>
+        <item>0no</item>
 
     </string-array>
 </resources>

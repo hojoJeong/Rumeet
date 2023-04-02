@@ -50,7 +50,7 @@
                     android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_home_welcome_message"
-                    tools:text="@string/title_best_record" />
+                    android:text="@string/title_best_record" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cdv_home_record"
@@ -66,7 +66,8 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:paddingVertical="@dimen/base_vertical_title_to_content">
 
                         <TextView
                             android:id="@+id/tv_home_record_times"
@@ -168,7 +169,7 @@
                     android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cdv_home_record"
-                    tools:text="@string/title_my_badge" />
+                    android:text="@string/title_my_badge" />
 
                 <TextView
                     android:id="@+id/btn_home_badge"
@@ -178,7 +179,7 @@
                     android:drawableRight="@drawable/ic_arrow_right"
                     android:drawableTint="@color/dim_gray"
                     android:text="@string/title_see_more"
-                    android:visibility="@{vm.badgeList == null ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{vm.badgeList == null ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_home_badge_title"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_home_badge_title"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -199,7 +200,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-
                         <ImageView
                             android:id="@+id/iv_home_record_badge_1"
                             android:layout_width="80dp"
@@ -210,6 +210,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:position="@{1}"
                             app:setBadgeImg="@{vm.badgeList}"
+                            android:layout_marginVertical="@dimen/base_vertical_title_to_content"
                             tools:src="@drawable/ic_launcher_background" />
 
                         <ImageView
@@ -260,7 +261,7 @@
                     android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cdv_home_badge"
-                    tools:text="@string/title_recommend_random_friend" />
+                    android:text="@string/title_recommend_random_friend" />
 
                 <TextView
                     android:id="@+id/btn_home_recommend_friend"
@@ -270,7 +271,7 @@
                     android:drawableRight="@drawable/ic_refresh"
                     android:drawableTint="@color/dim_gray"
                     android:text="@string/title_refresh"
-                    android:visibility="@{vm.recommendFriendList == null ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{vm.recommendFriendList == null ?  View.GONE : View.VISIBLE}"
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_home_recommend_friend_title"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_home_recommend_friend_title"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -308,12 +309,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="40dp"
                             android:textAlignment="center"
-                            android:visibility="@{vm.recommendFriendList == null ? View.VISIBLE : View.GONE}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:text="@string/content_no_pace" />
+                            android:text="@string/content_no_pace" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 

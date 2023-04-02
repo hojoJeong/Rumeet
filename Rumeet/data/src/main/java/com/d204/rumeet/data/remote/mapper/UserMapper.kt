@@ -72,5 +72,9 @@ internal fun HomeDataResponseDto.toDomainModel() = HomeDataDomainModel(
 )
 
 internal fun NotificationListResponseDto.toDomainModel() = NotificationListDomainModel(
-    date, fromUserId, id, toUserId
+    date, fromUserId, id, toUserId, fromUserName, fromUserProfile
+)
+
+internal fun RunningRequestResponse.toDomainModel() = RunningRequestDomainModel(
+    date, mode, partnerId, raceId, state, userId
 )

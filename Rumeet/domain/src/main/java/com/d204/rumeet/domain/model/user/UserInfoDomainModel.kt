@@ -11,5 +11,5 @@ data class UserInfoDomainModel(
     val weight: Double,
     val date: Long,
     val state: Int,
-    val oauth: String
+    val oauth: String?
 )

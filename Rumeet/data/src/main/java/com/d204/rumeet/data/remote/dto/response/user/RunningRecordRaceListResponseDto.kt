@@ -3,7 +3,7 @@ package com.d204.rumeet.data.remote.dto.response.user
 import com.google.gson.annotations.SerializedName
 
 data class RunningRecordRaceListResponseDto(
-    @SerializedName("data")
+    @SerializedName("date")
     val date: Long,
     @SerializedName("heartRate")
     val heartRate: Int,

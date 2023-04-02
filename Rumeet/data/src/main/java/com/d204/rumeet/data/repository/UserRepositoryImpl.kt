@@ -40,6 +40,7 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserId(): Int {
+        Log.d(TAG, "getUserId repo: ${userDataStorePreferences.getUserId()}")
         return userDataStorePreferences.getUserId()
     }
 
@@ -96,13 +97,15 @@ internal class UserRepositoryImpl @Inject constructor(
         startDate: Long,
         endDate: Long
     ): NetworkResult<RunningRecordDomainModel> {
-        return handleApi {
+        val response =  handleApi {
             userApi.getRunningRecord(
                 userId,
                 startDate,
                 endDate
             )
         }.toDomainResult<RunningRecordResponseDto, RunningRecordDomainModel> { it.toDomainModel() }
+        Log.d(TAG, "getRunningRecord: $response")
+        return response
     }
 
     override suspend fun getHomeData(userId: Int): NetworkResult<HomeDataDomainModel> {
@@ -111,7 +114,11 @@ internal class UserRepositoryImpl @Inject constructor(
         return response
     }
 
-    override suspend fun getFriendRequestList(): NetworkResult<List<NotificationListDomainModel>> {
-        return handleApi { userApi.getFriendRequestList() }.toDomainResult<List<NotificationListResponseDto>, List<NotificationListDomainModel>> { it.map { model -> model.toDomainModel() } }
+    override suspend fun getFriendRequestList(userId: Int): NetworkResult<List<NotificationListDomainModel>> {
+        return handleApi { userApi.getFriendRequestList(userId) }.toDomainResult<List<NotificationListResponseDto>, List<NotificationListDomainModel>> { it.map { model -> model.toDomainModel() } }
+    }
+
+    override suspend fun getRunningRequestList(userId: Int): NetworkResult<List<RunningRequestDomainModel>> {
+        return handleApi { userApi.getRunningRequestList(userId) }.toDomainResult<List<RunningRequestResponse>, List<RunningRequestDomainModel>> { it.map { model -> model.toDomainModel() } }
     }
 }

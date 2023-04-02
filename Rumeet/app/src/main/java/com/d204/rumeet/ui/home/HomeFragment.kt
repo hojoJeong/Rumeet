@@ -28,8 +28,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         binding.lifecycleOwner = viewLifecycleOwner
         with(viewModel) {
             getUserIdByUseCase()
-            getRecommendFriendListForHome()
-            getHomeData()
         }
         binding.vm = viewModel
     }
@@ -38,20 +36,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.userId.collect {
+                    Log.d(TAG, "initDataBinding 유저 아이디: ${viewModel.userId.value.successOrNull()}")
                     viewModel.registFcmToken()
+                    viewModel.getRecommendFriendListForHome()
+                    viewModel.getHomeData()
                 }
             }
             launch {
                 viewModel.homeResponse.collect {
                     val response = it.successOrNull()?.badge
+                    Log.d(TAG, "initDataBinding 뱃지: $response")
                     if(response != null){
                         val urlList = resources.getStringArray(R.array.url_badge)
                         val codeList = resources.getStringArray(R.array.code_badge)
-                        val myBadgeList = listOf(
-                            urlList[codeList.indexOf(response!![0].code.toString())],
-                            urlList[codeList.indexOf(response[1].code.toString())],
-                            urlList[codeList.indexOf(response[2].code.toString())],
-                        )
+                        val myBadgeList = mutableListOf<String>()
+                        for(i in response.indices){
+                            myBadgeList.add(urlList[codeList.indexOf(response!![i].code.toString())])
+                        }
                         viewModel.setBadgeList(myBadgeList)
                     }
                 }

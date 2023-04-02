@@ -138,6 +138,7 @@ class MyPageViewModel @Inject constructor(
                 .onSuccess {
                     dismissLoading()
                     _userInfo.value = UiState.Success(it.toUiModel())
+                    Log.d(TAG, "getUserInfo: ${userInfo.value.successOrNull()}")
                 }
                 .onError {
                     dismissLoading()
@@ -178,8 +179,13 @@ class MyPageViewModel @Inject constructor(
         baseViewModelScope.launch {
             showLoading()
             getRunningRecordUseCase(userId.value.successOrNull()!!, startDate, endDate)
-                .onSuccess {  }
-                .onError {  }
+                .onSuccess {
+                    dismissLoading()
+                    _runningRecord.value = UiState.Success(it)
+                }
+                .onError {
+                    dismissLoading()
+                }
         }
     }
 

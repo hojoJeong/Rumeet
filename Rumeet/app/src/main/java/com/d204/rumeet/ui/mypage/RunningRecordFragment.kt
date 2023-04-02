@@ -1,5 +1,7 @@
 package com.d204.rumeet.ui.mypage
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
@@ -24,6 +26,9 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
 
     override fun initStartView() {
         binding.contentRunningRecordNoResult.tvContentNoResultMessage.text = "러닝 데이터가 없습니다."
+        binding.tvRunningRecordAverageTime.text = "--"
+        binding.tvRunningRecordAverageDistance.text = "--"
+        binding.tvRunningRecordAveragePace.text = "--"
         initDatePicker()
     }
 
@@ -31,11 +36,12 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.runningRecord.collect {
+                    Log.d(TAG, "initDataBinding: ${it.successOrNull()}")
                     val summaryData = it.successOrNull()?.summaryData
                     binding.tvRunningRecordAverageDistance.text =
-                        summaryData?.totalDistance.toString()
-                    binding.tvRunningRecordAverageTime.text = summaryData?.totalTime.toString()
-                    binding.tvRunningRecordAveragePace.text = summaryData?.averagePace?.toRecord()
+                        summaryData?.totalDistance?.toString() ?: "--"
+                    binding.tvRunningRecordAverageTime.text = summaryData?.totalTime?.toString() ?: "--"
+                    binding.tvRunningRecordAveragePace.text = summaryData?.averagePace?.toRecord() ?: "--"
 
                     val activityList =
                         it.successOrNull()?.raceList?.map { model -> model.toUiModel() }
@@ -54,6 +60,7 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
 
     private fun initActivityListAdapter(list: List<RunningActivityUiModel>) {
         val activityAdapter = RunningActivityListAdapter().apply {
+            Log.d(TAG, "initActivityListAdapter: $list")
             submitList(list)
         }
 

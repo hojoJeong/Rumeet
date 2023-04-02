@@ -10,5 +10,9 @@ data class NotificationListResponseDto(
     @SerializedName("id")
     val id: String,
     @SerializedName("toUserId")
-    val toUserId: Int
+    val toUserId: Int,
+    @SerializedName("fromUserName")
+    val fromUserName: String,
+    @SerializedName("fromUserProfile")
+    val fromUserProfile: String
 )

@@ -67,10 +67,11 @@ class HomeViewModel @Inject constructor(
     fun getUserIdByUseCase() {
         baseViewModelScope.launch {
             try {
-                val response = getUserIdUseCase()
-                _userId.value = UiState.Success(response)
-            } catch (e: Exception) {
-                _userId.value = UiState.Error(e.cause)
+                    val response = getUserIdUseCase()
+                    Log.d(TAG, "getUserIdByUseCase: $response")
+                    _userId.value = UiState.Success(response)
+                } catch (e: Exception) {
+                    _userId.value = UiState.Error(e.cause)
                 catchError(e)
             }
         }
@@ -79,9 +80,10 @@ class HomeViewModel @Inject constructor(
     fun getHomeData() {
         baseViewModelScope.launch {
             showLoading()
-            getHomeDataUseCase(userId.value.successOrNull() ?: -1)
+            getHomeDataUseCase(2)
                 .onSuccess { response ->
                     _userName.value = UiState.Success(response.record.nickname.toString())
+                    _homeResponse.value = UiState.Success(response)
                     setHomeRecord(response.record)
                     //TODO 친구 추천 서버 통신
                     dismissLoading()
@@ -93,12 +95,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun setHomeRecord(record: HomeRecordDomainModel){
+    private fun setHomeRecord(record: HomeRecordDomainModel) {
         try {
             val totalCount = "${record.totalCount}회"
-
             val totalDistance = "${record.totalKm}km"
-            var pace = record.averagePace?.toRecord().toString()
+            var pace = record.averagePace.toString()
 
             val myRecord = listOf(
                 BestRecordUiModel(totalCount, "누적 횟수"),
@@ -108,12 +109,13 @@ class HomeViewModel @Inject constructor(
             _homeRecord.value = UiState.Success(myRecord)
             Log.d(TAG, "setHomeRecord 내 기록: ${homeRecord.value.successOrNull()}")
 
-        } catch (e: Exception){
+        } catch (e: Exception) {
             _homeRecord.value = UiState.Error(e.cause)
         }
     }
 
-    fun setBadgeList(list: List<String>){
+    fun setBadgeList(list: List<String>) {
+        Log.d(TAG, "setBadgeList: $list")
         _badgeList.value = UiState.Success(list)
     }
 

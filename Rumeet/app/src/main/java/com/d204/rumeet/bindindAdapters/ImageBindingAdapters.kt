@@ -40,9 +40,9 @@ object ImageBindingAdapters {
             2-> {
                 Glide.with(context).load(badgeList.successOrNull()?.get(1)).into(this)
             }
-            3 -> {
-                Glide.with(context).load(badgeList.successOrNull()?.get(2)).into(this)
-            }
+//            3 -> {
+//                Glide.with(context).load(badgeList.successOrNull()?.get(2)).into(this)
+//            }
         }
     }
 }

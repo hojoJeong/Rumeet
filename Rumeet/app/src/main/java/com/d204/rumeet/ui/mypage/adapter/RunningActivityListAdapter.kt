@@ -1,5 +1,7 @@
 package com.d204.rumeet.ui.mypage.adapter
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -19,8 +21,10 @@ class RunningActivityListAdapter :
 
     class RunningActivityItemHolder(private val binding: ItemRunningRecordActivityBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: RunningActivityUiModel) {
+        fun bind(item: RunningActivityUiModel, index: Int) {
+            Log.d(TAG, "bind: $item")
             binding.activity = item
+            binding.index = index.toString()
         }
     }
 
@@ -35,7 +39,7 @@ class RunningActivityListAdapter :
         )
 
     override fun onBindViewHolder(holder: RunningActivityItemHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), itemCount)
     }
 
     object RunningActivityDiffUtil : DiffUtil.ItemCallback<RunningActivityUiModel>() {

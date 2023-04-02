@@ -46,6 +46,9 @@ internal interface UserApi {
     @GET("record/{userId}")
     suspend fun getHomeData(@Path("userId") userId: Int) : BaseResponse<HomeDataResponseDto>
 
-    @GET("friends/from-request")
-    suspend fun getFriendRequestList(): BaseResponse<List<NotificationListResponseDto>>
+    @GET("friends/to-request")
+    suspend fun getFriendRequestList(@Query("userId") userId: Int): BaseResponse<List<NotificationListResponseDto>>
+
+    @GET("game/invite/{userId}")
+    suspend fun getRunningRequestList(@Path("userId") userId: Int): BaseResponse<List<RunningRequestResponse>>
 }

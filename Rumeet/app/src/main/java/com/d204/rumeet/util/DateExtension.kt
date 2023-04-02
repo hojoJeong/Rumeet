@@ -43,6 +43,6 @@ fun Int.toDistance(): String {
 
 
 fun Int.toRecord() : String {
-    val simpleDateFormat = SimpleDateFormat("mm\'ss\"", Locale.KOREA)
+    val simpleDateFormat = SimpleDateFormat("mm:ss", Locale.KOREA)
     return simpleDateFormat.format(this*1000)
 }
