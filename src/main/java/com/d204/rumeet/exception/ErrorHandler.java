@@ -101,4 +101,11 @@ public class ErrorHandler {
         data.setData(null);
         return data.builder();
     }
+
+    @ExceptionHandler(TerminatedRunningException.class)
+    public ResponseEntity<?> TerminatedRunningException() {
+        RespData<Void> data = new RespData(ErrorEnum.TERMINATED_RUNNING_ROOM_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
 }
