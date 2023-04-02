@@ -29,7 +29,7 @@ public class RestGameController {
     @Operation(summary = "친구에게 초대받은 러닝 리스트를 가져옴")
     @GetMapping("/invite/{userId}")
     public ResponseEntity<?> getInvitationList(@PathVariable int userId) {
-        RespData<List<FriendRaceDto>> data = new RespData<>();
+        RespData<List> data = new RespData<>();
         data.setMsg("초대받은 리스트");
         data.setData(gameService.getInvitationList(userId));
         return data.builder();

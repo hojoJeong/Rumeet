@@ -162,6 +162,7 @@ public class FriendServiceImpl implements FriendService {
             tmp.setFromUserName(user.getNickname());
             tmp.setFromUserProfile(user.getProfile());
             tmp.setToUserId(toUserId);
+            list.add(tmp);
         }
         return list;
     }
