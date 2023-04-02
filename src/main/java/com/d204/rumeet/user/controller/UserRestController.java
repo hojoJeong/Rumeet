@@ -101,9 +101,7 @@ public class UserRestController {
     public ResponseEntity<?> joinUser(@RequestPart(value = "user") JoinUserDto user,
                                       @RequestPart(value = "profile_img" , required = false) MultipartFile profile) {
         RespData<Void> data = new RespData<>();
-        System.out.println(profile);
         userService.joinUser(user, profile);
-        System.out.println(profile);
 
         return data.builder();
     }

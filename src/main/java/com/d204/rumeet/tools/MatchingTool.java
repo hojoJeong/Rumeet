@@ -24,7 +24,7 @@ public class MatchingTool {
 
     //이번
     // 매칭 시작하는 것
-    public void doMatching(GameDto info) {
+    public void doMatching(GameDto info) throws Exception{
         int mode = info.getMode();
         int[] km = new int[] {1,2,3,5,1,2,3,5,1,2,3,5};
         if(lists[mode] == null) {
@@ -73,7 +73,7 @@ public class MatchingTool {
         System.out.println("========================");
     }
 
-    public void doCancel(GameDto gameDto) {
+    public void doCancel(GameDto gameDto) throws Exception{
         if(lists[gameDto.getMode()]==null|| lists[gameDto.getMode()].head==null) return;
         lists[gameDto.getMode()].remove(gameDto.getUserId());
         lists[gameDto.getMode()].print();

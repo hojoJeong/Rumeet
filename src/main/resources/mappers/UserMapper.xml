@@ -100,7 +100,7 @@
         VALUES (#{userId});
     </insert>
 
-    <insert id="joinUserToBadge" parameterType="int">
+    <insert id="joinUserToBadge" parameterType="map">
         INSERT INTO my_badge (user_id, badge_id, date)
         VALUES (#{userId}, 17, #{date});
     </insert>

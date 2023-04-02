@@ -25,7 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -139,7 +141,7 @@ public class UserServiceImpl implements UserService{
         amqpAdmin.declareBinding(binding);
 
         // 친구 매칭용 큐
-        queue = QueueBuilder.durable("friend.user." + id+".").build();
+        queue = QueueBuilder.durable("friend.user." + id).build();
         amqpAdmin.declareQueue(queue);
         binding = BindingBuilder.bind(queue)
                 .to(new TopicExchange("friend.user.exchange"))
@@ -156,7 +158,11 @@ public class UserServiceImpl implements UserService{
         userMapper.joinUser(user);
         int id = user.getId();
         userMapper.joinUserToRecord(id);
-        userMapper.joinUserToBadge(id,date);
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",id);
+        map.put("date",date);
+
+        userMapper.joinUserToBadge(map);
         initQueue(id);
     }
     @Override
