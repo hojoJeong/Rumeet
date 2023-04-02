@@ -20,6 +20,11 @@
         android:theme="@style/Theme.Rumeet"
         android:usesCleartextTraffic="true" >
 
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/GOOGLE_MAP_API_KEY"/>
+
         <activity android:name=".ui.activities.StartActivity"
             android:theme="@style/Theme.Rumeet.Splash"
             android:exported="true">
@@ -31,9 +36,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
 
-            <meta-data
-                android:name="com.kakao.sdk.AppKey"
-                android:value="@string/KAKAO_NATIVE_KEY"/>
         </activity>
         <activity
             android:name=".ui.activities.MainActivity"/>

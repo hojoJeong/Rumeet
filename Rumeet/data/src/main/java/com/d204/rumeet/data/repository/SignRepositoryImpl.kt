@@ -1,21 +1,15 @@
 package com.d204.rumeet.data.repository
 
-import android.util.Log
 import com.d204.rumeet.data.remote.api.SignApiService
 import com.d204.rumeet.data.remote.api.handleApi
 import com.d204.rumeet.data.remote.dto.request.sign.ResetPasswordRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.JoinRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.SocialJoinRequestDto
-import com.d204.rumeet.data.remote.dto.response.BaseResponse
-import com.d204.rumeet.data.util.getMultipartData
+import com.d204.rumeet.data.util.getProfileMultipartData
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.repository.SignRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 import javax.inject.Inject
-import kotlin.math.sign
 
 internal class SignRepositoryImpl @Inject constructor(
     private val signApiService: SignApiService
@@ -34,7 +28,7 @@ internal class SignRepositoryImpl @Inject constructor(
         age: Int,
         imageUri: File?
     ): NetworkResult<Unit?> {
-        val multipartData = getMultipartData(imageUri)
+        val multipartData = getProfileMultipartData(imageUri)
         val request = JoinRequestDto(
             id,
             password,
@@ -71,7 +65,7 @@ internal class SignRepositoryImpl @Inject constructor(
             System.currentTimeMillis(),
             profileImgUrl
         )
-        val profileImg = getMultipartData(imageUri)
+        val profileImg = getProfileMultipartData(imageUri)
 
         // 소셜로그인은 서버에서 로직처리, 멀티파트는 null을 전달
         return handleApi { signApiService.socialJoin(request, profileImg) }

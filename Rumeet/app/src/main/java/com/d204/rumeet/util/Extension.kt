@@ -7,6 +7,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import java.io.File
+import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.text.DecimalFormat
@@ -103,9 +105,24 @@ fun getCalorie(gender : Int, age : Int, weight : Float, time : Long) : String{
     val calcHeart = roundDigit(120.times(0.6309), 2)
 
     val firstCalc : Double = roundDigit((calcAge + calcWeight + calcHeart - 55.0969) * minute.toDouble(), 2)
-    return floatTo2f(roundDigit(firstCalc.div(4.184) ,2).toFloat())
+    return floatTo2f(roundDigit(firstCalc.div(4.184) ,2).div(10).toFloat())
 }
 
 fun roundDigit(number : Double, digits : Int): Double {
     return Math.round(number * Math.pow(10.0, digits.toDouble())) / Math.pow(10.0, digits.toDouble())
+}
+
+fun viewToBitmap(view : View) : Bitmap{
+    val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    view.draw(canvas)
+    return bitmap
+}
+
+fun bitmapToFile(bitmap: Bitmap, file: File): File {
+    val outputStream = FileOutputStream(file)
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+    outputStream.flush()
+    outputStream.close()
+    return file
 }

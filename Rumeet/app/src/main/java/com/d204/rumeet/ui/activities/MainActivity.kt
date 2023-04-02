@@ -65,6 +65,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initAfterBinding() {
         navController.addOnDestinationChangedListener { _, _, _ ->
 
+            flag = true
             binding.fcvMain.isClickable = true
             binding.lyRunning.visibility = View.GONE
 

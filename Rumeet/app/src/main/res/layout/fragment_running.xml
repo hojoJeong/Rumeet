@@ -253,7 +253,7 @@
             android:progressDrawable="@drawable/bg_my_running_progress"
             android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/sb_partner_progress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

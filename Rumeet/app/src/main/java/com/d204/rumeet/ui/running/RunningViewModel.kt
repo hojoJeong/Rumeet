@@ -4,6 +4,7 @@ import android.util.Log
 import com.d204.rumeet.domain.model.user.UserInfoDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
+import com.d204.rumeet.domain.usecase.running.RecordRunningUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserInfoUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
@@ -20,65 +21,83 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunningViewModel @Inject constructor(
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val recordRunningUseCase: RecordRunningUseCase
 ) : BaseViewModel() {
 
-    private val _runningSideEffect : MutableSharedFlow<RunningSideEffect> = MutableSharedFlow(replay = 1, extraBufferCapacity = 100)
-    val runningSideEffect : SharedFlow<RunningSideEffect> get() = _runningSideEffect.asSharedFlow()
+    private val _runningSideEffect: MutableSharedFlow<RunningSideEffect> =
+        MutableSharedFlow(replay = 1, extraBufferCapacity = 100)
+    val runningSideEffect: SharedFlow<RunningSideEffect> get() = _runningSideEffect.asSharedFlow()
+
+    private val _runningRecordState : MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val runningRecordState : StateFlow<Boolean> get() = _runningRecordState.asStateFlow()
 
     val runningTypeModel = RunningTypeModel()
 
-    fun startRun(userId : Int, roomId : Int){
+    fun startRun(userId: Int, roomId: Int) {
         baseViewModelScope.launch {
-            startRunningSubscribe(userId,roomId)
+            startRunningSubscribe(userId, roomId)
         }
     }
-
 
     // 레이스 종료후 보내기
-    fun raceRecord(userId : Int, raceId : Int, mode : Int, velocity : Float, time : Long, heartRate : Int = 0, success : Int, polyLine : File?){
+    fun raceRecord(
+        userId: Int,
+        raceId: Int,
+        mode: Int,
+        velocity: Float,
+        time: Int,
+        heartRate: Int,
+        success: Int,
+        polyline: File?
+    ) {
         baseViewModelScope.launch {
-
+            recordRunningUseCase(userId, raceId, mode, velocity, time, heartRate, success, polyline)
+                .onSuccess { _runningRecordState.emit(true) }
+                .onError { e -> catchError(e) }
         }
     }
 
-    fun getUserInfo(userId : Int){
+    fun getUserInfo(userId: Int) {
         baseViewModelScope.launch {
             try {
                 getUserInfoUseCase(userId)
                     .onSuccess { _runningSideEffect.emit(RunningSideEffect.SuccessUserInfo(it)) }
                     .onError { e -> catchError(e) }
-            }catch (e : Exception){
-                Log.e("TAG", "getUserInfo: catch ${e.message}", )
+            } catch (e: Exception) {
+                Log.e("TAG", "getUserInfo: catch ${e.message}")
             }
         }
     }
 
-    fun getPartnerInfo(partnerId : Int){
+    fun getPartnerInfo(partnerId: Int) {
         baseViewModelScope.launch {
             try {
                 getUserInfoUseCase(partnerId)
                     .onSuccess { _runningSideEffect.emit(RunningSideEffect.SuccessPartnerInfo(it)) }
                     .onError { e -> catchError(e) }
-            }catch (e : Exception){
-                Log.e("TAG", "getUserInfo: catch ${e.message}", )
+            } catch (e: Exception) {
+                Log.e("TAG", "getUserInfo: catch ${e.message}")
             }
         }
     }
 
-    private fun startRunningSubscribe(userId : Int, roomId: Int){
-        RunningAMQPManager.receiveRunning(roomId, userId, object : DefaultConsumer(RunningAMQPManager.runningChannel){
-            override fun handleDelivery(
-                consumerTag: String?,
-                envelope: Envelope?,
-                properties: AMQP.BasicProperties?,
-                body: ByteArray
-            ) {
-                val distance = String(body)
-                Log.d("get partner running", "handleDelivery: ${distance}")
-                _runningSideEffect.tryEmit(RunningSideEffect.SuccessRunning(distance.toInt()))
-            }
-        })
+    private fun startRunningSubscribe(userId: Int, roomId: Int) {
+        RunningAMQPManager.receiveRunning(
+            roomId,
+            userId,
+            object : DefaultConsumer(RunningAMQPManager.runningChannel) {
+                override fun handleDelivery(
+                    consumerTag: String?,
+                    envelope: Envelope?,
+                    properties: AMQP.BasicProperties?,
+                    body: ByteArray
+                ) {
+                    val distance = String(body)
+                    Log.d("get partner running", "handleDelivery: ${distance}")
+                    _runningSideEffect.tryEmit(RunningSideEffect.SuccessRunning(distance.toInt()))
+                }
+            })
     }
 
     // state = 1 싱글, state = 2 멀티
@@ -87,17 +106,17 @@ class RunningViewModel @Inject constructor(
     }
 
     // 거리 or 협동의 난이도
-    fun setDistance(distance : RunningDistance){
+    fun setDistance(distance: RunningDistance) {
         runningTypeModel.distance = distance
     }
 
     // 누구와 달릴지
-    fun setRunningDetailType(who : RunningDetailType){
+    fun setRunningDetailType(who: RunningDetailType) {
         runningTypeModel.runningDetailType = who
     }
 
     // 난이도
-    fun setRunningDifficulty(difficulty: RunningDifficulty){
+    fun setRunningDifficulty(difficulty: RunningDifficulty) {
         runningTypeModel.runningDifficulty = difficulty
     }
 }
