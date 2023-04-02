@@ -16,6 +16,8 @@ public class ErrorHandler {
     @ExceptionHandler(BindingException.class)
     public ResponseEntity<?> BindingException(BindingException ex) {
         RespData<Integer> data = new RespData(ErrorEnum.SQL_ERROR);
+        System.out.println(
+                "#########DATA : "+data);
         if (ex instanceof BindingException) {
             data = new RespData(ErrorEnum.NO_USER_ERROR);
             data.setData(-1);
