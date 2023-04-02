@@ -2,11 +2,13 @@ package com.d204.rumeet.game.handler;
 
 import com.d204.rumeet.game.model.dto.GameDto;
 import com.d204.rumeet.game.model.dto.FriendRaceDto;
+import com.d204.rumeet.game.model.dto.RaceDto;
 import com.d204.rumeet.game.model.service.GameService;
 import com.d204.rumeet.tools.FriendMatchingTool;
 import com.d204.rumeet.tools.MatchingTool;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.apache.spark.internal.config.R;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -69,8 +71,15 @@ public class GameHandler {
                 Criteria.where("raceId").is(raceId)),
                 FriendRaceDto.class
         );
+        RaceDto raceDto = new RaceDto(friendRaceDto.getRaceId(),
+                friendRaceDto.getUserId(),
+                friendRaceDto.getPartnerId(),
+                friendRaceDto.getMode(),
+                friendRaceDto.getDate(),
+                friendRaceDto.getState());
+        System.out.println("############### 매칭된 게임 정보"+raceDto.toString());
         if (friendRaceDto.getState() == 0) { // 달리기 시작
-            friendMatchingTool.doRunning(friendRaceDto);
+            friendMatchingTool.doRunning(raceDto);
         }
     }
 
