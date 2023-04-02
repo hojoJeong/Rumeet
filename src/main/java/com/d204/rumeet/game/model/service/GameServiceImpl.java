@@ -1,14 +1,13 @@
 package com.d204.rumeet.game.model.service;
 
+import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.DuplicateFriendRequestException;
 import com.d204.rumeet.exception.InvalidRunningException;
 import com.d204.rumeet.exception.NoUserDataException;
 import com.d204.rumeet.exception.TerminatedRunningException;
 import com.d204.rumeet.fcm.model.service.FcmMessageService;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
-import com.d204.rumeet.game.model.dto.FriendRaceDto;
-import com.d204.rumeet.game.model.dto.RaceDto;
-import com.d204.rumeet.game.model.dto.RaceStateDto;
+import com.d204.rumeet.game.model.dto.*;
 import com.d204.rumeet.game.model.mapper.GameMapper;
 import com.d204.rumeet.tools.FriendMatchingTool;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
@@ -18,6 +17,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -148,4 +153,48 @@ public class GameServiceImpl implements GameService {
         kafkaService.sendMessage("rumeet.endgame."+km[mode],msg);
     }
 
+
+    @Override
+    public SoloPlayDto doSoloPlay(int userId, int mode, int ghost) {
+        int[] km = new int[] {1,2,3,5};
+        SoloPlayDto soloPlayDto = new SoloPlayDto();
+
+        RaceDto raceDto = new RaceDto();
+        raceDto.setMode(mode);
+        soloPlayDto.setMode(mode);
+        raceDto.setUserId(userId);
+        soloPlayDto.setUserId(userId);
+        raceDto.setPartnerId(-1);
+        soloPlayDto.setPartnerId(userId);
+        raceDto.setDate(System.currentTimeMillis());
+        soloPlayDto.setDate(raceDto.getDate());
+        int[] pace = new int[km[mode]];
+        if(ghost == 1) {
+            OkHttpClient client = new OkHttpClient();
+            System.out.println("http://119.202.203.157:8001/recommend/" + km[mode] + "/" + userId+"/1");
+            Request request = new Request.Builder().url("http://119.202.203.157:8001/recommend/" + km[mode] + "/" + userId+"/1").get().build();
+            Call call = client.newCall(request);
+            String responseBody= "";
+            RespData<String> data = new RespData<>();
+            try {
+                Response response = call.execute();
+                responseBody = response.body().string();
+                System.out.println("responseBody = " + responseBody);
+                data.setData(responseBody);
+            } catch (IOException e) {
+                System.out.println("e = " + e);
+            }
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<GamePaceDto>>() {}.getType();
+            List<GamePaceDto> gamePaceDtos = gson.fromJson(responseBody, listType);
+            GamePaceDto user = gamePaceDtos.get(0);
+            raceDto.setPartnerId(user.getId());
+            soloPlayDto.setPartnerId(user.getId());
+            pace = user.getPace();
+            soloPlayDto.setPace(pace);
+        }
+        gameMapper.makeRace(raceDto);
+        soloPlayDto.setId(raceDto.getId());
+        return soloPlayDto;
+    }
 }

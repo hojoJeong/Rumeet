@@ -3,6 +3,7 @@ package com.d204.rumeet.game.model.service;
 import com.d204.rumeet.game.model.dto.FriendRaceDto;
 import com.d204.rumeet.game.model.dto.MatchAcceptDto;
 import com.d204.rumeet.game.model.dto.RaceDto;
+import com.d204.rumeet.game.model.dto.SoloPlayDto;
 import org.springframework.amqp.core.Message;
 
 import java.util.List;
@@ -22,4 +23,5 @@ public interface GameService {
 
     void endGameToKafka(Message message) throws Exception;
 
+    SoloPlayDto doSoloPlay(int userId, int mode, int ghost);
 }

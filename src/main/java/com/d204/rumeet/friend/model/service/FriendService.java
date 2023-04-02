@@ -3,6 +3,7 @@ package com.d204.rumeet.friend.model.service;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.friend.model.dto.FriendListDto;
 import com.d204.rumeet.friend.model.dto.FriendRequestDto;
+import com.d204.rumeet.friend.model.dto.FriendRequestInfoDto;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface FriendService {
 
     void requestFriend(FriendRequestDto friendRequestDto);
 
-    List<FriendRequestDao> getReceiveRequests(int toUserId);
+    List<FriendRequestInfoDto> getReceiveRequests(int toUserId);
 
     List<FriendRequestDao> getSendRequests(int fromUserId);
 
