@@ -19,8 +19,8 @@ pace3_avg = None
 pace5_avg = None
 
 
-@app.get("/recommand/{km}/{id}")
-async def recommand(km, id):
+@app.get("/recommand/{km}/{id}/{count}")
+async def recommand(km, id,count):
         global clustered_data_1km,clustered_data_2km,clustered_data_3km,clustered_data_5km
         global pace1_avg, pace2_avg, pace3_avg, pace5_avg
         similar_users = []
@@ -28,9 +28,9 @@ async def recommand(km, id):
             user_id_cluster = clustered_data_1km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
             similar_users = clustered_data_1km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
             similar_users = similar_users.select("user_id", "avg_pace1")
-            if similar_users.count() != 3:
-                random_user = pace1_avg.filter(col("user_id") != 1).subtract(similar_users).orderBy(rand()).limit(
-                    3 - similar_users.count())
+            if similar_users.count() != count:
+                random_user = pace1_avg.filter(col("user_id") != id).subtract(similar_users).orderBy(rand()).limit(
+                    count - similar_users.count())
                 similar_users = similar_users.union(random_user)
 
             # 결과 출력
@@ -40,9 +40,9 @@ async def recommand(km, id):
             user_id_cluster = clustered_data_2km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
             similar_users = clustered_data_2km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
             similar_users = similar_users.select("user_id", "avg_pace1", "avg_pace2")
-            if similar_users.count() != 3:
-                random_user = pace2_avg.filter(col("user_id") != 1).subtract(similar_users).orderBy(rand()).limit(
-                    3 - similar_users.count())
+            if similar_users.count() != count:
+                random_user = pace2_avg.filter(col("user_id") != id).subtract(similar_users).orderBy(rand()).limit(
+                    count - similar_users.count())
                 similar_users = similar_users.union(random_user)
 
             # 결과 출력
@@ -51,9 +51,9 @@ async def recommand(km, id):
             user_id_cluster = clustered_data_3km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
             similar_users = clustered_data_3km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
             similar_users = similar_users.select("user_id", "avg_pace1", "avg_pace2", "avg_pace3")
-            if similar_users.count() != 3:
-                random_user = pace3_avg.filter(col("user_id") != 1).subtract(similar_users).orderBy(rand()).limit(
-                    3 - similar_users.count())
+            if similar_users.count() != count:
+                random_user = pace3_avg.filter(col("user_id") != id).subtract(similar_users).orderBy(rand()).limit(
+                    count - similar_users.count())
                 similar_users = similar_users.union(random_user)
 
             # 결과 출력
@@ -61,16 +61,34 @@ async def recommand(km, id):
         elif km == "5": # 5km
             user_id_cluster = clustered_data_5km.filter(col("user_id") == id).select("cluster").collect()[0]["cluster"]
             similar_users = clustered_data_5km.filter((col("user_id") != id) & (col("cluster") == user_id_cluster))
-            similar_users = similar_users.select("user_id", "avg_pace1", "avg_pace2", "avg_pace3")
-            if similar_users.count() != 3:
-                random_user = pace5_avg.filter(col("user_id") != 1).subtract(similar_users).orderBy(rand()).limit(
-                    3 - similar_users.count())
+            similar_users = similar_users.select("user_id", "avg_pace1", "avg_pace2", "avg_pace3", "avg_pace4", "avg_pace5")
+            if similar_users.count() != count:
+                random_user = pace5_avg.filter(col("user_id") != id).subtract(similar_users).orderBy(rand()).limit(
+                    count - similar_users.count())
                 similar_users = similar_users.union(random_user)
 
             # 결과 출력
             similar_users.show()
         similar_users_list = [row.asDict() for row in similar_users.collect()]
-        return similar_users_list
+        output_data = []
+        if km in ["1", "2", "3"]:
+            output_data = [
+                {
+                    "id": d["user_id"],
+                    "pace": [d[f"avg_pace{i}"] for i in range(1, int(km) + 1)],
+                }
+                for d in similar_users_list
+            ]
+        elif km == "5":
+            output_data = [
+                {
+                    "id": d["user_id"],
+                    "pace": [d[f"avg_pace{i}"] for i in range(1, 6)],
+                }
+                for d in similar_users_list
+            ]
+
+        return output_data
 
 @app.get("/load/{km}/{id}")
 async def rootd(km, id):
@@ -85,9 +103,6 @@ async def rootd(km, id):
             print(pace_value)
         elif km =="2": # 2km
             print("km : 5")
-            pace2_avg.filter(pace2_avg["user_id"] == id) \
-                .select('avg_pace1', 'avg_pace2')\
-                .show()
             filtered = pace2_avg.filter(pace2_avg["user_id"] == id) \
                 .select('avg_pace1', 'avg_pace2') \
                 .rdd.flatMap(lambda x: x) \
