@@ -93,7 +93,7 @@ public class GameServiceImpl implements GameService {
     public void acceptRace(int raceId) {
         // mongoDB에서 roomId로 매칭 정보 가져오기
         FriendRaceDto request = mongoTemplate.findOne(
-                Query.query(Criteria.where("roomId").is(raceId)),
+                Query.query(Criteria.where("raceId").is(raceId)),
                 FriendRaceDto.class
         );
         if(request.getState() == -1) {
