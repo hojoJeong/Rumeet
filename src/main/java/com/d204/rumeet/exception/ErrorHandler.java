@@ -16,6 +16,8 @@ public class ErrorHandler {
     @ExceptionHandler(BindingException.class)
     public ResponseEntity<?> BindingException(BindingException ex) {
         RespData<Integer> data = new RespData(ErrorEnum.SQL_ERROR);
+        System.out.println(
+                "#########DATA : "+data);
         if (ex instanceof BindingException) {
             data = new RespData(ErrorEnum.NO_USER_ERROR);
             data.setData(-1);
@@ -98,6 +100,13 @@ public class ErrorHandler {
     @ExceptionHandler(InvalidRunningException.class)
     public ResponseEntity<?> InvalidRunningException() {
         RespData<Void> data = new RespData(ErrorEnum.INVALID_RUNNING_ROOM_ERROR);
+        data.setData(null);
+        return data.builder();
+    }
+
+    @ExceptionHandler(TerminatedRunningException.class)
+    public ResponseEntity<?> TerminatedRunningException() {
+        RespData<Void> data = new RespData(ErrorEnum.TERMINATED_RUNNING_ROOM_ERROR);
         data.setData(null);
         return data.builder();
     }

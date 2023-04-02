@@ -1,10 +1,14 @@
 package com.d204.rumeet.game.model.service;
 
+import com.d204.rumeet.exception.DuplicateFriendRequestException;
 import com.d204.rumeet.exception.InvalidRunningException;
+import com.d204.rumeet.exception.NoUserDataException;
+import com.d204.rumeet.exception.TerminatedRunningException;
 import com.d204.rumeet.fcm.model.service.FcmMessageService;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.game.model.dto.FriendRaceDto;
 import com.d204.rumeet.game.model.dto.RaceDto;
+import com.d204.rumeet.game.model.dto.RaceStateDto;
 import com.d204.rumeet.game.model.mapper.GameMapper;
 import com.d204.rumeet.tools.FriendMatchingTool;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
@@ -63,15 +67,13 @@ public class GameServiceImpl implements GameService {
         SimpleUserDto user = userService.getSimpleUserById(userId);
         SimpleUserFcmDto target = userService.getSimpleUserFcmInfoById(partnerId);
 
-        long current = System.currentTimeMillis();
-
         // mongoDB에 초대 저장하기
         FriendRaceDto matchRequest = FriendRaceDto.builder()
                 .raceId(raceDto.getId()) // Mysql에 저장된 id
                 .userId(userId)
                 .partnerId(partnerId)
                 .mode(raceDto.getMode())
-                .date(current)
+                .date(raceDto.getDate())
                 .state(0) // default state : 0
                 .build();
         mongoTemplate.insert(matchRequest);
@@ -93,11 +95,13 @@ public class GameServiceImpl implements GameService {
     public void acceptRace(int raceId) {
         // mongoDB에서 roomId로 매칭 정보 가져오기
         FriendRaceDto request = mongoTemplate.findOne(
-                Query.query(Criteria.where("roomId").is(raceId)),
+                Query.query(Criteria.where("raceId").is(raceId)),
                 FriendRaceDto.class
         );
-        if(request.getState() == -1) {
+        if(request == null) {
             throw new InvalidRunningException();
+        } else if(request.getState() == -1) {
+            throw new TerminatedRunningException();
         } else { // friend.queue에 raceId 넣어주기
             Gson gson = new Gson();
             rabbitTemplate.convertAndSend("game.exchange", "friend", gson.toJson(raceId));
@@ -109,14 +113,19 @@ public class GameServiceImpl implements GameService {
         // 러닝 초대 거부 (state -1로 변경)
         int result = gameMapper.denyRace(raceId);
         if (result != 1) {
-            throw new InvalidRunningException();
+            throw new TerminatedRunningException();
         }
     }
 
 
     @Override
     public int getRaceState(int raceId) {
-        return gameMapper.getRaceState(raceId);
+        RaceStateDto result = gameMapper.getRaceState(raceId);
+        System.out.println("################get Race State result: "+result);
+        if (result == null) {
+            throw new InvalidRunningException();
+        }
+        return result.getState();
     }
 
     @Override
@@ -125,6 +134,7 @@ public class GameServiceImpl implements GameService {
                 Query.query(Criteria.where("partnerId").is(userId)),
                 FriendRaceDto.class
         );
+        System.out.println("############### getInvitationList: "+requests);
         return requests;
     }
 

@@ -20,7 +20,9 @@ public enum ErrorEnum {
     NO_FRIEND_ERROR("fail", "친구가 아닙니다.", 1),
     ALREADY_FRIEND_ERROR("fail", "이미 친구입니다.", 2),
     NO_BADGE_ERROR("fail", "해당 뱃지 정보가 없습니다.", 1),
-    INVALID_RUNNING_ROOM_ERROR("fail", "더이상 접근 불가능한 매칭방입니다", 1);
+    INVALID_RUNNING_ROOM_ERROR("fail", "올바른 방 요청이 아닙니다.", 1),
+    TERMINATED_RUNNING_ROOM_ERROR("fail", "이미 만료된 방입니다.", 2);
+
     public String flag;
     public String msg;
     public int code;
