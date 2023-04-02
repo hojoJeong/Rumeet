@@ -1,6 +1,7 @@
 package com.d204.rumeet.game.model.service;
 
 import com.d204.rumeet.exception.InvalidRunningException;
+import com.d204.rumeet.exception.TerminatedRunningException;
 import com.d204.rumeet.fcm.model.service.FcmMessageService;
 import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.game.model.dto.FriendRaceDto;
@@ -96,8 +97,10 @@ public class GameServiceImpl implements GameService {
                 Query.query(Criteria.where("raceId").is(raceId)),
                 FriendRaceDto.class
         );
-        if(request.getState() == -1) {
+        if(request == null) {
             throw new InvalidRunningException();
+        } else if(request.getState() == -1) {
+            throw new TerminatedRunningException();
         } else { // friend.queue에 raceId 넣어주기
             Gson gson = new Gson();
             rabbitTemplate.convertAndSend("game.exchange", "friend", gson.toJson(raceId));
@@ -109,7 +112,7 @@ public class GameServiceImpl implements GameService {
         // 러닝 초대 거부 (state -1로 변경)
         int result = gameMapper.denyRace(raceId);
         if (result != 1) {
-            throw new InvalidRunningException();
+            throw new TerminatedRunningException();
         }
     }
 
