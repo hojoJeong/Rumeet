@@ -60,7 +60,6 @@ async def root():
     # SparkSession 생성
         spark = SparkSession.builder \
         .appName("ReadParquetFromHDFS2") \
-        .master("spark://j8d204.p.ssafy.io:7077") \
         .getOrCreate()
 
     # HDFS에서 파케이 파일 읽기
@@ -69,7 +68,7 @@ async def root():
         new_df_1km = spark.read \
         .format("parquet") \
         .option("header", "true") \
-        .load("hdfs://13.125.218.237:9000/user/spark/output/1km")
+        .load("hdfs://localhost:9000/user/spark/output/1km")
         df_1km = new_df_1km.cache()
 
         if pace1_avg is not None:
@@ -84,7 +83,7 @@ async def root():
         new_df_2km = spark.read \
                 .format("parquet") \
                 .option("header", "true") \
-                .load("hdfs://13.125.218.237:9000/user/spark/output/2km")
+                .load("hdfs://localhost:9000/user/spark/output/2km")
         df_2km = new_df_2km.cache()
 
         if pace2_avg is not None:
@@ -100,7 +99,7 @@ async def root():
         new_df_3km = spark.read \
                 .format("parquet") \
                 .option("header", "true") \
-                .load("hdfs://13.125.218.237:9000/user/spark/output/3km")
+                .load("hdfs://localhost:9000/user/spark/output/3km")
         df_3km = new_df_3km.cache()
 
         if pace3_avg is not None:
@@ -117,7 +116,7 @@ async def root():
         new_df_5km = spark.read \
                 .format("parquet") \
                 .option("header", "true") \
-                .load("hdfs://13.125.218.237:9000/user/spark/output/5km")
+                .load("hdfs://localhost:9000/user/spark/output/5km")
         df_5km = new_df_5km.cache()
 
         if pace5_avg is not None:
