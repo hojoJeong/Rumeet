@@ -136,8 +136,10 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchUsers(nickname: String): NetworkResult<List<UserModel>> {
-        return handleApi { userApiService.searchUsers(nickname) }
+        val response =  handleApi { userApiService.searchUsers(nickname) }
             .toDomainResult<List<UserResponseDto>, List<UserModel>> { response -> response.map { it.toDomainModel() } }
+        Log.d(TAG, "searchUsers: $response")
+        return response
     }
 
     override suspend fun getAccessToken(): String {

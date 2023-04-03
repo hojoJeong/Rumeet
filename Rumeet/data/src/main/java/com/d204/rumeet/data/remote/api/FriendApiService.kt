@@ -32,7 +32,7 @@ internal interface FriendApiService {
     suspend fun searchFriend(
         @Query("userId") userId : Int,
         @Query("nickname") nickname : String
-    ) : BaseResponse<List<FriendResponseDto>>
+    ) : BaseResponse<List<FriendListResponseDto>>
 
     @POST("friends/accept")
     suspend fun acceptRequestFriend(

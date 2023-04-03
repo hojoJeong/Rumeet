@@ -52,6 +52,7 @@ class FriendListViewModel @Inject constructor(
             showLoading()
             searchFriendUseCase(getUserIdUseCase(),  searchNickname)
                 .onSuccess { response ->
+                    Log.d(TAG, "searchFriendList: $response")
                     _friendListAction.emit(FriendListAction.SuccessSearchFriend)
                     _friendList.value = UiState.Success(response)
                 }

@@ -52,7 +52,7 @@ internal class FriendRepositoryImpl @Inject constructor(
         userId: Int,
         searchNickname: String
     ): NetworkResult<List<FriendListDomainModel>> {
-        return handleApi {
+        val response = handleApi {
             friendApiService.searchFriend(
                 userId,
                 searchNickname
@@ -60,6 +60,8 @@ internal class FriendRepositoryImpl @Inject constructor(
         }.toDomainResult<List<FriendListResponseDto>, List<FriendListDomainModel>> { response ->
             response.map { it.toDomainModel() }
         }
+        Log.d(TAG, "searchFriends: $response")
+        return response
     }
 
     override suspend fun acceptFriendRequest(friendId: Int, myId: Int): Boolean {
