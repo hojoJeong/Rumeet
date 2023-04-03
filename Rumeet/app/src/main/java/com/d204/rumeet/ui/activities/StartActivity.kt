@@ -11,11 +11,6 @@ import com.d204.rumeet.domain.usecase.user.RegistFcmTokenUseCase
 import com.d204.rumeet.ui.base.BaseActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class StartActivity : BaseActivity<ActivityStartBinding>() {

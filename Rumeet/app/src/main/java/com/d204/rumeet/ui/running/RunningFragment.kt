@@ -10,6 +10,7 @@ import android.location.Location
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.Vibrator
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,7 @@ import com.d204.rumeet.ui.running.model.RunningModel3pace
 import com.d204.rumeet.ui.running.model.RunningModel5pace
 import com.d204.rumeet.util.*
 import com.d204.rumeet.util.amqp.RunningAMQPManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
@@ -72,6 +74,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var pace3Flag = false
     private var pace5Flag = false
 
+    private var distanceCheck = true
+
     private var gender = -1
     private var weight = 0f
     private var age = 0
@@ -82,6 +86,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var kmPerHour: Float = 0f
     private var currentCalorie = 0f
     private var printHeight = 0f
+    private var currentDistance = 0f
+
+    private var testDistance = 300
+
+    private lateinit var vibrator: Vibrator
 
     // 서비스 연결여부 콜백함수
     private val serviceConnection = object : ServiceConnection {
@@ -108,6 +117,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             // 좌표 기록
             locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
 
+            currentDistance = runningDistance
+
             // 나의 seekbar 진행률을 올린다
             binding.sbMyProgress.progress = runningDistance.toInt()
             Log.d(TAG, "onReceive: my max progress : ${binding.sbMyProgress.max}")
@@ -127,22 +138,25 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             binding.tvRunningCalorie.text = floatTo2f(currentCalorie)
 
             // 페이스 기록(50은 테스트용)
-            if (runningDistance >= 50f && !pace1Flag) {
+            if (runningDistance >= testDistance.toFloat() && !pace1Flag) {
                 pace1 = time.div(1000).toInt()
                 pace1Flag = true
                 Log.d(TAG, "onReceive: running 1000 finish")
+                vibrator.vibrate(500)
             } else if (runningDistance >= 2000f && !pace2Flag) {
                 pace2 = time.div(1000).toInt()
                 pace2Flag = true
                 Log.d(TAG, "onReceive: running 2000 finish")
+                vibrator.vibrate(500)
             } else if (runningDistance >= 3000f && !pace3Flag) {
                 pace2 = time.div(1000).toInt()
                 pace2Flag = true
                 Log.d(TAG, "onReceive: running 3000 finish")
+                vibrator.vibrate(500)
             }
 
-            // Todo 싱글이면 메세지 보낼 필요 없음
-            if(true){
+            // 싱글이면 메세지 보낼 필요 없음
+            if(args.gameType >= 4){
                 RunningAMQPManager.sendRunning(
                     args.partnerId,
                     args.roomId,
@@ -156,8 +170,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 // 5인경우 기록
                 if (!pace5Flag) pace5 = time.div(1000).toInt()
 
-                // Todo 싱글이면 보낼 필요 없음
-                if(true){
+                // 싱글이면 보낼 필요 없음
+                if(args.gameType >= 4){
                     RunningAMQPManager.sendEndGame(getMessageForEndQueue())
                 }
 
@@ -196,7 +210,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     /** end.queue에 보낼 메시지 생성 */
     private fun getMessageForEndQueue() : String{
         val message = when (maxDistance) {
-            50 -> {
+            testDistance -> {
                 Log.d(TAG, "onReceive: make 1000 response")
                 val response = runningEndModel as RunningModel1pace
                 response.user_id = args.myId
@@ -244,22 +258,36 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     override fun initStartView() {
 
         // Todo 싱글, 고스트 설정을 해줘야함
-        if(true){
+        if(args.gameType >= 4){
             viewModel.getUserInfo(args.myId)
             viewModel.getPartnerInfo(args.partnerId)
-        } else if(true){
-            viewModel.getUserInfo(args.myId)
+
+            with(binding){
+                sbMyProgress.visibility = View.VISIBLE
+                sbPartnerProgress.visibility = View.VISIBLE
+                sbSharkProgress.visibility = View.GONE
+            }
         }
 
         // 고도 센서 설정
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         altitudeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
+        vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         initRunningMode()
     }
 
     private fun successRunningData(distance : Int){
         Log.d(TAG, "initDataBinding: partner running : ${distance}")
         binding.sbPartnerProgress.progress = distance
+
+        // 거리를 따라 잡혔으면 알람
+        if(currentDistance < distance && distanceCheck){
+            Snackbar.make(binding.tvRunningMode, "따라잡혔습니다!!", Snackbar.LENGTH_SHORT).show()
+            vibrator.vibrate(500)
+            distanceCheck = false
+        } else if(currentDistance > distance){
+            distanceCheck = true
+        }
 
         // 상대방의 거리를 받아 더 커진다면?
         if (distance >= maxDistance) {
@@ -341,7 +369,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                             })
 
                         // Todo 경쟁이면 해당 코드 실행
-                        if(true){
+                        if(args.gameType >= 4){
                             viewModel.startRun(args.myId, args.roomId)
                             Log.d("TAG", "SuccessUserInfo: start")
                         }
@@ -413,7 +441,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 50
+                maxDistance = testDistance
                 checkCount = 1
                 "경쟁 1km"
             }
