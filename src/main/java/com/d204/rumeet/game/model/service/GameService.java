@@ -21,4 +21,6 @@ public interface GameService {
     void endGameToKafka(Message message) throws Exception;
 
     SoloPlayDto doSoloPlay(int userId, int mode, int ghost);
+
+    List<RecommendDto> recommendMainPage(int userId);
 }

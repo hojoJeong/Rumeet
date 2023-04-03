@@ -32,10 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Slf4j
@@ -216,5 +213,38 @@ public class GameServiceImpl implements GameService {
         gameMapper.makeRace(raceDto);
         soloPlayDto.setId(raceDto.getId());
         return soloPlayDto;
+    }
+
+    @Override
+    public List<RecommendDto> recommendMainPage(int userId) {
+        List<RecommendDto> list = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+        int[] km = new int[]{1, 2, 3, 5};
+        Random r = new Random();
+        int seed = r.nextInt(4);
+        Request request = new Request.Builder().url("http://119.202.203.157:8001/recommend/" + km[seed] + "/" + userId + "/3").get().build();
+        Call call = client.newCall(request);
+        String responseBody = "";
+        RespData<String> data = new RespData<>();
+        try {
+            Response response = call.execute();
+            responseBody = response.body().string();
+            System.out.println("responseBody = " + responseBody);
+            data.setData(responseBody);
+        } catch (IOException e) {
+            System.out.println("e = " + e);
+        }
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<GamePaceDto>>() {
+        }.getType();
+        List<GamePaceDto> gamePaceDtos = gson.fromJson(responseBody, listType);
+
+        for(GamePaceDto gamePaceDto : gamePaceDtos) {
+            UserDto user = userService.getUserById(gamePaceDto.getId());
+            RecommendDto recommendDto = new RecommendDto(user.getId(), user.getNickname(), user.getProfile());
+            list.add(recommendDto);
+        }
+
+        return list;
     }
 }
