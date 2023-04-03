@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface RecordService {
 
-    RecordDto getRecord(int userId);
+    FriendRecordDto getFriendRecord(int userId);
 
     Map<String, Object> getMainRecord(int userId);
     void updateRecord(RaceInfoReqDto data);
