@@ -35,7 +35,7 @@ public interface UserService {
 
     void modifyUserProfile(ProfileUserDto user, MultipartFile profile);
 
-    List<SimpleUserDto> searchUsersByNickname(String nickname);
+    List<UserRecordDto> searchUsersByNickname(String nickname);
 
     SimpleUserDto getSimpleUserById(int id);
 

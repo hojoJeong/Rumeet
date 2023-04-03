@@ -131,7 +131,7 @@ public class UserRestController {
     @Operation(summary = "유저 검색 (닉네임)", description = "전체 사용자에서 닉네임 검색")
     @GetMapping("/search")
     public ResponseEntity<?> searchFriend(@RequestParam("nickname") String nickname) {
-        List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
+        List<UserRecordDto> users = userService.searchUsersByNickname(nickname);
         RespData<List> data = new RespData<>();
         data.setData(users);
         return data.builder();
