@@ -80,4 +80,13 @@ public class RestGameController {
         return data.builder();
     }
 
+
+    @Operation(summary = "메인페이지 추천 3인 (Path userId)")
+    @GetMapping("/recommend/{userId}")
+    public ResponseEntity<?> recommendMainPage(@PathVariable int userId) {
+        RespData<List> data = new RespData<>();
+        data.setMsg("메인페이지 추천 3인");
+        data.setData(gameService.recommendMainPage(userId));
+        return data.builder();
+    }
 }
