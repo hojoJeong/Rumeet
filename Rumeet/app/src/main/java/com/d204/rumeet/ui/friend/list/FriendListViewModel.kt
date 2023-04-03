@@ -3,9 +3,11 @@ package com.d204.rumeet.ui.friend.list
 import android.content.ContentValues.TAG
 import android.provider.Contacts.Intents.UI
 import android.util.Log
+import com.d204.rumeet.domain.model.chatting.ChattingCreateModel
 import com.d204.rumeet.domain.model.friend.FriendListDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
+import com.d204.rumeet.domain.usecase.chatting.CreateChattingRoomUseCase
 import com.d204.rumeet.domain.usecase.friend.GetFriendInfoUseCase
 import com.d204.rumeet.domain.usecase.friend.GetFriendListUseCase
 import com.d204.rumeet.domain.usecase.friend.SearchFriendUseCase
@@ -26,7 +28,8 @@ class FriendListViewModel @Inject constructor(
     private val getFriendListUseCase: GetFriendListUseCase,
     private val searchFriendUseCase: SearchFriendUseCase,
     private val getUserIdUseCase: GetUserIdUseCase,
-    private val getFriendDetailInfoUseCase: GetFriendDetailInfoUseCase
+    private val getFriendDetailInfoUseCase: GetFriendDetailInfoUseCase,
+    private val createChattingRoomUseCase: CreateChattingRoomUseCase
 
 ) : BaseViewModel(), FriendListClickListener {
     private val _friendListAction: MutableSharedFlow<FriendListAction> = MutableSharedFlow()
@@ -36,6 +39,8 @@ class FriendListViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val friendList: StateFlow<UiState<List<FriendListDomainModel>>> get() = _friendList.asStateFlow()
 
+    private val _chattingRoom: MutableStateFlow<UiState<ChattingCreateModel>> = MutableStateFlow(UiState.Loading)
+    val chattingRoom: StateFlow<UiState<ChattingCreateModel>> get() = _chattingRoom.asStateFlow()
 
     fun requestFriendList(type: Int) {
         baseViewModelScope.launch {
@@ -95,6 +100,21 @@ class FriendListViewModel @Inject constructor(
     override fun onFriendListClick(userId: Int) {
         baseViewModelScope.launch {
             _friendListAction.emit(FriendListAction.SearchFriend(userId))
+        }
+    }
+
+    fun createChatting( friendId: Int){
+        baseViewModelScope.launch {
+            showLoading()
+            createChattingRoomUseCase(getUserIdUseCase(), friendId)
+                .onSuccess {
+                    _friendListAction.emit(FriendListAction.CreateChatting(friendId, it))
+                    Log.d(TAG, "createChatting: $it")
+                }
+                .onError {
+
+                }
+            dismissLoading()
         }
     }
 

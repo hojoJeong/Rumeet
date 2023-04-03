@@ -288,6 +288,9 @@
             android:name="com.d204.rumeet.ui.friend.list.FriendListFragment"
             android:label="FriendListFragment">
             <action
+                android:id="@+id/action_friendListFragment_to_chattingFragment"
+                app:destination="@+id/chattingFragment"/>
+            <action
                 android:id="@+id/action_friendListFragment_to_addFriendFragment"
                 app:destination="@id/addFriendFragment" />
         </fragment>

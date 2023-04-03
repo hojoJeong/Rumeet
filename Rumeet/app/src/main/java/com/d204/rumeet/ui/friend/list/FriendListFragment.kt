@@ -8,6 +8,7 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentFriendListBinding
 import com.d204.rumeet.domain.model.friend.FriendInfoDomainModel
 import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.friend.list.adapter.FriendListAdapter
 import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +59,10 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
                         is FriendListAction.SuccessSearchFriend -> {
                             hideKeyboard()
                         }
+                        is FriendListAction.CreateChatting -> {
+                            val response = it.roomInfo
+                            navigate(FriendListFragmentDirections.actionFriendListFragmentToChattingFragment(response.profile, response.roomId, response.noReadCnt, it.friendId))
+                        }
                     }
                 }
             }
@@ -76,9 +81,9 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
         val dialog = FriendInfoDialog().apply {
             viewInfo = "friendDetail"
             initFriendInfo(friendData)
-            addChattingButtonClickListener { userId ->
+            addChattingButtonClickListener { friendId ->
                 //Todo navigate chatting...
-
+                viewModel.createChatting(friendId)
             }
         }
         dialog.show(childFragmentManager, dialog.tag)
