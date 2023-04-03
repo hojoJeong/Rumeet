@@ -181,7 +181,7 @@ public class GameServiceImpl implements GameService {
         raceDto.setUserId(userId);
         soloPlayDto.setUserId(userId);
         raceDto.setPartnerId(-1);
-        soloPlayDto.setPartnerId(userId);
+        soloPlayDto.setPartnerId(-1);
         raceDto.setDate(System.currentTimeMillis());
         soloPlayDto.setDate(raceDto.getDate());
         int[] pace = new int[km[mode]];
