@@ -13,5 +13,6 @@ public class RaceInfoReqDto {
     int heartRate;
     int success;
 
+    String polyline;
 
 }

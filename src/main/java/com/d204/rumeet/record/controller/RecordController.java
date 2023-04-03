@@ -50,9 +50,8 @@ public class RecordController {
 
     @Operation(summary = "raceInfo 업데이트")
     @PostMapping("/race")
-    public ResponseEntity<?> addRaceInfo(@RequestPart("raceInfo") RaceInfoReqDto raceInfoReqDto,
-                                         @RequestPart("polyline") MultipartFile poly) {
-        recordService.addRaceInfo(raceInfoReqDto, poly);
+    public ResponseEntity<?> addRaceInfo(@RequestBody RaceInfoReqDto raceInfoReqDto) {
+        recordService.addRaceInfo(raceInfoReqDto);
         recordService.updateRecord(raceInfoReqDto);
         RespData<RecordDto> data = new RespData<>();
         data.setMsg("raceInfo 기록 추가 완료");

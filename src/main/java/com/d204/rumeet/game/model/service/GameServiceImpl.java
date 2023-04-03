@@ -10,6 +10,7 @@ import com.d204.rumeet.friend.model.dao.FriendRequestDao;
 import com.d204.rumeet.game.model.dto.*;
 import com.d204.rumeet.game.model.mapper.GameMapper;
 import com.d204.rumeet.tools.FriendMatchingTool;
+import com.d204.rumeet.tools.OSUpload;
 import com.d204.rumeet.user.model.dto.SimpleUserDto;
 import com.d204.rumeet.user.model.dto.SimpleUserFcmDto;
 import com.d204.rumeet.user.model.dto.UserDto;
@@ -29,7 +30,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -54,6 +57,7 @@ public class GameServiceImpl implements GameService {
 
     private final FriendMatchingTool friendMatchingTool;
 
+    private final OSUpload osUpload;
 
     public void makeRace(RaceDto raceDto) {
         gameMapper.makeRace(raceDto);
@@ -207,6 +211,12 @@ public class GameServiceImpl implements GameService {
             raceDto.setPartnerId(user.getId());
             soloPlayDto.setPartnerId(user.getId());
             pace = user.getPace();
+            if(pace == null) {
+                pace = new int[km[mode]];
+                for (int i = 0; i < km[mode]; i++) {
+                    pace[i] = 300;
+                }
+            }
             soloPlayDto.setPace(pace);
         } else if (ghost == 2) {
             GamePaceDto gamePaceDto = kafkaService.messageBYFastApi(km[mode], userId);
@@ -257,5 +267,37 @@ public class GameServiceImpl implements GameService {
         }
 
         return list;
+    }
+
+    @Override
+    public String savePoly(MultipartFile file) {
+        String url = "https://kr.object.ncloudstorage.com/rumeet/polyline/1309605582565100.png";
+        if(file != null && !file.isEmpty()) {
+            String [] formats = {".jpeg", ".png", ".bmp", ".jpg", ".PNG", ".JPEG"};
+            // 원래 파일 이름 추출
+            String origName = file.getOriginalFilename();
+            System.out.println(origName);
+            // 확장자 추출(ex : .png)
+            String extension = ".png";
+
+            String folderName = "polyline";
+            for(int i = 0; i < formats.length; i++) {
+                if (extension.equals(formats[i])){
+                    File uploadFile = null;
+                    try {
+                        uploadFile = osUpload.convert(file)        // 파일 생성
+                                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File convert fail"));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String fileName = folderName + "/" + System.nanoTime() + ".png";
+                    osUpload.put("rumeet", fileName, uploadFile);
+
+                    url = "https://kr.object.ncloudstorage.com/rumeet/"+fileName;
+                    break;
+                }
+            }
+        }
+        return url;
     }
 }

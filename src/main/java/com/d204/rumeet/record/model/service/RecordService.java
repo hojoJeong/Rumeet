@@ -15,7 +15,7 @@ public interface RecordService {
     Map<String, Object> getMainRecord(int userId);
     void updateRecord(RaceInfoReqDto data);
 
-    void addRaceInfo(RaceInfoReqDto data, MultipartFile poly);
+    void addRaceInfo(RaceInfoReqDto data);
 
     Map<String, Object> getRaceInfo(int userId, long startDate, long endDate);
 
