@@ -127,8 +127,13 @@ public class ChatServiceImpl implements ChatService{
             createQueue(chatRoomDto);
         }
         UserDto user2 = userService.getUserById(dto.getUser2());
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(rabbitTemplate);
+        QueueInformation queueInformation = null;
+        StringBuilder queueName = new StringBuilder();
+        queueName.append("chat.queue.").append(chatRoomDto.getId()).append(".").append(dto.getUser1());
+        queueInformation = rabbitAdmin.getQueueInfo(queueName.toString());
         returnDTO = new CreateChatReturnDTO(chatRoomDto.getId(), chatRoomDto.getUser2()
-                ,user2.getNickname(),user2.getProfile());
+                ,user2.getNickname(),user2.getProfile(),queueInformation.getMessageCount());
         return returnDTO;
     }
 

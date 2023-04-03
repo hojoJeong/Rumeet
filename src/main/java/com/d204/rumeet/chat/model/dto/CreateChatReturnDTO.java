@@ -12,4 +12,5 @@ public class CreateChatReturnDTO {
     int userId;
     String nickname;
     String profile;
+    int noReadCnt;
 }
