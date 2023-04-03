@@ -30,6 +30,7 @@ class FriendListViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val friendList: StateFlow<UiState<List<FriendListUiModel>>> get() = _friendList.asStateFlow()
 
+
     fun requestFriendList() {
         baseViewModelScope.launch {
             showLoading()

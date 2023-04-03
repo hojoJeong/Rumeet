@@ -6,14 +6,14 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import android.util.Log
+import com.d204.rumeet.domain.model.friend.FriendRecommendDomainModel
 import com.d204.rumeet.domain.model.user.HomeBadgeDomainModel
 import com.d204.rumeet.domain.model.user.HomeDataDomainModel
 import com.d204.rumeet.domain.model.user.HomeRecordDomainModel
+import com.d204.rumeet.domain.model.user.UserInfoDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
-import com.d204.rumeet.domain.usecase.user.GetHomeDataUseCase
-import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
-import com.d204.rumeet.domain.usecase.user.RegistFcmTokenUseCase
+import com.d204.rumeet.domain.usecase.user.*
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
@@ -33,7 +33,9 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
     private val registFcmTokenUseCase: RegistFcmTokenUseCase,
-    private val getHomeDataUseCase: GetHomeDataUseCase
+    private val getHomeDataUseCase: GetHomeDataUseCase,
+    private val getFriendRecommendListUseCase: GetFriendRecommendListUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase
 ) : BaseViewModel() {
     private val _userId: MutableStateFlow<UiState<Int>> = MutableStateFlow(UiState.Loading)
     val userId: StateFlow<UiState<Int>>
@@ -63,15 +65,21 @@ class HomeViewModel @Inject constructor(
     val homeResponse: StateFlow<UiState<HomeDataDomainModel>>
         get() = _homeResponse.asStateFlow()
 
+    private val _friendRecommendList: MutableStateFlow<UiState<List<FriendRecommendDomainModel>>> = MutableStateFlow(UiState.Loading)
+    val friendRecommendList: StateFlow<UiState<List<FriendRecommendDomainModel>>>
+        get() = _friendRecommendList
+
+    private val _friendDetailInfo: MutableStateFlow<UiState<UserInfoDomainModel>> = MutableStateFlow(UiState.Loading)
+    val friendDetailInfo: StateFlow<UiState<UserInfoDomainModel>> get() = _friendDetailInfo.asStateFlow()
 
     fun getUserIdByUseCase() {
         baseViewModelScope.launch {
             try {
-                    val response = getUserIdUseCase()
-                    Log.d(TAG, "getUserIdByUseCase: $response")
-                    _userId.value = UiState.Success(response)
-                } catch (e: Exception) {
-                    _userId.value = UiState.Error(e.cause)
+                val response = getUserIdUseCase()
+                Log.d(TAG, "getUserIdByUseCase: $response")
+                _userId.value = UiState.Success(response)
+            } catch (e: Exception) {
+                _userId.value = UiState.Error(e.cause)
                 catchError(e)
             }
         }
@@ -79,17 +87,14 @@ class HomeViewModel @Inject constructor(
 
     fun getHomeData() {
         baseViewModelScope.launch {
-            showLoading()
             getHomeDataUseCase(userId.value.successOrNull()!!)
                 .onSuccess { response ->
                     _userName.value = UiState.Success(response.record.nickname.toString())
                     _homeResponse.value = UiState.Success(response)
                     setHomeRecord(response.record)
                     //TODO 친구 추천 서버 통신
-                    dismissLoading()
                 }
                 .onError {
-                    dismissLoading()
                     catchError(it)
                 }
         }
@@ -139,6 +144,34 @@ class HomeViewModel @Inject constructor(
             baseViewModelScope.launch {
                 registFcmTokenUseCase(userId.value.successOrNull() ?: -1, token)
             }
+        }
+    }
+
+    fun getFriendRecommendList() {
+        baseViewModelScope.launch {
+            showLoading()
+            getFriendRecommendListUseCase(userId.value.successOrNull() ?: -1)
+                .onSuccess {
+                    dismissLoading()
+                    _friendRecommendList.value = UiState.Success(it)
+                }
+                .onError {
+                    dismissLoading()
+                }
+        }
+    }
+
+    fun getFriendInfo(userId: Int){
+        baseViewModelScope.launch {
+            showLoading()
+            getUserInfoUseCase(userId)
+                .onSuccess {
+                    dismissLoading()
+                    _friendDetailInfo.value = UiState.Success(it)
+                }
+                .onError {
+                    dismissLoading()
+                }
         }
     }
 }

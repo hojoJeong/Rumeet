@@ -60,5 +60,8 @@ internal interface UserApiService {
 
     @GET("record/match/{userId}")
     suspend fun getMatchingHistoryList(@Path("userId") userId: Int): BaseResponse<MatchingHistoryResponseDto>
+
+    @GET("game/recommend/{userId}")
+    suspend fun getFriendRecommendList(@Path("userId") userId: Int): BaseResponse<List<FriendRecommendListResponseDto>>
 }
 

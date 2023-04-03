@@ -30,4 +30,14 @@ internal interface FriendApiService {
         @Query("userId") userId : Int,
         @Query("nickname") nickname : String
     ) : BaseResponse<List<FriendResponseDto>>
+
+    @POST("friends/accept")
+    suspend fun acceptRequestFriend(
+        @Body request: FriendRequestDto
+    ) : BaseResponse<Unit?>
+
+    @POST("friends/reject")
+    suspend fun rejectRequestFriend(
+        @Body request: FriendRequestDto
+    ): BaseResponse<Unit>
 }

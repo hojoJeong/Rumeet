@@ -8,4 +8,6 @@ interface FriendRepository {
     suspend fun getFriendInfo(friendId : Int) : NetworkResult<FriendModel>
     suspend fun requestFriend(myId : Int, friendId: Int) : NetworkResult<Unit?>
     suspend fun searchFriends(userId : Int, searchNickname : String) :  NetworkResult<List<FriendModel>>
+    suspend fun acceptFriendRequest(friendId: Int, myId: Int): Boolean
+    suspend fun rejectFriendRequest(friendId: Int, myId: Int): Boolean
 }

@@ -11,16 +11,24 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemNotificationBinding
 import com.d204.rumeet.domain.model.user.NotificationListDomainModel
 import com.d204.rumeet.domain.model.user.RunningRequestDomainModel
+import com.d204.rumeet.ui.notification.NotificationHandler
 import com.d204.rumeet.ui.notification.model.NotificationFriendUiModel
 import com.d204.rumeet.util.toDate
 
 class NotificationFriendListAdapter : ListAdapter<NotificationListDomainModel, NotificationFriendListAdapter.NotificationFriendItemHolder>(NotificationListDiffUtil) {
-    class NotificationFriendItemHolder(private val binding: ItemNotificationBinding) :
+    lateinit var notificationHandler: NotificationHandler
+    inner class NotificationFriendItemHolder(private val binding: ItemNotificationBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NotificationListDomainModel) {
             binding.img = item.fromUserProfile
             binding.tvItemNotificationName.text = item.fromUserName
             binding.tvItemNotificationPace.text = item.date.toDate()
+            binding.btnItemNotificationAccept.setOnClickListener {
+                notificationHandler.onClick(item.fromUserId, item.toUserId, true)
+            }
+            binding.btnItemNotificationReject.setOnClickListener {
+                notificationHandler.onClick(item.fromUserId, item.toUserId, false)
+            }
         }
     }
 

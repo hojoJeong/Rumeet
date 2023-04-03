@@ -42,4 +42,15 @@ internal class FriendRepositoryImpl @Inject constructor(
             response.map { it.toDomainModel() }
         }
     }
+
+    override suspend fun acceptFriendRequest(friendId: Int, myId: Int): Boolean {
+        val request = FriendRequestDto(friendId, myId)
+        val response = friendApiService.acceptRequestFriend(request).flag == "success"
+        return response
+    }
+
+    override suspend fun rejectFriendRequest(friendId: Int, myId: Int): Boolean {
+        val request = FriendRequestDto(friendId, myId)
+        return friendApiService.rejectRequestFriend(request).flag == "success"
+    }
 }

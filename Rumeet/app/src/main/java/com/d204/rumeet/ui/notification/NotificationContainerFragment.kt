@@ -71,6 +71,16 @@ class NotificationContainerFragment(private val viewInfo: String) :
                     binding.contentNotificationNoResult.tvContentNoResultMessage.visibility = View.GONE
                     val friendAdapter = NotificationFriendListAdapter().apply {
                         submitList(it.successOrNull())
+                        notificationHandler = object : NotificationHandler{
+                            override fun onClick(friendId: Int, myId: Int, accept: Boolean) {
+                                if(accept){
+                                    viewModel.acceptRequestFriend(friendId, myId)
+                                } else {
+                                    viewModel.rejectRequestFriend(friendId, myId)
+                                }
+                                viewModel.getNotificationList()
+                            }
+                        }
                     }
                     binding.rvNotification.adapter = friendAdapter
                 }

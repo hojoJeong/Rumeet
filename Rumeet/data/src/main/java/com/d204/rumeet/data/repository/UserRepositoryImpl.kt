@@ -17,6 +17,7 @@ import com.d204.rumeet.data.remote.mapper.toDomainModel
 import com.d204.rumeet.data.remote.mapper.toRequestDto
 import com.d204.rumeet.data.util.getProfileMultipartData
 import com.d204.rumeet.domain.NetworkResult
+import com.d204.rumeet.domain.model.friend.FriendRecommendDomainModel
 import com.d204.rumeet.domain.model.user.*
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.model.user.UserInfoDomainModel
@@ -141,5 +142,12 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getAccessToken(): String {
         return userDataStorePreferences.getAccessToken() ?: ""    }
+
+    override suspend fun getFriendRecommendList(userId: Int): NetworkResult<List<FriendRecommendDomainModel>> {
+        val response = handleApi { userApiService.getFriendRecommendList(userId) }.toDomainResult<List<FriendRecommendListResponseDto>, List<FriendRecommendDomainModel>> { it.map { model -> model.toDomainModel() } }
+        Log.d(TAG, "getFriendRecommendList: $response")
+        return response
+    }
+
 
 }
