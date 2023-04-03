@@ -14,12 +14,6 @@ import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import org.apache.commons.math3.filter.DefaultMeasurementModel
-import org.apache.commons.math3.filter.DefaultProcessModel
-import org.apache.commons.math3.filter.KalmanFilter
-import org.apache.commons.math3.linear.Array2DRowRealMatrix
-import org.apache.commons.math3.linear.ArrayRealVector
-import org.apache.commons.math3.linear.RealVector
 
 class RunningService : Service(), LocationListener {
 
@@ -102,105 +96,5 @@ class RunningService : Service(), LocationListener {
                 }
             }
         }
-    }
-}
-
-class KalmanFilter2 {
-    // 칼만 필터 파라미터 설정
-    private val initialProcessNoise = 0.01
-    private val initialMeasurementNoise = 3.0
-    private val initialEstimationError = 10.0
-
-    // 칼만 필터 적용을 위한 초기화
-    private var processNoise = initialProcessNoise
-    private var measurementNoise = initialMeasurementNoise
-    private var estimationError = initialEstimationError
-    private var lastLatitude = 0.0
-    private var lastLongitude = 0.0
-
-    fun filter(latitude: Double, longitude: Double, altitude: Double, accuracy: Float): Location {
-        // 칼만 필터 적용을 위한 파라미터 계산
-        val K = estimationError / (estimationError + measurementNoise)
-        val lat = lastLatitude + K * (latitude - lastLatitude)
-        val lon = lastLongitude + K * (longitude - lastLongitude)
-        val estErr = (1 - K) * estimationError + processNoise
-        lastLatitude = lat
-        lastLongitude = lon
-        estimationError = estErr
-        val filteredLocation = Location("")
-        filteredLocation.latitude = lat
-        filteredLocation.longitude = lon
-        filteredLocation.altitude = altitude
-        return filteredLocation
-    }
-}
-
-class GpsKalmanFilter {
-    var kalmanFilter: KalmanFilter? = null
-
-    fun initialize(initialState: RealVector) {
-        val stateTransition = Array2DRowRealMatrix(
-            arrayOf(
-                doubleArrayOf(1.0, 0.0, 1.0, 0.0),
-                doubleArrayOf(0.0, 1.0, 0.0, 1.0),
-                doubleArrayOf(0.0, 0.0, 1.0, 0.0),
-                doubleArrayOf(0.0, 0.0, 0.0, 1.0)
-            )
-        )
-
-        val control = null // No control input in this example
-
-        val processNoise = Array2DRowRealMatrix(
-            arrayOf(
-                doubleArrayOf(1.0, 0.0, 0.0, 0.0),
-                doubleArrayOf(0.0, 1.0, 0.0, 0.0),
-                doubleArrayOf(0.0, 0.0, 1.0, 0.0),
-                doubleArrayOf(0.0, 0.0, 0.0, 1.0)
-            )
-        )
-
-        val initialStateCovariance = Array2DRowRealMatrix(
-            arrayOf(
-                doubleArrayOf(1.0, 0.0, 0.0, 0.0),
-                doubleArrayOf(0.0, 1.0, 0.0, 0.0),
-                doubleArrayOf(0.0, 0.0, 1.0, 0.0),
-                doubleArrayOf(0.0, 0.0, 0.0, 1.0)
-            )
-        )
-
-        val processModel = DefaultProcessModel(
-            stateTransition,
-            control,
-            processNoise,
-            initialState,
-            initialStateCovariance
-        )
-
-        val measurementMatrix = Array2DRowRealMatrix(
-            arrayOf(
-                doubleArrayOf(1.0, 0.0, 0.0, 0.0),
-                doubleArrayOf(0.0, 1.0, 0.0, 0.0)
-            )
-        )
-
-        val measurementNoise = Array2DRowRealMatrix(
-            arrayOf(
-                doubleArrayOf(1.0, 0.0),
-                doubleArrayOf(0.0, 1.0)
-            )
-        )
-
-        val measurementModel = DefaultMeasurementModel(
-            measurementMatrix,
-            measurementNoise
-        )
-
-        kalmanFilter = KalmanFilter(processModel, measurementModel)
-    }
-
-    fun correctLocation(measurement: RealVector): RealVector? {
-        kalmanFilter?.predict()
-        kalmanFilter?.correct(measurement)
-        return kalmanFilter?.stateEstimationVector
     }
 }

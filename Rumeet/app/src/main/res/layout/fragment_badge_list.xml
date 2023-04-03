@@ -57,7 +57,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_badge_recent_title"
                     tools:src="@drawable/ic_launcher_background"
-                    app:setImageByGlide="@{recent.badgeImg}"
+                    app:imgByUrl="@{recent.badgeImg}"
                     android:layout_marginTop="@dimen/base_vertical_title_to_content"/>
 
                 <TextView
