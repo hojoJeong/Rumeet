@@ -28,13 +28,11 @@ public class RecordServiceImpl implements RecordService{
     private final UserService userService;
     private final BadgeService badgeService;
 
-
-
     final String bucketName = "rumeet";
     private final OSUpload osUpload;
     @Override
-    public RecordDto getRecord(int userId) {
-        RecordDto record = recordMapper.getRecord(userId);
+    public FriendRecordDto getFriendRecord(int userId) {
+        FriendRecordDto record = recordMapper.getFriendRecord(userId);
         return record;
     }
 

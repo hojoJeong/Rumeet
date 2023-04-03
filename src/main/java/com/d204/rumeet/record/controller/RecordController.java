@@ -30,6 +30,15 @@ public class RecordController {
         return data.builder();
     }
 
+    @Operation(summary = "친구 기록 조회")
+    @GetMapping("/friend/{userId}")
+    public ResponseEntity<?> getFriendRecord(@PathVariable int userId) {
+        FriendRecordDto friend = recordService.getFriendRecord(userId);
+        RespData<FriendRecordDto> data = new RespData<>();
+        data.setData(friend);
+        return data.builder();
+    }
+
     @Operation(summary = "record 업데이트")
     @PutMapping
     public ResponseEntity<?> updateRecord(@RequestBody RaceInfoReqDto info) {
