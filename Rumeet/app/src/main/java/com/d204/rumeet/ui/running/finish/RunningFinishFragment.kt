@@ -83,9 +83,9 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
             delay(10000)
 
             withContext(Dispatchers.IO){
-                Log.d("map size", "${binding.lyMap.width}, ${binding.lyMap.height} ")
-                val bitmap = viewToBitmap(binding.lyMap)
-                polylineImage = bitmapToFile(bitmap, File(context?.cacheDir, "map_poly.png"))
+    //                Log.d("map size", "${binding.lyMap.width}, ${binding.lyMap.height} ")
+    //                val bitmap = viewToBitmap(binding.lyMap)
+    //                polylineImage = bitmapToFile(bitmap, File(context?.cacheDir, "map_poly.png"))
             }
 
 

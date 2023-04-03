@@ -201,7 +201,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 val response = runningEndModel as RunningModel1pace
                 response.user_id = args.myId
                 response.race_id = args.roomId
-                response.pace1 = pace1
+                if(pace1 != 0) response.pace1 = pace1
                 Gson().toJson(response)
             }
             2000 -> {
@@ -209,8 +209,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 val response = runningEndModel as RunningModel2pace
                 response.user_id = args.myId
                 response.race_id = args.roomId
-                response.pace1 = pace1
-                response.pace2 = pace2
+                if(pace1 != 0)response.pace1 = pace1
+                if(pace2 != 0)response.pace2 = pace2
                 Gson().toJson(response)
             }
             3000 -> {
@@ -218,9 +218,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 val response = runningEndModel as RunningModel3pace
                 response.user_id = args.myId
                 response.race_id = args.roomId
-                response.pace1 = pace1
-                response.pace2 = pace2
-                response.pace3 = pace3
+                if(pace1 != 0)response.pace1 = pace1
+                if(pace2 != 0)response.pace2 = pace2
+                if(pace3 != 0) response.pace3 = pace3
                 Gson().toJson(response)
             }
             5000 -> {
@@ -228,10 +228,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 val response = runningEndModel as RunningModel5pace
                 response.user_id = args.myId
                 response.race_id = args.roomId
-                response.pace1 = pace1
-                response.pace2 = pace2
-                response.pace3 = pace3
-                response.pace5 = pace5
+                if(pace1 != 0)response.pace1 = pace1
+                if(pace2 != 0)response.pace2 = pace2
+                if(pace3 != 0)response.pace3 = pace3
+                if(pace5 != 0) response.pace5 = pace5
                 Gson().toJson(response)
             }
             else -> throw java.lang.IllegalArgumentException("NO MAX DISTANCE")

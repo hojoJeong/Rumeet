@@ -31,10 +31,10 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_result"
             app:layout_constraintStart_toEndOf="@id/tv_result" />
 
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
             android:id="@+id/ly_map"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             android:layout_margin="@dimen/base_horizontal_margin"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             app:layout_constraintEnd_toEndOf="parent"
