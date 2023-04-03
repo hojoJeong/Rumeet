@@ -16,7 +16,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="@dimen/base_horizontal_margin"
-            android:text="@string/title_request_friend"
+            android:text="알림 받기"
             style="@style/base_font_medium_14_dim_gray"/>
 
         <Switch
@@ -29,6 +29,7 @@
             android:layout_margin="@dimen/base_horizontal_margin"
             android:track="@drawable/bg_switch_track"
             style="@style/switchCustom"/>
+
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/dv_setting_notification"

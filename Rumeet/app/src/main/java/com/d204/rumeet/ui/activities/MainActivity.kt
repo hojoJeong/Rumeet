@@ -1,5 +1,8 @@
 package com.d204.rumeet.ui.activities
 
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -32,6 +35,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         ChattingAMQPMananer.initChannel()
         RunningAMQPManager.initChannel()
+
+        val type = intent.getStringExtra("type")
+        if (type != null) {
+            navController.navigate(
+                HomeFragmentDirections.actionHomeFragmentToNotificationFragment(
+                    type.toInt()
+                )
+            )
+        }
     }
 
     override fun initDataBinding() {
@@ -63,6 +75,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun initAfterBinding() {
+
         navController.addOnDestinationChangedListener { _, _, _ ->
 
             flag = true
@@ -79,7 +92,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             RumeetToolbar.ToolbarType.LOGO_TEXT_ALARM,
                             "홈",
                             rightClickListener = {
-                                //Todo 알람 페이지로 navigate
+                                navController.navigate(
+                                    HomeFragmentDirections.actionHomeFragmentToNotificationFragment(
+                                        0
+                                    )
+                                )
                             })
                     }
                 }
@@ -147,7 +164,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }
                     binding.bvnMain.root.visibility = View.GONE
                 }
-
             }
         }
     }

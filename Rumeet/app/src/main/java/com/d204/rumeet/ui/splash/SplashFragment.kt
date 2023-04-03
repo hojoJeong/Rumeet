@@ -2,6 +2,7 @@ package com.d204.rumeet.ui.splash
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -52,8 +53,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
         // Android 12 부터 SplashScreen으로 대체
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             initSplashScreen()
-        }else {
-
         }
         if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
             && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
@@ -79,9 +78,15 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
                     is SplashNavigationAction.StartLoginActivity -> requireContext().startActivityAfterClearBackStack(
                         LoginActivity::class.java
                     )
-                    is SplashNavigationAction.StartMainActivity -> requireContext().startActivityAfterClearBackStack(
-                        MainActivity::class.java
-                    )
+                    is SplashNavigationAction.StartMainActivity -> {
+                        if(requireActivity().intent.extras?.getString("type")!= null){
+                            receiveFcmMessageOnBackGround()
+                        } else {
+                            requireContext().startActivityAfterClearBackStack(
+                                MainActivity::class.java
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -109,5 +114,14 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
                 }
             }
         )
+    }
+
+    private fun receiveFcmMessageOnBackGround(){
+        val type = requireActivity().intent.extras?.getString("type")
+        val startActivityIntent = Intent(requireContext(), MainActivity::class.java).apply {
+            putExtra("type", type)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        requireActivity().startActivity(startActivityIntent)
     }
 }

@@ -8,7 +8,7 @@ data class UserInfoUiModel(
     val gender: Int,
     val height: Double,
     val nickname: String = "닉네임",
-    val oauth: String,
+    val oauth: String?,
     val password: String?,
     val profile: String?,
     val weight: Double

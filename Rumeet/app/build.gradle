@@ -26,7 +26,7 @@ android {
 
         resValue "string", "KAKAO_NATIVE_KEY", properties['kakao.native.key']
         resValue "string", "KAKAO_MANIFEST_KEY", properties['kakao.manifest.key']
-        resValue "string", "GOOGLE_MAP_API_KEY", properties['google.map.api.key']
+//        resValue "string", "GOOGLE_MAP_API_KEY", properties['google.map.api.key']
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -73,6 +73,7 @@ dependencies {
     implementation platform(libs.firebase.bom)
     implementation libs.firebase.analytics
     implementation libs.firebase.crashlytics
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
 
     // official library
     implementation libs.hilt

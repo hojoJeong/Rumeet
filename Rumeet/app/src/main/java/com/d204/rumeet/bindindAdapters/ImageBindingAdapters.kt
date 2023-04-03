@@ -1,9 +1,12 @@
 package com.d204.rumeet.bindindAdapters
 
+import android.icu.text.Transliterator.Position
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.d204.rumeet.R
+import com.d204.rumeet.ui.base.UiState
+import com.d204.rumeet.ui.base.successOrNull
 
 
 object ImageBindingAdapters {
@@ -17,7 +20,7 @@ object ImageBindingAdapters {
 
     @JvmStatic
     @BindingAdapter("setImageByGlide")
-    fun ImageView.setImageByGlide(url: String) {
+    fun ImageView.setImageByGlide(url: String?) {
         Glide.with(context).load(url).into(this)
     }
 
@@ -25,5 +28,25 @@ object ImageBindingAdapters {
     @BindingAdapter("setImageResource")
     fun ImageView.setImageResource(img: Int) {
         setImageResource(img)
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["setBadgeImg", "position"])
+    fun ImageView.setBadgeImg(badgeList: UiState<List<String>>, position: Int) {
+        when (position) {
+            1 -> {
+                if (badgeList.successOrNull()?.size?:0 >= 1) {
+                    Glide.with(context).load(badgeList.successOrNull()?.get(0)).into(this)
+                }
+            }
+            2 -> {
+                if (badgeList.successOrNull()?.size?:0 >= 2)
+                    Glide.with(context).load(badgeList.successOrNull()?.get(1)).into(this)
+            }
+            3 -> {
+                if (badgeList.successOrNull()?.size?:0 >= 3)
+                    Glide.with(context).load(badgeList.successOrNull()?.get(2)).into(this)
+            }
+        }
     }
 }

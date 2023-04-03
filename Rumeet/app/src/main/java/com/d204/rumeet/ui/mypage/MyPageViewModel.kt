@@ -2,28 +2,38 @@ package com.d204.rumeet.ui.mypage
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.util.LogPrinter
 import com.d204.rumeet.domain.NetworkResult
+import com.d204.rumeet.domain.model.user.MatchingHistoryDomainModel
+import com.d204.rumeet.domain.model.user.NotificationStateDomainModel
+import com.d204.rumeet.domain.model.user.RunningRecordDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
-import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
-import com.d204.rumeet.domain.usecase.user.GetUserInfoUseCase
+import com.d204.rumeet.domain.usecase.user.*
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
-import com.d204.rumeet.ui.mypage.model.BadgeContentListUiModel
-import com.d204.rumeet.ui.mypage.model.UserInfoUiModel
+import com.d204.rumeet.ui.mypage.model.*
 import com.d204.rumeet.ui.mypage.setting.SettingAction
 import com.d204.rumeet.ui.mypage.setting.UserInfoAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.lang.Thread.State
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
-    private val getUserInfoUseCase: GetUserInfoUseCase
-) : BaseViewModel(), MyPageEventHandler{
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val withdrawalUseCase: WithdrawalUseCase,
+    private val getAcquiredBadgeListUseCase: GetAcquiredBadgeListUseCase,
+    private val logoutUseCase: LogoutUseCase,
+    private val getRunningRecordUseCase: GetRunningRecordUseCase,
+    private val getNotificationSettingStateUseCase: GetNotificationSettingStateUseCase,
+    private val modifyNotificationSettingStateUseCase: ModifyNotificationSettingStateUseCase,
+    private val getMatchingHistoryUseCase: GetMatchingHistoryUseCase
+) : BaseViewModel(), MyPageEventHandler {
     private val _myPageNavigationEvent: MutableSharedFlow<MyPageAction> = MutableSharedFlow()
     val myPageNavigationEvent: SharedFlow<MyPageAction> get() = _myPageNavigationEvent.asSharedFlow()
 
@@ -58,7 +68,29 @@ class MyPageViewModel @Inject constructor(
     val userInfo: StateFlow<UiState<UserInfoUiModel>>
         get() = _userInfo.asStateFlow()
 
-    private fun setSettingNavigate(title: String) {
+    private val _resultWithdrawal: MutableStateFlow<UiState<Boolean>> =
+        MutableStateFlow(UiState.Loading)
+    val resultWithdrawal: StateFlow<UiState<Boolean>>
+        get() = _resultWithdrawal.asStateFlow()
+
+    private val _acquiredBadgeList: MutableStateFlow<UiState<List<AcquiredBadgeUiModel>>> =
+        MutableStateFlow(UiState.Loading)
+    val acquiredBadgeList: StateFlow<UiState<List<AcquiredBadgeUiModel>>>
+        get() = _acquiredBadgeList.asStateFlow()
+
+    private val _runningRecord: MutableStateFlow<UiState<RunningRecordDomainModel>> = MutableStateFlow(UiState.Loading)
+    val runningRecord: StateFlow<UiState<RunningRecordDomainModel>>
+        get() = _runningRecord
+
+    private val _notificationSettingState: MutableStateFlow<UiState<NotificationStateDomainModel>> = MutableStateFlow(UiState.Loading)
+    val notificationSettingState: StateFlow<UiState<NotificationStateDomainModel>>
+        get() = _notificationSettingState.asStateFlow()
+
+    private val _matchingHistoryList: MutableStateFlow<UiState<MatchingHistoryDomainModel>> = MutableStateFlow(UiState.Loading)
+    val matchingHistoryList: StateFlow<UiState<MatchingHistoryDomainModel>>
+        get() = _matchingHistoryList.asStateFlow()
+
+    fun setSettingNavigate(title: String) {
         baseViewModelScope.launch {
             when (title) {
                 myPageMunuList[0] -> _myPageNavigationEvent.emit(MyPageAction.RunningRecord)
@@ -73,11 +105,10 @@ class MyPageViewModel @Inject constructor(
                 settingOptionList[1] -> _settingNavigationEvent.emit(SettingAction.SettingNotification)
                 settingOptionList[3] -> _settingNavigationEvent.emit(SettingAction.Privacy)
                 settingOptionList[4] -> _settingNavigationEvent.emit(SettingAction.ServiceTerms)
-                settingOptionList[5] -> _settingNavigationEvent.emit(SettingAction.LogOut)
 
-                userInfoOptionList[6] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetDetailInfo)
-                userInfoOptionList[7] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetPassword)
-                userInfoOptionList[8] -> _userInfoNavigationEvent.emit(UserInfoAction.Withdrawal)
+                userInfoOptionList[5] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetDetailInfo)
+                userInfoOptionList[6] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetPassword)
+                userInfoOptionList[7] -> _userInfoNavigationEvent.emit(UserInfoAction.Withdrawal)
             }
         }
     }
@@ -95,10 +126,6 @@ class MyPageViewModel @Inject constructor(
         _userInfoOptionList = list
     }
 
-    fun getBadgeList() {
-        //TODO 뱃지 서버통신
-    }
-
     fun getUserId() {
         baseViewModelScope.launch {
             try {
@@ -113,14 +140,101 @@ class MyPageViewModel @Inject constructor(
     fun getUserInfo() {
         baseViewModelScope.launch {
             showLoading()
-            Log.d(TAG, "getUserInfo userID: ${userId.value.successOrNull()}")
             getUserInfoUseCase(userId.value.successOrNull() ?: -1)
                 .onSuccess {
                     dismissLoading()
-                    Log.d(TAG, "getUserInfo: $it")
+                    _userInfo.value = UiState.Success(it.toUiModel())
+                    Log.d(TAG, "getUserInfo: ${userInfo.value.successOrNull()}")
                 }
                 .onError {
+                    dismissLoading()
                     catchError(it)
+                }
+        }
+    }
+
+    fun withdrawal() {
+        baseViewModelScope.launch {
+            showLoading()
+            try {
+                dismissLoading()
+                _resultWithdrawal.value =
+                    UiState.Success(withdrawalUseCase.invoke(userId.value.successOrNull()!!))
+            } catch (e: Exception) {
+                _resultWithdrawal.value = UiState.Error(e.cause)
+            }
+        }
+    }
+
+    fun getAcquiredBadgeList() {
+        baseViewModelScope.launch {
+            showLoading()
+            getAcquiredBadgeListUseCase(userId.value.successOrNull()!!)
+                .onSuccess {
+                    dismissLoading()
+                    _acquiredBadgeList.value = UiState.Success(it.map { model -> model.toUiModel() })
+                }
+                .onError {
+                    dismissLoading()
+                    catchError(it)
+                }
+        }
+    }
+
+    fun getRunningRecord(startDate: Long, endDate: Long){
+        baseViewModelScope.launch {
+            showLoading()
+            getRunningRecordUseCase(userId.value.successOrNull()!!, startDate, endDate)
+                .onSuccess {
+                    dismissLoading()
+                    _runningRecord.value = UiState.Success(it)
+                }
+                .onError {
+                    dismissLoading()
+                }
+        }
+    }
+
+    fun logout(){
+        baseViewModelScope.launch {
+            logoutUseCase.invoke()
+        }
+    }
+
+    fun getNotificationSettingState(){
+        baseViewModelScope.launch {
+            showLoading()
+            getNotificationSettingStateUseCase(userId.value.successOrNull()?:-1)
+                .onSuccess {
+                    _notificationSettingState.value = UiState.Success(it)
+                    dismissLoading()
+                }
+                .onError {
+                    _notificationSettingState.value = UiState.Error(it.cause)
+                    dismissLoading()
+                }
+        }
+    }
+
+    fun modifyNotificationState(target: Int, state: Int){
+        baseViewModelScope.launch {
+            showLoading()
+            val response = modifyNotificationSettingStateUseCase(userId.value.successOrNull()?:-1, target, state)
+            if(response) Log.d(TAG, "modifyNotificationState: 알림 변경 완료")
+        }
+    }
+
+    fun getMatchingHistoryList(){
+        baseViewModelScope.launch {
+            showLoading()
+            getMatchingHistoryUseCase(userId.value.successOrNull()!!)
+                .onSuccess {
+                    dismissLoading()
+                    _matchingHistoryList.value = UiState.Success(it)
+                }
+                .onError {
+                    dismissLoading()
+                    Log.d(TAG, "getMatchingHistoryList: ${it.cause}")
                 }
         }
     }

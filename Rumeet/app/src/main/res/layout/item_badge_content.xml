@@ -32,7 +32,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_item_badge_list"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_vertical_title_to_content"
             android:layout_marginHorizontal="@dimen/base_horizontal_margin"
