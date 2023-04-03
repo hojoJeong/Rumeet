@@ -181,13 +181,12 @@ public class GameServiceImpl implements GameService {
         raceDto.setUserId(userId);
         soloPlayDto.setUserId(userId);
         raceDto.setPartnerId(-1);
-        soloPlayDto.setPartnerId(userId);
+        soloPlayDto.setPartnerId(-1);
         raceDto.setDate(System.currentTimeMillis());
         soloPlayDto.setDate(raceDto.getDate());
         int[] pace = new int[km[mode]];
         if (ghost == 1) {
             OkHttpClient client = new OkHttpClient();
-            System.out.println("http://119.202.203.157:8001/recommend/" + km[mode] + "/" + userId + "/1");
             Request request = new Request.Builder().url("http://119.202.203.157:8001/recommend/" + km[mode] + "/" + userId + "/1").get().build();
             Call call = client.newCall(request);
             String responseBody = "";
@@ -208,6 +207,18 @@ public class GameServiceImpl implements GameService {
             raceDto.setPartnerId(user.getId());
             soloPlayDto.setPartnerId(user.getId());
             pace = user.getPace();
+            soloPlayDto.setPace(pace);
+        } else if (ghost == 2) {
+            GamePaceDto gamePaceDto = kafkaService.messageBYFastApi(km[mode], userId);
+            raceDto.setPartnerId(userId);
+            soloPlayDto.setPartnerId(userId);
+            pace = gamePaceDto.getPace();
+            if(pace == null) {
+                pace = new int[km[mode]];
+                for (int i = 0; i < km[mode]; i++) {
+                    pace[i] = 300;
+                }
+            }
             soloPlayDto.setPace(pace);
         }
         gameMapper.makeRace(raceDto);
