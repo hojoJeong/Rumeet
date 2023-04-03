@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.hadoop.util.GSetByHashMap;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -87,6 +88,13 @@ public class RestGameController {
         RespData<List> data = new RespData<>();
         data.setMsg("메인페이지 추천 3인");
         data.setData(gameService.recommendMainPage(userId));
+        return data.builder();
+    }
+
+    @PostMapping("/poly")
+    public ResponseEntity<?> savePoly(@RequestPart("polyline") MultipartFile file) {
+        RespData<String> data = new RespData<>();
+        data.setData(gameService.savePoly(file));
         return data.builder();
     }
 }

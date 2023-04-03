@@ -161,10 +161,8 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public void addRaceInfo(RaceInfoReqDto raceInfoReqDto, MultipartFile poly) {
+    public void addRaceInfo(RaceInfoReqDto raceInfoReqDto) {
         //{"user_id":1, "race_id":999, "mode":2, "velocity":23, "elapsed_time":701,"average_heart_rate":150, "success":1}
-
-        String url = this.getUrl(poly);
 
         int userId = raceInfoReqDto.getUserId();
         int mode = raceInfoReqDto.getMode();
@@ -204,7 +202,7 @@ public class RecordServiceImpl implements RecordService{
         raceInfo.setDate(System.currentTimeMillis());
         raceInfo.setKm(km);
         raceInfo.setKcal(kcal);
-        raceInfo.setPolyline(url);
+        raceInfo.setPolyline(raceInfoReqDto.getPolyline());
         recordMapper.addRaceInfo(raceInfo);
     }
 
@@ -222,7 +220,6 @@ public class RecordServiceImpl implements RecordService{
             String folderName = "polyline";
             for(int i = 0; i < formats.length; i++) {
                 if (extension.equals(formats[i])){
-                    // user email과 확장자 결합
                     File uploadFile = null;
                     try {
                         uploadFile = osUpload.convert(poly)        // 파일 생성
