@@ -2,6 +2,7 @@ package com.d204.rumeet.data.remote.api
 
 import com.d204.rumeet.data.remote.dto.request.friend.FriendRequestDto
 import com.d204.rumeet.data.remote.dto.response.BaseResponse
+import com.d204.rumeet.data.remote.dto.response.user.FriendDetailInfoResponseDto
 import com.d204.rumeet.data.remote.dto.response.user.FriendResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -40,4 +41,9 @@ internal interface FriendApiService {
     suspend fun rejectRequestFriend(
         @Body request: FriendRequestDto
     ): BaseResponse<Unit>
+
+    @GET("record/friend/{userId}")
+    suspend fun getFriendDetailInfo(
+        @Path("userId") userId: Int
+    ) : BaseResponse<FriendDetailInfoResponseDto>
 }

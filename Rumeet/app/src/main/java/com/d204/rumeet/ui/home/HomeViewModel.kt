@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import android.util.Log
+import com.d204.rumeet.domain.model.friend.FriendInfoDomainModel
 import com.d204.rumeet.domain.model.friend.FriendRecommendDomainModel
 import com.d204.rumeet.domain.model.user.HomeBadgeDomainModel
 import com.d204.rumeet.domain.model.user.HomeDataDomainModel
@@ -35,7 +36,8 @@ class HomeViewModel @Inject constructor(
     private val registFcmTokenUseCase: RegistFcmTokenUseCase,
     private val getHomeDataUseCase: GetHomeDataUseCase,
     private val getFriendRecommendListUseCase: GetFriendRecommendListUseCase,
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val getFriendDetailInfoUseCase: GetFriendDetailInfoUseCase
 ) : BaseViewModel() {
     private val _userId: MutableStateFlow<UiState<Int>> = MutableStateFlow(UiState.Loading)
     val userId: StateFlow<UiState<Int>>
@@ -69,8 +71,8 @@ class HomeViewModel @Inject constructor(
     val friendRecommendList: StateFlow<UiState<List<FriendRecommendDomainModel>>>
         get() = _friendRecommendList
 
-    private val _friendDetailInfo: MutableStateFlow<UiState<UserInfoDomainModel>> = MutableStateFlow(UiState.Loading)
-    val friendDetailInfo: StateFlow<UiState<UserInfoDomainModel>> get() = _friendDetailInfo.asStateFlow()
+    private val _friendDetailInfo: MutableStateFlow<UiState<FriendInfoDomainModel>> = MutableStateFlow(UiState.Loading)
+    val friendDetailInfo: StateFlow<UiState<FriendInfoDomainModel>> get() = _friendDetailInfo.asStateFlow()
 
     fun getUserIdByUseCase() {
         baseViewModelScope.launch {
@@ -164,7 +166,7 @@ class HomeViewModel @Inject constructor(
     fun getFriendInfo(userId: Int){
         baseViewModelScope.launch {
             showLoading()
-            getUserInfoUseCase(userId)
+            getFriendDetailInfoUseCase(userId)
                 .onSuccess {
                     dismissLoading()
                     _friendDetailInfo.value = UiState.Success(it)

@@ -40,11 +40,22 @@
             android:layout_marginStart="12dp"
             android:layout_width="0dp"
             android:layout_marginEnd="@dimen/base_horizontal_margin"
+            android:layout_marginVertical="@dimen/base_vertical_margin"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/btn_chatting"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_chatting"
             app:layout_constraintTop_toTopOf="@id/btn_chatting" />
+
+        <TextView
+            android:id="@+id/btn_dialog_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="닫기 X"
+            android:layout_margin="@dimen/base_horizontal_margin"
+            style="@style/base_font_bold_14_black"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

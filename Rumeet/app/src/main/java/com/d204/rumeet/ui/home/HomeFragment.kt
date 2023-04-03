@@ -1,23 +1,18 @@
 package com.d204.rumeet.ui.home
 
-import android.content.ContentValues
-import android.content.Context
 import android.util.Log
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentHomeBinding
+import com.d204.rumeet.domain.model.friend.FriendInfoDomainModel
 import com.d204.rumeet.domain.model.friend.FriendRecommendDomainModel
-import com.d204.rumeet.domain.model.user.UserInfoDomainModel
 import com.d204.rumeet.ui.base.*
+import com.d204.rumeet.ui.friend.add.AddFriendViewModel
 import com.d204.rumeet.ui.friend.list.FriendInfoDialog
 import com.d204.rumeet.ui.home.adapter.RecommendFriendAdapter
-import com.d204.rumeet.ui.home.model.BestRecordUiModel
-import com.d204.rumeet.util.toCount
-import com.d204.rumeet.util.toDistance
-import com.d204.rumeet.util.toRecord
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -52,11 +47,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 viewModel.homeResponse.collectLatest {
                     val response = it.successOrNull()?.badge
                     Log.d(TAG, "initDataBinding 뱃지: $response")
-                    if(response != null){
+                    if (response != null) {
                         val urlList = resources.getStringArray(R.array.url_badge)
                         val codeList = resources.getStringArray(R.array.code_badge)
                         val myBadgeList = mutableListOf<String>()
-                        for(i in response.indices){
+                        for (i in response.indices) {
                             myBadgeList.add(urlList[codeList.indexOf(response!![i].code.toString())])
                         }
                         viewModel.setBadgeList(myBadgeList)
@@ -77,16 +72,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     }
 
-    private fun initFriendRecommendList(list: List<FriendRecommendDomainModel>){
+    private fun initFriendRecommendList(list: List<FriendRecommendDomainModel>) {
         val recommendAdapter = RecommendFriendAdapter().apply {
             submitList(list)
-            homeHandler = object : HomeHandler{
+            homeHandler = object : HomeHandler {
                 override fun onClick(userId: Int) {
                     viewModel.getFriendInfo(userId)
                     lifecycleScope.launchWhenResumed {
                         launch {
                             viewModel.friendDetailInfo.collectLatest {
-
+                                Log.d(TAG, "onClick: ${it.successOrNull()}")
+                                if (viewModel.friendRecommendList.value.successOrNull() != null)
+                                    showFriendInfoDialog(viewModel.friendDetailInfo.value.successOrNull())
                             }
                         }
                     }
@@ -94,10 +91,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
             }
         }
-        with(binding.rvHomeRecommendFriend){
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        with(binding.rvHomeRecommendFriend) {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = recommendAdapter
         }
+
+
     }
 
     private fun initBtnClickListener() {
@@ -114,11 +114,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         private const val TAG = "러밋_HomeFragment"
     }
 
-    private fun showFriendInfoDialog(info: UserInfoDomainModel) {
-        val dialog = FriendInfoDialog().apply {
-            viewInfo = "friend"
-            friendInfo = info
+    private fun showFriendInfoDialog(info: FriendInfoDomainModel?) {
+        if (info != null) {
+            val addFriendViewModel by activityViewModels<AddFriendViewModel>()
+            val dialog = FriendInfoDialog().apply {
+                viewInfo = "friend"
+                friendInfo = info
+                friendViewModel = addFriendViewModel
+            }
+            dialog.show(requireActivity().supportFragmentManager, dialog.tag)
         }
-        dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 }

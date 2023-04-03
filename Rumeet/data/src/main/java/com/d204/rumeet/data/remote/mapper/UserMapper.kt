@@ -2,6 +2,7 @@ package com.d204.rumeet.data.remote.mapper
 
 import com.d204.rumeet.data.remote.dto.request.user.ModifyUserDetailInfoRequestDto
 import com.d204.rumeet.data.remote.dto.response.user.*
+import com.d204.rumeet.domain.model.friend.FriendInfoDomainModel
 import com.d204.rumeet.domain.model.friend.FriendRecommendDomainModel
 import com.d204.rumeet.domain.model.user.*
 
@@ -99,4 +100,8 @@ internal fun MatchingHistoryResponseDto.toDomain() = MatchingHistoryDomainModel(
 
 internal fun FriendRecommendListResponseDto.toDomainModel() = FriendRecommendDomainModel(
     nickname, profile, userId
+)
+
+internal fun FriendDetailInfoResponseDto.toDomain() = FriendInfoDomainModel(
+    id, nickname, pace, profileImg, totalKm.toInt(), totalTime.toInt()
 )
