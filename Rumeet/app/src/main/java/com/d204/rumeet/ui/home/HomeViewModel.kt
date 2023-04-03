@@ -80,7 +80,7 @@ class HomeViewModel @Inject constructor(
     fun getHomeData() {
         baseViewModelScope.launch {
             showLoading()
-            getHomeDataUseCase(2)
+            getHomeDataUseCase(userId.value.successOrNull()!!)
                 .onSuccess { response ->
                     _userName.value = UiState.Success(response.record.nickname.toString())
                     _homeResponse.value = UiState.Success(response)

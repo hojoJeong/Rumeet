@@ -31,7 +31,7 @@ class MatchingHistoryFragment : BaseFragment<FragmentMatchingHistoryBinding, MyP
         viewModel.getMatchingHistoryList()
         lifecycleScope.launchWhenStarted {
             launch {
-                viewModel.matchingHistoryList.collectLatest { response ->
+                viewModel.matchingHistoryList.collect { response ->
                     val raceList = response.successOrNull()?.raceList ?: emptyList()
                     ghostList = mutableListOf<MatchingHistoryRaceUiModel>()
                     competitionList = mutableListOf<MatchingHistoryRaceUiModel>()
@@ -50,6 +50,9 @@ class MatchingHistoryFragment : BaseFragment<FragmentMatchingHistoryBinding, MyP
                             }
                         }
                     }
+
+                    val summaryData = response.successOrNull()?.summaryData
+                    binding.data = summaryData?.toUiModel()
                     initView()
                 }
             }

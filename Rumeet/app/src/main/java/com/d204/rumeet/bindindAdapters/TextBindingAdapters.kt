@@ -98,6 +98,16 @@ fun TextView.setMode(mode: String) {
     }
 }
 
+@BindingAdapter("setSuccess")
+fun TextView.setSuccess(success: String) {
+    if(success == "승리") {
+        setTextColor(context.getColor(R.color.navy_blue))
+    } else {
+        setTextColor(context.getColor(R.color.red))
+    }
+    text = success
+}
+
 @BindingAdapter("setActivityTitle")
 fun TextView.setActivityTitle(index: String) {
     text = "나의 ${index}째 러닝"
@@ -105,5 +115,14 @@ fun TextView.setActivityTitle(index: String) {
 
 @BindingAdapter("setPartnerName")
 fun TextView.setPartnerName(name: String){
-    text = "vs $name"
+    val content = "vs $name"
+    text = SpannableStringBuilder(content).apply {
+        setSpan(
+            RelativeSizeSpan(0.7f),
+            0,
+            2,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+    }
+
 }

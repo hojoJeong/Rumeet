@@ -43,11 +43,11 @@
                     style="@style/base_font_medium_12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_running_record_date_matching"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_date_matching"
-                    app:layout_constraintStart_toEndOf="@+id/tv_item_running_record_date_matching"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_running_record_title_matching"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_title_matching"
+                    app:layout_constraintStart_toEndOf="@+id/tv_item_running_record_title_matching"
                     tools:text="싱글"
-                    app:setMode="@{activity.mode}"
+                    app:setSuccess="@{activity.success}"
                     android:layout_marginStart="10dp"/>
 
                 <TextView

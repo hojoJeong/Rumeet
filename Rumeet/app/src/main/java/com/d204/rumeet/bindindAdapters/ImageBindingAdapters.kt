@@ -32,17 +32,21 @@ object ImageBindingAdapters {
 
     @JvmStatic
     @BindingAdapter(value = ["setBadgeImg", "position"])
-    fun ImageView.setBadgeImg(badgeList: UiState<List<String>>, position: Int){
-        when(position){
+    fun ImageView.setBadgeImg(badgeList: UiState<List<String>>, position: Int) {
+        when (position) {
             1 -> {
-                Glide.with(context).load(badgeList.successOrNull()?.get(0)).into(this)
+                if (badgeList.successOrNull()?.size?:0 >= 1) {
+                    Glide.with(context).load(badgeList.successOrNull()?.get(0)).into(this)
+                }
             }
-            2-> {
-                Glide.with(context).load(badgeList.successOrNull()?.get(1)).into(this)
+            2 -> {
+                if (badgeList.successOrNull()?.size?:0 >= 2)
+                    Glide.with(context).load(badgeList.successOrNull()?.get(1)).into(this)
             }
-//            3 -> {
-//                Glide.with(context).load(badgeList.successOrNull()?.get(2)).into(this)
-//            }
+            3 -> {
+                if (badgeList.successOrNull()?.size?:0 >= 3)
+                    Glide.with(context).load(badgeList.successOrNull()?.get(2)).into(this)
+            }
         }
     }
 }

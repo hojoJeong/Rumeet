@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, BaseViewModel>() {
+class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, MyPageViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_badge_list
     override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage) { defaultViewModelProviderFactory }
@@ -31,9 +31,12 @@ class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, BaseViewModel>(
 
         lifecycleScope.launchWhenStarted {
             launch {
-                viewModel.acquiredBadgeList.collect{
+                viewModel.acquiredBadgeList.collect {
                     initRecentBadge(it.successOrNull() ?: emptyList())
                     initBadgeList(it.successOrNull() ?: emptyList())
+                    if(it.successOrNull()?.size?:0 > 0){
+                        binding.tvBadgeRecentNo.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -46,7 +49,7 @@ class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, BaseViewModel>(
     }
 
     private fun initRecentBadge(badgeList: List<AcquiredBadgeUiModel>) {
-        if(badgeList.isEmpty()){
+        if (badgeList.isEmpty()) {
             binding.tvBadgeRecentNo.visibility = View.VISIBLE
             binding.tvBadgeRecentDate.visibility = View.GONE
         } else {
@@ -56,16 +59,18 @@ class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, BaseViewModel>(
             val badgeNameList = resources.getStringArray(R.array.title_badge)
             val badgeCodeList = resources.getStringArray(R.array.code_badge)
             val badgeImgList = resources.getStringArray(R.array.url_badge)
-            for(badge in badgeList){
-                if(recentBadgeDate < badge.date ){
+            for (badge in badgeList) {
+                if (recentBadgeDate < badge.date) {
                     recentBadgeDate = badge.date
                     recentBadgeName = badgeNameList[badgeCodeList.indexOf(badge.code.toString())]
                     recentBadgeImg = badgeImgList[badgeCodeList.indexOf(badge.code.toString())]
                 }
             }
 
-            val recentBadge = BadgeDetailUiModel(recentBadgeImg, recentBadgeName, recentBadgeDate.toDate())
+            val recentBadge =
+                BadgeDetailUiModel(recentBadgeImg, recentBadgeName, recentBadgeDate.toDate())
 
+            Log.d(TAG, "initRecentBadge: $recentBadge")
             binding.recent = recentBadge
         }
     }
@@ -187,9 +192,16 @@ class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, BaseViewModel>(
         for (acquiredBadge in acquiredBadgeList) {
             val index = acquiredBadge.code.toString()
             val curBadge =
-                myBadge[Character.getNumericValue(index[0])].badgeList[Character.getNumericValue(
-                    index[1]
-                )]
+                if (index.length == 1) {
+                    myBadge[0].badgeList[Character.getNumericValue(
+                        index[0]
+                    )]
+                } else {
+                    myBadge[Character.getNumericValue(index[0])].badgeList[Character.getNumericValue(
+                        index[1]
+                    )]
+                }
+
             with(curBadge) {
                 badgeDate = acquiredBadge.date.toDate()
                 val curUrl = resources.getStringArray(R.array.url_badge)

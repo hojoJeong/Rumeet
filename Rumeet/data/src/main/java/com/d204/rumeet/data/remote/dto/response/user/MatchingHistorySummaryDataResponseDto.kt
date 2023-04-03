@@ -7,7 +7,7 @@ data class MatchingHistorySummaryDataResponseDto(
     val fail: Int,
     @SerializedName("matchCount")
     val matchCount: Int,
-    @SerializedName("Success")
+    @SerializedName("success")
     val success: Int,
     @SerializedName("userId")
     val userId: Int

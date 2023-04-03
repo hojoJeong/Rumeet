@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <variable
+            name="data"
+            type="com.d204.rumeet.ui.mypage.model.MatchingHistorySummaryDataUiModel" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,7 +37,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/tv_matching_history_average_distance_title"
                     app:layout_constraintBottom_toTopOf="@+id/tv_matching_history_average_distance_title"
                     app:layout_constraintVertical_chainStyle="packed"
-                    android:text="0"
+                    android:text="@{data.matchCount}"
                     android:layout_marginBottom="6dp"
                     style="@style/base_font_bold_16_black"/>
                 <TextView
@@ -57,7 +60,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/tv_matching_history_average_time_title"
                     app:layout_constraintBottom_toTopOf="@+id/tv_matching_history_average_time_title"
                     app:layout_constraintVertical_chainStyle="packed"
-                    android:text="0"
+                    android:text="@{data.success}"
                     android:layout_marginBottom="6dp"
                     style="@style/base_font_bold_16_black"/>
                 <TextView
@@ -80,7 +83,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/tv_matching_history_average_pace_title"
                     app:layout_constraintBottom_toTopOf="@+id/tv_matching_history_average_pace_title"
                     app:layout_constraintVertical_chainStyle="packed"
-                    android:text="0"
+                    android:text="@{data.fail}"
                     android:layout_marginBottom="6dp"
                     style="@style/base_font_bold_16_black"/>
                 <TextView

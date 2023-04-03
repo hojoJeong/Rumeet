@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.mypage
 
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,10 +24,11 @@ class MatchingHistoryContainerFragment : BaseFragment<FragmentMatchingHistoryCon
         get() = R.layout.fragment_matching_history_container
     override val viewModel: MyPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage){defaultViewModelProviderFactory}
 
-    private lateinit var matchingList: MutableList<MatchingHistoryRaceUiModel>
+    private lateinit var matchingList: List<MatchingHistoryRaceUiModel>
 
 
     override fun initStartView() {
+        initView()
         binding.contentMatchintHistoryNoResult.tvContentNoResultMessage.text = "매칭 기록이 없습니다."
     }
 
@@ -38,12 +40,14 @@ class MatchingHistoryContainerFragment : BaseFragment<FragmentMatchingHistoryCon
     }
 
 
-    fun setViewInfo(list: MutableList<MatchingHistoryRaceUiModel>){
-        matchingList = list
-        initView()
+    fun setViewInfo(list: List<MatchingHistoryRaceUiModel>){
+        matchingList = list ?: emptyList<MatchingHistoryRaceUiModel>()
     }
 
     private fun initView(){
+        if(matchingList.size > 0){
+            binding.contentMatchintHistoryNoResult.root.visibility = View.GONE
+        }
         val matchingAdapter = MatchingHistoryItemAdapter().apply {
             submitList(matchingList)
         }

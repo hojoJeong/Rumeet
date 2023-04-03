@@ -16,6 +16,7 @@ import com.d204.rumeet.util.toCount
 import com.d204.rumeet.util.toDistance
 import com.d204.rumeet.util.toRecord
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -33,9 +34,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initDataBinding() {
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenResumed {
             launch {
-                viewModel.userId.collect {
+                viewModel.userId.collectLatest {
                     Log.d(TAG, "initDataBinding 유저 아이디: ${viewModel.userId.value.successOrNull()}")
                     viewModel.registFcmToken()
                     viewModel.getRecommendFriendListForHome()
@@ -43,7 +44,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 }
             }
             launch {
-                viewModel.homeResponse.collect {
+                viewModel.homeResponse.collectLatest {
                     val response = it.successOrNull()?.badge
                     Log.d(TAG, "initDataBinding 뱃지: $response")
                     if(response != null){
@@ -53,6 +54,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                         for(i in response.indices){
                             myBadgeList.add(urlList[codeList.indexOf(response!![i].code.toString())])
                         }
+
+
                         viewModel.setBadgeList(myBadgeList)
                     }
                 }
