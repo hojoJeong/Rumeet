@@ -20,10 +20,10 @@ class ResetPasswordViewModel @Inject constructor(
     private val _resetPasswordAction: MutableSharedFlow<ResetPasswordAction> = MutableSharedFlow()
     val resetPasswordAction: SharedFlow<ResetPasswordAction> get() = _resetPasswordAction.asSharedFlow()
 
-    fun requestResetPassword(email: String, password: String) {
+    fun requestResetPassword(id: Int, email: String, password: String) {
         baseViewModelScope.launch {
             showLoading()
-            resetPasswordUseCase(email, password)
+            resetPasswordUseCase(id, email, password)
                 .onSuccess { _resetPasswordAction.emit(ResetPasswordAction.SuccessResetPassword) }
                 .onError { e -> catchError(e) }
             dismissLoading()

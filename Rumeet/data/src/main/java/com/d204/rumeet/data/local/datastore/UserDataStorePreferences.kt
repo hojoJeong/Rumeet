@@ -1,5 +1,6 @@
 package com.d204.rumeet.data.local.datastore
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.*
@@ -19,9 +20,10 @@ internal class UserDataStorePreferences(val context: Context) {
     private val userId = intPreferencesKey("USER_ID")
     private val fcmToken = stringPreferencesKey("FCM_TOKEN")
 
-    suspend fun setUserId(id : Int){
+    suspend fun setUserId(userId : Int){
+        Log.d(TAG, "setUserId: $userId")
         context.datastore.edit { preference ->
-            preference[userId] = id
+            preference[this.userId] = userId
         }
     }
 

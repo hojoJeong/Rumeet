@@ -81,9 +81,6 @@ dependencies {
     kapt libs.glide.compiler
     implementation "jp.wasabeef:glide-transformations:4.3.0"
 
-
-    implementation 'org.apache.commons:commons-math3:3.6.1'
-
     // kakao
     implementation libs.kakao.sdk
 

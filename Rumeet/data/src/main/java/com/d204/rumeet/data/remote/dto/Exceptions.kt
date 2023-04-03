@@ -11,6 +11,8 @@ class DuplicateInfoException(e : Throwable?, msg : String?) : IOException(e) // 
 class SingUpErrorException(e : Throwable?, msg: String?) : IOException(e)
 class AlreadyFriendException(e : Throwable?, msg : String?) : IOException(e)
 class AlreadyRequestFriendException(e: Throwable?, msg: String?) : IOException(e)
+class WithdrawalUserLoginErrorException(e: Throwable?, msg: String?) : IOException(e) //회원탈퇴한 유저가 가입, 로그인 시도
+
 
 class HaveNotJwtTokenException(e: Throwable?, code: Int?) : IOException(e) // Jwt 토큰이 없습니다. 100
 
@@ -24,4 +26,5 @@ object ErrorMessage {
     const val SIGN_UP_FAIL_ERROR_MESSAGE = "회원가입을 실패했습니다."
     const val ALREADY_FRIEND_ERROR_MESSAGE = "이미 친구입니다."
     const val ALREADY_REQUEST_FRIEND_ERROR_MESSAGE = "이미 친구요청을 보낸 상태입니다."
+    const val WITHDRAWAL_USER_LOGIN_ERROR_MESSAGE = "이미 탈퇴한 회원입니다."
 }

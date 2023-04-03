@@ -13,6 +13,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -125,4 +126,28 @@ fun bitmapToFile(bitmap: Bitmap, file: File): File {
     outputStream.flush()
     outputStream.close()
     return file
+}
+
+fun Int.toMode() : String{
+    var mode = ""
+    when(this){
+        0 -> mode = "싱글 1km"
+        1 -> mode = "싱글 2km"
+        2 -> mode = "싱글 3km"
+        3 -> mode = "싱글 5km"
+        4 -> mode = "경쟁 1km"
+        5 -> mode = "경쟁 2km"
+        6 -> mode = "경쟁 3km"
+        7 -> mode = "경쟁 5km"
+        8 -> mode = "협동 1km"
+        9 -> mode = "협동 2km"
+        10 -> mode = "협동 3km"
+        11 -> mode = "협동 5km"
+    }
+    return mode
+}
+
+fun Int.toSuccess(): String{
+    if(this == 0) return "패배"
+    else return "승리"
 }

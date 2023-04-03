@@ -3,30 +3,34 @@ package com.d204.rumeet.data.remote.dto.response.user
 import com.google.gson.annotations.SerializedName
 
 data class UserInfoResponse(
-    @SerializedName("age")
-    val age: Int?,
-    @SerializedName("date")
-    val date: Long?,
-    @SerializedName("email")
-    val email: String?,
-    @SerializedName("gender")
-    val gender: Int?,
-    @SerializedName("height")
-    val height: Double?,
     @SerializedName("id")
-    val id: Int?,
-    @SerializedName("nickname")
-    val nickname: String?,
-    @SerializedName("oauth")
-    val oauth: String?,
+    val id: Int,
+    @SerializedName("email")
+    val email: String,
     @SerializedName("password")
-    val password: String?,
+    val password: String,
+    @SerializedName("nickname")
+    val nickname: String,
+    @SerializedName("age")
+    val age: Int,
+    @SerializedName("gender")
+    val gender: Int,
     @SerializedName("profile")
     val profile: String?,
-    @SerializedName("refreshToken")
-    val refreshToken: String?,
-    @SerializedName("state")
-    val state: Int?,
+    @SerializedName("height")
+    val height: Double,
     @SerializedName("weight")
-    val weight: Double?
+    val weight: Double,
+    @SerializedName("date")
+    val date: Long,
+    @SerializedName("state")
+    val state: Int,
+    @SerializedName("fcmToken")
+    val fcmToken: String,
+    @SerializedName("oauth")
+    val oauth: String?,
+    @SerializedName("friendAlarm")
+    val friendAlarm: Int,
+    @SerializedName("matchingAlarm")
+    val matchingAlarm: Int
 )

@@ -1,11 +1,15 @@
 package com.d204.rumeet.ui.join.nickname
 
 import android.app.Activity.RESULT_OK
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.provider.MediaStore
+import android.util.Log
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.d204.rumeet.R
@@ -15,7 +19,9 @@ import com.d204.rumeet.ui.components.SingleLineEditText
 import com.d204.rumeet.ui.join.JoinViewModel
 import com.d204.rumeet.ui.join.SocialJoinModel
 import com.d204.rumeet.util.getAbsolutePath
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.io.File
 
 class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewModel>() {
@@ -43,39 +49,64 @@ class JoinNicknameFragment : BaseFragment<FragmentJoinNicknameBinding, JoinViewM
         }
         exception = viewModel.errorEvent
 
-        // args의 profile img가 null이면 아이디, 아니면 소셜로그인의 회원가입
-        if (args.oauth != 1L) {
-            socialLogin = true
-            viewModel.joinInfo.socialJoinModel = SocialJoinModel(args.oauth, args.profileImg)
+        if(args.reset){
+            Glide.with(requireContext()).load(args.profileImg).into(binding.ivProfileImg)
+            binding.tvAgreeTermsOfUsers.visibility = View.GONE
+        } else {
+            // args의 profile img가 null이면 아이디, 아니면 소셜로그인의 회원가입
+            if (args.oauth != 1L) {
+                socialLogin = true
+                viewModel.joinInfo.socialJoinModel = SocialJoinModel(args.oauth, args.profileImg)
 
-            Glide.with(requireContext())
-                .load(args.profileImg)
-                .into(binding.ivProfileImg)
+                Glide.with(requireContext())
+                    .load(args.profileImg)
+                    .into(binding.ivProfileImg)
+            }
         }
     }
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            viewModel.joinNicknameAction.collectLatest {
-                when (it) {
-                    is JoinNicknameAction.CheckNicknameValidation -> {
-                        if (binding.editNickname.nicknameValidate) viewModel.nicknameValidation(
-                            binding.editNickname.keyword
-                        )
+            launch {
+                viewModel.joinNicknameAction.collectLatest {
+                    when (it) {
+                        is JoinNicknameAction.CheckNicknameValidation -> {
+                            if (binding.editNickname.nicknameValidate) viewModel.nicknameValidation(
+                                binding.editNickname.keyword
+                            )
+                        }
+                        is JoinNicknameAction.DuplicateNickname -> {
+                            binding.editNickname.setStateMessage(
+                                getString(R.string.content_duplicated_nickname),
+                                false
+                            )
+                        }
+                        is JoinNicknameAction.PassNicknameValidation -> {
+                            if (args.reset) {
+                                viewModel.editProfile.curProfile = args.profileImg
+                                viewModel.editProfile.name = binding.editNickname.keyword
+                                viewModel.editProfile.editProfile = imageFile
+                                viewModel.editProfile.id = args.userId
+                                Log.d(TAG, "initDataBinding: ${viewModel.editProfile}")
+                                viewModel.editProfile()
+                            } else {
+                                viewModel.joinInfo.nickname = it.nickname
+                                viewModel.joinInfo.profileImg = imageFile
+                                if (!socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
+                                else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
+                            }
+                        }
+                        is JoinNicknameAction.NavigateGallery -> {
+                            navigateGallery()
+                        }
                     }
-                    is JoinNicknameAction.DuplicateNickname -> {
-                        binding.editNickname.setStateMessage(
-                            getString(R.string.content_duplicated_nickname),
-                            false
-                        )
+                }
+            }
+            launch {
+                viewModel.resultEditUserProfile.collect{
+                    if(it){
+                        findNavController().popBackStack()
                     }
-                    is JoinNicknameAction.PassNicknameValidation -> {
-                        viewModel.joinInfo.nickname =  it.nickname
-                        viewModel.joinInfo.profileImg = imageFile
-                        if(!socialLogin) navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToJoinPasswordFragment())
-                        else navigate(JoinNicknameFragmentDirections.actionJoinNickNameFragmentToAdditionalInfoFragment())
-                    }
-                    is JoinNicknameAction.NavigateGallery -> { navigateGallery() }
                 }
             }
         }
