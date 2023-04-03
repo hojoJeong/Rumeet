@@ -11,7 +11,7 @@ public class MatchInfoDto {
     long date;
     String partnerName;
     int pace;
-    long time;
+    int time;
     double km;
     int heartRate;
     double kcal;
