@@ -21,4 +21,7 @@ interface UserRepository {
     suspend fun getFriendRequestList(userId: Int): NetworkResult<List<NotificationListDomainModel>>
     suspend fun getRunningRequestList(userId: Int): NetworkResult<List<RunningRequestDomainModel>>
     suspend fun getMatchingHistoryList(userId: Int): NetworkResult<MatchingHistoryDomainModel>
+    suspend fun searchUsers(nickname : String) : NetworkResult<List<UserModel>>
+    suspend fun getAccessToken() : String
+
 }

@@ -1,6 +1,5 @@
 package com.d204.rumeet.data.di
 
-import com.d204.rumeet.common.Constants.BASE_URL
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.interceptor.BearerInterceptor

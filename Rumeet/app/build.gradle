@@ -26,7 +26,7 @@ android {
 
         resValue "string", "KAKAO_NATIVE_KEY", properties['kakao.native.key']
         resValue "string", "KAKAO_MANIFEST_KEY", properties['kakao.manifest.key']
-        resValue "string", "GOOGLE_MAP_API_KEY", properties['google.map.api.key']
+//        resValue "string", "GOOGLE_MAP_API_KEY", properties['google.map.api.key']
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

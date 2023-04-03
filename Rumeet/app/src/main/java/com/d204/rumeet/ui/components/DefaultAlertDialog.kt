@@ -30,7 +30,6 @@ class DefaultAlertDialog(
     private var initDate: Long = 0
     private var isStartDate = ""
     private lateinit var parentBinding: FragmentRunningRecordBinding
-    private lateinit var viewModel: MyPageViewModel
 
     private lateinit var myPageViewModel: MyPageViewModel
 
@@ -85,8 +84,8 @@ class DefaultAlertDialog(
         }
     }
 
-    fun setViewModel(viewModel: MyPageViewModel){
-        this.viewModel = viewModel
+    fun setViewModel(viewModel: MyPageViewModel) {
+        myPageViewModel = viewModel
     }
 
     fun setInitDatePickerData(
@@ -105,7 +104,7 @@ class DefaultAlertDialog(
         val year = initDate.toDate().substring(0, 4).toInt()
         val month = initDate.toDate().substring(5, 7).toInt()
         val day = initDate.toDate().substring(8).toInt()
-        binding.dpDialog.init(year, month, day, DatePicker.OnDateChangedListener { _, _, _, _ ->  })
+        binding.dpDialog.init(year, month, day, DatePicker.OnDateChangedListener { _, _, _, _ -> })
 
     }
 
@@ -126,15 +125,21 @@ class DefaultAlertDialog(
                 if (isStartDate == "시작") {
                     parentBinding.tvRunningRecordStartDate.text = date
                     val endDateText = parentBinding.tvRunningRecordEndDate.text.toString()
-                    val endDate = if(endDateText == "종료 날짜") System.currentTimeMillis() else endDateText.toDate()
-                    viewModel.getRunningRecord(dateForLongType, endDate)
+                    val endDate =
+                        if (endDateText == "종료 날짜") System.currentTimeMillis() else endDateText.toDate()
+                    myPageViewModel.getRunningRecord(dateForLongType, endDate)
                 } else {
                     parentBinding.tvRunningRecordEndDate.text = date
                     val startDateText = parentBinding.tvRunningRecordStartDate.text.toString()
-                    val startDate = if(startDateText == "시작 날짜") System.currentTimeMillis() else startDateText.toDate()
-                    viewModel.getRunningRecord(startDate, dateForLongType)
+                    val startDate =
+                        if (startDateText == "시작 날짜") System.currentTimeMillis() else startDateText.toDate()
+                    myPageViewModel.getRunningRecord(startDate, dateForLongType)
                 }
-                binding.dpDialog.init(year, month-1, day, DatePicker.OnDateChangedListener { _, _, _, _ ->  })
+                binding.dpDialog.init(
+                    year,
+                    month - 1,
+                    day,
+                    DatePicker.OnDateChangedListener { _, _, _, _ -> })
 
                 dismissAllowingStateLoss()
             }

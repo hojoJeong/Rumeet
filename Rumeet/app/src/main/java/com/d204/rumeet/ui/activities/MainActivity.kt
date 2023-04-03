@@ -15,7 +15,6 @@ import com.d204.rumeet.databinding.ActivityMainBinding
 import com.d204.rumeet.ui.base.BaseActivity
 import com.d204.rumeet.ui.components.RumeetToolbar
 import com.d204.rumeet.ui.home.HomeFragmentDirections
-import com.d204.rumeet.ui.home.HomeFragmentDirections
 import com.d204.rumeet.util.amqp.ChattingAMQPMananer
 import com.d204.rumeet.util.amqp.RunningAMQPManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,8 +37,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         RunningAMQPManager.initChannel()
 
         val type = intent.getStringExtra("type")
-        if(type != null) {
-            navController.navigate(HomeFragmentDirections.actionHomeFragmentToNotificationFragment(type.toInt()))
+        if (type != null) {
+            navController.navigate(
+                HomeFragmentDirections.actionHomeFragmentToNotificationFragment(
+                    type.toInt()
+                )
+            )
         }
     }
 
@@ -82,15 +85,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             binding.tbToolbar.visibility = View.GONE
             when (navController.currentDestination?.id) {
                 R.id.homeFragment -> {
-                    binding.tbToolbar.visibility = View.VISIBLE
-                    binding.tbToolbar.setToolbarType(
-                        RumeetToolbar.ToolbarType.LOGO_TEXT_ALARM,
-                        "홈",
-                        rightClickListener = {
-                            navController.navigate(HomeFragmentDirections.actionHomeFragmentToNotificationFragment(0))
-                        })
-                }
-            }
                     binding.bvnMain.root.visibility = View.VISIBLE
                     with(binding.tbToolbar) {
                         visibility = View.VISIBLE
@@ -98,7 +92,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                             RumeetToolbar.ToolbarType.LOGO_TEXT_ALARM,
                             "홈",
                             rightClickListener = {
-                                //Todo 알람 페이지로 navigate
+                                navController.navigate(
+                                    HomeFragmentDirections.actionHomeFragmentToNotificationFragment(
+                                        0
+                                    )
+                                )
                             })
                     }
                 }
@@ -166,7 +164,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }
                     binding.bvnMain.root.visibility = View.GONE
                 }
-
             }
         }
     }

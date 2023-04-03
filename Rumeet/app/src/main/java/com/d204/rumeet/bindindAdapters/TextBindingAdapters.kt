@@ -29,6 +29,36 @@ fun TextView.bindAuthenticationVisibility(state: Boolean) {
     else this.visibility = View.GONE
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@BindingAdapter("chatting_date")
+fun TextView.bindChattingDate(date : Long){
+    //오늘 = 시간
+    val timeSimpleDateFormat = SimpleDateFormat("hh:mm", Locale.KOREA)
+    // 사흘부터
+    val dateSimpleDateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
+
+    val today = LocalDate.now(ZoneId.systemDefault())
+    val yesterday = today.minusDays(1)
+
+    val time = Instant.ofEpochMilli(date)
+    val dateToCheck = time.atZone(ZoneId.systemDefault()).toLocalDate()
+
+    val isToday = dateToCheck == today
+    val isYesterday = dateToCheck == yesterday
+
+    text = when {
+        isToday -> timeSimpleDateFormat.format(date)
+        isYesterday -> "어제"
+        else -> dateSimpleDateFormat.format(date)
+    }
+}
+
+@BindingAdapter("time")
+fun TextView.bindTime(date : Long){
+    val timeSimpleDateFormat = SimpleDateFormat("yyyy:MM:dd:hh:mm", Locale.KOREA)
+    text = timeSimpleDateFormat.format(date).substring(11)
+}
+
 @BindingAdapter("setWelcomeMessage")
 fun TextView.setWelcomeMessage(userName: UiState<String>) {
     val name = userName.successOrNull() ?: ""
