@@ -11,20 +11,21 @@ import android.location.LocationProvider
 import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.location.LocationAvailability
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
+import org.apache.commons.math3.filter.DefaultMeasurementModel
+import org.apache.commons.math3.filter.DefaultProcessModel
+import org.apache.commons.math3.filter.KalmanFilter
+import org.apache.commons.math3.linear.Array2DRowRealMatrix
+import org.apache.commons.math3.linear.ArrayRealVector
+import org.apache.commons.math3.linear.RealVector
 
 class RunningService : Service(), LocationListener {
 
     private lateinit var locationManager: LocationManager
     private var lastLocation: Location? = null
     private var totalDistance = 0f
-
     private val binder = RunningBinder()
 
     inner class RunningBinder : Binder() {
@@ -73,8 +74,8 @@ class RunningService : Service(), LocationListener {
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        if(provider?.equals(LocationManager.GPS_PROVIDER) == true){
-            when(status){
+        if (provider?.equals(LocationManager.GPS_PROVIDER) == true) {
+            when (status) {
                 LocationProvider.AVAILABLE -> {
                     if (ActivityCompat.checkSelfPermission(
                             this,
@@ -86,9 +87,14 @@ class RunningService : Service(), LocationListener {
                     ) {
                         return
                     }
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 10.0f, this)
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        1000L,
+                        10.0f,
+                        this
+                    )
                 }
-                LocationProvider.OUT_OF_SERVICE ->{
+                LocationProvider.OUT_OF_SERVICE -> {
                     locationManager.removeUpdates(this)
                 }
                 LocationProvider.TEMPORARILY_UNAVAILABLE -> {
@@ -96,5 +102,105 @@ class RunningService : Service(), LocationListener {
                 }
             }
         }
+    }
+}
+
+class KalmanFilter2 {
+    // 칼만 필터 파라미터 설정
+    private val initialProcessNoise = 0.01
+    private val initialMeasurementNoise = 3.0
+    private val initialEstimationError = 10.0
+
+    // 칼만 필터 적용을 위한 초기화
+    private var processNoise = initialProcessNoise
+    private var measurementNoise = initialMeasurementNoise
+    private var estimationError = initialEstimationError
+    private var lastLatitude = 0.0
+    private var lastLongitude = 0.0
+
+    fun filter(latitude: Double, longitude: Double, altitude: Double, accuracy: Float): Location {
+        // 칼만 필터 적용을 위한 파라미터 계산
+        val K = estimationError / (estimationError + measurementNoise)
+        val lat = lastLatitude + K * (latitude - lastLatitude)
+        val lon = lastLongitude + K * (longitude - lastLongitude)
+        val estErr = (1 - K) * estimationError + processNoise
+        lastLatitude = lat
+        lastLongitude = lon
+        estimationError = estErr
+        val filteredLocation = Location("")
+        filteredLocation.latitude = lat
+        filteredLocation.longitude = lon
+        filteredLocation.altitude = altitude
+        return filteredLocation
+    }
+}
+
+class GpsKalmanFilter {
+    var kalmanFilter: KalmanFilter? = null
+
+    fun initialize(initialState: RealVector) {
+        val stateTransition = Array2DRowRealMatrix(
+            arrayOf(
+                doubleArrayOf(1.0, 0.0, 1.0, 0.0),
+                doubleArrayOf(0.0, 1.0, 0.0, 1.0),
+                doubleArrayOf(0.0, 0.0, 1.0, 0.0),
+                doubleArrayOf(0.0, 0.0, 0.0, 1.0)
+            )
+        )
+
+        val control = null // No control input in this example
+
+        val processNoise = Array2DRowRealMatrix(
+            arrayOf(
+                doubleArrayOf(1.0, 0.0, 0.0, 0.0),
+                doubleArrayOf(0.0, 1.0, 0.0, 0.0),
+                doubleArrayOf(0.0, 0.0, 1.0, 0.0),
+                doubleArrayOf(0.0, 0.0, 0.0, 1.0)
+            )
+        )
+
+        val initialStateCovariance = Array2DRowRealMatrix(
+            arrayOf(
+                doubleArrayOf(1.0, 0.0, 0.0, 0.0),
+                doubleArrayOf(0.0, 1.0, 0.0, 0.0),
+                doubleArrayOf(0.0, 0.0, 1.0, 0.0),
+                doubleArrayOf(0.0, 0.0, 0.0, 1.0)
+            )
+        )
+
+        val processModel = DefaultProcessModel(
+            stateTransition,
+            control,
+            processNoise,
+            initialState,
+            initialStateCovariance
+        )
+
+        val measurementMatrix = Array2DRowRealMatrix(
+            arrayOf(
+                doubleArrayOf(1.0, 0.0, 0.0, 0.0),
+                doubleArrayOf(0.0, 1.0, 0.0, 0.0)
+            )
+        )
+
+        val measurementNoise = Array2DRowRealMatrix(
+            arrayOf(
+                doubleArrayOf(1.0, 0.0),
+                doubleArrayOf(0.0, 1.0)
+            )
+        )
+
+        val measurementModel = DefaultMeasurementModel(
+            measurementMatrix,
+            measurementNoise
+        )
+
+        kalmanFilter = KalmanFilter(processModel, measurementModel)
+    }
+
+    fun correctLocation(measurement: RealVector): RealVector? {
+        kalmanFilter?.predict()
+        kalmanFilter?.correct(measurement)
+        return kalmanFilter?.stateEstimationVector
     }
 }
