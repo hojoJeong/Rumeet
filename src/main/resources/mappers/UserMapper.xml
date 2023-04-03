@@ -48,11 +48,6 @@
         SELECT id, email, nickname, age, gender, profile_img, date, state FROM user_view WHERE id = #{id};
     </select>
 
-    <select id="searchUsersByNickname" parameterType="String" resultMap="simple_user">
-        SELECT id, email, nickname, age, gender, profile_img, date, state
-        FROM user_view WHERE nickname LIKE #{nickname};
-    </select>
-
     <update id="modifyUser" parameterType="ModifyUserDto">
         UPDATE user SET age = #{age}, gender = #{gender}, height = #{height}, weight = #{weight} WHERE (id = #{id});
     </update>
@@ -122,4 +117,13 @@
     </update>
 
 
+    <select id="searchUsersByNickname" parameterType="String" resultType="UserRecordDto">
+        SELECT u.id,u.nickname,u.profile_img AS profileImg, r.total_km AS totalKm, r.total_time AS totalTime, r.average_pace AS pace
+        FROM user_view u
+                 LEFT JOIN record r ON u.id = r.user_id
+        WHERE u.nickname LIKE #{nickname};
+    </select>
+
 </mapper>
+
+

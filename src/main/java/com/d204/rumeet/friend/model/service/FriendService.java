@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface FriendService {
 
-
     List<FriendListDto> getFilteredFriendsByUserId(int userId, int type);
 
     void deleteFriend(int userId, int friendId);
@@ -25,5 +24,6 @@ public interface FriendService {
 
     void rejectRequests(FriendRequestDto friendRequestDto);
 
-    List<SimpleUserDto> searchFriend(int userId, String nickname);
+    List<FriendListDto> searchFriendByNickname(int userId, String nickname);
+
 }

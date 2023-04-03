@@ -91,7 +91,7 @@ public class FriendController {
     @Operation(summary = "내 친구 목록에서 닉네임으로 조회", description = "친구 닉네임 조회")
     @GetMapping("/search")
     public ResponseEntity<?> searchFriend(@RequestParam("userId") int userId, @RequestParam("nickname") String nickname) {
-        List<SimpleUserDto> friends = friendService.searchFriend(userId, nickname);
+        List<FriendListDto> friends = friendService.searchFriendByNickname(userId, nickname);
         RespData<List> data = new RespData<>();
         data.setData(friends);
         return data.builder();

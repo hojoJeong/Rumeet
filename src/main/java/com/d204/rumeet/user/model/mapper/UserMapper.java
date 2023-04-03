@@ -22,7 +22,7 @@ public interface UserMapper {
 
     int checkDuplication(CheckDto checkDto);
 
-    List<SimpleUserDto> searchUsersByNickname(String nickname);
+    List<UserRecordDto> searchUsersByNickname(String nickname);
 
     int modifyPwd(ModifyPwdDto modifyPwdDto);
 

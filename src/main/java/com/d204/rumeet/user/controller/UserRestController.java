@@ -3,6 +3,7 @@ package com.d204.rumeet.user.controller;
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.CustomJwtException;
 import com.d204.rumeet.exception.ErrorEnum;
+import com.d204.rumeet.friend.model.dto.FriendListDto;
 import com.d204.rumeet.tools.DataUtil;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.user.model.dto.*;
@@ -130,7 +131,7 @@ public class UserRestController {
     @Operation(summary = "유저 검색 (닉네임)", description = "전체 사용자에서 닉네임 검색")
     @GetMapping("/search")
     public ResponseEntity<?> searchFriend(@RequestParam("nickname") String nickname) {
-        List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
+        List<UserRecordDto> users = userService.searchUsersByNickname(nickname);
         RespData<List> data = new RespData<>();
         data.setData(users);
         return data.builder();

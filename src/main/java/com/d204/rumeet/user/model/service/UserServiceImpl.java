@@ -212,8 +212,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<SimpleUserDto> searchUsersByNickname(String nickname) {
-        List<SimpleUserDto> users = userMapper.searchUsersByNickname("%" + nickname + "%");
+    public List<UserRecordDto> searchUsersByNickname(String nickname) {
+        List<UserRecordDto> users = userMapper.searchUsersByNickname("%" + nickname + "%");
         return users;
     }
 
