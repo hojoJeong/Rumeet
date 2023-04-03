@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
 
     </data>
@@ -8,36 +9,60 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.running.fragment.RunningOptionFragment">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tbly_running_option"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            style="@style/tabLayoutCustom"/>
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vpg_running_option"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
+            android:overScrollMode="never"
+            android:id="@+id/sv_main"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_running_option_start_running"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tbly_running_option"
-            app:layout_constraintBottom_toTopOf="@+id/btn_running_option_start_running"
-            android:layout_marginBottom="10dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".ui.running.option.RunningOptionFragment">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tbly_running_option"
+                    style="@style/tabLayoutCustom"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vpg_running_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tbly_running_option" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_running_option_start_running"
+            style="@style/base_font_bold_16_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_margin="@dimen/base_horizontal_margin"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginBottom="80dp"
             android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
             android:text="@string/content_btn_start_running"
-            style="@style/base_font_bold_16_white"/>
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/sv_main"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

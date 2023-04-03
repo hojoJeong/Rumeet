@@ -16,6 +16,6 @@ internal interface UserApiService {
     ) : BaseResponse<List<UserResponseDto?>>
 
     @GET("users/{id}")
-    suspend fun getUserInfo(@Path("id") id: Int) : BaseResponse<UserInfoResponse>
+    suspend fun getUserInfo(@Path("id") id: Int) : BaseResponse<UserInfoResponse?>
 }
 

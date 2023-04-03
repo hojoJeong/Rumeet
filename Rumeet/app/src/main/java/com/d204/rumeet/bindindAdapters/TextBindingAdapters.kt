@@ -109,6 +109,8 @@ fun TextView.setInteger(value : Int){
     if(value != 0) {
         text = value.toString()
         visibility = View.VISIBLE
+    } else{
+        visibility = View.GONE
     }
 }
 
