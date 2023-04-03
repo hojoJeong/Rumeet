@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="@dimen/base_horizontal_margin"
-        tools:context=".ui.running.fragment.RunningOptionRelayFragment">
+        tools:context=".ui.running.option.multi.RunningOptionRelayFragment">
 
         <TextView
             android:layout_width="match_parent"

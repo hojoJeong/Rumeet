@@ -56,4 +56,12 @@ internal object ApiModule {
     ) : ChattingApiService{
         return retrofit.create(ChattingApiService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideRunningApiService(
+        @Named("Auth") retrofit: Retrofit
+    ) : RunningApiService{
+        return retrofit.create(RunningApiService::class.java)
+    }
 }

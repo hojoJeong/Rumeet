@@ -7,6 +7,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
@@ -15,9 +16,12 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import java.io.File
+import java.io.FileOutputStream
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
+import java.text.DecimalFormat
 
 
 fun Context.startActivityAfterClearBackStack(classType: Class<out Activity>) {
@@ -72,29 +76,6 @@ fun checkEmailValidate(email : String) : Boolean{
     return pattern.matcher(email).matches()
 }
 
-fun resizeImage(imageFile: File, targetWidth: Int, targetHeight: Int): Bitmap {
-    // 이미지 파일 로드
-    val options = BitmapFactory.Options().apply {
-        inJustDecodeBounds = true // 이미지 정보만 가져오기 위해 inJustDecodeBounds 옵션을 true로 설정
-    }
-    BitmapFactory.decodeFile(imageFile.path, options)
-
-    // 이미지 리사이징
-    val width = options.outWidth
-    val height = options.outHeight
-    var scaleFactor = 1
-    if (width > targetWidth || height > targetHeight) {
-        val widthRatio = width.toFloat() / targetWidth.toFloat()
-        val heightRatio = height.toFloat() / targetHeight.toFloat()
-        scaleFactor = Math.min(widthRatio, heightRatio).toInt()
-    }
-    val scaledOptions = BitmapFactory.Options().apply {
-        inSampleSize = scaleFactor // 이미지 리사이징 옵션 설정
-    }
-
-    return BitmapFactory.decodeFile(imageFile.path, scaledOptions)
-}
-
 fun RecyclerView.scrollToBottom() {
     // scroll to last item to get the view of last item
     val layoutManager = layoutManager as LinearLayoutManager?
@@ -107,4 +88,41 @@ fun RecyclerView.scrollToBottom() {
             layoutManager.scrollToPositionWithOffset(lastItemPosition, offset)
         }
     }
+}
+
+fun floatTo2f(data : Float) : String{
+    val df = DecimalFormat("##0.00")
+    return df.format(data)
+}
+
+fun jsonToString(json : Any): String? = Gson().toJson(json)
+
+fun getCalorie(gender : Int, age : Int, weight : Float, time : Long) : String{
+    val minute = (time/1000/60)
+    val calcAge = roundDigit(age.toDouble().times(0.2017), 2)
+    // 파운드 기준
+    val calcWeight = roundDigit(weight.times(2.20462).times(0.09036), 2)
+    val calcHeart = roundDigit(120.times(0.6309), 2)
+
+    val firstCalc : Double = roundDigit((calcAge + calcWeight + calcHeart - 55.0969) * minute.toDouble(), 2)
+    return floatTo2f(roundDigit(firstCalc.div(4.184) ,2).div(10).toFloat())
+}
+
+fun roundDigit(number : Double, digits : Int): Double {
+    return Math.round(number * Math.pow(10.0, digits.toDouble())) / Math.pow(10.0, digits.toDouble())
+}
+
+fun viewToBitmap(view : View) : Bitmap{
+    val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    view.draw(canvas)
+    return bitmap
+}
+
+fun bitmapToFile(bitmap: Bitmap, file: File): File {
+    val outputStream = FileOutputStream(file)
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+    outputStream.flush()
+    outputStream.close()
+    return file
 }

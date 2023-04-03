@@ -1,6 +1,6 @@
 package com.d204.rumeet.ui.chatting.chatting_list
 
-import android.os.Build.VERSION_CODES.P
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -8,9 +8,14 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentChattingListBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.chatting.chatting_list.adapter.ChattingListAdapter
-import com.d204.rumeet.util.AMQPManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
+private const val TAG = "ChattingListFragment"
 
 @AndroidEntryPoint
 class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingListViewModel>() {
@@ -19,6 +24,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
 
     override val viewModel: ChattingListViewModel by viewModels()
     private lateinit var chattingListAdapter: ChattingListAdapter
+    private var flag = false
 
     override fun initStartView() {
         with(binding) {
@@ -37,6 +43,8 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         setNoResult(it.isEmpty)
                     }
                     is ChattingListSideEffect.NavigateChattingRoom -> {
+                        Log.d(TAG, "initDataBinding: $flag")
+
                         navigate(
                             ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(
                                 profile = it.profile,
@@ -47,8 +55,13 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         )
                     }
                     is ChattingListSideEffect.SuccessNewChattingList -> {
+                        binding.rvChattingRoom.visibility = View.INVISIBLE
                         chattingListAdapter.submitList(null)
                         chattingListAdapter.submitList(it.chattingRoomInfo.toList())
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(300)
+                            binding.rvChattingRoom.visibility = View.VISIBLE
+                        }
                     }
                 }
             }
@@ -69,4 +82,5 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
 
         binding.contentNoResultChattingList.tvContentNoResultMessage.text = "채팅내역이 존재하지 않습니다"
     }
+
 }

@@ -44,4 +44,10 @@ internal abstract class RepositoryModule {
     abstract fun bindChattingRepositoryImpl(
         chattingRepositoryImpl: ChattingRepositoryImpl
     ) : ChattingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRunningRepositoryImpl(
+        runningRepositoryImpl: RunningRepositoryImpl
+    ) : RunningRepository
 }

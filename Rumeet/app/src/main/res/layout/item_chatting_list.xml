@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/base_horizontal_margin"
         android:paddingVertical="@dimen/base_vertical_title_to_content"
+        android:focusable="true"
+        android:clickable="true"
         app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId, chattingRoomData.profile, chattingRoomData.otherUserId, chattingRoomData.noReadCnt)}">
 
         <de.hdodenhof.circleimageview.CircleImageView
