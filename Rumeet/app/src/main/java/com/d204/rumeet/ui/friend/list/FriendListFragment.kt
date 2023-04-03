@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentFriendListBinding
+import com.d204.rumeet.domain.model.friend.FriendInfoDomainModel
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.friend.list.adapter.FriendListAdapter
 import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
@@ -71,11 +72,13 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
         binding.tvAllFriendContent.text = "${listSize}\n전체친구"
     }
 
-    private fun showFriendInfoDialog(friendData: FriendListUiModel) {
+    private fun showFriendInfoDialog(friendData: FriendInfoDomainModel) {
         val dialog = FriendInfoDialog().apply {
+            viewInfo = "friendDetail"
             initFriendInfo(friendData)
             addChattingButtonClickListener { userId ->
                 //Todo navigate chatting...
+
             }
         }
         dialog.show(childFragmentManager, dialog.tag)

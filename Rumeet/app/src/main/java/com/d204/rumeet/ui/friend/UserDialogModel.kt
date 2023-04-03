@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.friend
 
+import com.d204.rumeet.domain.model.friend.FriendInfoDomainModel
 import com.d204.rumeet.ui.friend.add.model.UserListUiModel
 import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
 import com.d204.rumeet.util.toDistance
@@ -26,4 +27,10 @@ fun UserListUiModel.toUserDialogModel() = UserDialogModel(
     userNickname = this.nickname,
     userProfileImg = this.profileImg,
     totalKm.toInt().toDistance(), totalTime.toMinute(), pace.toRecord()
+)
+
+fun FriendInfoDomainModel.toUserDialogModel() = UserDialogModel(
+    id,
+    nickname,
+    profileImg, totalKm.toDistance(), totalTime.toRecord(), pace.toRecord()
 )

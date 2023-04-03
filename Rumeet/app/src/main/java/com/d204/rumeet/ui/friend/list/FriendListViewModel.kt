@@ -9,6 +9,7 @@ import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.friend.GetFriendInfoUseCase
 import com.d204.rumeet.domain.usecase.friend.GetFriendListUseCase
 import com.d204.rumeet.domain.usecase.friend.SearchFriendUseCase
+import com.d204.rumeet.domain.usecase.user.GetFriendDetailInfoUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
@@ -24,7 +25,9 @@ class FriendListViewModel @Inject constructor(
     private val getFriendInfoUseCase: GetFriendInfoUseCase,
     private val getFriendListUseCase: GetFriendListUseCase,
     private val searchFriendUseCase: SearchFriendUseCase,
-    private val getUserIdUseCase: GetUserIdUseCase
+    private val getUserIdUseCase: GetUserIdUseCase,
+    private val getFriendDetailInfoUseCase: GetFriendDetailInfoUseCase
+
 ) : BaseViewModel(), FriendListClickListener {
     private val _friendListAction: MutableSharedFlow<FriendListAction> = MutableSharedFlow()
     val friendListAction: SharedFlow<FriendListAction> get() = _friendListAction.asSharedFlow()
@@ -64,8 +67,8 @@ class FriendListViewModel @Inject constructor(
     fun getFriendInfo(userId: Int) {
         baseViewModelScope.launch {
             showLoading()
-            getFriendInfoUseCase(userId)
-                .onSuccess { _friendListAction.emit(FriendListAction.SuccessFriendInfo(it.toUiModel())) }
+            getFriendDetailInfoUseCase(userId)
+                .onSuccess { _friendListAction.emit(FriendListAction.SuccessFriendInfo(it)) }
                 .onError { e -> catchError(e) }
             dismissLoading()
         }
