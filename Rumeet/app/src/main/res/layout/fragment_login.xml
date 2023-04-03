@@ -11,199 +11,207 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/iv_login_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:src="@drawable/ic_app_main_logo"
-            app:layout_constraintBottom_toTopOf="@id/edit_login_id"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="1" />
-
-        <com.d204.rumeet.ui.components.FilledEditText
-            android:id="@+id/edit_login_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            app:layout_constraintBottom_toTopOf="@id/ly_content"
+            app:layout_constraintDimensionRatio="1.4:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_login_logo" />
-
-        <com.d204.rumeet.ui.components.FilledEditText
-            android:id="@+id/edit_login_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
-            android:layout_marginTop="11dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_login_id" />
-
-
-        <CheckBox
-            android:id="@+id/btn_login_auto"
-            android:layout_width="@dimen/check_box_size"
-            android:layout_height="@dimen/check_box_size"
-            android:layout_marginStart="@dimen/base_horizontal_margin"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/sc_checked_auto_login"
-            android:button="@null"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_login_auto_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_login_auto_title" />
-
-        <TextView
-            android:id="@+id/tv_login_auto_title"
-            style="@style/base_font_medium_14_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="17dp"
-            android:minHeight="0dp"
-            android:text="@string/content_auto_login"
-            app:layout_constraintStart_toEndOf="@id/btn_login_auto"
-            app:layout_constraintTop_toBottomOf="@+id/edit_login_password" />
-
-        <TextView
-            android:id="@+id/tv_login_find_account"
-            style="@style/base_font_medium_14_dim_gray"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/content_find_account"
-            app:layout_constraintBottom_toBottomOf="@id/tv_login_auto_title"
-            app:layout_constraintEnd_toEndOf="@id/edit_login_password"
-            app:layout_constraintTop_toTopOf="@id/tv_login_auto_title"
-            app:onSingleClick="@{() -> vm.navigateFindAccount()}" />
-
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ly_login"
+            android:id="@+id/ly_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_login_auto">
+            app:layout_constraintTop_toBottomOf="@id/iv_login_logo">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_login"
-                style="@style/base_font_bold_16_white"
-                android:layout_width="match_parent"
+            <com.d204.rumeet.ui.components.FilledEditText
+                android:id="@+id/edit_login_id"
+                android:layout_width="match_parent" 
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
-                android:text="@string/content_login"
+                android:layout_marginHorizontal="@dimen/base_horizontal_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:onSingleClick="@{() -> vm.navigateEmailLogin()}" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ly_kakao_login"
+            <com.d204.rumeet.ui.components.FilledEditText
+                android:id="@+id/edit_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_horizontal_margin"
                 android:layout_marginTop="11dp"
-                android:background="@drawable/bg_rect_transparent_golden_yellow_round8_stroke0"
-                android:paddingVertical="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_login"
-                app:onSingleClick="@{() -> vm.navigateKakaoLogin()}">
+                app:layout_constraintTop_toBottomOf="@id/edit_login_id" />
 
-                <ImageView
-                    android:id="@+id/iv_kakao_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="26dp"
-                    android:src="@drawable/ic_kakao_logo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_kakao_login"
-                    style="@style/base_font_bold_16_maire"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/content_kakao_login"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ly_naver_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="11dp"
-                android:background="@drawable/bg_rect_transparent_kelly_green_round8_stroke0"
-                android:paddingVertical="14dp"
-                app:layout_constraintEnd_toEndOf="parent"
+            <CheckBox
+                android:id="@+id/btn_login_auto"
+                android:layout_width="@dimen/check_box_size"
+                android:layout_height="@dimen/check_box_size"
+                android:layout_marginStart="@dimen/base_horizontal_margin"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/sc_checked_auto_login"
+                android:button="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_login_auto_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ly_kakao_login">
+                app:layout_constraintTop_toTopOf="@id/tv_login_auto_title" />
 
-                <ImageView
-                    android:id="@+id/iv_naver_login"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="27dp"
-                    android:src="@drawable/ic_naver_logo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_naver_login"
-                    style="@style/base_font_bold_16_white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/content_naver_login"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:id="@+id/ly_join"
+            <TextView
+                android:id="@+id/tv_login_auto_title"
+                style="@style/base_font_medium_14_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
-                android:orientation="horizontal"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="17dp"
+                android:minHeight="0dp"
+                android:text="@string/content_auto_login"
+                app:layout_constraintStart_toEndOf="@id/btn_login_auto"
+                app:layout_constraintTop_toBottomOf="@+id/edit_login_password" />
+
+            <TextView
+                android:id="@+id/tv_login_find_account"
+                style="@style/base_font_medium_14_dim_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/content_find_account"
+                app:layout_constraintBottom_toBottomOf="@id/tv_login_auto_title"
+                app:layout_constraintEnd_toEndOf="@id/edit_login_password"
+                app:layout_constraintTop_toTopOf="@id/tv_login_auto_title"
+                app:onSingleClick="@{() -> vm.navigateFindAccount()}" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ly_naver_login">
+                app:layout_constraintTop_toBottomOf="@id/btn_login_auto">
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_login"
+                    style="@style/base_font_bold_16_white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rect_transparent_navyblue_round8_stroke0"
+                    android:text="@string/content_login"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:onSingleClick="@{() -> vm.navigateEmailLogin()}" />
 
-                <TextView
-                    android:id="@+id/tv_join_title"
-                    style="@style/base_font_medium_12_dim_gray"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_kakao_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:background="@drawable/bg_rect_transparent_golden_yellow_round8_stroke0"
+                    android:paddingVertical="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_login"
+                    app:onSingleClick="@{() -> vm.navigateKakaoLogin()}">
+
+                    <ImageView
+                        android:id="@+id/iv_kakao_logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="26dp"
+                        android:src="@drawable/ic_kakao_logo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_kakao_login"
+                        style="@style/base_font_bold_16_maire"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/content_kakao_login"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_naver_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:background="@drawable/bg_rect_transparent_kelly_green_round8_stroke0"
+                    android:paddingVertical="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ly_kakao_login">
+
+                    <ImageView
+                        android:id="@+id/iv_naver_login"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="27dp"
+                        android:src="@drawable/ic_naver_logo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_naver_login"
+                        style="@style/base_font_bold_16_white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/content_naver_login"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/ly_join"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/content_join_title" />
+                    android:layout_marginTop="23dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ly_naver_login">
 
-                <TextView
-                    android:id="@+id/tv_join"
-                    style="@style/base_font_bold_12_neon_blue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="13dp"
-                    android:text="@string/content_join"
-                    app:onSingleClick="@{() -> vm.navigateJoin()}" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_join_title"
+                        style="@style/base_font_medium_12_dim_gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/content_join_title" />
+
+                    <TextView
+                        android:id="@+id/tv_join"
+                        style="@style/base_font_bold_12_neon_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="13dp"
+                        android:text="@string/content_join"
+                        app:onSingleClick="@{() -> vm.navigateJoin()}" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

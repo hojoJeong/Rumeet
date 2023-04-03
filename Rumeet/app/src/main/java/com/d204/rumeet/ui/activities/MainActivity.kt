@@ -63,10 +63,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         binding.btnSingle.setOnClickListener {
             navController.navigate(R.id.navigation_running, bundleOf("type" to 1), navOption)
+            binding.bvnMain.bvnMain.selectedItemId = R.id.homeFragment
         }
 
         binding.btnMulti.setOnClickListener {
             navController.navigate(R.id.navigation_running, bundleOf("type" to 2), navOption)
+            binding.bvnMain.bvnMain.selectedItemId = R.id.homeFragment
         }
     }
 

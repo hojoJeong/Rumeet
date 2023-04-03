@@ -69,6 +69,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
     }
 
     private fun setNoResult(isEmpty: Boolean) {
+        Log.d(TAG, "setNoResult: $isEmpty")
         if (isEmpty) {
             binding.contentNoResultChattingList.root.visibility = View.VISIBLE
             binding.contentNoResultChattingList.tvContentNoResultMessage.text = "채팅 내역이 없습니다"
