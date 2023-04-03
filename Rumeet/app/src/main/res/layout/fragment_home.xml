@@ -8,6 +8,8 @@
         <variable
             name="vm"
             type="com.d204.rumeet.ui.home.HomeViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,11 +20,11 @@
             android:id="@+id/scv_home"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="50dp">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -40,35 +42,281 @@
                     app:setWelcomeMessage='@{vm.userName}'
                     tools:text="@string/content_welcome_message" />
 
-                <com.d204.rumeet.ui.components.CardViewHome
-                    android:id="@+id/content_home_best_record"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_home_record_title"
+                    style="@style/base_font_bold_16_dim_gray"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_welcome_message"
-                    app:setBestRecordView="@{vm.bestRecord}" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_home_welcome_message"
+                    android:text="@string/title_best_record" />
 
-                <com.d204.rumeet.ui.components.CardViewHome
-                    android:id="@+id/content_home_badge"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cdv_home_record"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
+                    android:layout_marginTop="@dimen/base_vertical_title_to_content"
+                    android:elevation="10dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/content_home_best_record"
-                    app:setBadgeView="@{vm.badgeList}" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_home_record_title">
 
-                <com.d204.rumeet.ui.components.CardViewHome
-                    android:id="@+id/content_home_recommend_friend"
-                    android:layout_width="match_parent"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingVertical="@dimen/base_vertical_title_to_content">
+
+                        <TextView
+                            android:id="@+id/tv_home_record_times"
+                            style="@style/base_font_bold_22_black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            app:layout_constraintBottom_toTopOf="@+id/tv_home_record_time_title"
+                            app:layout_constraintEnd_toEndOf="@+id/tv_home_record_time_title"
+                            app:layout_constraintStart_toStartOf="@+id/tv_home_record_time_title"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_chainStyle="packed"
+                            app:recordTitle='@{"누적 횟수"}'
+                            app:recordValue="@{vm.homeRecord}"
+                            tools:text="11회" />
+
+                        <TextView
+                            android:id="@+id/tv_home_record_time_title"
+                            style="@style/base_font_medium_16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="누적 횟수"
+                            android:textColor="@color/dim_gray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_home_record_distance_title"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_home_record_times" />
+
+                        <TextView
+                            android:id="@+id/tv_home_record_distance"
+                            style="@style/base_font_bold_22_black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_home_record_times"
+                            app:layout_constraintEnd_toEndOf="@+id/tv_home_record_distance_title"
+                            app:layout_constraintStart_toStartOf="@+id/tv_home_record_distance_title"
+                            app:layout_constraintVertical_chainStyle="packed"
+                            app:recordTitle='@{"누적 거리"}'
+                            app:recordValue="@{vm.homeRecord}"
+                            tools:text="11회" />
+
+                        <TextView
+                            android:id="@+id/tv_home_record_distance_title"
+                            style="@style/base_font_medium_16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="누적 거리"
+                            android:textColor="@color/dim_gray"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_home_record_time_title"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_home_record_pace_title"
+                            app:layout_constraintStart_toEndOf="@id/tv_home_record_time_title" />
+
+                        <TextView
+                            android:id="@+id/tv_home_record_pace"
+                            style="@style/base_font_bold_22_black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_home_record_times"
+                            app:layout_constraintEnd_toEndOf="@+id/tv_home_record_pace_title"
+                            app:layout_constraintStart_toStartOf="@+id/tv_home_record_pace_title"
+                            app:layout_constraintVertical_chainStyle="packed"
+                            app:recordTitle='@{"페이스"}'
+                            app:recordValue="@{vm.homeRecord}"
+                            tools:text="11회" />
+
+                        <TextView
+                            android:id="@+id/tv_home_record_pace_title"
+                            style="@style/base_font_medium_16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="페이스"
+                            android:textColor="@color/dim_gray"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_home_record_time_title"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tv_home_record_distance_title" />
+
+                        <TextView
+                            android:id="@+id/tv_home_record_result_no"
+                            style="@style/base_font_medium_14_nobel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="40dp"
+                            android:textAlignment="center"
+                            android:visibility="@{vm.homeRecord == null ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="@string/content_no_best_record" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/tv_home_badge_title"
+                    style="@style/base_font_bold_16_dim_gray"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cdv_home_record"
+                    android:text="@string/title_my_badge" />
+
+                <TextView
+                    android:id="@+id/btn_home_badge"
+                    style="@style/base_font_medium_12_dim_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_arrow_right"
+                    android:drawableTint="@color/dim_gray"
+                    android:text="@string/title_see_more"
+                    android:visibility="@{vm.badgeList == null ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_home_badge_title"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_home_badge_title"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cdv_home_badge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_vertical_title_to_content"
+                    android:elevation="10dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/content_home_badge"
-                    app:setRecommendFriendView="@{vm.recommendFriendList}" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_home_badge_title">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/iv_home_record_badge_1"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_home_record_badge_2"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:position="@{1}"
+                            app:setBadgeImg="@{vm.badgeList}"
+                            android:layout_marginVertical="@dimen/base_vertical_title_to_content"
+                            tools:src="@drawable/ic_launcher_background" />
+
+                        <ImageView
+                            android:id="@+id/iv_home_record_badge_2"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_home_record_badge_1"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_home_record_badge_3"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:position="@{2}"
+                            app:setBadgeImg="@{vm.badgeList}"
+                            tools:src="@drawable/ic_launcher_background" />
+
+                        <ImageView
+                            android:id="@+id/iv_home_record_badge_3"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/iv_home_record_badge_2"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:position="@{3}"
+                            app:setBadgeImg="@{vm.badgeList}"
+                            tools:src="@drawable/ic_launcher_background" />
+
+                        <TextView
+                            android:id="@+id/tv_home_badge_result_no"
+                            style="@style/base_font_medium_14_nobel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="40dp"
+                            android:textAlignment="center"
+                            android:visibility="@{vm.badgeList == null ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="@string/content_no_badge" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tv_home_recommend_friend_title"
+                    style="@style/base_font_bold_16_dim_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cdv_home_badge"
+                    android:text="@string/title_recommend_random_friend" />
+
+                <TextView
+                    android:id="@+id/btn_home_recommend_friend"
+                    style="@style/base_font_medium_12_dim_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_refresh"
+                    android:drawableTint="@color/dim_gray"
+                    android:text="@string/title_refresh"
+                    android:visibility="@{vm.recommendFriendList == null ?  View.GONE : View.VISIBLE}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_home_recommend_friend_title"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_home_recommend_friend_title"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cdv_home_recommend_friend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_vertical_title_to_content"
+                    android:elevation="10dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_home_recommend_friend_title">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_home_recommend_friend"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_home_recommend_friend_result_no"
+                            style="@style/base_font_medium_14_nobel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="40dp"
+                            android:textAlignment="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:text="@string/content_no_pace" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

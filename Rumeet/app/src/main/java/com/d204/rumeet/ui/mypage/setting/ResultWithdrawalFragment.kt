@@ -24,7 +24,6 @@ class ResultWithdrawalFragment : BaseFragment<FragmentResultWithdrawalBinding, B
         with(binding.btnResultWithdrawal){
             setContent(getString(R.string.content_result_withdrawal_btn))
             addClickListener{
-                //TODO(회원 탈퇴 로직 구현)
                 requireActivity().startActivityAfterClearBackStack(LoginActivity::class.java)
             }
         }

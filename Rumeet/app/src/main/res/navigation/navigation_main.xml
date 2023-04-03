@@ -12,9 +12,26 @@
         <action
             android:id="@+id/action_homeFragment_to_navigation_running"
             app:destination="@id/navigation_running" />
+        <action
+            android:id="@+id/action_homeFragment_to_runningOptionContainerFragment"
+            app:destination="@id/runningOptionFragment"/>
+        <action
+            android:id="@+id/action_homeFragment_to_navigation_mypage"
+            app:destination="@id/navigation_mypage" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
-
-
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.d204.rumeet.ui.notification.NotificationFragment"
+        android:label="NotificationFragment">
+        <argument
+            android:name="type"
+            android:defaultValue="0"
+            app:argType="integer"
+            app:nullable="false" />
+    </fragment>
     <navigation
         android:id="@+id/navigation_running"
         app:startDestination="@id/runningOptionFragment">
@@ -153,6 +170,10 @@
 
     </navigation>
 
+    <fragment
+        android:id="@+id/runningFragment"
+        android:name="com.d204.rumeet.ui.running.RunningFragment"
+        android:label="RunningFragment" />
 
     <navigation
         android:id="@+id/navigation_mypage"
@@ -198,34 +219,19 @@
             android:name="com.d204.rumeet.ui.mypage.setting.UserInfoFragment"
             android:label="SettingUserInfoFragment">
             <action
-                android:id="@+id/action_userInfoFragment_to_confirmPasswordFragment"
-                app:destination="@id/confirmPasswordFragment" />
-            <action
                 android:id="@+id/action_userInfoFragment_to_additionalInfoFragment2"
                 app:destination="@id/additionalInfoFragment2" />
             <action
                 android:id="@+id/action_userInfoFragment_to_withdrawalFragment"
                 app:destination="@id/withdrawalFragment" />
+            <action
+                android:id="@+id/action_userInfoFragment_to_resetPasswordFragment2"
+                app:destination="@id/resetPasswordFragment2" />
         </fragment>
         <fragment
             android:id="@+id/notificationSettingFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.NotificationSettingFragment"
             android:label="NotificationSettingFragment" />
-        <fragment
-            android:id="@+id/confirmPasswordFragment"
-            android:name="com.d204.rumeet.ui.mypage.setting.ConfirmPasswordFragment"
-            android:label="ConfirmPasswordFragment">
-            <argument
-                android:name="destination_fragment"
-                app:argType="string"
-                app:nullable="false" />
-
-            <action
-                android:id="@+id/action_confirmPasswordFragment_to_resetPasswordFragment2"
-                app:destination="@id/resetPasswordFragment2"
-                app:popUpTo="@id/userInfoFragment"
-                app:popUpToInclusive="false" />
-        </fragment>
 
         <fragment
             android:id="@+id/additionalInfoFragment2"
@@ -300,6 +306,16 @@
                 android:defaultValue="false"
                 app:argType="boolean"
                 app:nullable="false" />
+            <argument
+                android:name="userName"
+                android:defaultValue=""
+                app:argType="string"
+                app:nullable="false" />
+            <argument
+                android:name="userId"
+                android:defaultValue="-1"
+                app:argType="integer"
+                app:nullable="false" />
         </fragment>
         <fragment
             android:id="@+id/addFriendFragment"
@@ -331,6 +347,7 @@
             android:name="otherUserId"
             android:defaultValue="0"
             app:argType="integer" />
+
 
     </fragment>
 
