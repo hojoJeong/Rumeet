@@ -3,6 +3,7 @@ package com.d204.rumeet.user.controller;
 import com.d204.rumeet.data.RespData;
 import com.d204.rumeet.exception.CustomJwtException;
 import com.d204.rumeet.exception.ErrorEnum;
+import com.d204.rumeet.friend.model.dto.FriendListDto;
 import com.d204.rumeet.tools.DataUtil;
 import com.d204.rumeet.tools.JwtTool;
 import com.d204.rumeet.user.model.dto.*;

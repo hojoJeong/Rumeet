@@ -1,5 +1,6 @@
 package com.d204.rumeet.user.model.service;
 
+import com.d204.rumeet.friend.model.dto.FriendListDto;
 import com.d204.rumeet.user.model.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface FriendMapper {
 
     int getMatchCount(int userId, int friendId);
-    FriendListDto getFriend(int userId);
+    FriendListDto getNoRunningFriend(int userId);
     FriendListDto getRunningFriend(int userId, int friendId);
 
 }

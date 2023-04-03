@@ -46,20 +46,16 @@ public class FriendServiceImpl implements FriendService {
         for (FriendDao friend : friends) {
             friendIds.add(friend.getFriendId());
         }
-        System.out.println(friendIds);
         List<FriendListDto> friendList = new ArrayList<>();
         for (int friendId : friendIds) {
             int cnt = friendMapper.getMatchCount(userId, friendId);
             if (cnt > 0) {
-                System.out.println(friendId+"cnt있음"+ cnt);
                 FriendListDto friend = friendMapper.getRunningFriend(userId, friendId);
                 if (friend != null) {
                     friendList.add(friend);
                 }
             } else {
-                System.out.println(friendId+"cnt없음"+ cnt);
-                FriendListDto friend = friendMapper.getFriend(friendId);
-                System.out.println(friend);
+                FriendListDto friend = friendMapper.getNoRunningFriend(friendId);
                 if (friend != null) {
                     friendList.add(friend);
                 }
@@ -70,7 +66,6 @@ public class FriendServiceImpl implements FriendService {
             } else if (type == 3) {
                 Collections.sort(friendList, (x, y) -> -Integer.compare(x.getMatchCount(), y.getMatchCount()));
             }
-
             return friendList;
         }
 
@@ -225,26 +220,37 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<SimpleUserDto> searchFriend(int userId, String nickname) {
-        List<SimpleUserDto> users = userService.searchUsersByNickname(nickname);
+    public List<FriendListDto> searchFriendByNickname(int userId, String nickname) {
 
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
         List<FriendDao> friends = mongoTemplate.find(query, FriendDao.class, "friend");
 
-        Set<Integer> friendId = new HashSet<>();
+        Set<Integer> friendIds = new HashSet<>();
         for (FriendDao friend : friends) {
-            friendId.add(friend.getFriendId());
+            friendIds.add(friend.getFriendId());
         }
 
-        List<SimpleUserDto> filteredFriends = new ArrayList<>();
-        for (SimpleUserDto user : users) {
-            if (friendId.contains(user.getId())) {
-                filteredFriends.add(user);
+        List<FriendListDto> friendList = new ArrayList<>();
+        for (int friendId : friendIds) {
+            UserDto user = userService.getUserById(friendId);
+            if (user.getNickname().contains(nickname)){
+                int cnt = friendMapper.getMatchCount(userId, friendId);
+                FriendListDto friend;
+                if (cnt > 0) {
+                    friend = friendMapper.getRunningFriend(userId, friendId);
+                } else {
+                    friend = friendMapper.getNoRunningFriend(friendId);
+                }
+                if (friend != null) {
+                    friendList.add(friend);
+                }
             }
-        }
-        return filteredFriends;
 
+        }
+        return friendList;
     }
+
+
 }
 
