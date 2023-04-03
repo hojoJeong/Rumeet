@@ -26,7 +26,7 @@ internal class FriendRepositoryImpl @Inject constructor(
 ) : FriendRepository {
 
     override suspend fun getUserFriendList(type: Int): NetworkResult<List<FriendListDomainModel>> {
-        return handleApi {
+        val response =  handleApi {
             friendApiService.getFriendList(
                 userDataStorePreferences.getUserId(),
                 type
@@ -35,6 +35,8 @@ internal class FriendRepositoryImpl @Inject constructor(
             .toDomainResult<List<FriendListResponseDto>, List<FriendListDomainModel>> { response ->
                 response.map { it.toDomainModel() }
             }
+        Log.d(TAG, "getUserFriendList: $response")
+        return response
     }
 
     override suspend fun getFriendInfo(friendId: Int): NetworkResult<FriendModel> {

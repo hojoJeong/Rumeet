@@ -11,7 +11,7 @@ data class FriendListResponseDto(
     val nickname: String,
     @SerializedName("pace")
     val pace: Int,
-    @SerializedName("profileImage")
+    @SerializedName("profileImg")
     val profileImage: String,
     @SerializedName("userId")
     val userId: Int

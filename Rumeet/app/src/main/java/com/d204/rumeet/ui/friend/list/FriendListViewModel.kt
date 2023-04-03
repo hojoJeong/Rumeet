@@ -35,7 +35,6 @@ class FriendListViewModel @Inject constructor(
 
 
     fun requestFriendList(type: Int) {
-        Log.d(TAG, "requestFriendList: ")
         baseViewModelScope.launch {
             showLoading()
             getFriendListUseCase(type)

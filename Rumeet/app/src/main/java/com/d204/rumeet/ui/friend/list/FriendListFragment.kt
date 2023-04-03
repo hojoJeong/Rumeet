@@ -1,7 +1,5 @@
 package com.d204.rumeet.ui.friend.list
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
@@ -11,7 +9,6 @@ import com.d204.rumeet.databinding.FragmentFriendListBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.friend.list.adapter.FriendListAdapter
 import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
-import com.d204.rumeet.ui.mypage.FriendListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -20,7 +17,6 @@ import kotlinx.coroutines.launch
 class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_friend_list
-
     override val viewModel: FriendListViewModel by viewModels()
     private lateinit var friendAdapter: FriendListAdapter
 
@@ -37,11 +33,6 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
     override fun initDataBinding() {
         lifecycleScope.launchWhenStarted {
             launch {
-                viewModel.friendList.collectLatest {
-
-                }
-            }
-            launch {
                 viewModel.friendListAction.collectLatest {
                     when (it) {
                         is FriendListAction.SuccessFriendList -> {
@@ -55,10 +46,10 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
                             showFriendInfoDialog(it.friendInfo)
                         }
                         is FriendListAction.SortRunTogetherFriend -> {
-                            //Todo request sort
+                            viewModel.requestFriendList(3)
                         }
                         is FriendListAction.SortRecentlyRunFriend -> {
-                            //Todo request sort
+                            viewModel.requestFriendList(2)
                         }
                         is FriendListAction.NavigateAddFriend -> {
                             navigate(FriendListFragmentDirections.actionFriendListFragmentToAddFriendFragment())
