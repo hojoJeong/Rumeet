@@ -9,6 +9,7 @@ import java.util.List;
 public interface RecordMapper {
 
     RecordDto getRecord(int userId);
+    FriendRecordDto getFriendRecord(int userId);
     MainRecordDto getMainRecord(int userId);
     void updateRecord(RecordDto record);
     void addRaceInfo(RaceInfoDto raceInfo);

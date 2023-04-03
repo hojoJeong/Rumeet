@@ -41,6 +41,19 @@
         SELECT * FROM record WHERE user_id = #{userId};
     </select>
 
+    <select id="getFriendRecord" parameterType="int" resultType="FriendRecordDto">
+        SELECT
+            r.user_id AS id ,
+            u.nickname AS nickname,
+            u.profile_img AS profileImg,
+            r.total_km AS totalKm,
+            r.total_time AS totalTime,
+            r.average_pace AS pace
+        FROM record r
+                 JOIN user u ON u.id = r.user_id
+        WHERE u.id =#{userId};
+    </select>
+
     <select id="getMainRecord" parameterType="int" resultMap="mainRecord">
         SELECT r.*, u.nickname
         FROM record r
