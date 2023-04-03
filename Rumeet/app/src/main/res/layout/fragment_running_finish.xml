@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_result"
+            style="@style/base_font_bold_32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_horizontal_margin"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="승리" />
+
+        <TextView
+            android:id="@+id/tv_running_time"
+            style="@style/base_font_medium_12_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_result"
+            app:layout_constraintStart_toEndOf="@id/tv_result" />
+
+        <fragment
+            android:id="@+id/ly_map"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="@dimen/base_horizontal_margin"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_result" />
+
+        <LinearLayout
+            android:id="@+id/ly_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/ly_calorie"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ly_map">
+
+            <TextView
+                android:id="@+id/tv_running_pace"
+                style="@style/base_font_bold_16_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_pace_speed"
+                style="@style/base_font_medium_10_white"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="km/h" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_calorie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/ly_speed"
+            app:layout_constraintEnd_toStartOf="@id/ly_height"
+            app:layout_constraintStart_toEndOf="@id/ly_speed"
+            app:layout_constraintTop_toTopOf="@id/ly_speed">
+
+            <TextView
+                android:id="@+id/tv_running_calorie"
+                style="@style/base_font_bold_16_white"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_calorie"
+                android:textColor="@color/black"
+                style="@style/base_font_medium_10_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kcal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/ly_speed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ly_calorie"
+            app:layout_constraintTop_toTopOf="@id/ly_speed">
+
+
+            <TextView
+                android:id="@+id/tv_running_height"
+                style="@style/base_font_bold_16_white"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp" />
+
+            <TextView
+                style="@style/base_font_medium_10_white"
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:text="m" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_running_pace_title"
+            style="@style/base_font_medium_12_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="@string/title_pace"
+            app:layout_constraintEnd_toEndOf="@+id/ly_speed"
+            app:layout_constraintStart_toStartOf="@id/ly_speed"
+            app:layout_constraintTop_toBottomOf="@+id/ly_speed" />
+
+        <TextView
+            android:id="@+id/tv_running_calorie_title"
+            style="@style/base_font_medium_12_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_calorie"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/ly_calorie"
+            app:layout_constraintStart_toStartOf="@id/ly_calorie"
+            app:layout_constraintTop_toBottomOf="@+id/ly_calorie" />
+
+        <TextView
+            android:id="@+id/tv_running_height_title"
+            style="@style/base_font_medium_12_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_running_height"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/ly_height"
+            app:layout_constraintStart_toStartOf="@+id/ly_height"
+            app:layout_constraintTop_toBottomOf="@+id/ly_height" />
+
+
+        <com.d204.rumeet.ui.components.SingleButton
+            android:id="@+id/btn_okay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/base_horizontal_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

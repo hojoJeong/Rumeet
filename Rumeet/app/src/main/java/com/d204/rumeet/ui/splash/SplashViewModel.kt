@@ -2,6 +2,7 @@ package com.d204.rumeet.ui.splash
 
 import android.util.Log
 import com.d204.rumeet.domain.usecase.auth.GetUserAutoLoginUseCase
+import com.d204.rumeet.domain.usecase.user.GetUserAccessToken
 import com.d204.rumeet.domain.usecase.user.GetUserFirstAccessCheckUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val getUserFirstAccessCheckUseCase: GetUserFirstAccessCheckUseCase,
-    private val getUserAutoLoginUseCase: GetUserAutoLoginUseCase
+    private val getUserAutoLoginUseCase: GetUserAutoLoginUseCase,
+    private val getUserAccessToken : GetUserAccessToken
 ) : BaseViewModel() {
 
     // StateFlow는 상태값, 대신 초기값이 필요(데이터에 대한 값들)
@@ -33,10 +35,12 @@ class SplashViewModel @Inject constructor(
         baseViewModelScope.launch {
             launch {
                 // 억까임
-                delay(1000)
+                delay(500)
                 // true -> 방문했음
                 if (getUserFirstAccessCheckUseCase()) {
-                    if (getUserAutoLoginUseCase()) _navigationEvent.emit(SplashNavigationAction.StartMainActivity)
+                    if (getUserAutoLoginUseCase() && getUserAccessToken().isNotEmpty()) {
+                        _navigationEvent.emit(SplashNavigationAction.StartMainActivity)
+                    }
                     else _navigationEvent.emit(SplashNavigationAction.StartLoginActivity)
                 } else _navigationEvent.emit(SplashNavigationAction.NavigateOnBoarding)
             }

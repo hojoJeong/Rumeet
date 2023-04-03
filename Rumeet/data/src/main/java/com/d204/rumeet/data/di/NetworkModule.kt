@@ -1,5 +1,6 @@
 package com.d204.rumeet.data.di
 
+import com.d204.rumeet.common.Constants.BASE_URL
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.AuthApiService
 import com.d204.rumeet.data.remote.interceptor.BearerInterceptor
@@ -20,7 +21,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
-    const val BASE_URL = "http://j8d204.p.ssafy.io/rumeet/"
+
+    private const val BASE_URL = "http://j8d204.p.ssafy.io/rumeet/"
+    private const val BASE_URL_3 = "http://192.168.137.166:8080/rumeet/"
+    private const val BASE_URL_2 = "http://119.202.203.157/rumeet/"
 
     @Provides
     @Singleton

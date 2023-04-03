@@ -88,10 +88,10 @@ class LoginViewModel @Inject constructor(
             showLoading()
             doEmailLoginUseCase.invoke(email, password, autoLoginState)
                 .onSuccess { jwt ->
-                    _navigationEvent.emit(LoginNavigationAction.LoginSuccess)
                     setUserAutoLoginCheck(autoLoginState)
                     Log.d(TAG, "doEmailLogin: ${jwt.userId}")
                     setUserTokenUseCase(jwt.accessToken, jwt.refreshToken, jwt.userId)
+                    _navigationEvent.emit(LoginNavigationAction.LoginSuccess)
                 }
                 .onError { e ->
                     setUserAutoLoginCheck(false)

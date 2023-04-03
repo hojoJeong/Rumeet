@@ -1,48 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.d204.rumeet.ui.chatting.ChattingViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/whisper"
-        tools:context=".ui.chatting.ChattingFragment">
+        android:background="@color/whisper">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_chatting_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/edit_chatting_input"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginTop="@dimen/base_horizontal_margin"
+            android:layout_marginBottom="18dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:chatting="@{vm.chattingDataList}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/ly_chatting"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="@dimen/base_vertical_margin"/>
+            app:layout_constraintVertical_bias="0" />
 
-        <EditText
-            android:id="@+id/edit_chatting_input"
+        <LinearLayout
+            android:id="@+id/ly_chatting"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_marginHorizontal="18dp"
-            android:layout_marginBottom="28dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginBottom="18dp"
             android:background="@drawable/bg_rect_transparent_white_round8_stroke0"
+            android:gravity="start"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_chatting_content">
 
-        <TextView
-            android:id="@+id/btn_chatting_submit"
-            style="@style/base_font_bold_14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:text="전송"
-            android:textColor="@color/prussian_blue"
-            app:layout_constraintBottom_toBottomOf="@+id/edit_chatting_input"
-            app:layout_constraintEnd_toEndOf="@+id/edit_chatting_input"
-            app:layout_constraintTop_toTopOf="@+id/edit_chatting_input" />
+            <EditText
+                android:id="@+id/edit_chatting_input"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_weight="5"
+                android:background="@color/transparent"
+                android:paddingHorizontal="12dp" />
+
+            <TextView
+                android:id="@+id/btn_chatting_submit"
+                style="@style/base_font_bold_14"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text="전송"
+                app:onSingleClick="@{() -> vm.sendChatting()}" />
+
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

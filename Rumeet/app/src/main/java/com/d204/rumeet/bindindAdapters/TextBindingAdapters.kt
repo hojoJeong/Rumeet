@@ -4,14 +4,22 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
+import android.os.Build
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
 import com.d204.rumeet.R
 import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.components.FilledEditText
+import okhttp3.internal.notify
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.util.toRecord
 
@@ -77,6 +85,16 @@ fun TextView.setBadgeText(url: String, title: String){
         this.setTextColor(context.getColor(R.color.nobel))
     } else {
         this.setTextColor(context.getColor(R.color.black))
+    }
+}
+
+@BindingAdapter("set_integer")
+fun TextView.setInteger(value : Int){
+    if(value != 0) {
+        text = value.toString()
+        visibility = View.VISIBLE
+    } else{
+        visibility = View.GONE
     }
 }
 

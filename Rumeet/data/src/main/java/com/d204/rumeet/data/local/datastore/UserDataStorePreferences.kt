@@ -29,6 +29,7 @@ internal class UserDataStorePreferences(val context: Context) {
 
     suspend fun getUserId() : Int{
         return context.datastore.data.first().let {
+            Log.d("TAG", "getUserId: ${it[userId]}")
             it[userId] ?: -1
         }
     }
@@ -70,12 +71,14 @@ internal class UserDataStorePreferences(val context: Context) {
 
     suspend fun getAccessToken() : String?{
         return context.datastore.data.first().let {
+            Log.d("DataStore", "getAccessToken: ${it[accessToken]}")
             it[accessToken]
         }
     }
 
     suspend fun getRefreshToken() : String?{
         return context.datastore.data.first().let {
+            Log.d("DataStore", "getRefreshToken: ${it[refreshToken]}")
             it[refreshToken]
         }
     }

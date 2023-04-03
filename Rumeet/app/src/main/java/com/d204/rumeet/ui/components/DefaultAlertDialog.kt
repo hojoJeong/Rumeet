@@ -2,6 +2,7 @@ package com.d204.rumeet.ui.base
 
 import android.view.View
 import android.widget.DatePicker
+import androidx.databinding.BindingAdapter
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ContentSingleButtonDialogBinding
 import com.d204.rumeet.databinding.FragmentRunningRecordBinding
@@ -17,7 +18,8 @@ data class AlertModel(
 )
 
 class DefaultAlertDialog(
-    private val alertModel: AlertModel
+    private val alertModel: AlertModel,
+    private val buttonListener: (() -> Unit)? = null
 ) : BaseDialogFragment<ContentSingleButtonDialogBinding>(layoutId = R.layout.content_single_button_dialog) {
     override val layoutResourceId: Int
         get() = R.layout.content_single_button_dialog
@@ -35,7 +37,14 @@ class DefaultAlertDialog(
     override fun initStartView() {
         binding.cancelState = cancelButtonVisibility
         binding.alertModel = alertModel
-        binding.btnOkay.setOnClickListener { dismissAllowingStateLoss() }
+        with(binding.btnOkay) {
+            buttonListener?.also {
+                setOnClickListener {
+                    buttonListener.invoke()
+                    dismissAllowingStateLoss()
+                }
+            } ?: setOnClickListener { dismissAllowingStateLoss() }
+        }
         binding.btnCancel.setOnClickListener { dismissAllowingStateLoss() }
 
         if (logoutState) {

@@ -5,6 +5,7 @@ import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentNotificationBinding
 import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.notification.adapter.NotificationContainerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -46,4 +47,5 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding, Notificat
             tab.text = tabList[position]
         }.attach()
     }
+
 }

@@ -9,6 +9,8 @@ class NoUserFindErrorException(e: Throwable?, msg: String?) : IOException(e) // 
 class SocialLoginErrorException(e : Throwable?, msg : String?) : IOException(e) // 소셜 로그인하기 전, 회원가입 필요
 class DuplicateInfoException(e : Throwable?, msg : String?) : IOException(e) // 이메일, 닉네임이 중복
 class SingUpErrorException(e : Throwable?, msg: String?) : IOException(e)
+class AlreadyFriendException(e : Throwable?, msg : String?) : IOException(e)
+class AlreadyRequestFriendException(e: Throwable?, msg: String?) : IOException(e)
 class WithdrawalUserLoginErrorException(e: Throwable?, msg: String?) : IOException(e) //회원탈퇴한 유저가 가입, 로그인 시도
 
 
@@ -22,5 +24,7 @@ object ErrorMessage {
     const val NO_KAKAO_USER_ERROR_MESSAGE = "회원가입"
     const val DUPLICATE_USER_INFO_ERROR_MESSAGE = "중복 되는 이메일/닉네임이 있습니다."
     const val SIGN_UP_FAIL_ERROR_MESSAGE = "회원가입을 실패했습니다."
+    const val ALREADY_FRIEND_ERROR_MESSAGE = "이미 친구입니다."
+    const val ALREADY_REQUEST_FRIEND_ERROR_MESSAGE = "이미 친구요청을 보낸 상태입니다."
     const val WITHDRAWAL_USER_LOGIN_ERROR_MESSAGE = "이미 탈퇴한 회원입니다."
 }

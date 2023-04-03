@@ -22,7 +22,7 @@
     <string name="content_id_email_error">이메일 형식에 맞춰주세요</string>
     <string name="content_nickname_hint">사용하실 닉네임을 입력해주세요 :)</string>
     <string name="content_duplicated_nickname">이미 사용중인 닉네임 입니다</string>
-    <string name="content_nickname_size_error">닉네임은 최대 12글자까지 가능합니다</string>
+    <string name="content_nickname_size_error">닉네임은 최대 10글자까지 가능합니다</string>
     <string name="content_nickname_size_min_error">닉네임은 최소 2글자 작성해주세요</string>
     <string name="content_agree_app_terms_of_uses">계속하기를 누른다면 이용약관 동의로 간주합니다</string>
     <string name="content_password_hint">영어, 숫자, 특수문자를 활용한 8글자 이상</string>
@@ -51,7 +51,6 @@
     <!-- reset password -->
     <string name="title_reset_password">비밀번호 재설정</string>
     <string name="title_reset_password_description">새로운 비밀번호를 입력해주세요.</string>
-
 
     <!-- home -->
     <string name="content_welcome_message">%1$s님!\n오늘도 열심히 달려볼까요?</string>
@@ -82,6 +81,21 @@
     <string name="content_time_limit">이내에 인증을 완료해주세요</string>
     <string name="content_check_authentication_code">인증번호를 확인해주세요</string>
     <string name="content_time_out">시간이 만료되었습니다\n인증요청을 다시해주세요</string>
+    
+    <!-- friend -->
+    <string name="title_friend_list">목록</string>
+    <string name="content_all_friend">전체 친구</string>
+    <string name="content_recently_run_friend">최근에 같이 뛴 친구</string>
+    <string name="content_search_friend_hint">친구를 검색해보세요</string>
+    <string name="content_run_together_friend">함께 많이 달린 친구</string>
+    <string name="title_friend_dialog">친구 보기</string>
+    <string name="content_average_pace">평균 페이스</string>
+    <string name="content_friend_distance">거리</string>
+    <string name="content_friend_time">시간</string>
+    <string name="content_friend_pace">페이스</string>
+    <string name="content_friend_calorie">칼로리</string>
+    <string name="content_friend_add_hint">친구의 닉네임을 입력해보세요</string>
+    
 
     <!-- running -->
     <string name="content_option_competition">경쟁 모드</string>

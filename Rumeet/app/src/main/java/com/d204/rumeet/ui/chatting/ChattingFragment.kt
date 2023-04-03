@@ -1,60 +1,115 @@
 package com.d204.rumeet.ui.chatting
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
+import com.d204.rumeet.databinding.FragmentChattingBinding
+import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
+import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.ui.chatting.adapter.ChattingItemAdapter
+import com.d204.rumeet.ui.chatting.model.ChattingMessageUiModel
+import com.d204.rumeet.ui.chatting.model.toUiModel
+import com.d204.rumeet.util.amqp.ChattingAMQPMananer
+import com.d204.rumeet.util.scrollToBottom
+import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel>() {
+    override val layoutResourceId: Int
+        get() = R.layout.fragment_chatting
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ChattingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ChattingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    override val viewModel: ChattingViewModel by viewModels()
+    private val args by navArgs<ChattingFragmentArgs>()
+    private lateinit var chattingAdapter: ChattingItemAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun initStartView() {
+        with(binding) {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
+        exception = viewModel.errorEvent
+    }
+
+    override fun initDataBinding() {
+        lifecycleScope.launchWhenResumed {
+            launch {
+                viewModel.chattingSideEffect.collectLatest {
+                    when (it) {
+                        is ChattingSideEffect.SuccessChattingData -> {
+                            chattingAdapter = ChattingItemAdapter(it.userId, args.profile)
+                            binding.rvChattingContent.adapter = chattingAdapter
+                        }
+                        is ChattingSideEffect.SendChatting -> {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(400)
+                                if (viewModel.chattingUserId.value == 0 || args.chattingRoomId == 0 || viewModel.userId.value == 0) {
+                                    toastMessage("채팅 오류가 발생하였습니다.")
+                                } else {
+                                    if (binding.editChattingInput.text.toString().isNotEmpty()) {
+                                        val message = ChattingMessageModel(
+                                            roomId = args.chattingRoomId,
+                                            //에게
+                                            toUserId = viewModel.chattingUserId.value,
+                                            //가
+                                            fromUserId = viewModel.userId.value,
+                                            content = binding.editChattingInput.text.toString(),
+                                            System.currentTimeMillis()
+                                        )
+                                        withContext(Dispatchers.IO){
+                                            ChattingAMQPMananer.sendMessage(Gson().toJson(message))
+                                        }
+                                        val list = chattingAdapter.currentList.toMutableList()
+                                        list.add(message.toUiModel(false))
+
+                                        chattingAdapter.submitList(null)
+                                        chattingAdapter.submitList(list.toList())
+                                        binding.rvChattingContent.scrollToBottom()
+                                        binding.editChattingInput.setText("")
+                                    }
+                                }
+                            }
+                        }
+                        is ChattingSideEffect.ReceiveChatting -> {
+                            Log.d("TAG", "initDataBinding: ${it.messageModel}")
+                            if (it.messageModel != null) {
+                                val list = chattingAdapter.currentList.toMutableList()
+                                list.add(
+                                    ChattingMessageUiModel(
+                                        it.messageModel,
+                                        list[list.size - 1].message.fromUserId != viewModel.userId.value
+                                    )
+                                )
+                                chattingAdapter.submitList(list)
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    delay(300)
+                                    binding.rvChattingContent.scrollToBottom()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chatting, container, false)
+    override fun initAfterBinding() {
+        viewModel.requestChattingData(args.chattingRoomId, args.otherUserId, args.noReadCnt)
+        binding.rvChattingContent.itemAnimator = null
+
+        val event = View.OnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom < oldBottom) binding.rvChattingContent.scrollBy(0, oldBottom - bottom)
+        }
+        binding.rvChattingContent.addOnLayoutChangeListener(event)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ChattingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ChattingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ChattingAMQPMananer.unSubscribeChatting()
     }
 }

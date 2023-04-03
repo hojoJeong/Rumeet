@@ -52,7 +52,7 @@ firebase_crashlytics_gradle_version = "2.9.4"
 glide_version = "4.13.0"
 
 # rabbitmq
-rabbitmq_version = "5.17.0"
+rabbitmq_version = "5.13.1"
 
 
 [libraries]

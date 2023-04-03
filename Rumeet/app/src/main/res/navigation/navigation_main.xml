@@ -8,8 +8,151 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.d204.rumeet.ui.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="HomeFragment">
         <action
+            android:id="@+id/action_homeFragment_to_navigation_running"
+            app:destination="@id/navigation_running" />
+    </fragment>
+
+
+    <navigation
+        android:id="@+id/navigation_running"
+        app:startDestination="@id/runningOptionFragment">
+
+        <fragment
+            android:id="@+id/runningOptionFragment"
+            android:name="com.d204.rumeet.ui.running.option.RunningOptionFragment"
+            android:label="RunningOptionContainerFragment"
+            tools:layout="@layout/fragment_running_option">
+
+            <action
+                android:id="@+id/action_runningOptionFragment_to_runningMatchingFragment"
+                app:destination="@id/runningMatchingFragment"
+                app:popUpTo="@id/runningOptionFragment"
+                app:popUpToInclusive="false" />
+            <action
+                android:id="@+id/action_runningOptionFragment_to_runningLoadingFragment"
+                app:destination="@id/runningLoadingFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/runningFinishFragment"
+            android:name="com.d204.rumeet.ui.running.finish.RunningFinishFragment"
+            android:label="RunningFinishFragment"
+            tools:layout="@layout/fragment_running_finish">
+
+            <argument
+                android:name="locationList"
+                app:argType="android.location.Location[]"
+                app:nullable="false"/>
+
+            <argument
+                android:name="result"
+                app:argType="com.d204.rumeet.ui.running.finish.model.RunningFinishModel"
+                app:nullable="false"/>
+
+            <action
+                android:id="@+id/action_runningFinishFragment_to_homeFragment"
+                app:destination="@id/navigation_main" />
+
+        </fragment>
+
+        <fragment
+            android:id="@+id/runningMatchingFragment"
+            android:name="com.d204.rumeet.ui.running.matching.RunningMatchingFragment"
+            android:label="RunningMatchingFragment"
+            tools:layout="@layout/fragment_running_matching">
+
+            <argument
+                android:name="gameType"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <action
+                android:id="@+id/action_runningMatchingFragment_to_runningMatchingFailFragment"
+                app:destination="@id/runningMatchingFailFragment" />
+            <action
+                android:id="@+id/action_runningMatchingFragment_to_runningLoadingFragment"
+                app:destination="@id/runningLoadingFragment" />
+
+        </fragment>
+        <fragment
+            android:id="@+id/runningMatchingFailFragment"
+            android:name="com.d204.rumeet.ui.running.matching.RunningMatchingFailFragment"
+            android:label="RunningMatchingFailFragment"
+            tools:layout="@layout/fragment_running_matching_fail">
+            <action
+                android:id="@+id/action_runningMatchingFailFragment_to_runningOptionFragment"
+                app:destination="@id/runningOptionFragment"
+                app:popUpTo="@id/runningOptionFragment"
+                app:popUpToInclusive="false" />
+        </fragment>
+        <fragment
+            android:id="@+id/runningLoadingFragment"
+            android:name="com.d204.rumeet.ui.running.loading.RunningLoadingFragment"
+            android:label="RunningLoadingFragment"
+            tools:layout="@layout/fragment_running_loading">
+
+            <argument
+                android:name="roomId"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="myId"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="gameType"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="partnerId"
+                android:defaultValue="-1"
+                app:argType="integer"/>
+
+            <action
+                android:id="@+id/action_runningLoadingFragment_to_runningFragment"
+                app:destination="@id/runningFragment"
+                app:popUpTo="@id/homeFragment"
+                app:popUpToInclusive="false" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/runningFragment"
+            android:name="com.d204.rumeet.ui.running.RunningFragment"
+            android:label="RunningFragment"
+            tools:layout="@layout/fragment_running">
+
+            <argument
+                android:name="myId"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="roomId"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="gameType"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
+            <argument
+                android:name="partnerId"
+                android:defaultValue="-1"
+                app:argType="integer"/>
+            <action
+                android:id="@+id/action_runningFragment_to_runningFinishFragment"
+                app:destination="@id/runningFinishFragment" />
+
+        </fragment>
+
+    </navigation>
+
             android:id="@+id/action_homeFragment_to_runningOptionContainerFragment"
             app:destination="@id/runningOptionFragment" />
         <action
@@ -63,7 +206,7 @@
         <fragment
             android:id="@+id/settingFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.SettingFragment"
-            android:label="SettingFragment" >
+            android:label="SettingFragment">
             <action
                 android:id="@+id/action_settingFragment_to_userInfoFragment"
                 app:destination="@id/userInfoFragment" />
@@ -74,7 +217,7 @@
         <fragment
             android:id="@+id/userInfoFragment"
             android:name="com.d204.rumeet.ui.mypage.setting.UserInfoFragment"
-            android:label="SettingUserInfoFragment" >
+            android:label="SettingUserInfoFragment">
             <action
                 android:id="@+id/action_userInfoFragment_to_additionalInfoFragment2"
                 app:destination="@id/additionalInfoFragment2" />
@@ -93,7 +236,7 @@
         <fragment
             android:id="@+id/additionalInfoFragment2"
             android:name="com.d204.rumeet.ui.join.addtional_info.AdditionalInfoFragment"
-            android:label="AdditionalInfoFragment" >
+            android:label="AdditionalInfoFragment">
             <argument
                 android:name="reset"
                 app:argType="boolean"
@@ -138,7 +281,11 @@
         <fragment
             android:id="@+id/friendListFragment"
             android:name="com.d204.rumeet.ui.mypage.FriendListFragment"
-            android:label="FriendListFragment" />
+            android:label="FriendListFragment">
+            <action
+                android:id="@+id/action_friendListFragment_to_addFriendFragment"
+                app:destination="@id/addFriendFragment" />
+        </fragment>
         <fragment
             android:id="@+id/badgeListFragment"
             android:name="com.d204.rumeet.ui.mypage.BadgeListFragment"
@@ -146,7 +293,7 @@
         <fragment
             android:id="@+id/joinNicknameFragment2"
             android:name="com.d204.rumeet.ui.join.nickname.JoinNicknameFragment"
-            android:label="JoinNicknameFragment" >
+            android:label="JoinNicknameFragment">
             <argument
                 android:name="oauth"
                 android:defaultValue="1L"
@@ -171,8 +318,36 @@
                 app:nullable="false"
                 android:defaultValue="-1"/>
         </fragment>
-
+        <fragment
+            android:id="@+id/addFriendFragment"
+            android:name="com.d204.rumeet.ui.friend.add.AddFriendFragment"
+            android:label="AddFriendFragment" />
     </navigation>
+
+    <fragment
+        android:id="@+id/chattingFragment"
+        android:name="com.d204.rumeet.ui.chatting.ChattingFragment"
+        android:label="ChattingFragment"
+        tools:layout="@layout/fragment_chatting">
+        <argument
+            android:name="profile"
+            app:argType="string"
+            app:nullable="true" />
+
+        <argument
+            android:name="chattingRoomId"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="noReadCnt"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <argument
+            android:name="otherUserId"
+            android:defaultValue="0"
+            app:argType="integer" />
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.d204.rumeet.ui.notification.NotificationFragment"
@@ -184,5 +359,16 @@
             android:defaultValue="0"/>
     </fragment>
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/chattingListFragment"
+        android:name="com.d204.rumeet.ui.chatting.chatting_list.ChattingListFragment"
+        android:label="ChattingListFragment"
+        tools:layout="@layout/fragment_chatting_list">
+        <action
+            android:id="@+id/action_chattingListFragment_to_chattingFragment"
+            app:destination="@id/chattingFragment" />
+    </fragment>
 
 </navigation>

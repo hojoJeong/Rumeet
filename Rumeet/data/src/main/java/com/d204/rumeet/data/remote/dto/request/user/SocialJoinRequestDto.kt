@@ -20,5 +20,7 @@ data class SocialJoinRequestDto(
     @SerializedName("oauth")
     val oauth : String,
     @SerializedName("date")
-    val currentTime : Long
+    val currentTime : Long,
+    @SerializedName("profile")
+    val profileUrl : String
 )

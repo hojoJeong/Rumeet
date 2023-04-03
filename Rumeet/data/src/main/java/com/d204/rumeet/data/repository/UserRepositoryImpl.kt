@@ -3,8 +3,11 @@ package com.d204.rumeet.data.repository
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
-import com.d204.rumeet.data.remote.api.UserApi
+import com.d204.rumeet.data.remote.api.UserApiService
 import com.d204.rumeet.data.remote.api.handleApi
+import com.d204.rumeet.data.remote.dto.response.user.UserInfoResponse
+import com.d204.rumeet.data.remote.dto.response.user.UserResponseDto
+import com.d204.rumeet.data.remote.dto.response.user.toDomainModel
 import com.d204.rumeet.data.remote.dto.request.user.FcmTokenRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.ModifyNickNameRequest
 import com.d204.rumeet.data.remote.dto.request.user.ModifyNotificationStateRequestDto
@@ -16,6 +19,8 @@ import com.d204.rumeet.data.util.getMultipartData
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.model.user.*
 import com.d204.rumeet.domain.onSuccess
+import com.d204.rumeet.domain.model.user.UserInfoDomainModel
+import com.d204.rumeet.domain.model.user.UserModel
 import com.d204.rumeet.domain.repository.UserRepository
 import com.d204.rumeet.domain.toDomainResult
 import java.io.IOException
@@ -23,7 +28,7 @@ import javax.inject.Inject
 
 internal class UserRepositoryImpl @Inject constructor(
     private val userDataStorePreferences: UserDataStorePreferences,
-    private val userApi: UserApi
+    private val userApiService: UserApiService
 ) : UserRepository {
 
     // SP 관련 예외는 후순위
@@ -128,4 +133,14 @@ internal class UserRepositoryImpl @Inject constructor(
         Log.d(TAG, "getMatchingHistoryList: $response")
         return response
     }
+}
+    override suspend fun searchUsers(nickname: String): NetworkResult<List<UserModel>> {
+        return handleApi { userApiService.searchUsers(nickname) }
+            .toDomainResult<List<UserResponseDto>, List<UserModel>> { response -> response.map { it.toDomainModel() } }
+    }
+
+    override suspend fun getAccessToken(): String {
+        return userDataStorePreferences.getAccessToken() ?: ""
+    }
+
 }

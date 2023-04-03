@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="friend"
+            type="com.d204.rumeet.ui.friend.list.model.FriendListUiModel" />
+
+        <variable
+            name="clickListener"
+            type="com.d204.rumeet.ui.friend.list.FriendListClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:onSingleClick="@{() -> clickListener.onFriendListClick(friend.userId)}">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile_img"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_launcher_background"
+            app:imgByUrl="@{friend.userProfileImg}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/ly_user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile_img"
+            app:layout_constraintStart_toEndOf="@id/iv_profile_img"
+            app:layout_constraintTop_toTopOf="@id/iv_profile_img">
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                style="@style/base_font_medium_12_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{friend.userNickname}" />
+
+            <TextView
+                android:id="@+id/tv_pace"
+                style="@style/base_font_medium_10_dim_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@{`평균 페이스 ` +  friend.averagePace}" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
