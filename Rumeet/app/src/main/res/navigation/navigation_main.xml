@@ -178,10 +178,16 @@
     <navigation
         android:id="@+id/navigation_mypage"
         app:startDestination="@id/myPageFragment">
+        <argument
+            android:name="destination"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=""/>
         <fragment
             android:id="@+id/myPageFragment"
             android:name="com.d204.rumeet.ui.mypage.MyPageFragment"
             android:label="MyPageFragment">
+
             <action
                 android:id="@+id/action_myPageFragment_to_settingFragment"
                 app:destination="@id/settingFragment" />

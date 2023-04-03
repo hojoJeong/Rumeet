@@ -31,6 +31,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             getUserIdByUseCase()
         }
         binding.vm = viewModel
+        initBtnClickListener()
     }
 
     override fun initDataBinding() {
@@ -67,7 +68,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     }
 
-    private fun initAdapter() {
+    private fun initBtnClickListener() {
+        binding.btnHomeBadge.setOnClickListener {
+            navigate(HomeFragmentDirections.actionHomeFragmentToNavigationMypage("badge"))
+        }
+        binding.btnHomeRecommendFriend.setOnClickListener {
+
+        }
     }
 
 
