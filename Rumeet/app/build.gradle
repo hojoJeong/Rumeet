@@ -44,14 +44,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'x86', 'x86_64', 'armeabi-v7a', 'armeabi'
-            universalApk true
-        }
-    }
 
     dataBinding {
         enabled = true
@@ -92,9 +84,6 @@ dependencies {
 
     // kakao
     implementation libs.kakao.sdk
-    implementation fileTree(include: ['*jar'],dir:'libs')
-    implementation files('libs/libDaumMapAndroid.jar')
-    implementation 'com.jraska:falcon:2.2.0'
 
     // custom view
     implementation libs.circleimageview
