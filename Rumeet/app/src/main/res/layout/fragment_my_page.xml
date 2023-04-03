@@ -16,6 +16,7 @@
             android:id="@+id/iv_mypage_profile"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -23,7 +24,7 @@
             app:civ_circle_background_color="@color/white_smoke"
             android:layout_marginBottom="@dimen/base_vertical_contents_to_contents"
             android:layout_marginTop="@dimen/base_vertical_margin"
-            android:src="@drawable/ic_app_main_logo"/>
+            tools:src="@drawable/ic_app_main_logo"/>
         <TextView
             android:id="@+id/tv_mypage_message"
             android:layout_width="wrap_content"

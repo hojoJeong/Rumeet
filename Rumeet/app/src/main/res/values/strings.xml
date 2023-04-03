@@ -53,10 +53,10 @@
 
     <!-- home -->
     <string name="content_welcome_message">%1$s님!\n오늘도 열심히 달려볼까요?</string>
-    <string name="title_best_record">최고기록</string>
-    <string name="title_distance">거리</string>
-    <string name="title_running_time">시간</string>
-    <string name="title_pace">페이스</string>
+    <string name="title_best_record">나의 누적 기록</string>
+    <string name="title_distance">누적 거리</string>
+    <string name="title_running_time">누적 횟수</string>
+    <string name="title_pace">평균 페이스</string>
     <string name="title_calorie">칼로리</string>
     <string name="content_distance">%1$dkm</string>
     <string name="content_calorie">$1%dkcal</string>
@@ -125,7 +125,6 @@
         <item>버전 정보</item>
         <item>개인정보 수집 및 이용 설정</item>
         <item>서비스 이용 약관</item>
-        <item>로그아웃</item>
     </string-array>
 
     <string-array name="title_user_info_content">
@@ -134,7 +133,6 @@
         <item>나이</item>
         <item>성별</item>
         <item>신장/체중</item>
-        <item>SNS 연동</item>
         <item>부가정보 수정</item>
         <item>비밀번호 재설정</item>
         <item>회원탈퇴</item>
@@ -182,14 +180,14 @@
     <string name="title_mode_ghost">고스트 모드</string>
     <string name="title_mode_competition">경쟁 모드</string>
     <string name="title_mode_team">협동 모드</string>
-    
+
     <string name="title_badge_recent">최근 획득한 뱃지</string>
     <string name="title_badge_welcome">만나서 반가워요!</string>
     <string name="title_badge_distance">오늘도 러밋!\n힘차게 뛰어볼까요?</string>
     <string name="title_badge_time">성장하는 러닝 실력!\n더 오래 달려봐요!</string>
     <string name="title_badge_competition">나만의 러닝 메이트\n함께 뛰어봐요!</string>
     <string name="title_badge_team">상어를 피해\n끝까지 달려봐요!</string>
-    <string name="title_badge_relay">내가 성정하는\n이어달리기!</string>
+    <string name="title_badge_relay">이어달리기로 즐기는 인터벌!</string>
 
     <string-array name="url_badge">
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_10.png</item>
@@ -199,11 +197,11 @@
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_30.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_competition_times_30_no.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_100.png</item>
-        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_1000.png</item>
-        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_1000_no.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_100_no.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_500.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_500_no.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_1000.png</item>
+        <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_distance_1000_no.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_first_victory.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_first_victory_no.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_hours_10.png</item>
@@ -225,8 +223,115 @@
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_team_times_30.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_team_times_30_no.png</item>
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_welcome.png</item>
+
         <item>https://kr.object.ncloudstorage.com/rumeet/badge/ic_badge_welcome_no.png</item>
+    </string-array>
+
+    <string-array name="title_badge">
+        <item>경쟁 10회 승리</item>
+        <item>경쟁 10회 승리no</item>
+
+        <item>경쟁 20회 승리</item>
+        <item>경쟁 20회 승리no</item>
+
+        <item>경쟁 30회 승리</item>
+        <item>경쟁 30회 승리no</item>
+
+        <item>러닝 100km 달성</item>
+        <item>러닝 100km 달성no</item>
+
+        <item>러닝 500km 달성</item>
+        <item>러닝 500km 달성no</item>
+
+        <item>러닝 1000km 달성</item>
+        <item>러닝 1000km 달성no</item>
+
+        <item>경쟁 첫 번째 승리</item>
+        <item>경쟁 첫 번째 승리no</item>
+
+        <item>러닝 10시간 달성</item>
+        <item>러닝 10시간 달성no</item>
+
+        <item>러닝 20시간 달성</item>
+        <item>러닝 20시간 달성no</item>
+
+        <item>러닝 50시간 달성</item>
+        <item>러닝 50시간 달성no</item>
+
+        <item>이어달리기 10회 완료</item>
+        <item>이어달리기 10회 완료no</item>
+
+        <item>이어달리기 20회 완료</item>
+        <item>이어달리기 20회 완료no</item>
+
+        <item>이어달리기 30회 완료</item>
+        <item>이어달리기 30회 완료no</item>
+
+        <item>협동 10회 완료</item>
+        <item>협동 10회 완료no</item>
+
+        <item>협동 20회 완료</item>
+        <item>협동 20회 완료no</item>
+
+        <item>협동 30회 완료</item>
+        <item>협동 30회 완료no</item>
+
+        <item>웰컴 뱃지</item>
+        <item>웰컴 뱃지no</item>
 
     </string-array>
 
+    <string-array name="code_badge">
+        <item>20</item>
+        <item>20no</item>
+
+        <item>21</item>
+        <item>21no</item>
+
+        <item>22</item>
+        <item>22no</item>
+
+        <item>10</item>
+        <item>10no</item>
+
+        <item>11</item>
+        <item>11no</item>
+
+        <item>12</item>
+        <item>12no</item>
+
+        <item>1</item>
+        <item>1no</item>
+
+        <item>13</item>
+        <item>13no</item>
+
+        <item>14</item>
+        <item>14no</item>
+
+        <item>15</item>
+        <item>15no</item>
+
+        <item>40</item>
+        <item>40no</item>
+
+        <item>41</item>
+        <item>41no</item>
+
+        <item>42</item>
+        <item>42no</item>
+
+        <item>30</item>
+        <item>30no</item>
+
+        <item>31</item>
+        <item>31no</item>
+
+        <item>32</item>
+        <item>32no</item>
+
+        <item>0</item>
+        <item>0no</item>
+
+    </string-array>
 </resources>

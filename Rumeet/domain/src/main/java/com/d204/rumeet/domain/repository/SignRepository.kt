@@ -8,5 +8,5 @@ interface SignRepository {
     suspend fun signUpEmail(id: String, password: String, nickname: String, weight: Float, height: Float, gender: Int, age: Int, imageUri: File?): NetworkResult<Unit?>
     suspend fun signUpSocialLogin(oAuth: Long, nickname: String, profileImgUrl: String, weight: Float, height: Float, gender: Int, age: Int, imageUri : File?): NetworkResult<Unit?>
     suspend fun requestAuthenticationCode(email : String) : NetworkResult<String?>
-    suspend fun resetPassword(email : String, password: String) : NetworkResult<Unit?>
+    suspend fun resetPassword(id: Int, email : String, password: String) : NetworkResult<Unit?>
 }

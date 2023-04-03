@@ -75,8 +75,8 @@ internal class SignRepositoryImpl @Inject constructor(
         return handleApi { signApiService.requestAuthenticationCode(email) }
     }
 
-    override suspend fun resetPassword(email: String, password: String): NetworkResult<Unit?> {
-        val request = ResetPasswordRequestDto(email, password)
+    override suspend fun resetPassword(id: Int, email: String, password: String): NetworkResult<Unit?> {
+        val request = ResetPasswordRequestDto(id, email, password)
         return handleApi { signApiService.resetPassword(request) }
     }
 }
