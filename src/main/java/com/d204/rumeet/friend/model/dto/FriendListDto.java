@@ -7,13 +7,9 @@ public class FriendListDto {
     int userId;
     String nickname;
     int pace;
-    String profileImage;
-
+    String profileImg;
     int matchCount;
     long latestDate;
-
-
-
 
 
 }

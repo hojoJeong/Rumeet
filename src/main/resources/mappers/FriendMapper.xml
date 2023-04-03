@@ -9,7 +9,8 @@
         WHERE ((user_id = #{userId} AND partner_id = #{friendId})
             OR (user_id = #{friendId} AND partner_id =  #{userId}))
     </select>
-    <select id="getFriend" resultType="FriendListDto">
+
+    <select id="getNoRunningFriend" resultType="FriendListDto">
         SELECT u.id AS userId,
                u.nickname,
                u.profile_img AS profileImg,
@@ -20,6 +21,7 @@
                  JOIN user u ON r.user_id = u.id
         WHERE r.user_id = #{userId}
     </select>
+
     <select id="getRunningFriend" resultType="FriendListDto">
         SELECT
             u.id AS userId,
