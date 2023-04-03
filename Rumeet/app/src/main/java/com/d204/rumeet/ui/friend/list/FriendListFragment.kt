@@ -14,6 +14,7 @@ import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
 import com.d204.rumeet.ui.mypage.FriendListFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListViewModel>() {
@@ -30,34 +31,41 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
         }
         exception = viewModel.errorEvent
 
-        viewModel.requestFriendList()
+        viewModel.requestFriendList(1)
     }
 
     override fun initDataBinding() {
-        lifecycleScope.launchWhenResumed {
-            viewModel.friendListAction.collectLatest {
-                when (it) {
-                    is FriendListAction.SuccessFriendList -> {
-                        hideKeyboard()
-                        settingFriendList(it.listSize)
-                    }
-                    is FriendListAction.SearchFriend -> {
-                        viewModel.getFriendInfo(it.userId)
-                    }
-                    is FriendListAction.SuccessFriendInfo -> {
-                        showFriendInfoDialog(it.friendInfo)
-                    }
-                    is FriendListAction.SortRunTogetherFriend -> {
-                        //Todo request sort
-                    }
-                    is FriendListAction.SortRecentlyRunFriend -> {
-                        //Todo request sort
-                    }
-                    is FriendListAction.NavigateAddFriend -> {
-                        navigate(FriendListFragmentDirections.actionFriendListFragmentToAddFriendFragment())
-                    }
-                    is FriendListAction.SuccessSearchFriend -> {
-                        hideKeyboard()
+        lifecycleScope.launchWhenStarted {
+            launch {
+                viewModel.friendList.collectLatest {
+
+                }
+            }
+            launch {
+                viewModel.friendListAction.collectLatest {
+                    when (it) {
+                        is FriendListAction.SuccessFriendList -> {
+                            hideKeyboard()
+                            settingFriendList(it.listSize)
+                        }
+                        is FriendListAction.SearchFriend -> {
+                            viewModel.getFriendInfo(it.userId)
+                        }
+                        is FriendListAction.SuccessFriendInfo -> {
+                            showFriendInfoDialog(it.friendInfo)
+                        }
+                        is FriendListAction.SortRunTogetherFriend -> {
+                            //Todo request sort
+                        }
+                        is FriendListAction.SortRecentlyRunFriend -> {
+                            //Todo request sort
+                        }
+                        is FriendListAction.NavigateAddFriend -> {
+                            navigate(FriendListFragmentDirections.actionFriendListFragmentToAddFriendFragment())
+                        }
+                        is FriendListAction.SuccessSearchFriend -> {
+                            hideKeyboard()
+                        }
                     }
                 }
             }
@@ -65,7 +73,7 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
     }
 
     private fun settingFriendList(listSize: Int) {
-        with(binding.lyNoResult){
+        with(binding.lyNoResult) {
             root.visibility = if (listSize == 0) View.VISIBLE else View.GONE
             tvContentNoResultMessage.text = "친구가 없습니다"
         }
@@ -90,8 +98,8 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
             var handle = false
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val keyword = view.text.toString()
-                if(keyword != "") viewModel.searchFriendList(view.text.toString())
-                else viewModel.requestFriendList()
+                if (keyword != "") viewModel.searchFriendList(view.text.toString())
+                else viewModel.requestFriendList(1)
                 handle = true
             }
             handle

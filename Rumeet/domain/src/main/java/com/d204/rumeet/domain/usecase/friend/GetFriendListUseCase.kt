@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetFriendListUseCase @Inject constructor(
     private val friendRepository: FriendRepository
 ){
-    suspend operator fun invoke() = friendRepository.getUserFriendList()
+    suspend operator fun invoke(type: Int) = friendRepository.getUserFriendList(type)
 }

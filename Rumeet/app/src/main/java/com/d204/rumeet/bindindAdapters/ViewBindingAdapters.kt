@@ -10,6 +10,7 @@ import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.base.successOrNull
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
+import com.d204.rumeet.domain.model.friend.FriendListDomainModel
 import com.d204.rumeet.ui.chatting.adapter.ChattingItemAdapter
 import com.d204.rumeet.ui.chatting.chatting_list.adapter.ChattingListAdapter
 import com.d204.rumeet.ui.chatting.chatting_list.model.ChattingRoomUiModel
@@ -33,7 +34,7 @@ fun FilledEditText.bindIsEnable(state: Boolean) {
 }
 
 @BindingAdapter("friends")
-fun RecyclerView.bindFriendsList(uiState: UiState<List<FriendListUiModel>>) {
+fun RecyclerView.bindFriendsList(uiState: UiState<List<FriendListDomainModel>>) {
     val bindAdapter = this.adapter
     if (bindAdapter is FriendListAdapter) {
         bindAdapter.submitList(uiState.successOrNull())

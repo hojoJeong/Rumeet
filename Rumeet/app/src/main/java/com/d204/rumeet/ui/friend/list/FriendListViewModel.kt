@@ -1,6 +1,9 @@
 package com.d204.rumeet.ui.friend.list
 
+import android.content.ContentValues.TAG
 import android.provider.Contacts.Intents.UI
+import android.util.Log
+import com.d204.rumeet.domain.model.friend.FriendListDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.friend.GetFriendInfoUseCase
@@ -26,18 +29,19 @@ class FriendListViewModel @Inject constructor(
     private val _friendListAction: MutableSharedFlow<FriendListAction> = MutableSharedFlow()
     val friendListAction: SharedFlow<FriendListAction> get() = _friendListAction.asSharedFlow()
 
-    private val _friendList: MutableStateFlow<UiState<List<FriendListUiModel>>> =
+    private val _friendList: MutableStateFlow<UiState<List<FriendListDomainModel>>> =
         MutableStateFlow(UiState.Loading)
-    val friendList: StateFlow<UiState<List<FriendListUiModel>>> get() = _friendList.asStateFlow()
+    val friendList: StateFlow<UiState<List<FriendListDomainModel>>> get() = _friendList.asStateFlow()
 
 
-    fun requestFriendList() {
+    fun requestFriendList(type: Int) {
+        Log.d(TAG, "requestFriendList: ")
         baseViewModelScope.launch {
             showLoading()
-            getFriendListUseCase()
+            getFriendListUseCase(type)
                 .onSuccess { response ->
                     _friendListAction.emit(FriendListAction.SuccessFriendList(response.size))
-                    _friendList.value = UiState.Success(response.map { it.toUiModel() })
+                    _friendList.value = UiState.Success(response)
                 }
                 .onError { e -> catchError(e) }
             dismissLoading()
@@ -50,7 +54,7 @@ class FriendListViewModel @Inject constructor(
             searchFriendUseCase(getUserIdUseCase(),  searchNickname)
                 .onSuccess { response ->
                     _friendListAction.emit(FriendListAction.SuccessSearchFriend)
-                    _friendList.value = UiState.Success(response.map { it.toUiModel() })
+                    _friendList.value = UiState.Success(response)
                 }
                 .onError { e -> catchError(e) }
             dismissLoading()
