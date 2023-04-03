@@ -11,20 +11,15 @@ import android.location.LocationProvider
 import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.location.LocationAvailability
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
 
 class RunningService : Service(), LocationListener {
 
     private lateinit var locationManager: LocationManager
     private var lastLocation: Location? = null
     private var totalDistance = 0f
-
     private val binder = RunningBinder()
 
     inner class RunningBinder : Binder() {
@@ -73,8 +68,8 @@ class RunningService : Service(), LocationListener {
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        if(provider?.equals(LocationManager.GPS_PROVIDER) == true){
-            when(status){
+        if (provider?.equals(LocationManager.GPS_PROVIDER) == true) {
+            when (status) {
                 LocationProvider.AVAILABLE -> {
                     if (ActivityCompat.checkSelfPermission(
                             this,
@@ -86,9 +81,14 @@ class RunningService : Service(), LocationListener {
                     ) {
                         return
                     }
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 10.0f, this)
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        1000L,
+                        10.0f,
+                        this
+                    )
                 }
-                LocationProvider.OUT_OF_SERVICE ->{
+                LocationProvider.OUT_OF_SERVICE -> {
                     locationManager.removeUpdates(this)
                 }
                 LocationProvider.TEMPORARILY_UNAVAILABLE -> {
