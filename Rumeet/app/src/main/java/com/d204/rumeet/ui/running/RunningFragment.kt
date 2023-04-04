@@ -41,6 +41,7 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 private const val TAG = "RunningFragment"
@@ -325,85 +326,96 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            viewModel.runningSideEffect.collectLatest {
-                when (it) {
-                    is RunningSideEffect.SuccessRunning -> {
-                        // 경쟁할 때 rabbitMQ의 콜백으로 온 데이터 받음
-                        successRunningData(it.distance)
-                    }
+            launch {
+                viewModel.runningSideEffect.collectLatest {
+                    when (it) {
+                        is RunningSideEffect.SuccessSoloData -> {
+                            // solo 시작 API 결과 받아옴
 
-                    is RunningSideEffect.EndRunning -> {
-
-                    }
-
-                    is RunningSideEffect.SuccessPartnerInfo -> {
-                        // 파트너의 프로필을 seekbar의 thumb로 변경
-                        Glide.with(requireContext())
-                            .load(it.partnerInfo.profile)
-                            .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
-                            .circleCrop()
-                            .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
-                            .override(100,100)
-                            .into(object : CustomTarget<Drawable>(){
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    transition: Transition<in Drawable>?
-                                ) {
-                                    binding.sbPartnerProgress.thumb = resource
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {
-
-                                }
-                            })
-                    }
-
-                    is RunningSideEffect.SuccessUserInfo -> {
-                        // 나의 프로필 이미지를 seekbar의 thumb로 변경
-                        Glide.with(requireContext())
-                            .load(it.userInfo.profile)
-                            .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
-                            .circleCrop()
-                            .override(100,100)
-                            .into(object : CustomTarget<Drawable>(){
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    transition: Transition<in Drawable>?
-                                ) {
-                                    binding.sbMyProgress.thumb = resource // Thumb 이미지를 설정합니다.
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {
-
-                                }
-                            })
-
-                        // Todo 경쟁이면 해당 코드 실행
-                        if(args.gameType >= 4){
-                            viewModel.startRun(args.myId, args.roomId)
-                            Log.d("TAG", "SuccessUserInfo: start")
                         }
 
-                        // 사용자의 정보 생성(칼로리 받기 위함)
-                        gender = it.userInfo.gender
-                        age = it.userInfo.age
-                        weight = it.userInfo.weight.toFloat()
+                        is RunningSideEffect.SuccessRunning -> {
+                            // 경쟁할 때 rabbitMQ의 콜백으로 온 데이터 받음
+                            successRunningData(it.distance)
+                        }
 
-                        // 서비스 실행
-                        if (!bindState) {
-                            Log.d("bindState", "SuccessUserInfo: start")
-                            val testIntent = Intent(activity, RunningService::class.java)
-                            requireActivity().bindService(
-                                testIntent,
-                                serviceConnection,
-                                Context.BIND_AUTO_CREATE
-                            )
-                        } else {
-                            Log.d("bindState", "initDataBinding: already start")
+                        is RunningSideEffect.EndRunning -> {
+
+                        }
+
+                        is RunningSideEffect.SuccessPartnerInfo -> {
+                            // 파트너의 프로필을 seekbar의 thumb로 변경
+                            Glide.with(requireContext())
+                                .load(it.partnerInfo.profile)
+                                .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
+                                .circleCrop()
+                                .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
+                                .override(100,100)
+                                .into(object : CustomTarget<Drawable>(){
+                                    override fun onResourceReady(
+                                        resource: Drawable,
+                                        transition: Transition<in Drawable>?
+                                    ) {
+                                        binding.sbPartnerProgress.thumb = resource
+                                    }
+
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                                    }
+                                })
+                        }
+
+                        is RunningSideEffect.SuccessUserInfo -> {
+                            // 나의 프로필 이미지를 seekbar의 thumb로 변경
+                            Glide.with(requireContext())
+                                .load(it.userInfo.profile)
+                                .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
+                                .circleCrop()
+                                .override(100,100)
+                                .into(object : CustomTarget<Drawable>(){
+                                    override fun onResourceReady(
+                                        resource: Drawable,
+                                        transition: Transition<in Drawable>?
+                                    ) {
+                                        binding.sbMyProgress.thumb = resource // Thumb 이미지를 설정합니다.
+                                    }
+
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                                    }
+                                })
+
+                            // Todo 경쟁이면 해당 코드 실행
+                            if(args.gameType >= 4){
+                                viewModel.startRun(args.myId, args.roomId)
+                                Log.d("TAG", "SuccessUserInfo: start")
+                            }
+
+                            // 사용자의 정보 생성(칼로리 받기 위함)
+                            gender = it.userInfo.gender
+                            age = it.userInfo.age
+                            weight = it.userInfo.weight.toFloat()
+
+                            // 서비스 실행
+                            if (!bindState) {
+                                Log.d("bindState", "SuccessUserInfo: start")
+                                val testIntent = Intent(activity, RunningService::class.java)
+                                requireActivity().bindService(
+                                    testIntent,
+                                    serviceConnection,
+                                    Context.BIND_AUTO_CREATE
+                                )
+                            } else {
+                                Log.d("bindState", "initDataBinding: already start")
+                            }
                         }
                     }
                 }
             }
+            launch {
+                viewModel
+            }
+
 
 
         }

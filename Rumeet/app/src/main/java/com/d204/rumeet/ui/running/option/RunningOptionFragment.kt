@@ -3,12 +3,16 @@ package com.d204.rumeet.ui.running.option
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningOptionBinding
+import com.d204.rumeet.domain.model.user.RunningSoloDomainModel
+import com.d204.rumeet.domain.repository.RunningRepository
 import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.ui.running.RunningSideEffect
 import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.ui.running.option.adapter.RunningOptionViewPagerAdapter
 import com.d204.rumeet.ui.running.option.model.RunningDetailType
@@ -20,6 +24,7 @@ import com.d204.rumeet.ui.running.option.single.RunningGhostSingleFragment
 import com.d204.rumeet.ui.running.option.single.RunningSingleFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, RunningViewModel>() {
@@ -45,7 +50,23 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
     }
 
     override fun initDataBinding() {
-
+        lifecycleScope.launchWhenStarted {
+            viewModel.runningSideEffect.collectLatest {
+                when (it) {
+                    is RunningSideEffect.SuccessSoloData -> {
+                        navigate(
+                            RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningLoadingFragment(
+                                myId = it.data.userId,
+                                gameType = it.data.mode,
+                                roomId = it.data.id,
+                                partnerId = it.data.partnerId
+                            )
+                        )
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 
     override fun initAfterBinding() {
@@ -53,11 +74,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
             Toast.makeText(this@RunningOptionFragment.context, "운동시작 클릭", Toast.LENGTH_SHORT).show();
             if (viewModel.runningTypeModel.runningType == RunningType.SINGLE) {  //single
                 Log.d(TAG, "initAfterBinding: 싱글 km mode: ${getRunningType()}")
-                navigate(
-                    RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningLoadingFragment(
-                        gameType = getRunningType()
-                    )
-                )
+                viewModel.startSoloGame(getRunningType())
             } else { // ghost
                 Log.d(TAG, "initAfterBinding: 고스트 type: ${getGhostType()}, km mode: ${getRunningType()}")
                 navigate(

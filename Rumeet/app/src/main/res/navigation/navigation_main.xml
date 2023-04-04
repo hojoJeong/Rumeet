@@ -47,9 +47,10 @@
                 app:destination="@id/runningMatchingFragment"
                 app:popUpTo="@id/runningOptionFragment"
                 app:popUpToInclusive="false" />
-            <action
+             <action
                 android:id="@+id/action_runningOptionFragment_to_runningLoadingFragment"
                 app:destination="@id/runningLoadingFragment" />
+
         </fragment>
 
         <fragment
