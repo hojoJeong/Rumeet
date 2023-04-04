@@ -26,8 +26,7 @@ class RunningGhostSingleFragment : BaseFragment<FragmentRunningSingleGhostBindin
     }
 
     override fun initDataBinding() {
-//        binding.contentDistance.
-
+        viewModel.setRunningDetailType(RunningDetailType.GHOST_SINGLE) // default : 내 고스트
 
     }
 
