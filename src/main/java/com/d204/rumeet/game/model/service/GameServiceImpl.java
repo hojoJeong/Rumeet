@@ -184,7 +184,7 @@ public class GameServiceImpl implements GameService {
         }.getType();
         Map<String, Integer> map = new Gson().fromJson(msg, type);
         int mode = gameMapper.getMode(map.get("race_id"));
-        int[] km = new int[]{1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5};
+        int[] km = new int[]{1, 2, 3, 5, 1, 2, 3, 5, 1, 2, 3, 5,1,2,3,5,1,2,3,5,1,2,3,5};
         kafkaService.sendMessage("rumeet.endgame." + km[mode], msg);
     }
 
