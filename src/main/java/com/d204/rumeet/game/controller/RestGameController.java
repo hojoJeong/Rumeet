@@ -36,12 +36,12 @@ public class RestGameController {
         return data.builder();
     }
 
-    @Operation(summary = "친구에게 러닝 초대 보내기 (userId, partnerId, mode, date(30초 타이머 시작한 시간 기준으로 long type) 만 보내면 됩니다) 없는 유저면 코드1")
+    @Operation(summary = "친구에게 러닝 초대 보내고 raceId를 리턴 (userId, partnerId, mode, date(30초 타이머 시작한 시간 기준으로 long type) 만 보내면 됩니다)")
     @PostMapping("/invite")
     public ResponseEntity<?> inviteRunning(@RequestBody RaceDto raceDto) {
-        RespData<Void> data = new RespData<>();
+        RespData<Integer> data = new RespData<>();
         data.setMsg("친구 초대");
-        gameService.inviteRace(raceDto);
+        data.setData(gameService.inviteRace(raceDto));
         return data.builder();
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 public interface GameService {
     void makeRace(RaceDto gameDto);
 
-    void inviteRace(RaceDto raceDto);
+    int inviteRace(RaceDto raceDto);
 
     int getRaceState(int raceId);
 

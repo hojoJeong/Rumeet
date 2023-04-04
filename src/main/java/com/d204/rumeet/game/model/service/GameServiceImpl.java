@@ -64,7 +64,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void inviteRace(RaceDto raceDto) {
+    public int inviteRace(RaceDto raceDto) {
         // DB에 state 0으로 추가
         raceDto.setState(0);
         gameMapper.makeRace(raceDto);
@@ -98,6 +98,7 @@ public class GameServiceImpl implements GameService {
             } catch (Exception e) {
             }
         }
+        return raceDto.getId();
     }
 
     @Override
