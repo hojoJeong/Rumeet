@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d204.rumeet.R
@@ -12,6 +13,7 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.notification.adapter.NotificationFriendListAdapter
 import com.d204.rumeet.ui.notification.adapter.NotificationRunningListAdapter
+import com.d204.rumeet.ui.running.RunningViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -21,6 +23,7 @@ class NotificationContainerFragment(private val viewInfo: String) :
     override val layoutResourceId: Int
         get() = R.layout.fragment_notification_container
     override val viewModel: NotificationViewModel by activityViewModels()
+    private val runningViewModel by activityViewModels<RunningViewModel> ()
 
     override fun initStartView() {
         viewModel.getNotificationList()
@@ -41,6 +44,8 @@ class NotificationContainerFragment(private val viewInfo: String) :
                     is NotificationAction.AcceptFriendRequest -> {}
                     is NotificationAction.AcceptRunningRequest -> {
                         Log.d(TAG, "initView: accept ${action.raceId}")
+                        runningViewModel.startRun(viewModel.userId, action.raceId)
+                        navigate(NotificationFragmentDirections.actionNotificationFragmentToNavigationRunning())
                     }
                     is NotificationAction.DenyFriendRequest -> {}
                     is NotificationAction.DenyRunningRequest -> {

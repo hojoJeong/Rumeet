@@ -23,7 +23,7 @@ class RunningMatchingFragment :
     override fun initStartView() {
         Log.d(TAG, "initStartView: runningMAtchingFragment withfriend: ${args.withFriend}")
         if(args.withFriend){
-            viewModel.startWithFriendMatching(args.gameType)
+            viewModel.startFriendModeMatching(args.gameType)
         } else {
             viewModel.startRandomMatching(args.gameType)
         }

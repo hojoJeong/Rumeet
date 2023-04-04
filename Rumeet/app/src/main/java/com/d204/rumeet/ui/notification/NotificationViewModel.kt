@@ -42,9 +42,11 @@ class NotificationViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val resultReplyRequest: StateFlow<UiState<Boolean>> get() = _resultReplyRequest.asStateFlow()
 
+    var userId = -1
     fun getNotificationList() {
         baseViewModelScope.launch {
             showLoading()
+            userId = getUserIdUseCase()
             getRunningRequestListUseCase(getUserIdUseCase())
                 .onSuccess {
                     _notificationAction.emit(NotificationAction.RunningRequest(it))

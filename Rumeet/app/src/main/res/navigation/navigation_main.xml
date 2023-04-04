@@ -31,6 +31,9 @@
             android:defaultValue="0"
             app:argType="integer"
             app:nullable="false" />
+        <action
+            android:id="@+id/action_notificationFragment_to_navigation_running"
+            app:destination="@id/navigation_running" />
     </fragment>
     <navigation
         android:id="@+id/navigation_running"
