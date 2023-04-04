@@ -161,7 +161,6 @@ public class UserServiceImpl implements UserService{
         Map<String,Object> map = new HashMap<>();
         map.put("userId",id);
         map.put("date",date);
-
         userMapper.joinUserToBadge(map);
         initQueue(id);
     }
@@ -179,9 +178,16 @@ public class UserServiceImpl implements UserService{
         }
         user.setEmail(email);
         user.setPassword(pwd);
-        user.setDate(System.currentTimeMillis());
+        long date = System.currentTimeMillis();
+        user.setDate(date);
         userMapper.joinKakaoUser(user);
-        initQueue(user.getId());
+        int id = user.getId();
+        userMapper.joinUserToRecord(id);
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",id);
+        map.put("date",date);
+        userMapper.joinUserToBadge(map);
+        initQueue(id);
     }
 
     @Override
