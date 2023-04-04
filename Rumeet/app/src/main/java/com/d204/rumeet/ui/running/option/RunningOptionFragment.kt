@@ -16,6 +16,7 @@ import com.d204.rumeet.ui.running.RunningSideEffect
 import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.ui.running.option.adapter.RunningOptionViewPagerAdapter
 import com.d204.rumeet.ui.running.option.model.RunningDetailType
+import com.d204.rumeet.ui.running.option.model.RunningDifficulty
 import com.d204.rumeet.ui.running.option.model.RunningDistance
 import com.d204.rumeet.ui.running.option.model.RunningType
 import com.d204.rumeet.ui.running.option.multi.RunningOptionCompetitionOrGhostFragment
@@ -59,7 +60,8 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
                                 myId = it.data.userId,
                                 gameType = it.data.mode,
                                 roomId = it.data.id,
-                                partnerId = it.data.partnerId
+                                partnerId = it.data.partnerId,
+                                pace = it.data.pace.toIntArray()
                             )
                         )
                     }
@@ -176,6 +178,21 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
     private fun getRunningType(): Int {
         var type = -1
         //멀티
+        var collabor = 0
+
+        when(viewModel.getRunningDifficulty()){
+            RunningDifficulty.EASY -> {
+                collabor = 0
+            }
+            RunningDifficulty.NORMAL -> {
+                collabor = 1
+            }
+            RunningDifficulty.HARD -> {
+                collabor = 2
+            }
+            else -> {}
+        }
+
         with(viewModel.runningTypeModel) {
             when (this.runningType) {
                 RunningType.SINGLE_GHOST -> {
@@ -213,16 +230,16 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
                 RunningType.MULTI_COLLABORATION -> {
                     type = when (this.distance) {
                         RunningDistance.ONE -> {
-                            8
+                            8 + collabor * 4
                         }
                         RunningDistance.TWO -> {
-                            9
+                            9 + collabor * 4
                         }
                         RunningDistance.THREE -> {
-                            10
+                            10 + collabor * 4
                         }
                         RunningDistance.FIVE -> {
-                            11
+                            11 + collabor * 4
                         }
                     }
                 }

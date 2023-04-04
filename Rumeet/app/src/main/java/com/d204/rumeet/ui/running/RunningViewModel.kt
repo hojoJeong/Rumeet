@@ -140,4 +140,7 @@ class RunningViewModel @Inject constructor(
     fun setRunningDifficulty(difficulty: RunningDifficulty) {
         runningTypeModel.runningDifficulty = difficulty
     }
+    fun getRunningDifficulty() : RunningDifficulty {
+        return runningTypeModel.runningDifficulty
+    }
 }

@@ -56,7 +56,8 @@ class RunningLoadingFragment : BaseFragment<FragmentRunningLoadingBinding, Runni
                     myId = args.myId,
                     partnerId = args.partnerId,
                     gameType = args.gameType,
-                    roomId = args.roomId
+                    roomId = args.roomId,
+                    pace = args.pace
                 ))
             }
         }.start()
