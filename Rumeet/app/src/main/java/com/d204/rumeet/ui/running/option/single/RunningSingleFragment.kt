@@ -21,7 +21,7 @@ class RunningSingleFragment : BaseFragment<FragmentRunningSingleBinding, Running
     }
 
     override fun initDataBinding() {
-
+        viewModel.setDistance(RunningDistance.ONE)
     }
 
     override fun initAfterBinding() {

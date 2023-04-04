@@ -216,7 +216,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     /** end.queue에 보낼 메시지 생성 */
     private fun getMessageForEndQueue() : String{
         val message = when (maxDistance) {
-            testDistance -> {
+            1000 -> {
                 Log.d(TAG, "onReceive: make 1000 response")
                 val response = runningEndModel as RunningModel1pace
                 response.user_id = args.myId
@@ -273,23 +273,27 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 sbMyProgress.visibility = View.VISIBLE
                 sbPartnerProgress.visibility = View.VISIBLE
                 sbSharkProgress.visibility = View.GONE
-                btnRunningPause.visibility = View.GONE
+                binding.btnRunningStop.visibility = View.VISIBLE
             }
-        }
-        else if (args.partnerId != -1) isGhost = true // ghost는 partner id = -1
+        } else if (args.partnerId != -1) isGhost = true // ghost는 partner id = -1
         if(isGhost){ // 고스트 모드
             Log.d(TAG, "initStartView: @@@@@@@고스트모드 경기 시작")
             viewModel.getUserInfo(args.myId)
             viewModel.getPartnerInfo(args.partnerId)
-        } else if (!isMulti){ // 싱글 모드
+            binding.btnRunningStop.visibility = View.VISIBLE
+        } else if (!isMulti){ // 싱글 모드 only single : pause 가능
             Log.d(TAG, "initStartView: @@@@@@@싱글모드 경기 시작")
             viewModel.getUserInfo(args.myId)
+            binding.btnRunningPause.visibility = View.VISIBLE
         }
+
         // 고도 센서 설정
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         altitudeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
         vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         initRunningMode()
+
+        Log.d(TAG, "initStartView: ##########maxDistance $maxDistance")
 
         // 고스트 모드일 경우 seekbar 자동으로 움직이게 하기
         if(isGhost) {
@@ -323,8 +327,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             // end queue에 메시지
             Log.d(TAG, "initDataBinding: end game you lose ${getMessageForEndQueue()}")
 
-            // 게임 종료 보내기
-            RunningAMQPManager.sendEndGame(getMessageForEndQueue())
+            if(isMulti) { // 게임 종료 보내기
+                RunningAMQPManager.sendEndGame(getMessageForEndQueue())
+            }
+
 
             navigate(RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
                 locationList.toTypedArray(),
@@ -631,10 +637,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             // 고도 중지
             sensorManager.unregisterListener(this)
 
-            if(isMulti) { // 멀티일 경우
-                RunningAMQPManager.sendEndGame(getMessageForEndQueue())
-                Log.d(TAG, "stopRunning: ${getMessageForEndQueue()}")
-            }
+            RunningAMQPManager.sendEndGame(getMessageForEndQueue())
+            Log.d(TAG, "stopRunning: ${getMessageForEndQueue()}")
+
             Log.d(TAG, "stopRunning: 게임 종료하고 이제 화면 넘어갑니다.")
             navigate(
                 RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
