@@ -80,6 +80,7 @@ object RunningAMQPManager {
     // 게임 관련 데이터 받기
     fun receiveRunning(roomId: Int, userId: Int, callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
+            Log.d(TAG, "receiveRunning: ${roomId}.${userId}")
             runningTag = runningChannel?.basicConsume("game.${roomId}.${userId}", callback) ?: ""
         }
     }
