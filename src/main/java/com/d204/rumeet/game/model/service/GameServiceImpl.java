@@ -163,12 +163,13 @@ public class GameServiceImpl implements GameService {
             FriendRaceInfoDto tmp = FriendRaceInfoDto.builder()
                     .raceId(dto.getRaceId())
                     .state(dto.getState())
-                    .partnerId(userId)
+                    .partnerId(dto.getPartnerId())
                     .nickname(user.getNickname())
                     .profile(user.getProfile())
                     .mode(dto.getMode())
                     .date(dto.getDate())
-                    .userId(dto.getPartnerId()).build();
+                    .userId(dto.getUserId()
+                    ).build();
             list.add(tmp);
         }
         //
