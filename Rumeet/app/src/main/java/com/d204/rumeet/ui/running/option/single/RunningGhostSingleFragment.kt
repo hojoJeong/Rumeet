@@ -27,7 +27,7 @@ class RunningGhostSingleFragment : BaseFragment<FragmentRunningSingleGhostBindin
 
     override fun initDataBinding() {
         viewModel.setRunningDetailType(RunningDetailType.GHOST_SINGLE) // default : 내 고스트
-
+        viewModel.setDistance(RunningDistance.ONE)
     }
 
     override fun initAfterBinding() {
