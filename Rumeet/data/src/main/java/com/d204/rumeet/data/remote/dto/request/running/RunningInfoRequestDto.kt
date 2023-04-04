@@ -11,5 +11,6 @@ internal data class RunningInfoRequestDto(
     val velocity : Double,
     val time : Int,
     val heartRate : Int = 100,
-    val success : Int
+    val success : Int,
+    val polyline : String
 )

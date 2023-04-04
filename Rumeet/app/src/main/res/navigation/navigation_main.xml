@@ -170,11 +170,6 @@
 
     </navigation>
 
-    <fragment
-        android:id="@+id/runningFragment"
-        android:name="com.d204.rumeet.ui.running.RunningFragment"
-        android:label="RunningFragment" />
-
     <navigation
         android:id="@+id/navigation_mypage"
         app:startDestination="@id/myPageFragment">
