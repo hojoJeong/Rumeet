@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
+import com.bumptech.glide.Glide
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningFinishBinding
 import com.d204.rumeet.ui.base.BaseFragment
@@ -27,14 +28,15 @@ import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import okhttp3.*
 import java.io.File
+import java.io.IOException
 
 
 private const val TAG = "RunningFinishFragment"
 
 @AndroidEntryPoint
-class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, RunningViewModel>(),
-    OnMapReadyCallback, SnapshotReadyCallback {
+class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, RunningViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_running_finish
 
@@ -46,13 +48,10 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
 
     private var longitudeAverage: Double = 0.0
     private var latitudeAverage: Double = 0.0
-    private lateinit var polylineImage: File
-    private lateinit var map: GoogleMap
 
     override fun initStartView() {
-        val supportMapFragment =
-            childFragmentManager.findFragmentById(R.id.ly_map) as SupportMapFragment
-        supportMapFragment.getMapAsync(this)
+//        val supportMapFragment =
+//            childFragmentManager.findFragmentById(R.id.iv_map) as SupportMapFragment
     }
 
     override fun initDataBinding() {
@@ -80,53 +79,67 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
         binding.btnOkay.addClickListener {
             if (viewModel.runningRecordState.value) navigate(RunningFinishFragmentDirections.actionRunningFinishFragmentToHomeFragment())
         }
-    }
-
-    override fun onMapReady(p0: GoogleMap) {
-        initAverageLocation()
-
-        map = p0
-
-        Log.d(TAG, "initStartView: on map ready call back")
-
-        val polyline = PolylineOptions().apply {
-            locationList.forEach { location ->
-                add(LatLng(location.latitude, location.longitude))
+        var polyline = ""
+        var polyurl = ""
+        CoroutineScope(Dispatchers.Main).launch {
+            locationList.forEach {
+                polyline += it.latitude
+                polyline += ","
+                polyline += it.longitude
+                polyline += "%7C"
             }
-            color(Color.RED)
-            width(5f)
+            polyline.removeSuffix("%7C")
+            val client = OkHttpClient()
+            val url = HttpUrl.Builder()
+                .scheme("http")
+                .host("119.202.203.157")
+                .port(8002)
+                .addQueryParameter("polyline", polyline)
+                .build()
+
+            val request = Request.Builder()
+                .url(url)
+                .build()
+
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onResponse(call: Call, response: Response) {
+                        // 요청이 성공했을 때의 처리"
+                        polyurl = response.body!!.string().replace("\"", "")
+                        if(polyurl.length != 0) {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                Log.d(TAG, "initAfterBinding urlasdasdsad: $polyurl")
+
+                                Glide.with(requireContext())
+                                    .load(polyurl)
+                                    .into(binding.ivMap)
+
+                                viewModel.raceRecord(
+                                    args.result.userId,
+                                    args.result.raceId,
+                                    args.result.mode,
+                                    args.result.velocity,
+                                    args.result.time.div(1000).toInt(),
+                                    0,
+                                    args.result.success,
+                                    polyurl
+                                )
+                            }
+                        }
+
+
+                    }
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        // 요청이 실패했을 때의 처리
+                        e.printStackTrace()
+                        polyurl = "https://kr.object.ncloudstorage.com/rumeet/base_profile.png"
+                    }
+                })
+
         }
 
-        map.addPolyline(polyline)
 
-        val builder = LatLngBounds.Builder().apply {
-            polyline.points.forEach {
-                include(it)
-            }
-        }.build()
-
-        val camera = CameraUpdateFactory.newLatLngBounds(builder, 100)
-        map.moveCamera(camera)
-        map.snapshot(this)
     }
 
-    override fun onSnapshotReady(p0: Bitmap?) {
 
-        CoroutineScope(Dispatchers.IO).launch {
-            Log.d(TAG, "onSnapshotReady: 사진 딜레이 시작")
-            delay(3000)
-            Log.d(TAG, "onSnapshotReady: 사진 딜레이 종료")
-            polylineImage = bitmapToFile(p0!!, File(context?.cacheDir, "map_poly.png"))
-            viewModel.raceRecord(
-                args.result.userId,
-                args.result.raceId,
-                args.result.mode,
-                args.result.velocity,
-                args.result.time.div(1000).toInt(),
-                0,
-                args.result.success,
-                polylineImage
-            )
-        }
-    }
 }

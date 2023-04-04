@@ -8,11 +8,10 @@ import okhttp3.MultipartBody
 import retrofit2.http.*
 
 internal interface RunningApiService {
-    @Multipart
+
     @POST("record/race")
     suspend fun recordRace(
-        @Part("raceInfo") request : RunningInfoRequestDto,
-        @Part file : MultipartBody.Part?,
+        @Body request : RunningInfoRequestDto
     ) : BaseResponse<Unit?>
 
     @PUT("record")

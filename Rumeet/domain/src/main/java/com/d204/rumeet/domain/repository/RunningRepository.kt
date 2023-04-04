@@ -6,6 +6,6 @@ import java.io.File
 
 interface RunningRepository {
     // 밀리초 아님
-    suspend fun recordRunning(userId : Int, raceId : Int, mode : Int, velocity : Float, time : Int, heartRate : Int, success : Int, polyline : File?) : NetworkResult<Unit?>
     suspend fun startSolo(userId:Int, mode: Int, ghost: Int): NetworkResult<RunningSoloDomainModel>
+    suspend fun recordRunning(userId : Int, raceId : Int, mode : Int, velocity : Float, time : Int, heartRate : Int, success : Int, polyline : String) : NetworkResult<Unit?>
 }

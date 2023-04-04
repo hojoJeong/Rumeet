@@ -31,11 +31,10 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_result"
             app:layout_constraintStart_toEndOf="@id/tv_result" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/ly_map"
+        <ImageView
+            android:id="@+id/iv_map"
             android:layout_width="match_parent"
             android:layout_height="260dp"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_margin="@dimen/base_horizontal_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +48,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@id/ly_calorie"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ly_map">
+            app:layout_constraintTop_toBottomOf="@id/iv_map">
 
             <TextView
                 android:id="@+id/tv_running_pace"
