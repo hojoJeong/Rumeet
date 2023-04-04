@@ -22,14 +22,13 @@ internal class RunningRepositoryImpl @Inject constructor(
         time: Int,
         heartRate: Int,
         success: Int,
-        polyline: File?
+        polyline: String
     ) : NetworkResult<Unit?> {
         try {
-            val poly = getPolylineMultipartData(polyline)
-            val request = RunningInfoRequestDto(userId, raceId, mode, velocity.toDouble(), time, heartRate, success)
+            val request = RunningInfoRequestDto(userId, raceId, mode, velocity.toDouble(), time, heartRate, success, polyline)
 
             val response1 = runningApiService.putRace(request)
-            val response2 = runningApiService.recordRace(request, poly)
+            val response2 = runningApiService.recordRace(request)
         }catch (e : Exception){
             Log.e("record error", "recordRunning: ${e.message}", )
         }

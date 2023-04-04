@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -27,6 +29,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private lateinit var navController: NavController
 
     private var flag = true
+    private var exitFlag = false
 
     override fun initStartView() {
         val navHostFragment =
@@ -54,12 +57,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             runningState(flag)
         }
 
+        val navOption = NavOptions.Builder()
+            .setPopUpTo(R.id.homeFragment, false)
+            .build()
+
         binding.btnSingle.setOnClickListener {
-            navController.navigate(R.id.navigation_running, bundleOf("type" to 1))
+            navController.navigate(R.id.navigation_running, bundleOf("type" to 1), navOption)
+            binding.bvnMain.bvnMain.selectedItemId = R.id.homeFragment
         }
 
         binding.btnMulti.setOnClickListener {
-            navController.navigate(R.id.navigation_running, bundleOf("type" to 2))
+            navController.navigate(R.id.navigation_running, bundleOf("type" to 2), navOption)
+            binding.bvnMain.bvnMain.selectedItemId = R.id.homeFragment
         }
     }
 
@@ -171,8 +180,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onBackPressed() {
         if (findNavController(R.id.fcv_main).currentDestination?.id == R.id.runningMatchingFailFragment) {
             findNavController(R.id.fcv_main).popBackStack(R.id.runningOptionFragment, false)
+        } else if(findNavController(R.id.fcv_main).currentDestination?.id == R.id.homeFragment) {
+            if(exitFlag){
+                super.onBackPressed()
+            } else{
+                // 처음 백버튼
+                exitFlag = true
+                Toast.makeText(this, "한번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
+            }
         } else {
+            // 기본 back 버튼이면 패스
             super.onBackPressed()
+            exitFlag = false
         }
     }
 

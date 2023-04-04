@@ -9,6 +9,5 @@ class ApplicationClass : Application() {
     override fun onCreate() {
         super.onCreate()
         KakaoSdk.init(this, getString(R.string.KAKAO_NATIVE_KEY))
-
     }
 }

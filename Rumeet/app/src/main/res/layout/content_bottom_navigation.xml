@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
         android:contentDescription="@string/app_name"
+        android:tintMode="@color/white"
         app:borderWidth="0dp"
         app:layout_anchor="@id/bottomAppBar"
         android:src="@drawable/ic_toolbar_logo" />
