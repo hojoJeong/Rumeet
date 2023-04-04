@@ -71,18 +71,27 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
 
     override fun initAfterBinding() {
         binding.btnRunningOptionStartRunning.setOnClickListener {
-            Toast.makeText(this@RunningOptionFragment.context, "운동시작 클릭", Toast.LENGTH_SHORT).show();
-            if (viewModel.runningTypeModel.runningType == RunningType.SINGLE) {  //single
-                Log.d(TAG, "initAfterBinding: 싱글 km mode: ${getRunningType()}")
-                viewModel.startSoloGame(getRunningType())
-            } else { // ghost
-                Log.d(TAG, "initAfterBinding: 고스트 type: ${getGhostType()}, km mode: ${getRunningType()}")
-                navigate(
-                    RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
-                        gameType = getRunningType(),
-                        ghostType = getGhostType()
+            when (viewModel.runningTypeModel.runningType) {
+                RunningType.SINGLE -> {  //single
+                    Log.d(TAG, "initAfterBinding: 싱글 km mode: ${getRunningType()}")
+                    viewModel.startSoloGame(getRunningType())
+                }
+                RunningType.SINGLE_GHOST -> { // ghost
+                    Log.d(TAG, "initAfterBinding: 고스트 type: ${getGhostType()}, km mode: ${getRunningType()}")
+                    navigate(
+                        RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
+                            gameType = getRunningType(),
+                            ghostType = getGhostType()
+                        )
                     )
-                )
+                }
+                else -> { // multi
+                    navigate(
+                        RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
+                            gameType = getRunningType()
+                        )
+                    )
+                }
             }
         }
     }
