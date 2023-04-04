@@ -136,6 +136,10 @@
                 android:defaultValue="-1"
                 app:argType="integer"/>
 
+            <argument
+                android:name="pace"
+                app:argType="integer[]" />
+
             <action
                 android:id="@+id/action_runningLoadingFragment_to_runningFragment"
                 app:destination="@id/runningFragment"
@@ -168,6 +172,10 @@
                 android:name="partnerId"
                 android:defaultValue="-1"
                 app:argType="integer"/>
+
+            <argument
+                android:name="pace"
+                app:argType="integer[]" />
 
             <action
                 android:id="@+id/action_runningFragment_to_runningFinishFragment"
