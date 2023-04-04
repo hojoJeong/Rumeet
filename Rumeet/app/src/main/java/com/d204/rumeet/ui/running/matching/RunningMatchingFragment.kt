@@ -26,13 +26,15 @@ class RunningMatchingFragment :
 
     override fun initStartView() {
         binding.lifecycleOwner = viewLifecycleOwner
-        if (args.ghostType > -1) { // 고스트 모드 분기 (내 고스트:1, 랜덤 고스트 : 2)
+        if (args.ghostType != -1) { // 고스트 모드 분기 (내 고스트:1, 랜덤 고스트 : 2)
             Log.d(TAG, "initStartView: 고스트 모드임!! (1:나, 2:랜덤) : ${args.ghostType}")
             viewModel.startGhost(args.gameType, args.ghostType)
         } else { // 매칭인 경우
             viewModel.startMatching(args.gameType)
         }
     }
+
+
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenStarted {
