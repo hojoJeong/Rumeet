@@ -49,7 +49,7 @@ class RunningViewModel @Inject constructor(
         time: Int,
         heartRate: Int,
         success: Int,
-        polyline: File?
+        polyline: String
     ) {
         baseViewModelScope.launch {
             recordRunningUseCase(userId, raceId, mode, velocity, time, heartRate, success, polyline)
