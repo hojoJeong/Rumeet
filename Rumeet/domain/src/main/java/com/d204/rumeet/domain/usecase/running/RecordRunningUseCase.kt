@@ -15,7 +15,7 @@ class RecordRunningUseCase @Inject constructor(
         time: Int,
         heartRate: Int,
         success: Int,
-        polyline: File?
+        polyline: String
     ) = runningRepository.recordRunning(
         userId,
         raceId,
