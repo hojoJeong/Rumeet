@@ -53,7 +53,8 @@ class RunningMatchingFragment :
                                     myId = it.userId,
                                     gameType = args.gameType,
                                     roomId = it.roomId,
-                                    partnerId = it.partnerId
+                                    partnerId = it.partnerId,
+                                    pace = IntArray(3)
                                 )
                             )
                         }
@@ -62,7 +63,8 @@ class RunningMatchingFragment :
                                 roomId = it.data.id,
                                 myId = it.data.userId,
                                 partnerId = it.data.partnerId,
-                                gameType = it.data.mode
+                                gameType = it.data.mode,
+                                pace = it.data.pace.toIntArray()
                             ))
                         }
                     }
@@ -71,7 +73,8 @@ class RunningMatchingFragment :
 
             launch {
                 viewModel.ghostType.collect {
-                    viewModel.startGetGhost()
+                    if(viewModel.gameType.value<4)
+                        viewModel.startGetGhost()
                 }
             }
         }

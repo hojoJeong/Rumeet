@@ -34,6 +34,7 @@ import com.d204.rumeet.ui.running.model.RunningModel1pace
 import com.d204.rumeet.ui.running.model.RunningModel2pace
 import com.d204.rumeet.ui.running.model.RunningModel3pace
 import com.d204.rumeet.ui.running.model.RunningModel5pace
+import com.d204.rumeet.ui.running.option.model.RunningDifficulty
 import com.d204.rumeet.util.*
 import com.d204.rumeet.util.amqp.RunningAMQPManager
 import com.google.android.material.snackbar.Snackbar
@@ -44,6 +45,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 private const val TAG = "러밋_RunningFragment"
@@ -57,7 +60,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     private lateinit var sensorManager: SensorManager
     private lateinit var altitudeSensor: Sensor
-
+    private lateinit var difficulty: RunningDifficulty
     private val args by navArgs<RunningFragmentArgs>()
     private var bindState = false
 
@@ -90,13 +93,14 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var currentCalorie = 0f
     private var printHeight = 0f
     private var currentDistance = 0f
-
+    private var collaborationDistance = 0f
     private var testDistance = 300
 
     private lateinit var vibrator: Vibrator
 
     private var isMulti = false
     private var isGhost = false
+    private var isShark = false
 
     // 서비스 연결여부 콜백함수
     private val serviceConnection = object : ServiceConnection {
@@ -124,9 +128,12 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
 
             currentDistance = runningDistance
-
+            if(isShark) {
+                collaborationDistance = ((runningDistance.toInt() + userDistance) / 2).toFloat()
+            } else {
+                binding.sbMyProgress.progress = runningDistance.toInt()
+            }
             // 나의 seekbar 진행률을 올린다
-            binding.sbMyProgress.progress = runningDistance.toInt()
             Log.d(TAG, "onReceive: my max progress : ${binding.sbMyProgress.max}")
             Log.d(TAG, "onReceive: currnet my distance : ${runningDistance.toInt()}")
             Log.d(TAG, "onReceive: max / current ${binding.sbMyProgress.max} / ${binding.sbMyProgress.progress}")
@@ -171,7 +178,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             }
 
             //  러닝 종료
-            if (maxDistance <= runningDistance) {
+            if ((!isShark && maxDistance <= runningDistance) || (isShark && maxDistance <= collaborationDistance)) {
                 Log.d(TAG, "onReceive: running 5000 end")
                 // 5인경우 기록
                 if (!pace5Flag) pace5 = time.div(1000).toInt()
@@ -202,7 +209,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             }
         }
     }
-
+    private var sec = 0
+    private lateinit var ghostPace : IntArray
+    private var sequence = 0
+    private var ghostDistance = 0
+    private var sharkDistance = 0
+    private var userDistance = 0
+    private var sharkPace = 0
     /** 시간초 타이머 */
     private val handler = Handler(Looper.getMainLooper())
     private val timer = object : Runnable {
@@ -210,6 +223,28 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             time += 1000
             binding.tvRunningTime.text = time.toMinute()
             handler.postDelayed(this, 1000)
+            // 고스트 모드 처리
+            // 상어도 여기서 처리하면 될듯?
+            if(isGhost) {
+                sec++
+                if(args.pace[sequence]==sec) {
+                    sequence++
+                }
+                ghostDistance += ghostPace[sequence]
+                Log.d(TAG, "run: ghostDistance = ${ghostDistance}")
+                successRunningData(ghostDistance)
+            }
+            if(isShark) {
+                sec++
+                if(sec >= 30) {
+                    if(sec == 30) {
+                        Snackbar.make(binding.tvRunningMode, "상어가 출발합니다!!", Snackbar.LENGTH_SHORT).show()
+                        vibrator.vibrate(1000)
+                    }
+                    sharkDistance += sharkPace
+                }
+                successSharkData(sharkDistance)
+            }
         }
     }
 
@@ -263,11 +298,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     // 상대방과 나의 profile 이미지로 seekbar의 thumb 이미지 변경
     override fun initStartView() {
         // Todo 싱글, 고스트 설정을 해줘야함
+        viewModel.getUserInfo(args.myId)
+
         if(args.gameType >= 4){ // multi
             Log.d(TAG, "initStartView: @@@@@@@멀티모드 경기 시작")
             isMulti = true
-            viewModel.getUserInfo(args.myId)
-            viewModel.getPartnerInfo(args.partnerId)
 
             with(binding){
                 sbMyProgress.visibility = View.VISIBLE
@@ -275,17 +310,27 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 sbSharkProgress.visibility = View.GONE
                 binding.btnRunningStop.visibility = View.VISIBLE
             }
-        } else if (args.partnerId != -1) isGhost = true // ghost는 partner id = -1
-        if(isGhost){ // 고스트 모드
-            Log.d(TAG, "initStartView: @@@@@@@고스트모드 경기 시작")
-            viewModel.getUserInfo(args.myId)
-            viewModel.getPartnerInfo(args.partnerId)
+        } else if(args.gameType>=8) {
+            isShark = true
+            var shark = arrayOf(0,0,400,300,240)
+            sharkPace = 1000 / shark[args.gameType/4]
+            binding.sbSharkProgress.visibility = View.VISIBLE
+        } else {
+            isGhost = true
             binding.btnRunningStop.visibility = View.VISIBLE
-        } else if (!isMulti){ // 싱글 모드 only single : pause 가능
-            Log.d(TAG, "initStartView: @@@@@@@싱글모드 경기 시작")
-            viewModel.getUserInfo(args.myId)
-            binding.btnRunningPause.visibility = View.VISIBLE
+            if(args.partnerId != -1){ // 고스트 모드
+                viewModel.getPartnerInfo(args.partnerId)
+                ghostPace = IntArray(args.pace.size)
+                binding.sbPartnerProgress.visibility = View.VISIBLE
+                for(i in ghostPace.indices) {
+                    Log.d(TAG, "initStartView: (1000/args.pace[0]).toDouble() = ${(1000.0/args.pace[i])}")
+                    ghostPace[i] = Math.round((1000.0/args.pace[i])).toInt()// 1 더주는 이유는 올림 처리
+                }
+                Log.d(TAG, "initStartView: ghostPace= ${ghostPace.contentToString()}")
+            }
         }
+
+
 
         // 고도 센서 설정
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -296,42 +341,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         Log.d(TAG, "initStartView: ##########maxDistance $maxDistance")
 
         // 고스트 모드일 경우 seekbar 자동으로 움직이게 하기
-        if(isGhost) {
-            setGhostSeekbar()
-        }
-    }
-
-    private fun setGhostSeekbar() {
-        CoroutineScope(Dispatchers.Main).launch {
-
-            binding.sbPartnerProgress
-        }
 
     }
-
-    private fun successRunningData(distance : Int){
-        Log.d(TAG, "initDataBinding: partner running : ${distance}")
-        binding.sbPartnerProgress.progress = distance
-
-        // 거리를 따라 잡혔으면 알람
-        if(currentDistance < distance && distanceCheck){
-            Snackbar.make(binding.tvRunningMode, "따라잡혔습니다!!", Snackbar.LENGTH_SHORT).show()
-            vibrator.vibrate(500)
-            distanceCheck = false
-        } else if(currentDistance > distance){
-            distanceCheck = true
-        }
-
-        // 상대방의 거리를 받아 더 커진다면?
-        if (distance >= maxDistance) {
-            // end queue에 메시지
-            Log.d(TAG, "initDataBinding: end game you lose ${getMessageForEndQueue()}")
-
-            if(isMulti) { // 게임 종료 보내기
-                RunningAMQPManager.sendEndGame(getMessageForEndQueue())
-            }
-
-
+    private fun successSharkData(distance : Int) {
+        binding.sbSharkProgress.progress = distance
+        // 상어한테 먹힘
+        if(collaborationDistance < distance){
+            RunningAMQPManager.sendEndGame(getMessageForEndQueue())
             navigate(RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
                 locationList.toTypedArray(),
                 RunningFinishModel(
@@ -346,6 +362,51 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
             ))
         }
+    }
+
+    private fun successRunningData(distance : Int){
+        Log.d(TAG, "initDataBinding: partner running : ${distance}")
+        userDistance = distance
+        if(isShark)  {
+            collaborationDistance = (currentDistance + distance) / 2
+        } else {
+            binding.sbMyProgress
+            binding.sbPartnerProgress.progress = distance
+            // 거리를 따라 잡혔으면 알람
+            if(currentDistance < distance && distanceCheck){
+                Snackbar.make(binding.tvRunningMode, "따라잡혔습니다!!", Snackbar.LENGTH_SHORT).show()
+                vibrator.vibrate(500)
+                distanceCheck = false
+            } else if(currentDistance > distance){
+                distanceCheck = true
+            }
+
+            // 상대방의 거리를 받아 더 커진다면?
+            if (distance >= maxDistance) {
+                // end queue에 메시지
+                Log.d(TAG, "initDataBinding: end game you lose ${getMessageForEndQueue()}")
+
+                if(isMulti) { // 게임 종료 보내기
+                    RunningAMQPManager.sendEndGame(getMessageForEndQueue())
+                }
+
+
+                navigate(RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
+                    locationList.toTypedArray(),
+                    RunningFinishModel(
+                        success = 0,
+                        velocity = kmPerHour,
+                        calorie = currentCalorie,
+                        height = printHeight,
+                        userId = args.myId,
+                        raceId = args.roomId,
+                        mode = args.gameType,
+                        time = time
+                    )
+                ))
+            }
+        }
+
     }
 
     override fun initDataBinding() {
@@ -593,7 +654,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     override fun onPause() {
         super.onPause()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
-        sensorManager.unregisterListener(this);
+        sensorManager.unregisterListener(this)
     }
 
     override fun onDestroyView() {
