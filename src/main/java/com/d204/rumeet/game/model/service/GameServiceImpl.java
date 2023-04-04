@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -115,6 +116,12 @@ public class GameServiceImpl implements GameService {
         } else { // friend.queue에 raceId 넣어주기
             Gson gson = new Gson();
             rabbitTemplate.convertAndSend("game.exchange", "friend", gson.toJson(raceId));
+            // mongoDB state = 1로 바꿔주기
+            mongoTemplate.updateMulti(
+                    Query.query(Criteria.where("raceId").is(raceId)),
+                    Update.update("state", 1),
+                    FriendRaceDto.class
+            );
         }
     }
 
@@ -124,6 +131,12 @@ public class GameServiceImpl implements GameService {
         int result = gameMapper.denyRace(raceId);
         if (result != 1) {
             throw new TerminatedRunningException();
+        } else { // 성공 : mongoDB state = -1로 변경
+            mongoTemplate.updateMulti(
+                    Query.query(Criteria.where("raceId").is(raceId)),
+                    Update.update("state", -1),
+                    FriendRaceDto.class
+            );
         }
     }
 
@@ -141,7 +154,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<FriendRaceInfoDto> getInvitationList(int userId) {
         List<FriendRaceDto> requests = mongoTemplate.find(
-                Query.query(Criteria.where("partnerId").is(userId)),
+                Query.query(Criteria.where("partnerId").is(userId).and("state").is(0)),
                 FriendRaceDto.class
         );
         List<FriendRaceInfoDto> list = new ArrayList<>();
