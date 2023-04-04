@@ -204,6 +204,7 @@ public class GameServiceImpl implements GameService {
         raceDto.setDate(System.currentTimeMillis());
         soloPlayDto.setDate(raceDto.getDate());
         int[] pace = new int[km[mode]];
+        Arrays.fill(pace,-1);
         if (ghost == 1) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder().url("http://119.202.203.157:8001/recommend/" + km[mode] + "/" + userId + "/1").get().build();
@@ -226,7 +227,7 @@ public class GameServiceImpl implements GameService {
             raceDto.setPartnerId(user.getId());
             soloPlayDto.setPartnerId(user.getId());
             pace = user.getPace();
-            if(pace == null) {
+            if(pace == null || pace.length == 0) {
                 pace = new int[km[mode]];
                 for (int i = 0; i < km[mode]; i++) {
                     pace[i] = 300;
@@ -244,8 +245,13 @@ public class GameServiceImpl implements GameService {
                     pace[i] = 300;
                 }
             }
-            soloPlayDto.setPace(pace);
         }
+        for (int i = 0; i < km[mode]; i++) {
+            if(pace[i]==-1) {
+                pace[i] = 300;
+            }
+        }
+        soloPlayDto.setPace(pace);
         gameMapper.makeRace(raceDto);
         soloPlayDto.setId(raceDto.getId());
         return soloPlayDto;
