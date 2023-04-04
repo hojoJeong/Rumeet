@@ -616,9 +616,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             // 고도 중지
             sensorManager.unregisterListener(this)
 
-            RunningAMQPManager.sendEndGame(getMessageForEndQueue())
-            Log.d(TAG, "stopRunning: ${getMessageForEndQueue()}")
-
+            if(isMulti) { // 멀티일 경우
+                RunningAMQPManager.sendEndGame(getMessageForEndQueue())
+                Log.d(TAG, "stopRunning: ${getMessageForEndQueue()}")
+            }
+            Log.d(TAG, "stopRunning: 게임 종료하고 이제 화면 넘어갑니다.")
             navigate(
                 RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
                     locationList = locationList.toTypedArray(),
