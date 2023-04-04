@@ -85,6 +85,11 @@
                 android:defaultValue="-1"
                 app:argType="integer" />
 
+            <argument
+                android:name="ghostType"
+                android:defaultValue="-1"
+                app:argType="integer" />
+
             <action
                 android:id="@+id/action_runningMatchingFragment_to_runningMatchingFailFragment"
                 app:destination="@id/runningMatchingFailFragment" />
@@ -162,6 +167,7 @@
                 android:name="partnerId"
                 android:defaultValue="-1"
                 app:argType="integer"/>
+
             <action
                 android:id="@+id/action_runningFragment_to_runningFinishFragment"
                 app:destination="@id/runningFinishFragment" />
@@ -169,11 +175,6 @@
         </fragment>
 
     </navigation>
-
-    <fragment
-        android:id="@+id/runningFragment"
-        android:name="com.d204.rumeet.ui.running.RunningFragment"
-        android:label="RunningFragment" />
 
     <navigation
         android:id="@+id/navigation_mypage"

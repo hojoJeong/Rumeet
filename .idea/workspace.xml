@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cdcbd2b9-6c53-42b5-8fe4-ba1c3b008495" name="Changes" comment="" />
+    <list default="true" id="221c7380-4838-47b5-8e25-0d6022d285f6" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,27 +16,26 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2NMCa84CSGSzVeJShz94F6IUHJm" />
+  <component name="ProjectId" id="2NtU1vAbvjgB6DGwzz8AtZnLHcC" />
   <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Rumeet" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="cdcbd2b9-6c53-42b5-8fe4-ba1c3b008495" name="Changes" comment="" />
-      <created>1679464626780</created>
+      <changelist id="221c7380-4838-47b5-8e25-0d6022d285f6" name="Changes" comment="" />
+      <created>1680482661157</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1679464626780</updated>
+      <updated>1680482661157</updated>
     </task>
     <servers />
   </component>
