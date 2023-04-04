@@ -34,6 +34,8 @@ class RunningMatchingFragment :
         }
     }
 
+
+
     override fun initDataBinding() {
         lifecycleScope.launchWhenStarted {
             launch {
