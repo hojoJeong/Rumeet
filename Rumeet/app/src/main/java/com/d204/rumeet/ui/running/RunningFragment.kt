@@ -40,6 +40,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -288,6 +290,19 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         altitudeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
         vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         initRunningMode()
+
+        // 고스트 모드일 경우 seekbar 자동으로 움직이게 하기
+        if(isGhost) {
+            setGhostSeekbar()
+        }
+    }
+
+    private fun setGhostSeekbar() {
+        CoroutineScope(Dispatchers.Main).launch {
+
+            binding.sbPartnerProgress
+        }
+
     }
 
     private fun successRunningData(distance : Int){
@@ -333,8 +348,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 viewModel.runningSideEffect.collectLatest {
                     when (it) {
                         is RunningSideEffect.SuccessSoloData -> {
-                            // solo 시작 API 결과 받아옴
-
+                            // 필요없는거임
                         }
 
                         is RunningSideEffect.SuccessRunning -> {
@@ -418,9 +432,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             launch {
                 viewModel
             }
-
-
-
         }
     }
 
@@ -434,7 +445,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 1000
                 checkCount = 1
-                "싱글 1km"
+                if(isGhost) "고스트 1km"
+                else "싱글 1km"
             }
             1 -> {
                 runningEndModel = RunningModel2pace(
@@ -443,7 +455,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 2000
                 checkCount = 2
-                "싱글 2km"
+                if(isGhost) "고스트 2km"
+                else "싱글 2km"
             }
             2 -> {
                 runningEndModel = RunningModel3pace(
@@ -452,7 +465,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 3000
                 checkCount = 3
-                "싱글 3km"
+                if(isGhost) "고스트 3km"
+                else "싱글 3km"
             }
             3 -> {
                 runningEndModel = RunningModel5pace(
@@ -461,7 +475,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 5000
                 checkCount = 4
-                "싱글 5km"
+                if(isGhost) "고스트 5km"
+                else "싱글 5km"
             }
             4 -> {
                 runningEndModel = RunningModel1pace(
@@ -616,9 +631,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             // 고도 중지
             sensorManager.unregisterListener(this)
 
-            RunningAMQPManager.sendEndGame(getMessageForEndQueue())
-            Log.d(TAG, "stopRunning: ${getMessageForEndQueue()}")
-
+            if(isMulti) { // 멀티일 경우
+                RunningAMQPManager.sendEndGame(getMessageForEndQueue())
+                Log.d(TAG, "stopRunning: ${getMessageForEndQueue()}")
+            }
+            Log.d(TAG, "stopRunning: 게임 종료하고 이제 화면 넘어갑니다.")
             navigate(
                 RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
                     locationList = locationList.toTypedArray(),
