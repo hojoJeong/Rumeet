@@ -41,9 +41,10 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
-private const val TAG = "RunningFragment"
+private const val TAG = "러밋_RunningFragment"
 
 @AndroidEntryPoint
 class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>(),
@@ -91,6 +92,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var testDistance = 300
 
     private lateinit var vibrator: Vibrator
+
+    private var isMulti = false
+    private var isGhost = false
 
     // 서비스 연결여부 콜백함수
     private val serviceConnection = object : ServiceConnection {
@@ -256,9 +260,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     // 상대방과 나의 profile 이미지로 seekbar의 thumb 이미지 변경
     override fun initStartView() {
-
         // Todo 싱글, 고스트 설정을 해줘야함
-        if(args.gameType >= 4){
+        if(args.gameType >= 4){ // multi
+            Log.d(TAG, "initStartView: @@@@@@@멀티모드 경기 시작")
+            isMulti = true
             viewModel.getUserInfo(args.myId)
             viewModel.getPartnerInfo(args.partnerId)
 
@@ -266,9 +271,18 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 sbMyProgress.visibility = View.VISIBLE
                 sbPartnerProgress.visibility = View.VISIBLE
                 sbSharkProgress.visibility = View.GONE
+                btnRunningPause.visibility = View.GONE
             }
         }
-
+        else if (args.partnerId != -1) isGhost = true // ghost는 partner id = -1
+        if(isGhost){ // 고스트 모드
+            Log.d(TAG, "initStartView: @@@@@@@고스트모드 경기 시작")
+            viewModel.getUserInfo(args.myId)
+            viewModel.getPartnerInfo(args.partnerId)
+        } else if (!isMulti){ // 싱글 모드
+            Log.d(TAG, "initStartView: @@@@@@@싱글모드 경기 시작")
+            viewModel.getUserInfo(args.myId)
+        }
         // 고도 센서 설정
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         altitudeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
@@ -315,85 +329,98 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            viewModel.runningSideEffect.collectLatest {
-                when (it) {
-                    is RunningSideEffect.SuccessRunning -> {
-                        // 경쟁할 때 rabbitMQ의 콜백으로 온 데이터 받음
-                        successRunningData(it.distance)
-                    }
+            launch {
+                viewModel.runningSideEffect.collectLatest {
+                    when (it) {
+                        is RunningSideEffect.SuccessSoloData -> {
+                            // solo 시작 API 결과 받아옴
 
-                    is RunningSideEffect.EndRunning -> {
-
-                    }
-
-                    is RunningSideEffect.SuccessPartnerInfo -> {
-                        // 파트너의 프로필을 seekbar의 thumb로 변경
-                        Glide.with(requireContext())
-                            .load(it.partnerInfo.profile)
-                            .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
-                            .circleCrop()
-                            .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
-                            .override(100,100)
-                            .into(object : CustomTarget<Drawable>(){
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    transition: Transition<in Drawable>?
-                                ) {
-                                    binding.sbPartnerProgress.thumb = resource
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {
-
-                                }
-                            })
-                    }
-
-                    is RunningSideEffect.SuccessUserInfo -> {
-                        // 나의 프로필 이미지를 seekbar의 thumb로 변경
-                        Glide.with(requireContext())
-                            .load(it.userInfo.profile)
-                            .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
-                            .circleCrop()
-                            .override(100,100)
-                            .into(object : CustomTarget<Drawable>(){
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    transition: Transition<in Drawable>?
-                                ) {
-                                    binding.sbMyProgress.thumb = resource // Thumb 이미지를 설정합니다.
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {
-
-                                }
-                            })
-
-                        // Todo 경쟁이면 해당 코드 실행
-                        if(args.gameType >= 4){
-                            viewModel.startRun(args.myId, args.roomId)
-                            Log.d("TAG", "SuccessUserInfo: start")
                         }
 
-                        // 사용자의 정보 생성(칼로리 받기 위함)
-                        gender = it.userInfo.gender
-                        age = it.userInfo.age
-                        weight = it.userInfo.weight.toFloat()
+                        is RunningSideEffect.SuccessRunning -> {
+                            // 경쟁할 때 rabbitMQ의 콜백으로 온 데이터 받음
+                            successRunningData(it.distance)
+                        }
 
-                        // 서비스 실행
-                        if (!bindState) {
-                            Log.d("bindState", "SuccessUserInfo: start")
-                            val testIntent = Intent(activity, RunningService::class.java)
-                            requireActivity().bindService(
-                                testIntent,
-                                serviceConnection,
-                                Context.BIND_AUTO_CREATE
-                            )
-                        } else {
-                            Log.d("bindState", "initDataBinding: already start")
+                        is RunningSideEffect.EndRunning -> {
+
+                        }
+
+                        is RunningSideEffect.SuccessPartnerInfo -> {
+                            // 파트너의 프로필을 seekbar의 thumb로 변경
+                            Glide.with(requireContext())
+                                .load(it.partnerInfo.profile)
+                                .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
+                                .circleCrop()
+                                .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
+                                .override(100,100)
+                                .into(object : CustomTarget<Drawable>(){
+                                    override fun onResourceReady(
+                                        resource: Drawable,
+                                        transition: Transition<in Drawable>?
+                                    ) {
+                                        binding.sbPartnerProgress.thumb = resource
+                                    }
+
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                                    }
+                                })
+                        }
+
+                        is RunningSideEffect.SuccessUserInfo -> {
+                            // 나의 프로필 이미지를 seekbar의 thumb로 변경
+                            Glide.with(requireContext())
+                                .load(it.userInfo.profile)
+                                .apply(RequestOptions().transform(CenterCrop(), RoundedCorners(999)))
+                                .circleCrop()
+                                .override(100,100)
+                                .into(object : CustomTarget<Drawable>(){
+                                    override fun onResourceReady(
+                                        resource: Drawable,
+                                        transition: Transition<in Drawable>?
+                                    ) {
+                                        binding.sbMyProgress.thumb = resource // Thumb 이미지를 설정합니다.
+                                    }
+
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                                    }
+                                })
+
+                            // Todo 경쟁이면 해당 코드 실행
+                            if(args.gameType >= 4){
+                                viewModel.startRun(args.myId, args.roomId)
+                                Log.d("TAG", "SuccessUserInfo: start")
+                            }
+
+                            // 사용자의 정보 생성(칼로리 받기 위함)
+                            gender = it.userInfo.gender
+                            age = it.userInfo.age
+                            weight = it.userInfo.weight.toFloat()
+
+                            // 서비스 실행
+                            if (!bindState) {
+                                Log.d("bindState", "SuccessUserInfo: start")
+                                val testIntent = Intent(activity, RunningService::class.java)
+                                requireActivity().bindService(
+                                    testIntent,
+                                    serviceConnection,
+                                    Context.BIND_AUTO_CREATE
+                                )
+                            } else {
+                                Log.d("bindState", "initDataBinding: already start")
+                            }
                         }
                     }
                 }
             }
+            launch {
+                viewModel
+            }
+
+
+
         }
     }
 
@@ -512,8 +539,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         }
     }
 
-    /** 타이머 실행 밑 버튼 이벤트, SeekBar의 이벤트 막기 */
+    /** 타이머 실행 및 버튼 이벤트, SeekBar의 이벤트 막기 */
     override fun initAfterBinding() {
+
         handler.postDelayed(timer, 1000)
         binding.btnRunningPause.setOnClickListener {
             pauseRunning()
