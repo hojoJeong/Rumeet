@@ -23,6 +23,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding, Notificat
     }
 
     override fun initAfterBinding() {
+
     }
 
     private fun initView(){

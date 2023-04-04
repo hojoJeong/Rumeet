@@ -1,5 +1,6 @@
 package com.d204.rumeet.data.repository
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import com.d204.rumeet.data.remote.api.RunningApiService
 import com.d204.rumeet.data.remote.api.handleApi
@@ -33,5 +34,15 @@ internal class RunningRepositoryImpl @Inject constructor(
             Log.e("record error", "recordRunning: ${e.message}", )
         }
         return NetworkResult.Success(null)
+    }
+
+    override suspend fun acceptRunningRequest(raceId: Int): Boolean {
+        val response =  runningApiService.acceptRunningRequest(raceId).flag == "success"
+        Log.d(TAG, "acceptRunningRequest: $response")
+        return response
+    }
+
+    override suspend fun denyRunningRequest(raceId: Int): Boolean {
+        return runningApiService.denyRunningRequest(raceId).flag == "success"
     }
 }

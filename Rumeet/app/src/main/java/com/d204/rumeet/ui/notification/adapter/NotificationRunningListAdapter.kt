@@ -10,18 +10,26 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.ItemNotificationBinding
 import com.d204.rumeet.domain.model.user.RunningRequestDomainModel
 import com.d204.rumeet.ui.mypage.model.BadgeContentListUiModel
+import com.d204.rumeet.ui.notification.NotificationHandler
 import com.d204.rumeet.ui.notification.model.NotificationRunningUiModel
 import com.d204.rumeet.util.toDate
 import com.d204.rumeet.util.toMode
 
 class NotificationRunningListAdapter: ListAdapter<RunningRequestDomainModel, NotificationRunningListAdapter.NotificationRunningItemHolder>(NotificationListDiffUtil) {
-    class NotificationRunningItemHolder(private val binding: ItemNotificationBinding) :
+    lateinit var handler: NotificationHandler
+    inner class NotificationRunningItemHolder(private val binding: ItemNotificationBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: RunningRequestDomainModel) {
             binding.tvItemNotificationPace.text = item.date.toDate()
             val mode = item.mode.toMode()
             binding.tvItemNotificationMode.text = mode.substring(0, 2)
             binding.tvItemNotificationOption.text = mode.substring(3)
+            binding.btnItemNotificationAccept.setOnClickListener {
+                handler.onClickRunning(item.raceId, true)
+            }
+            binding.btnItemNotificationReject.setOnClickListener {
+                handler.onClickRunning(item.raceId, false)
+            }
         }
     }
 

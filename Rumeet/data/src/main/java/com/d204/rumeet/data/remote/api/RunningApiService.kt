@@ -18,4 +18,10 @@ internal interface RunningApiService {
     suspend fun putRace(
         @Body request : RunningInfoRequestDto
     ) : BaseResponse<Unit?>
+
+    @POST("game/{raceId}/accept")
+    suspend fun acceptRunningRequest(@Path("raceId") raceId: Int): BaseResponse<Unit>
+
+    @POST("game/{raceId}/deny")
+    suspend fun denyRunningRequest(@Path("raceId") raceId: Int) : BaseResponse<Unit>
 }

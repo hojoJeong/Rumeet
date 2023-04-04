@@ -1,6 +1,7 @@
 package com.d204.rumeet.ui.notification
 
-import android.app.Notification
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -8,9 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentNotificationContainerBinding
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.successOrNull
-import com.d204.rumeet.ui.notification.adapter.NotificationContainerAdapter
 import com.d204.rumeet.ui.notification.adapter.NotificationFriendListAdapter
 import com.d204.rumeet.ui.notification.adapter.NotificationRunningListAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +35,23 @@ class NotificationContainerFragment(private val viewInfo: String) :
     }
 
     private fun initView() {
+        lifecycleScope.launchWhenResumed {
+            viewModel.notificationAction.collect { action ->
+                when (action) {
+                    is NotificationAction.AcceptFriendRequest -> {}
+                    is NotificationAction.AcceptRunningRequest -> {
+                        Log.d(TAG, "initView: accept ${action.raceId}")
+                    }
+                    is NotificationAction.DenyFriendRequest -> {}
+                    is NotificationAction.DenyRunningRequest -> {
+                        Log.d(TAG, "initView: deny ${action.raceId}")
+                    }
+                    is NotificationAction.FriendRequest -> {}
+                    is NotificationAction.RunningRequest -> {}
+                }
+
+            }
+        }
         binding.rvNotification.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
@@ -54,9 +70,23 @@ class NotificationContainerFragment(private val viewInfo: String) :
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.runningRequestList.collect {
-                    binding.contentNotificationNoResult.tvContentNoResultMessage.visibility = View.GONE
+                    binding.contentNotificationNoResult.tvContentNoResultMessage.visibility =
+                        View.GONE
                     val runningAdapter = NotificationRunningListAdapter().apply {
                         submitList(it.successOrNull())
+                        handler = object : NotificationHandler {
+                            override fun onClickFriend(friendId: Int, myId: Int, accept: Boolean) {
+                            }
+
+                            override fun onClickRunning(raceId: Int, accept: Boolean) {
+                                if (accept) {
+                                    viewModel.acceptRequestRunning(raceId)
+                                } else {
+                                    viewModel.denyRequestRunning(raceId)
+                                }
+                            }
+
+                        }
                     }
                     binding.rvNotification.adapter = runningAdapter
                 }
@@ -67,18 +97,23 @@ class NotificationContainerFragment(private val viewInfo: String) :
     private fun initFriendRequestView() {
         lifecycleScope.launchWhenStarted {
             launch {
-                viewModel.friendRequestList.collect{
-                    binding.contentNotificationNoResult.tvContentNoResultMessage.visibility = View.GONE
+                viewModel.friendRequestList.collect {
+                    binding.contentNotificationNoResult.tvContentNoResultMessage.visibility =
+                        View.GONE
                     val friendAdapter = NotificationFriendListAdapter().apply {
                         submitList(it.successOrNull())
-                        notificationHandler = object : NotificationHandler{
-                            override fun onClick(friendId: Int, myId: Int, accept: Boolean) {
-                                if(accept){
+                        notificationHandler = object : NotificationHandler {
+                            override fun onClickFriend(friendId: Int, myId: Int, accept: Boolean) {
+                                if (accept) {
                                     viewModel.acceptRequestFriend(friendId, myId)
                                 } else {
-                                    viewModel.rejectRequestFriend(friendId, myId)
+                                    viewModel.denyRequestFriend(friendId, myId)
                                 }
                                 viewModel.getNotificationList()
+                            }
+
+                            override fun onClickRunning(raceId: Int, accept: Boolean) {
+
                             }
                         }
                     }
