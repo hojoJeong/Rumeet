@@ -92,6 +92,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     private lateinit var vibrator: Vibrator
 
+    private var isMulti = false
+    private var isGhost = false
+
     // 서비스 연결여부 콜백함수
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -256,9 +259,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     // 상대방과 나의 profile 이미지로 seekbar의 thumb 이미지 변경
     override fun initStartView() {
-
         // Todo 싱글, 고스트 설정을 해줘야함
-        if(args.gameType >= 4){
+        if(args.gameType >= 4){ // multi
+            isMulti = true
             viewModel.getUserInfo(args.myId)
             viewModel.getPartnerInfo(args.partnerId)
 
@@ -267,6 +270,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 sbPartnerProgress.visibility = View.VISIBLE
                 sbSharkProgress.visibility = View.GONE
             }
+        }
+        else if (args.partnerId == -1) isGhost = true // ghost는 partner id = -1
+        if(isGhost){ // 고스트 모드
+            viewModel.getUserInfo(args.myId)
+            viewModel.getPartnerInfo(args.partnerId)
+        } else if (!isMulti){ // 싱글 모드
+            viewModel.getUserInfo(args.myId)
         }
 
         // 고도 센서 설정
@@ -394,6 +404,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     }
                 }
             }
+
+
         }
     }
 
