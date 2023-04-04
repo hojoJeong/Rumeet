@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.running.option
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager.widget.ViewPager
@@ -9,6 +10,7 @@ import com.d204.rumeet.databinding.FragmentRunningOptionBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.ui.running.option.adapter.RunningOptionViewPagerAdapter
+import com.d204.rumeet.ui.running.option.model.RunningDetailType
 import com.d204.rumeet.ui.running.option.model.RunningDistance
 import com.d204.rumeet.ui.running.option.model.RunningType
 import com.d204.rumeet.ui.running.option.multi.RunningOptionCompetitionOrGhostFragment
@@ -50,11 +52,22 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
             if (viewModel.runningTypeModel.runningType == RunningType.SINGLE) {
 
             } else {
-                navigate(
-                    RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
-                        gameType = getRunningType()
+                if (viewModel.runningTypeModel.runningDetailType == RunningDetailType.FRIEND) {
+                    Log.d("TAG", "initAfterBinding: 친구 모드")
+                    navigate(
+                        RunningOptionFragmentDirections.actionRunningOptionFragmentToSelectFriendFragment(
+                            gameType = getRunningType()
+                        )
                     )
-                )
+                } else {
+                    Log.d("TAG", "initAfterBinding: 랜덤 모드")
+                    navigate(
+                        RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
+                            withFriend = false, gameType = getRunningType()
+                        )
+                    )
+                }
+
             }
         }
     }

@@ -13,4 +13,5 @@ sealed class FriendListAction {
     object NavigateAddFriend : FriendListAction()
     object SuccessSearchFriend : FriendListAction()
     class CreateChatting(val friendId: Int, val roomInfo: ChattingCreateModel): FriendListAction()
+    object StartRunningOption: FriendListAction()
 }

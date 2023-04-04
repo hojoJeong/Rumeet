@@ -5,9 +5,11 @@ import android.util.Log
 import com.d204.rumeet.data.remote.api.RunningApiService
 import com.d204.rumeet.data.remote.api.handleApi
 import com.d204.rumeet.data.remote.dto.request.running.RunningInfoRequestDto
+import com.d204.rumeet.data.remote.dto.request.running.RunningMatchingWithFriendRequestDto
 import com.d204.rumeet.data.util.getPolylineMultipartData
 import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.repository.RunningRepository
+import com.d204.rumeet.domain.toDomainResult
 import java.io.File
 import javax.inject.Inject
 
@@ -22,10 +24,10 @@ internal class RunningRepositoryImpl @Inject constructor(
         time: Int,
         heartRate: Int,
         success: Int,
-        polyline: String
-    ) : NetworkResult<Unit?> {
+        polyline: String?
+    ): NetworkResult<Unit?> {
         try {
-            val request = RunningInfoRequestDto(userId, raceId, mode, velocity.toDouble(), time, heartRate, success, polyline)
+            val request = RunningInfoRequestDto(userId, raceId, mode, velocity.toDouble(), time, heartRate, success, polyline?:"")
 
             val response1 = runningApiService.putRace(request)
             val response2 = runningApiService.recordRace(request)
@@ -43,5 +45,17 @@ internal class RunningRepositoryImpl @Inject constructor(
 
     override suspend fun denyRunningRequest(raceId: Int): Boolean {
         return runningApiService.denyRunningRequest(raceId).flag == "success"
+    }
+
+    override suspend fun inviteRunning(
+        userId: Int,
+        partnerId: Int,
+        mode: Int,
+        date: Long
+    ): NetworkResult<Int> {
+        val request = RunningMatchingWithFriendRequestDto(date = date, mode = mode, partnerId = partnerId, userId = userId)
+        val response = handleApi { runningApiService.inviteRunning(request) }.toDomainResult<Int, Int> { it }
+        Log.d(TAG, "inviteRunning: $response")
+        return response
     }
 }

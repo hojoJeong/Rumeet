@@ -5,6 +5,12 @@
         <variable
             name="data"
             type="com.d204.rumeet.domain.model.friend.FriendRecommendDomainModel" />
+        <variable
+            name="select_url"
+            type="String" />
+        <variable
+            name="select_name"
+            type="String" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -19,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:src="@drawable/ic_launcher_background"
-            app:setImageByGlide="@{data.profile}"/>
+            app:setImageByGlide="@{data.profile ?? select_url}"/>
 
         <TextView
             android:id="@+id/tv_item_content_recommend_friend_name"
@@ -29,7 +35,7 @@
             app:layout_constraintTop_toTopOf="@+id/iv_item_content_recommend_friend_profile"
             app:layout_constraintBottom_toBottomOf="@id/iv_item_content_recommend_friend_profile"
             tools:text="닉네임"
-            android:text="@{data.nickname}"
+            android:text="@{data.nickname ?? select_name}"
             android:ellipsize="end"
             style="@style/base_font_bold_14_black"
             android:layout_marginStart="16dp"/>

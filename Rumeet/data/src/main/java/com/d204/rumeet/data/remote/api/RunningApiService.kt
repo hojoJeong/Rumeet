@@ -1,6 +1,7 @@
 package com.d204.rumeet.data.remote.api
 
 import com.d204.rumeet.data.remote.dto.request.running.RunningInfoRequestDto
+import com.d204.rumeet.data.remote.dto.request.running.RunningMatchingWithFriendRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.SocialJoinRequestDto
 import com.d204.rumeet.data.remote.dto.response.BaseResponse
 import okhttp3.MultipartBody
@@ -23,4 +24,7 @@ internal interface RunningApiService {
 
     @POST("game/{raceId}/deny")
     suspend fun denyRunningRequest(@Path("raceId") raceId: Int) : BaseResponse<Unit>
+
+    @POST("game/invite")
+    suspend fun inviteRunning(@Body info: RunningMatchingWithFriendRequestDto): BaseResponse<Int>
 }

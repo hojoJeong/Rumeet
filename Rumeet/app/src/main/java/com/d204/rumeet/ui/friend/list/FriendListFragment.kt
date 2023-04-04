@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.friend.list
 
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
@@ -63,6 +64,8 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
                             val response = it.roomInfo
                             navigate(FriendListFragmentDirections.actionFriendListFragmentToChattingFragment(response.profile, response.roomId, response.noReadCnt, it.friendId))
                         }
+                        is FriendListAction.StartRunningOption -> {
+                        }
                     }
                 }
             }
@@ -85,7 +88,12 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
                 //Todo navigate chatting...
                 viewModel.createChatting(friendId)
             }
+            addOkBtnClickListener {
+                viewModel.startRunningOption()
+                Log.d("TAG", "showFriendInfoDialog: ")
+            }
         }
+
         dialog.show(childFragmentManager, dialog.tag)
     }
 
@@ -104,5 +112,4 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
             handle
         }
     }
-
 }

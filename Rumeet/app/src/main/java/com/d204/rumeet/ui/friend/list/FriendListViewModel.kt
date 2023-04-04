@@ -103,6 +103,11 @@ class FriendListViewModel @Inject constructor(
         }
     }
 
+    fun startRunningOption(){
+        baseViewModelScope.launch {
+             _friendListAction.emit(FriendListAction.StartRunningOption)
+        }
+    }
     fun createChatting( friendId: Int){
         baseViewModelScope.launch {
             showLoading()

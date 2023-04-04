@@ -55,6 +55,15 @@ object RunningAMQPManager {
             }
         }
     }
+    fun subscribeFriendMatching(userId: Int, callback: DefaultConsumer){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                runningChannel?.basicConsume("friend.user.${userId}", true, callback)
+            } catch (e: Exception) {
+                Log.e(TAG, "subscribeMatching: ${e.message}")
+            }
+        }
+    }
 
     // 게임 시작, 보내기
     fun sendRunning(partnerId: Int, roomId: Int, message: String) {

@@ -50,6 +50,23 @@
             <action
                 android:id="@+id/action_runningOptionFragment_to_runningLoadingFragment"
                 app:destination="@id/runningLoadingFragment" />
+            <action
+                android:id="@+id/action_runningOptionFragment_to_selectFriendFragment"
+                app:destination="@id/selectFriendFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/selectFriendFragment"
+            android:name="com.d204.rumeet.ui.running.option.SelectFriendFragment"
+            android:label="SelectFriendFragment" >
+            <argument
+                android:name="gameType"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+
+            <action
+                android:id="@+id/action_selectFriendFragment_to_runningMatchingFragment"
+                app:destination="@id/runningMatchingFragment" />
         </fragment>
 
         <fragment
@@ -84,6 +101,10 @@
                 android:name="gameType"
                 android:defaultValue="-1"
                 app:argType="integer" />
+            <argument
+                android:name="withFriend"
+                android:defaultValue="false"
+                app:argType="boolean"/>
 
             <action
                 android:id="@+id/action_runningMatchingFragment_to_runningMatchingFailFragment"
@@ -364,5 +385,6 @@
             android:id="@+id/action_chattingListFragment_to_chattingFragment"
             app:destination="@id/chattingFragment" />
     </fragment>
+
 
 </navigation>

@@ -86,9 +86,9 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
                 polyline += it.latitude
                 polyline += ","
                 polyline += it.longitude
-                polyline += "%7C"
+                polyline += "|"
             }
-            polyline.removeSuffix("%7C")
+            polyline=polyline.removeSuffix("|")
             val client = OkHttpClient()
             val url = HttpUrl.Builder()
                 .scheme("http")

@@ -1,8 +1,7 @@
 package com.d204.rumeet.ui.running.matching
 
-import android.os.CountDownTimer
 import android.util.Log
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
@@ -18,11 +17,16 @@ class RunningMatchingFragment :
     override val layoutResourceId: Int
         get() = R.layout.fragment_running_matching
 
-    override val viewModel: RunningMatchingViewModel by viewModels()
+    override val viewModel: RunningMatchingViewModel by activityViewModels<RunningMatchingViewModel>()
     private val args by navArgs<RunningMatchingFragmentArgs>()
 
     override fun initStartView() {
-        viewModel.startMatching(args.gameType)
+        Log.d(TAG, "initStartView: runningMAtchingFragment withfriend: ${args.withFriend}")
+        if(args.withFriend){
+            viewModel.startWithFriendMatching(args.gameType)
+        } else {
+            viewModel.startRandomMatching(args.gameType)
+        }
     }
 
     override fun initDataBinding() {

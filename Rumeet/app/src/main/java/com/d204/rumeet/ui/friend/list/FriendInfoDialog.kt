@@ -1,5 +1,7 @@
 package com.d204.rumeet.ui.friend.list
 
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.util.Log
 import android.view.View
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.DialogFriendInfoBinding
@@ -18,6 +20,7 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
         get() = R.layout.dialog_friend_info
 
     private lateinit var chattingClickListener: (Int) -> Unit
+    private lateinit var okBtnClickListerner: () -> Unit
     private lateinit var userDialogInfo: UserDialogModel
     lateinit var viewInfo: String
     lateinit var friendInfo: FriendInfoDomainModel
@@ -41,16 +44,23 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
                 tvTime.text = userDialogInfo.totalTime
                 tvPace.text = userDialogInfo.pace
             }
-            binding.btnOkay.setContent("확인")
+            binding.btnOkay.setContent("러닝 신청")
             binding.btnChatting.setOnClickListener {
                 chattingClickListener.invoke(userDialogInfo.id)
                 dismissAllowingStateLoss()
             }
-            binding.btnOkay.setOnClickListener {
+            binding.btnOkay.addClickListener {
+                Log.d("TAG", "initAfterBinding: ")
+                okBtnClickListerner.invoke()
                 dismissAllowingStateLoss()
             }
         }
 
+    }
+
+    fun addOkBtnClickListener(event: () -> Unit){
+        Log.d("TAG", "addOkBtnClickListener: ")
+        okBtnClickListerner = event
     }
 
     fun addChattingButtonClickListener(event: (Int) -> Unit) {
