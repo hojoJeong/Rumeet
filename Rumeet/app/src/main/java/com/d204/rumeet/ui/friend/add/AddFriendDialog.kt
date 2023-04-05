@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.friend.add
 
+import android.view.View
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.DialogFriendAddBinding
 import com.d204.rumeet.ui.base.BaseDialogFragment
@@ -23,8 +24,14 @@ class AddFriendDialog : BaseDialogFragment<DialogFriendAddBinding>(R.layout.dial
     }
 
     override fun initAfterBinding() {
+        binding.contentUserInfo.tvBestRecord.text = "누적 기록"
+        binding.contentUserInfo.tvAveragePace.visibility = View.GONE
+        binding.contentUserInfo.tvCalorieTitle.visibility = View.GONE
         with(binding.contentUserInfo) {
             userDialogModel = userData
+            tvDistance.text = userData.totalKm
+            tvTime.text = userData.totalTime
+            tvPace.text = userData.pace
         }
         binding.btnCancel.setOnClickListener {
             dismissAllowingStateLoss()

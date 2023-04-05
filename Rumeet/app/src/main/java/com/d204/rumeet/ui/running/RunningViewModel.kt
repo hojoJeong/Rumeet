@@ -1,13 +1,16 @@
 package com.d204.rumeet.ui.running
 
 import android.util.Log
+import com.d204.rumeet.domain.model.user.UserInfoDomainModel
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.repository.RunningRepository
+import com.d204.rumeet.domain.usecase.running.AcceptRunningRequestUseCase
 import com.d204.rumeet.domain.usecase.running.RecordRunningUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserInfoUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.running.option.model.*
 import com.d204.rumeet.util.amqp.RunningAMQPManager
 import com.rabbitmq.client.AMQP
@@ -24,6 +27,7 @@ class RunningViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val recordRunningUseCase: RecordRunningUseCase,
+    private val acceptRunningRequestUseCase: AcceptRunningRequestUseCase,
     private val runningRepository: RunningRepository
 ) : BaseViewModel() {
 
@@ -33,6 +37,9 @@ class RunningViewModel @Inject constructor(
 
     private val _runningRecordState : MutableStateFlow<Boolean> = MutableStateFlow(false)
     val runningRecordState : StateFlow<Boolean> get() = _runningRecordState.asStateFlow()
+
+    private val _acceptRunningRequestResult: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val acceptRunningRequestResult: StateFlow<Boolean> get() = _acceptRunningRequestResult.asStateFlow()
 
     private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
     val userId: StateFlow<Int> get() = _userId.asStateFlow()
@@ -144,5 +151,13 @@ class RunningViewModel @Inject constructor(
     }
     fun getRunningDifficulty() : RunningDifficulty {
         return runningTypeModel.runningDifficulty
+    }
+
+    fun acceptRunningRequest(raceId: Int){
+        baseViewModelScope.launch {
+            if(acceptRunningRequestUseCase.invoke(raceId)){
+                _acceptRunningRequestResult.value = true
+            }
+        }
     }
 }

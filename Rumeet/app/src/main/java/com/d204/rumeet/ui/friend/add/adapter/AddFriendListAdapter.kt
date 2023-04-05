@@ -36,7 +36,7 @@ class AddFriendListAdapter(
 
     private object AddFriendListDiffUtil : DiffUtil.ItemCallback<UserListUiModel>(){
         override fun areItemsTheSame(oldItem: UserListUiModel, newItem: UserListUiModel): Boolean {
-            return oldItem.userId == newItem.userId
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(

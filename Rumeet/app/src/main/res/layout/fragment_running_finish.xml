@@ -16,20 +16,50 @@
             style="@style/base_font_bold_32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/base_horizontal_margin"
+            android:layout_marginTop="28dp"
             android:textColor="@color/black"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_result"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="승리" />
+
+        <ImageView
+            android:id="@+id/iv_result"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_win"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_result"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tv_result"
+            app:layout_constraintTop_toTopOf="@+id/tv_result" />
+
 
         <TextView
             android:id="@+id/tv_running_time"
             style="@style/base_font_medium_12_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_result"
-            app:layout_constraintStart_toEndOf="@id/tv_result" />
+            android:layout_marginTop="18dp"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_result" />
+
+        <TextView
+            android:id="@+id/tv_running_time_title"
+            style="@style/base_font_medium_12_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="총 달린시간"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/tv_running_time"
+            app:layout_constraintStart_toStartOf="@+id/tv_running_time"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_time" />
 
         <ImageView
             android:id="@+id/iv_map"
@@ -38,7 +68,7 @@
             android:layout_margin="@dimen/base_horizontal_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_result" />
+            app:layout_constraintTop_toBottomOf="@id/tv_running_time_title" />
 
         <LinearLayout
             android:id="@+id/ly_speed"

@@ -2,6 +2,7 @@ package com.d204.rumeet.ui.running.matching
 
 import android.os.CountDownTimer
 import android.util.Log
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -9,10 +10,13 @@ import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningMatchingBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.successOrNull
+import com.d204.rumeet.ui.running.RunningViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 @AndroidEntryPoint
@@ -21,17 +25,32 @@ class RunningMatchingFragment :
     override val layoutResourceId: Int
         get() = R.layout.fragment_running_matching
 
-    override val viewModel: RunningMatchingViewModel by viewModels()
+    override val viewModel: RunningMatchingViewModel by activityViewModels<RunningMatchingViewModel>()
+    private val runningViewModel by viewModels<RunningViewModel>()
+
     private val args by navArgs<RunningMatchingFragmentArgs>()
 
     override fun initStartView() {
+        Log.d(TAG, "initStartView: runningMAtchingFragment withfriend: ${args.withFriend}")
         binding.lifecycleOwner = viewLifecycleOwner
-        Log.d(TAG, "initStartView: @@@@@@@@@@@@@@@@@고스트 타입"+args.ghostType)
-        if (args.ghostType != -1) { // 고스트 모드 분기 (내 고스트:1, 랜덤 고스트 : 2)
-            Log.d(TAG, "initStartView: 고스트 모드임!! (1:나, 2:랜덤) : ${args.ghostType}")
-            viewModel.startGhost(args.gameType, args.ghostType)
-        } else { // 매칭인 경우
-            viewModel.startMatching(args.gameType)
+
+        /** 초대 받은 사람인 경우 */
+        if (args.invitedFromFriend) {
+            Log.d(TAG, "initStartView: 초대 받은 사람")
+            Log.d(TAG, "initStartView: ${args.gameType}, ${args.roomId}")
+            viewModel.subscribeFriendQueue(args.roomId, args.myId)
+            runningViewModel.acceptRunningRequest(raceId = args.roomId)
+        } else {
+            if (args.withFriend) {
+                /** 초대 한 사람인 경우 */
+                viewModel.startFriendModeMatching(args.gameType)
+            } else if (args.ghostType != -1) { // 고스트 모드 분기 (내 고스트:1, 랜덤 고스트 : 2)
+                Log.d(TAG, "initStartView: 고스트 모드임!! (1:나, 2:랜덤) : ${args.ghostType}")
+                viewModel.startGhost(args.gameType, args.ghostType)
+            } else {
+                /** 랜덤 매칭 */
+                viewModel.startRandomMatching(args.gameType)
+            }
         }
     }
 
@@ -87,4 +106,4 @@ class RunningMatchingFragment :
     }
 }
 
-private const val TAG = "러밋_RunningMatchingFragment"
+private const val TAG = "RunningMatchingFragment"

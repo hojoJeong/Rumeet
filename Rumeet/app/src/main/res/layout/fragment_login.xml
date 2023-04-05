@@ -146,39 +146,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ly_naver_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="11dp"
-                    android:background="@drawable/bg_rect_transparent_kelly_green_round8_stroke0"
-                    android:paddingVertical="14dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ly_kakao_login">
-
-                    <ImageView
-                        android:id="@+id/iv_naver_login"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="27dp"
-                        android:src="@drawable/ic_naver_logo"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_naver_login"
-                        style="@style/base_font_bold_16_white"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/content_naver_login"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/ly_join"
@@ -188,7 +155,7 @@
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ly_naver_login">
+                    app:layout_constraintTop_toBottomOf="@id/ly_kakao_login">
 
 
                     <TextView

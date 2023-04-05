@@ -72,6 +72,7 @@ class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, MyPageViewModel
 
             Log.d(TAG, "initRecentBadge: $recentBadge")
             binding.recent = recentBadge
+            Log.d(TAG, "initRecentBadge binding recent: ${binding.recent}")
         }
     }
 

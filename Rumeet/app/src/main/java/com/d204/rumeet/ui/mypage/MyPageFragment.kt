@@ -1,15 +1,18 @@
 package com.d204.rumeet.ui.mypage
 
 import android.app.DatePickerDialog
+import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.d204.rumeet.NavigationMypageArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentMyPageBinding
 import com.d204.rumeet.ui.base.*
@@ -23,7 +26,14 @@ import kotlinx.coroutines.launch
 class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     override val layoutResourceId: Int = R.layout.fragment_my_page
     override val viewModel: MyPageViewModel by navGraphViewModels(R.id.navigation_mypage) { defaultViewModelProviderFactory }
+    private val args by navArgs<NavigationMypageArgs>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if(args.destination == "badge"){
+            navigate(MyPageFragmentDirections.actionMyPageFragmentToBadgeListFragment())
+        }
+    }
     override fun initStartView() {
         with(binding) {
             vm = viewModel
@@ -31,6 +41,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         }
         exception = viewModel.errorEvent
         initMenu()
+
+
     }
 
     override fun initDataBinding() {
@@ -39,6 +51,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         lifecycleScope.launchWhenResumed {
             launch {
                 viewModel.userId.collect {
+
                     viewModel.getUserInfo()
                 }
             }
