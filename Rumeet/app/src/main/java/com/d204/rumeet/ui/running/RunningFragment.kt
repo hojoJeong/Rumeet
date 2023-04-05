@@ -231,6 +231,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 if(args.pace[sequence]==sec) {
                     sequence++
                 }
+                if(!::ghostPace.isInitialized){
+                    ghostPace = IntArray(args.pace.size)
+                    binding.sbPartnerProgress.visibility = View.VISIBLE
+                    for(i in ghostPace.indices) {
+                        ghostPace[i] = Math.round((1000.0/args.pace[i])).toInt()// 1 더주는 이유는 올림 처리
+                    }
+                }
                 ghostDistance += ghostPace[sequence]
                 Log.d(TAG, "run: ghostDistance = ${ghostDistance}")
                 successRunningData(ghostDistance)
@@ -306,6 +313,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     // 상대방과 나의 profile 이미지로 seekbar의 thumb 이미지 변경
     override fun initStartView() {
         // Todo 싱글, 고스트 설정을 해줘야함
+        Log.d(TAG, "initStartView: ${args.partnerId}")
         viewModel.getUserInfo(args.myId)
 
         if(args.gameType >= 4){ // multi
@@ -354,7 +362,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private fun successSharkData(distance : Int) {
         binding.sbSharkProgress.progress = distance
         // 상어한테 먹힘
-        if(collaborationDistance < distance){
+        if(collaborationDistance < distance) {
             RunningAMQPManager.sendEndGame(getMessageForEndQueue())
             navigate(RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
                 locationList.toTypedArray(),
@@ -559,7 +567,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "경쟁 1km"
             }
@@ -618,78 +626,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 "협동 3km"
             }
             11 -> {
-                runningEndModel = RunningModel5pace(
-                    user_id = args.myId,
-                    race_id = args.roomId
-                )
-                maxDistance = 5000
-                checkCount = 4
-                "협동 5km"
-            }
-            12 -> {
-                runningEndModel = RunningModel1pace(
-                    user_id = args.myId,
-                    race_id = args.roomId
-                )
-                maxDistance = 1000
-                checkCount = 1
-                "협동 1km"
-            }
-            13 -> {
-                runningEndModel = RunningModel2pace(
-                    user_id = args.myId,
-                    race_id = args.roomId
-                )
-                maxDistance = 2000
-                checkCount = 2
-                "협동 2km"
-            }
-            14 -> {
-                runningEndModel = RunningModel3pace(
-                    user_id = args.myId,
-                    race_id = args.roomId
-                )
-                maxDistance = 3000
-                checkCount = 3
-                "협동 3km"
-            }
-            15 -> {
-                runningEndModel = RunningModel5pace(
-                    user_id = args.myId,
-                    race_id = args.roomId
-                )
-                maxDistance = 5000
-                checkCount = 4
-                "협동 5km"
-            }
-            16 -> {
-                runningEndModel = RunningModel1pace(
-                    user_id = args.myId,
-                    race_id = args.roomId
-                )
-                maxDistance = 1000
-                checkCount = 1
-                "협동 1km"
-            }
-            17 -> {
-                runningEndModel = RunningModel2pace(
-                    user_id = args.myId,
-                    race_id = args.roomId
-                )
-                maxDistance = 2000
-                checkCount = 2
-                "협동 2km"
-            }
-            18 -> {
-                runningEndModel = RunningModel3pace(
-                    user_id = args.myId,
-                    race_id = args.roomId
-                )
-                maxDistance = 3000
-                checkCount = 3
-                "협동 3km"
-            }
-            19 -> {
                 runningEndModel = RunningModel5pace(
                     user_id = args.myId,
                     race_id = args.roomId
