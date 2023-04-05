@@ -230,12 +230,23 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 if(args.pace[sequence]==sec) {
                     sequence++
                 }
+                if(!::ghostPace.isInitialized){
+                    ghostPace = IntArray(args.pace.size)
+                    binding.sbPartnerProgress.visibility = View.VISIBLE
+                    for(i in ghostPace.indices) {
+                        ghostPace[i] = Math.round((1000.0/args.pace[i])).toInt()// 1 더주는 이유는 올림 처리
+                    }
+                }
                 ghostDistance += ghostPace[sequence]
                 Log.d(TAG, "run: ghostDistance = ${ghostDistance}")
                 successRunningData(ghostDistance)
             }
             if(isShark) {
                 sec++
+                if(sec == 0) {
+                    var shark = arrayOf(0,0,400,300,240)
+                    sharkPace = 1000 / shark[args.gameType/4]
+                }
                 if(sec >= 30) {
                     if(sec == 30) {
                         Snackbar.make(binding.tvRunningMode, "상어가 출발합니다!!", Snackbar.LENGTH_SHORT).show()
