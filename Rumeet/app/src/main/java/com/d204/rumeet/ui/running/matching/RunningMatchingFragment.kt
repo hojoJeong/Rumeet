@@ -2,13 +2,19 @@ package com.d204.rumeet.ui.running.matching
 
 import android.util.Log
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.d204.rumeet.NavigationRunningArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningMatchingBinding
 import com.d204.rumeet.ui.base.BaseFragment
+import com.d204.rumeet.ui.running.RunningViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlin.math.log
 
 
 @AndroidEntryPoint
@@ -18,14 +24,27 @@ class RunningMatchingFragment :
         get() = R.layout.fragment_running_matching
 
     override val viewModel: RunningMatchingViewModel by activityViewModels<RunningMatchingViewModel>()
+    private val runningViewModel by viewModels<RunningViewModel>()
+
     private val args by navArgs<RunningMatchingFragmentArgs>()
 
     override fun initStartView() {
         Log.d(TAG, "initStartView: runningMAtchingFragment withfriend: ${args.withFriend}")
-        if(args.withFriend){
-            viewModel.startFriendModeMatching(args.gameType)
+
+        /** 초대 받은 사람인 경우 */
+        if (args.invitedFromFriend) {
+            Log.d(TAG, "initStartView: 초대 받은 사람")
+            Log.d(TAG, "initStartView: ${args.gameType}, ${args.roomId}")
+            viewModel.subscribeFriendQueue(args.roomId, args.myId)
+            runningViewModel.acceptRunningRequest(raceId = args.roomId)
         } else {
-            viewModel.startRandomMatching(args.gameType)
+            if (args.withFriend) {
+                /** 초대 한 사람인 경우 */
+                viewModel.startFriendModeMatching(args.gameType)
+            } else {
+                /** 랜덤 매칭 */
+                viewModel.startRandomMatching(args.gameType)
+            }
         }
     }
 

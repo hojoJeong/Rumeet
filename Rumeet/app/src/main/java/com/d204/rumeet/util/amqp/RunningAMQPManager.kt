@@ -58,6 +58,8 @@ object RunningAMQPManager {
     fun subscribeFriendMatching(userId: Int, callback: DefaultConsumer){
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                Log.d(TAG, "subscribeFriendMatching: 레빗엠큐 메니저 userID: $userId")
+                Log.d(TAG, "subscribeFriendMatching: $runningChannel")
                 runningChannel?.basicConsume("friend.user.${userId}", true, callback)
             } catch (e: Exception) {
                 Log.e(TAG, "subscribeMatching: ${e.message}")

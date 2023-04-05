@@ -19,16 +19,16 @@ class NotificationRunningListAdapter: ListAdapter<RunningRequestDomainModel, Not
     lateinit var handler: NotificationHandler
     inner class NotificationRunningItemHolder(private val binding: ItemNotificationBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: RunningRequestDomainModel) {
+        fun bind(item: RunningRequestDomainModel, position: Int) {
             binding.tvItemNotificationPace.text = item.date.toDate()
             val mode = item.mode.toMode()
             binding.tvItemNotificationMode.text = mode.substring(0, 2)
             binding.tvItemNotificationOption.text = mode.substring(3)
             binding.btnItemNotificationAccept.setOnClickListener {
-                handler.onClickRunning(item.raceId, true)
+                handler.onClickRunning(position, item.raceId, true)
             }
             binding.btnItemNotificationReject.setOnClickListener {
-                handler.onClickRunning(item.raceId, false)
+                handler.onClickRunning(position, item.raceId, false)
             }
         }
     }
@@ -57,6 +57,6 @@ class NotificationRunningListAdapter: ListAdapter<RunningRequestDomainModel, Not
     }
 
     override fun onBindViewHolder(holder: NotificationRunningItemHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 }

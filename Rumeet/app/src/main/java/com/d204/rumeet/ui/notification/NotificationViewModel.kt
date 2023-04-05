@@ -90,18 +90,16 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    fun acceptRequestRunning(raceId: Int) {
+    fun acceptRequestRunning(raceId: Int, index: Int) {
         baseViewModelScope.launch {
-            if (acceptRunningRequestUseCase(raceId)) {
-                _notificationAction.emit(NotificationAction.AcceptRunningRequest(raceId))
-            }
+            _notificationAction.emit(NotificationAction.AcceptRunningRequest(raceId, index))
         }
     }
 
-    fun denyRequestRunning(raceId: Int) {
+    fun denyRequestRunning(raceId: Int, index: Int) {
         baseViewModelScope.launch {
             if (denyRunningRequestUseCase(raceId)) {
-                _notificationAction.emit(NotificationAction.DenyRunningRequest(raceId))
+                _notificationAction.emit(NotificationAction.DenyRunningRequest(raceId, index))
             }
         }
     }

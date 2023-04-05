@@ -52,8 +52,18 @@ class RunningMatchingViewModel @Inject constructor(
         friendId = id
     }
 
+    fun subscribeFriendQueue(roomId: Int, userId: Int){
+        Log.d(TAG, "subscribeFriendQueue: $roomId")
+        baseViewModelScope.launch {
+            _userId.emit(getUserIdUseCase())
+            startFriendModelTimer(roomId)
+            startFriendMatchingSubscribe()
+        }
+    }
+
     fun startFriendModeMatching(gameType: Int) {
         Log.d(TAG, "startWithFriendMatching: matchingViewmodel gameType: $gameType")
+        Log.d(TAG, "startFriendModeMatching: friendId: $friendId")
         baseViewModelScope.launch {
             _userId.emit(getUserIdUseCase())
             _gameType.emit(gameType)
@@ -70,6 +80,7 @@ class RunningMatchingViewModel @Inject constructor(
     }
 
     private fun startFriendModelTimer(raceId: Int) {
+        Log.d(TAG, "startFriendModelTimer: $raceId")
         timer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 Log.d(TAG, "onTick friend: ${millisUntilFinished}")
@@ -164,6 +175,7 @@ class RunningMatchingViewModel @Inject constructor(
     }
 
     private fun startFriendMatchingSubscribe() {
+        Log.d(TAG, "startFriendMatchingSubscribe: ${userId.value}")
         RunningAMQPManager.subscribeFriendMatching(userId.value, object :
             DefaultConsumer(RunningAMQPManager.runningChannel) {
             override fun handleDelivery(
@@ -173,11 +185,6 @@ class RunningMatchingViewModel @Inject constructor(
                 body: ByteArray
             ) {
                 try {
-                    Log.d(TAG, "handleDelivery: ${userId.value}")
-                    Log.d(TAG, "handleDelivery: $consumerTag")
-                    Log.d(TAG, "handleDelivery: $envelope")
-                    Log.d(TAG, "handleDelivery: $properties")
-
                     timer.cancel()
                     val response = Gson().fromJson(String(body), RunningRaceModel::class.java)
                     if (response.userId != userId.value) {
@@ -186,11 +193,12 @@ class RunningMatchingViewModel @Inject constructor(
                         _otherPlayerId.tryEmit(response.partnerId)
                     }
                     _matchingResult.tryEmit(true)
+                    Log.d(TAG, "handleDelivery: ${response.userId}, ${response.id}, ${response.partnerId}")
                     val test = _runningMatchingSideEffect.tryEmit(
                         RunningMatchingSideEffect.SuccessMatching(
-                            _userId.value,
+                            response.userId,
                             response.id,
-                            _otherPlayerId.value
+                            response.partnerId
                         )
                     )
                     Log.d(TAG, "handleDelivery: $test")

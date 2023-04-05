@@ -8,6 +8,6 @@ sealed class NotificationAction {
     class RunningRequest(val runningList: List<RunningRequestDomainModel>): NotificationAction()
     class AcceptFriendRequest(val myId: Int, val friendId: Int): NotificationAction()
     class DenyFriendRequest(val myId: Int, val friendId: Int): NotificationAction()
-    class AcceptRunningRequest(val raceId: Int): NotificationAction()
-    class DenyRunningRequest(val raceId: Int): NotificationAction()
+    class AcceptRunningRequest(val raceId: Int, val index: Int): NotificationAction()
+    class DenyRunningRequest(val raceId: Int, val index: Int): NotificationAction()
 }

@@ -1,10 +1,14 @@
 package com.d204.rumeet.ui.running.option
 
+import android.content.ContentValues.TAG
+import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
+import com.d204.rumeet.NavigationRunningArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningOptionBinding
 import com.d204.rumeet.ui.base.BaseFragment
@@ -28,8 +32,25 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
 
     override val layoutResourceId: Int get() = R.layout.fragment_running_option
     override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running) { defaultViewModelProviderFactory }
-
+    private val args by navArgs<NavigationRunningArgs>()
     private val runningType by lazy { arguments?.getInt("type") }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        Log.d(TAG, "onCreate: ")
+        if (args.invitedFromFriend) {
+            navigate(
+                RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
+                    gameType = args.gameType,
+                    invitedFromFriend = args.invitedFromFriend,
+                    myId = args.myId,
+                    roomId = args.roomId,
+                    partnerId = args.partnerId
+                )
+            )
+        }
+    }
 
     override fun initStartView() {
         // 싱글

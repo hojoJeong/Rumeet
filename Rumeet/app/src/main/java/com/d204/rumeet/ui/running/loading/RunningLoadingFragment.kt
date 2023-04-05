@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.d204.rumeet.R
@@ -13,6 +14,7 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.running.RunningViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class RunningLoadingFragment : BaseFragment<FragmentRunningLoadingBinding, RunningViewModel>() {
@@ -52,12 +54,15 @@ class RunningLoadingFragment : BaseFragment<FragmentRunningLoadingBinding, Runni
             override fun onFinish() {
                 //navigate
                 Log.d(TAG, "onFinish: navigate ${args.gameType}")
-                navigate(RunningLoadingFragmentDirections.actionRunningLoadingFragmentToRunningFragment(
-                    myId = args.myId,
-                    partnerId = args.partnerId,
-                    gameType = args.gameType,
-                    roomId = args.roomId
-                ))
+                navigate(
+                    RunningLoadingFragmentDirections.actionRunningLoadingFragmentToRunningFragment(
+                        myId = args.myId,
+                        partnerId = args.partnerId,
+                        gameType = args.gameType,
+                        roomId = args.roomId
+                    )
+                )
+
             }
         }.start()
     }
