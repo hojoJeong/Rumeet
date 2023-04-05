@@ -13,6 +13,7 @@ import android.os.Looper
 import android.os.Vibrator
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.navArgs
@@ -580,6 +581,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                     serviceConnection,
                                     Context.BIND_AUTO_CREATE
                                 )
+
+                                ContextCompat.startForegroundService(requireContext(), testIntent)
                             } else {
                                 Log.d("bindState", "initDataBinding: already start")
                             }
@@ -816,12 +819,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(receiver, IntentFilter("custom-event"))
         sensorManager.registerListener(this, altitudeSensor, SensorManager.SENSOR_DELAY_NORMAL)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
-        sensorManager.unregisterListener(this)
     }
 
     override fun onDestroyView() {

@@ -16,6 +16,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -97,6 +98,8 @@ class RunningService : Service(), LocationListener {
         lastLocation?.let {
             val distance = it.distanceTo(location)
             totalDistance += distance
+
+            Log.d("TAG", "onLocationChanged: test")
 
             // 현재 내 위도,경도와 총 뛴거리를 표시
             val intent = Intent("custom-event")
