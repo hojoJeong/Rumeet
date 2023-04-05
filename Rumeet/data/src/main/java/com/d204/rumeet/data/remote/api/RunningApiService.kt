@@ -27,4 +27,11 @@ internal interface RunningApiService {
 
     @POST("game/invite")
     suspend fun inviteRunning(@Body info: RunningMatchingWithFriendRequestDto): BaseResponse<Int>
+
+    @GET("game/solo")
+    suspend fun startSoloRace(
+        @Query(value = "userId") userId: Int,
+        @Query(value = "mode") mode: Int,
+        @Query(value = "ghost") ghost: Int
+    ) : BaseResponse<RunningSoloResponseDto?>
 }

@@ -99,6 +99,7 @@ class HomeViewModel @Inject constructor(
                 .onError {
                     catchError(it)
                 }
+            Log.d(TAG, "getHomeData: done")
         }
     }
 

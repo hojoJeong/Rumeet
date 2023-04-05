@@ -88,7 +88,7 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
                 polyline += it.longitude
                 polyline += "|"
             }
-            polyline=polyline.removeSuffix("|")
+            polyline = polyline.removeSuffix("|")
             val client = OkHttpClient()
             val url = HttpUrl.Builder()
                 .scheme("http")
@@ -107,8 +107,6 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
                         polyurl = response.body!!.string().replace("\"", "")
                         if(polyurl.length != 0) {
                             CoroutineScope(Dispatchers.Main).launch {
-                                Log.d(TAG, "initAfterBinding urlasdasdsad: $polyurl")
-
                                 Glide.with(requireContext())
                                     .load(polyurl)
                                     .into(binding.ivMap)

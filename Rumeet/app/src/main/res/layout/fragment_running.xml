@@ -219,6 +219,7 @@
             android:layout_width="@dimen/size_btn_running"
             android:layout_height="@dimen/size_btn_running"
             android:layout_marginTop="78dp"
+            android:visibility="gone"
             android:background="@drawable/bg_layerlist_pause_oval_dandelion_stroke0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -228,32 +229,31 @@
             android:id="@+id/btn_running_stop"
             android:layout_width="@dimen/size_btn_running"
             android:layout_height="@dimen/size_btn_running"
-            android:background="@drawable/bg_layerlist_stop_oval_darkgray_stroke0"
+            android:layout_marginTop="80dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_running_pause"
+            android:background="@drawable/bg_layerlist_stop_oval_darkgray_stroke0"
             app:layout_constraintEnd_toStartOf="@id/btn_running_play"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_running_pause" />
+            app:layout_constraintTop_toBottomOf="@+id/ly_calorie" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_running_play"
             android:layout_width="@dimen/size_btn_running"
             android:layout_height="@dimen/size_btn_running"
-            android:background="@drawable/bg_layerlist_play_oval_dandelion_stroke0"
+            android:layout_marginTop="78dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/btn_running_stop"
+            android:background="@drawable/bg_layerlist_play_oval_dandelion_stroke0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_running_stop"
-            app:layout_constraintTop_toTopOf="@id/btn_running_stop" />
+            app:layout_constraintTop_toBottomOf="@+id/ly_calorie" />
 
         <SeekBar
             android:id="@+id/sb_my_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:progressDrawable="@drawable/bg_my_running_progress"
-            android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
-            app:layout_constraintBottom_toTopOf="@id/sb_partner_progress"
+            app:layout_constraintBottom_toBottomOf="@id/sb_partner_progress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -262,7 +262,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/base_horizontal_margin"
-            android:visibility="gone"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_partner_running_progress"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -272,12 +271,11 @@
         <SeekBar
             android:id="@+id/sb_shark_progress"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:progressDrawable="@drawable/bg_partner_running_progress"
-            android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/sb_my_progress"
+            app:layout_constraintBottom_toBottomOf="@id/sb_my_progress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

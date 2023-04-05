@@ -54,15 +54,13 @@ class RunningLoadingFragment : BaseFragment<FragmentRunningLoadingBinding, Runni
             override fun onFinish() {
                 //navigate
                 Log.d(TAG, "onFinish: navigate ${args.gameType}")
-                navigate(
-                    RunningLoadingFragmentDirections.actionRunningLoadingFragmentToRunningFragment(
-                        myId = args.myId,
-                        partnerId = args.partnerId,
-                        gameType = args.gameType,
-                        roomId = args.roomId
-                    )
-                )
-
+                navigate(RunningLoadingFragmentDirections.actionRunningLoadingFragmentToRunningFragment(
+                    myId = args.myId,
+                    partnerId = args.partnerId,
+                    gameType = args.gameType,
+                    roomId = args.roomId,
+                    pace = args.pace
+                ))
             }
         }.start()
     }

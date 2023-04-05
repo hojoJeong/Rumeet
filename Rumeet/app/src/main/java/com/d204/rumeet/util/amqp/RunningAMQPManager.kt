@@ -91,7 +91,8 @@ object RunningAMQPManager {
     fun sendEndGame(message: String) {
         CoroutineScope(Dispatchers.IO).launch {
             runningChannel?.basicPublish("", "end.queue", null, message.toByteArray())
-            runningChannel?.basicCancel(runningTag)
+            if(runningTag.isNotEmpty())
+                runningChannel?.basicCancel(runningTag)
         }
     }
 }

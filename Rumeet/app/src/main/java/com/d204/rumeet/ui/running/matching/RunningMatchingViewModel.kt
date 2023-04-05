@@ -1,15 +1,23 @@
 package com.d204.rumeet.ui.running.matching
 
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.CountDownTimer
 import android.util.Log
+import com.d204.rumeet.domain.model.user.RunningSoloDomainModel
+import com.d204.rumeet.domain.onError
+import com.d204.rumeet.domain.onSuccess
+import com.d204.rumeet.domain.repository.RunningRepository
+import com.d204.rumeet.domain.successOr
 import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.usecase.running.DenyRunningRequestUseCase
 import com.d204.rumeet.domain.usecase.running.InviteRunningUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
+import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.running.matching.model.RunningMatchingRequestModel
 import com.d204.rumeet.ui.running.matching.model.RunningRaceModel
+import com.d204.rumeet.util.amqp.ChattingAMQPMananer
 import com.d204.rumeet.util.amqp.RunningAMQPManager
 import com.d204.rumeet.util.jsonToString
 import com.google.gson.Gson
@@ -24,6 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RunningMatchingViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
+    private val runningRepository: RunningRepository,
     private val inviteRunningUseCase: InviteRunningUseCase,
     private val denyRunningRequestUseCase: DenyRunningRequestUseCase
 ) : BaseViewModel() {
@@ -37,11 +46,17 @@ class RunningMatchingViewModel @Inject constructor(
     private val _gameType: MutableStateFlow<Int> = MutableStateFlow(-1)
     val gameType: StateFlow<Int> get() = _gameType.asStateFlow()
 
+    private val _ghostType: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val ghostType: StateFlow<Int> get() = _ghostType.asStateFlow()
+
     private val _matchingResult: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val matchingState: StateFlow<Boolean> get() = _matchingResult.asStateFlow()
 
     private val _otherPlayerId: MutableStateFlow<Int> = MutableStateFlow(-1)
     val otherPlayer: StateFlow<Int> get() = _otherPlayerId.asStateFlow()
+
+    private val _gameStartInfo: MutableStateFlow<UiState<RunningSoloDomainModel>> = MutableStateFlow(UiState.Loading)
+    val gameStartInfo : StateFlow<UiState<RunningSoloDomainModel>> get() = _gameStartInfo.asStateFlow()
 
     private lateinit var timer: CountDownTimer
 
@@ -118,6 +133,16 @@ class RunningMatchingViewModel @Inject constructor(
         }
     }
 
+    fun startGhost(gameType: Int, ghostType: Int) {
+        baseViewModelScope.launch {
+            _userId.emit(getUserIdUseCase())
+            _gameType.emit(gameType)
+            _ghostType.emit(ghostType)
+
+            startRandomModeTimer()
+        }
+    }
+
     private fun startRandomModeTimer() {
         timer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -126,9 +151,7 @@ class RunningMatchingViewModel @Inject constructor(
 
             override fun onFinish() {
                 val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
-                RunningAMQPManager.failMatching(
-                    jsonToString(startModel) ?: throw Exception("NO TYPE")
-                )
+                RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
                 _matchingResult.tryEmit(false)
                 val response =
                     _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
@@ -136,6 +159,25 @@ class RunningMatchingViewModel @Inject constructor(
             }
         }.start()
     }
+
+    fun startGetGhost() {
+        baseViewModelScope.launch {
+            Log.d(TAG, "startGetGhost: StartSolo API 통신 시작!! gameType:${gameType.value}, ghostType:${ghostType.value}")
+            runningRepository.startSolo(userId.value, gameType.value, ghostType.value)
+                .onSuccess { response ->
+                    _runningMatchingSideEffect.emit(RunningMatchingSideEffect.SuccessGhostData(response))
+                    Log.d(TAG, "startGetGhost: 고스트 API 요청 결과: $response")
+                    timer.cancel()
+                    timer.onFinish()
+
+                }
+                .onError { e ->
+                    catchError(e)
+                    Log.d(TAG, "startGetGhost: Error 발생 Error 발생 !!!!!! ${e.message} ")
+                }
+        }
+    }
+
     private fun startRandomMatchingSubscribe() {
         RunningAMQPManager.subscribeMatching(userId.value, object :
             DefaultConsumer(RunningAMQPManager.runningChannel) {
@@ -208,6 +250,16 @@ class RunningMatchingViewModel @Inject constructor(
             }
         })
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        if(!_matchingResult.value){
+            val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
+            RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
+            Log.d(TAG, "onCleared: cancel matching")
+        }
+
+    }
 }
 
-private const val TAG = "RunningMatchingViewModel"
+private const val TAG = "러밋_RunningMatchingViewModel"

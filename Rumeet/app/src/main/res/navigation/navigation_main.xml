@@ -14,7 +14,7 @@
             app:destination="@id/navigation_running" />
         <action
             android:id="@+id/action_homeFragment_to_runningOptionContainerFragment"
-            app:destination="@id/runningOptionFragment" />
+            app:destination="@id/runningOptionFragment"/>
         <action
             android:id="@+id/action_homeFragment_to_navigation_mypage"
             app:destination="@id/navigation_mypage" />
@@ -22,38 +22,24 @@
             android:id="@+id/action_homeFragment_to_notificationFragment"
             app:destination="@id/notificationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.d204.rumeet.ui.notification.NotificationFragment"
+        android:label="NotificationFragment">
+        <argument
+            android:name="type"
+            android:defaultValue="0"
+            app:argType="integer"
+            app:nullable="false" />
+    </fragment>
     <navigation
         android:id="@+id/navigation_running"
         app:startDestination="@id/runningOptionFragment">
-        <argument
-            android:name="invited_from_friend"
-            android:defaultValue="false"
-            app:argType="boolean" />
-
-        <argument
-            android:name="myId"
-            android:defaultValue="-1"
-            app:argType="integer" />
-
-        <argument
-            android:name="roomId"
-            android:defaultValue="-1"
-            app:argType="integer" />
-
-        <argument
-            android:name="gameType"
-            android:defaultValue="-1"
-            app:argType="integer" />
-
-        <argument
-            android:name="partnerId"
-            android:defaultValue="-1"
-            app:argType="integer" />
 
         <fragment
             android:id="@+id/runningOptionFragment"
             android:name="com.d204.rumeet.ui.running.option.RunningOptionFragment"
-            android:label="RunningOptionFragment"
+            android:label="RunningOptionContainerFragment"
             tools:layout="@layout/fragment_running_option">
 
             <action
@@ -64,23 +50,6 @@
             <action
                 android:id="@+id/action_runningOptionFragment_to_runningLoadingFragment"
                 app:destination="@id/runningLoadingFragment" />
-            <action
-                android:id="@+id/action_runningOptionFragment_to_selectFriendFragment"
-                app:destination="@id/selectFriendFragment" />
-        </fragment>
-
-        <fragment
-            android:id="@+id/selectFriendFragment"
-            android:name="com.d204.rumeet.ui.running.option.SelectFriendFragment"
-            android:label="SelectFriendFragment">
-            <argument
-                android:name="gameType"
-                android:defaultValue="-1"
-                app:argType="integer" />
-
-            <action
-                android:id="@+id/action_selectFriendFragment_to_runningMatchingFragment"
-                app:destination="@id/runningMatchingFragment" />
         </fragment>
 
         <fragment
@@ -92,12 +61,12 @@
             <argument
                 android:name="locationList"
                 app:argType="android.location.Location[]"
-                app:nullable="false" />
+                app:nullable="false"/>
 
             <argument
                 android:name="result"
                 app:argType="com.d204.rumeet.ui.running.finish.model.RunningFinishModel"
-                app:nullable="false" />
+                app:nullable="false"/>
 
             <action
                 android:id="@+id/action_runningFinishFragment_to_homeFragment"
@@ -113,29 +82,6 @@
 
             <argument
                 android:name="gameType"
-                android:defaultValue="-1"
-                app:argType="integer" />
-            <argument
-                android:name="withFriend"
-                android:defaultValue="false"
-                app:argType="boolean" />
-            <argument
-                android:name="invitedFromFriend"
-                android:defaultValue="false"
-                app:argType="boolean"/>
-
-            <argument
-                android:name="myId"
-                android:defaultValue="-1"
-                app:argType="integer" />
-
-            <argument
-                android:name="roomId"
-                android:defaultValue="-1"
-                app:argType="integer" />
-
-            <argument
-                android:name="partnerId"
                 android:defaultValue="-1"
                 app:argType="integer" />
 
@@ -182,7 +128,7 @@
             <argument
                 android:name="partnerId"
                 android:defaultValue="-1"
-                app:argType="integer" />
+                app:argType="integer"/>
 
             <action
                 android:id="@+id/action_runningLoadingFragment_to_runningFragment"
@@ -215,7 +161,12 @@
             <argument
                 android:name="partnerId"
                 android:defaultValue="-1"
-                app:argType="integer" />
+                app:argType="integer"/>
+
+            <argument
+                android:name="pace"
+                app:argType="integer[]" />
+
             <action
                 android:id="@+id/action_runningFragment_to_runningFinishFragment"
                 app:destination="@id/runningFinishFragment" />
