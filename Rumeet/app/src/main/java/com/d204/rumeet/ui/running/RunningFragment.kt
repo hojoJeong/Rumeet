@@ -242,11 +242,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 successRunningData(ghostDistance)
             }
             if(isShark) {
-                sec++
                 if(sec == 0) {
                     var shark = arrayOf(0,0,400,300,240)
                     sharkPace = 1000 / shark[args.gameType/4]
                 }
+                sec++
                 if(sec >= 30) {
                     if(sec == 30) {
                         Snackbar.make(binding.tvRunningMode, "상어가 출발합니다!!", Snackbar.LENGTH_SHORT).show()
