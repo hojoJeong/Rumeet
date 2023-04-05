@@ -159,7 +159,9 @@
 
             <action
                 android:id="@+id/action_runningMatchingFragment_to_runningMatchingFailFragment"
-                app:destination="@id/runningMatchingFailFragment" />
+                app:destination="@id/runningMatchingFailFragment"
+                app:popUpToInclusive="false"
+                app:popUpTo="@id/runningOptionFragment"/>
             <action
                 android:id="@+id/action_runningMatchingFragment_to_runningLoadingFragment"
                 app:destination="@id/runningLoadingFragment" />

@@ -1,22 +1,20 @@
 package com.d204.rumeet.ui.running.matching
 
-import android.os.CountDownTimer
 import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningMatchingBinding
 import com.d204.rumeet.ui.base.BaseFragment
-import com.d204.rumeet.ui.base.successOrNull
 import com.d204.rumeet.ui.running.RunningViewModel
+import com.d204.rumeet.ui.running.matching.model.RunningMatchingUiModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.launch
-import kotlin.math.log
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -25,14 +23,28 @@ class RunningMatchingFragment :
     override val layoutResourceId: Int
         get() = R.layout.fragment_running_matching
 
-    override val viewModel: RunningMatchingViewModel by activityViewModels<RunningMatchingViewModel>()
+    override val viewModel: RunningMatchingViewModel by activityViewModels()
     private val runningViewModel by viewModels<RunningViewModel>()
 
     private val args by navArgs<RunningMatchingFragmentArgs>()
+    private val randomImgList = listOf(
+        RunningMatchingUiModel(R.drawable.ic_my_running_animation, "혼자서도 러밋!\n나만의 러닝메이트를 찾고있어요"),
+        RunningMatchingUiModel(R.drawable.ic_partner_running_animation, "같이 달리는 러밋!\n나만의 러닝메이트를 찾고있어요"),
+        RunningMatchingUiModel(R.drawable.ic_ghost_animation, "혼자라도 재밌게!\n나만의 러닝메이트를 찾고있어요"),
+        RunningMatchingUiModel(R.drawable.ic_together_running_animation, "다 같이 뛰어보아요!\n나만의 러닝메이트를 찾고있어요"),
+        RunningMatchingUiModel(R.drawable.ic_shark_animation, "상어에게 도망치기!\n나만의 러닝메이트를 찾고있어요")
+    )
 
     override fun initStartView() {
         Log.d(TAG, "initStartView: runningMAtchingFragment withfriend: ${args.withFriend}")
         binding.lifecycleOwner = viewLifecycleOwner
+
+        val random = Random().nextInt(5)
+        binding.tvContent.text = randomImgList[random].msg
+        Glide.with(requireContext())
+            .asGif()
+            .load(randomImgList[random].res)
+            .into(binding.pgLoading)
 
         /** 초대 받은 사람인 경우 */
         if (args.invitedFromFriend) {
@@ -53,7 +65,6 @@ class RunningMatchingFragment :
             }
         }
     }
-
 
 
     override fun initDataBinding() {
@@ -79,13 +90,15 @@ class RunningMatchingFragment :
                             )
                         }
                         is RunningMatchingSideEffect.SuccessGhostData -> {
-                            navigate(RunningMatchingFragmentDirections.actionRunningMatchingFragmentToRunningLoadingFragment(
-                                roomId = it.data.id,
-                                myId = it.data.userId,
-                                partnerId = it.data.partnerId,
-                                gameType = it.data.mode,
-                                pace = it.data.pace.toIntArray()
-                            ))
+                            navigate(
+                                RunningMatchingFragmentDirections.actionRunningMatchingFragmentToRunningLoadingFragment(
+                                    roomId = it.data.id,
+                                    myId = it.data.userId,
+                                    partnerId = it.data.partnerId,
+                                    gameType = it.data.mode,
+                                    pace = it.data.pace.toIntArray()
+                                )
+                            )
                         }
                     }
                 }
@@ -93,7 +106,7 @@ class RunningMatchingFragment :
 
             launch {
                 viewModel.ghostType.collect {
-                    if((viewModel.gameType.value<4) && (viewModel.ghostType.value > 0)) // 고스트 모드일때만
+                    if ((viewModel.gameType.value < 4) && (viewModel.ghostType.value > 0)) // 고스트 모드일때만
                         viewModel.startGetGhost()
                 }
             }
