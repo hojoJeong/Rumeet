@@ -97,13 +97,15 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var printHeight = 0f
     private var currentDistance = 0f
     private var collaborationDistance = 0
-    private var testDistance = 300
+    private var testDistance = 40
 
     private lateinit var vibrator: Vibrator
 
     private var isMulti = false
     private var isGhost = false
     private var isShark = false
+    private var isGameSet = false
+    private var isLose = false
 
     // 서비스 연결여부 콜백함수
     private val serviceConnection = object : ServiceConnection {
@@ -207,6 +209,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     RunningAMQPManager.sendEndGame(getMessageForEndQueue())
                 }
 
+                isGameSet = true
+
                 Log.d(TAG, "onReceive: send end game -> navigate ${getMessageForEndQueue()}")
 
                 // 게임 결과는 러닝 결과에서 api 호출할 것
@@ -288,7 +292,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private fun getMessageForEndQueue(): String {
         Log.d(TAG, "getMessageForEndQueue: maxDistance ${maxDistance}")
         val message = when (maxDistance) {
-            1000 -> {
+            testDistance -> {
                 Log.d(TAG, "onReceive: make 1000 response")
                 val response = runningEndModel as RunningModel1pace
                 response.user_id = args.myId
@@ -490,6 +494,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         is RunningSideEffect.SuccessRunning -> {
                             // 경쟁할 때 rabbitMQ의 콜백으로 온 데이터 받음
                             successRunningData(it.distance)
+                            // 백그라운드 상태에서 상대방이 먼저 옴을 확인
+                            if(it.distance >= maxDistance){
+                                isLose = true
+                            }
                         }
 
                         is RunningSideEffect.EndRunning -> {
@@ -635,7 +643,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 if (isGhost) "고스트 1km"
                 else "싱글 1km"
@@ -675,7 +683,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "경쟁 1km"
             }
@@ -711,7 +719,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "협동 1km"
             }
@@ -747,7 +755,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "협동 1km"
             }
@@ -783,7 +791,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "협동 1km"
             }
@@ -892,6 +900,47 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     }
     override fun onResume() {
         super.onResume()
+
+        // 백그라운드에서 처리 -> 게임이 끝났으면?
+        if(isGameSet){
+            // 끝났는데 상대가 먼저 끝냈으면?
+            if(isLose){
+                // 졌음
+                navigate(
+                    RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
+                        locationList = locationList.toTypedArray(),
+                        RunningFinishModel(
+                            success = 0,
+                            velocity = kmPerHour,
+                            calorie = currentCalorie,
+                            height = printHeight,
+                            userId = args.myId,
+                            raceId = args.roomId,
+                            mode = args.gameType,
+                            time = time
+                        )
+                    )
+                )
+            } else{
+                // 이겼음
+                navigate(
+                    RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
+                        locationList = locationList.toTypedArray(),
+                        RunningFinishModel(
+                            success = 1,
+                            velocity = kmPerHour,
+                            calorie = currentCalorie,
+                            height = printHeight,
+                            userId = args.myId,
+                            raceId = args.roomId,
+                            mode = args.gameType,
+                            time = time
+                        )
+                    )
+                )
+            }
+        }
+
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(receiver, IntentFilter("custom-event"))
         sensorManager.registerListener(this, altitudeSensor, SensorManager.SENSOR_DELAY_NORMAL)

@@ -250,7 +250,6 @@ class RunningMatchingViewModel @Inject constructor(
             }
         })
     }
-
 }
 
 private const val TAG = "러밋_RunningMatchingViewModel"
