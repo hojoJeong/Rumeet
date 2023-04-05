@@ -592,6 +592,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                             if (!bindState) {
                                 Log.d("bindState", "SuccessUserInfo: start")
                                 val testIntent = Intent(activity, RunningService::class.java)
+                                requireActivity().bindService(
+                                    testIntent,
+                                    serviceConnection,
+                                    Context.BIND_AUTO_CREATE
+                                )
                                 ContextCompat.startForegroundService(requireContext(), testIntent)
                             } else {
                                 Log.d("bindState", "initDataBinding: already start")

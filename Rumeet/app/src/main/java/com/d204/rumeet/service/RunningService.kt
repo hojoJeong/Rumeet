@@ -65,9 +65,12 @@ class RunningService : Service(), LocationListener {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 10.0f, this)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        createNotification()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground(1, createNotification())
+        } else {
+            // API 레벨이 26 미만인 경우, startForeground() 메서드를 호출할 필요 없음
+        }
         return START_REDELIVER_INTENT
     }
 
