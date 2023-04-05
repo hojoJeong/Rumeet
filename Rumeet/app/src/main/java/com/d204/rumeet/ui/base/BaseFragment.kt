@@ -199,8 +199,10 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
             (controller.currentDestination as? FragmentNavigator.Destination)?.className
                 ?: (controller.currentDestination as? DialogFragmentNavigator.Destination)?.className
         if (currentDestination == this.javaClass.name) {
+            Log.d("TAG", "navigate: move ${currentDestination}")
             controller.navigate(directions)
         }
+        Log.d("TAG", "navigate: no move")
     }
 
     // Home 화면으로 이동

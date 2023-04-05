@@ -6,29 +6,23 @@ import com.google.gson.annotations.SerializedName
 internal data class UserResponseDto(
     @SerializedName("id")
     val userId: Int,
-    @SerializedName("email")
-    val email: String,
     @SerializedName("nickname")
     val nickname: String,
-    @SerializedName("age")
-    val age: Int,
-    @SerializedName("gender")
-    val gender: Int,
     @SerializedName("profileImg")
     val profileImg: String?,
-    @SerializedName("date")
-    val createdAt: Long,
-    @SerializedName("state")
-    val state: Int
+    @SerializedName("totalKm")
+    val totalKm: Double?,
+    @SerializedName("totalTime")
+    val totalTime: Long?,
+    @SerializedName("pace")
+    val pace: Int?
 )
 
 internal fun UserResponseDto.toDomainModel() = UserModel(
     id = this.userId,
-    email = this.email,
     nickname = this.nickname,
-    age = this.age,
-    gender = this.gender,
     profileImg = this.profileImg ?: "",
-    createdAt = this.createdAt,
-    state = this.state
+    totalKm = this.totalKm ?: 0.0,
+    totalTime = this.totalTime ?: 0,
+    pace = this.pace ?: 0
 )

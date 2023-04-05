@@ -55,6 +55,17 @@ object RunningAMQPManager {
             }
         }
     }
+    fun subscribeFriendMatching(userId: Int, callback: DefaultConsumer){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                Log.d(TAG, "subscribeFriendMatching: 레빗엠큐 메니저 userID: $userId")
+                Log.d(TAG, "subscribeFriendMatching: $runningChannel")
+                runningChannel?.basicConsume("friend.user.${userId}", true, callback)
+            } catch (e: Exception) {
+                Log.e(TAG, "subscribeMatching: ${e.message}")
+            }
+        }
+    }
 
     // 게임 시작, 보내기
     fun sendRunning(partnerId: Int, roomId: Int, message: String) {
@@ -71,6 +82,7 @@ object RunningAMQPManager {
     // 게임 관련 데이터 받기
     fun receiveRunning(roomId: Int, userId: Int, callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
+            Log.d(TAG, "receiveRunning: ${roomId}.${userId}")
             runningTag = runningChannel?.basicConsume("game.${roomId}.${userId}", callback) ?: ""
         }
     }
