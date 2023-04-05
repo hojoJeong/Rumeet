@@ -68,7 +68,7 @@ class RunningMatchingFragment :
 
 
     override fun initDataBinding() {
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenResumed {
             launch {
                 viewModel.runningMatchingSideEffect.collectLatest {
                     when (it) {
