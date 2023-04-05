@@ -26,6 +26,7 @@ class RunningMatchingFragment :
 
     override fun initStartView() {
         binding.lifecycleOwner = viewLifecycleOwner
+        Log.d(TAG, "initStartView: @@@@@@@@@@@@@@@@@고스트 타입"+args.ghostType)
         if (args.ghostType != -1) { // 고스트 모드 분기 (내 고스트:1, 랜덤 고스트 : 2)
             Log.d(TAG, "initStartView: 고스트 모드임!! (1:나, 2:랜덤) : ${args.ghostType}")
             viewModel.startGhost(args.gameType, args.ghostType)
@@ -73,7 +74,7 @@ class RunningMatchingFragment :
 
             launch {
                 viewModel.ghostType.collect {
-                    if(viewModel.gameType.value<4)
+                    if((viewModel.gameType.value<4) && (viewModel.ghostType.value > 0)) // 고스트 모드일때만
                         viewModel.startGetGhost()
                 }
             }

@@ -97,7 +97,7 @@ class RunningMatchingViewModel @Inject constructor(
 
     fun startGetGhost() {
         baseViewModelScope.launch {
-            Log.d(TAG, "startGetGhost: 고스트 API 통신 시작!!")
+            Log.d(TAG, "startGetGhost: StartSolo API 통신 시작!! gameType:${gameType.value}, ghostType:${ghostType.value}")
             runningRepository.startSolo(userId.value, gameType.value, ghostType.value)
                 .onSuccess { response ->
                     _runningMatchingSideEffect.emit(RunningMatchingSideEffect.SuccessGhostData(response))
@@ -142,8 +142,12 @@ class RunningMatchingViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
-        RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
+        if(!_matchingResult.value){
+            val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
+            RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
+            Log.d(TAG, "onCleared: cancel matching")
+        }
+
     }
 }
 

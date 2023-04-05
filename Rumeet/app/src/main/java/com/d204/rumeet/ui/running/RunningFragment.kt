@@ -7,12 +7,12 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-import android.os.*
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
+import android.os.Vibrator
 import android.util.Log
 import android.view.View
-import androidx.annotation.NonNull
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.navArgs
@@ -23,7 +23,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningBinding
@@ -95,7 +94,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var currentCalorie = 0f
     private var printHeight = 0f
     private var currentDistance = 0f
-    private var collaborationDistance = 0f
+    private var collaborationDistance = 0
     private var testDistance = 300
 
     private lateinit var vibrator: Vibrator
@@ -132,7 +131,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
             currentDistance = runningDistance
             if (isShark) {
-                collaborationDistance = ((runningDistance.toInt() + userDistance) / 2).toFloat()
+                collaborationDistance = ((runningDistance.toInt() + userDistance) / 2)
+                binding.sbSharkProgress.progress = collaborationDistance
             } else {
                 binding.sbMyProgress.progress = runningDistance.toInt()
             }
@@ -248,18 +248,21 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 Log.d(TAG, "run: ghostDistance = ${ghostDistance}")
                 successRunningData(ghostDistance)
             }
-            if (isShark) {
+            if (args.gameType >= 8) {
                 if (sec == 0) {
                     var shark = arrayOf(0, 0, 400, 300, 240)
                     sharkPace = 1000 / shark[args.gameType / 4]
+                    Log.d(TAG, "run: shark visibility visible")
                 }
                 sec++
                 if (sec >= 30) {
                     if (sec == 30) {
+                        binding.sbSharkProgress.visibility = View.VISIBLE
                         Snackbar.make(binding.tvRunningMode, "상어가 출발합니다!!", Snackbar.LENGTH_SHORT)
                             .show()
                         vibrator.vibrate(1000)
                     }
+                    Log.d(TAG, "run: sharkPace ${sharkPace}")
                     sharkDistance += sharkPace
                 }
                 successSharkData(sharkDistance)
@@ -269,6 +272,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     /** end.queue에 보낼 메시지 생성 */
     private fun getMessageForEndQueue(): String {
+        Log.d(TAG, "getMessageForEndQueue: maxDistance ${maxDistance}")
         val message = when (maxDistance) {
             1000 -> {
                 Log.d(TAG, "onReceive: make 1000 response")
@@ -317,29 +321,30 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     // 상대방과 나의 profile 이미지로 seekbar의 thumb 이미지 변경
     override fun initStartView() {
         // Todo 싱글, 고스트 설정을 해줘야함
+        Log.d(TAG, "initStartView: ${args.partnerId}")
         viewModel.getUserInfo(args.myId)
 
         if (args.gameType >= 4) { // multi
             Log.d(TAG, "initStartView: @@@@@@@멀티모드 경기 시작")
             isMulti = true
 
+            viewModel.getPartnerInfo(args.partnerId)
+
             with(binding) {
                 sbMyProgress.visibility = View.VISIBLE
-                sbPartnerProgress.visibility = View.VISIBLE
-                sbSharkProgress.visibility = View.GONE
+                if (args.gameType < 8) {
+                    sbPartnerProgress.visibility = View.VISIBLE
+                    sbSharkProgress.visibility = View.GONE
+                } else {
+                    sbPartnerProgress.visibility = View.GONE
+                }
                 binding.btnRunningStop.visibility = View.VISIBLE
             }
-            viewModel.getPartnerInfo(args.partnerId)
-        } else if (args.gameType >= 8) {
-            isShark = true
-            var shark = arrayOf(0, 0, 400, 300, 240)
-            sharkPace = 1000 / shark[args.gameType / 4]
-            binding.sbSharkProgress.visibility = View.VISIBLE
-            viewModel.getPartnerInfo(args.partnerId)
-        } else {
-            isGhost = true
-            binding.btnRunningStop.visibility = View.VISIBLE
-            if (args.partnerId != -1) { // 고스트 모드
+        } else { // single
+            if (args.partnerId != -1) { // ghost
+                isGhost = true
+                binding.btnRunningStop.visibility = View.VISIBLE
+                binding.btnRunningPause.visibility = View.GONE
                 viewModel.getPartnerInfo(args.partnerId)
                 ghostPace = IntArray(args.pace.size)
                 binding.sbPartnerProgress.visibility = View.VISIBLE
@@ -351,9 +356,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     ghostPace[i] = Math.round((1000.0 / args.pace[i])).toInt()// 1 더주는 이유는 올림 처리
                 }
                 Log.d(TAG, "initStartView: ghostPace= ${ghostPace.contentToString()}")
+            } else { // solo
+                binding.btnRunningPause.visibility = View.VISIBLE
             }
         }
-
 
         // 고도 센서 설정
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -393,8 +399,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private fun successRunningData(distance: Int) {
         Log.d(TAG, "initDataBinding: partner running : ${distance}")
         userDistance = distance
-        if (isShark) {
-            collaborationDistance = (currentDistance + distance) / 2
+        if (args.gameType >= 8) {
+            collaborationDistance = (currentDistance.toInt() + distance) / 2
+            binding.sbMyProgress.progress = collaborationDistance
         } else {
             binding.sbMyProgress
             binding.sbPartnerProgress.progress = distance
@@ -456,42 +463,25 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         }
 
                         is RunningSideEffect.SuccessPartnerInfo -> {
-                            // 파트너의 프로필을 seekbar의 thumb로 변경
-//                            Glide.with(requireContext())
-//                                .load(it.partnerInfo.profile)
-//                                .apply(
-//                                    RequestOptions().transform(
-//                                        CenterCrop(),
-//                                        RoundedCorners(999)
-//                                    )
-//                                )
-//                                .circleCrop()
-//                                .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
-//                                .override(100, 100)
-//                                .into(object : CustomTarget<Drawable>() {
-//                                    override fun onResourceReady(
-//                                        resource: Drawable,
-//                                        transition: Transition<in Drawable>?
-//                                    ) {
-//                                        binding.sbPartnerProgress.thumb = resource
-//                                    }
-//
-//                                    override fun onLoadCleared(placeholder: Drawable?) {
-//
-//                                    }
-//                                })
 
+                            // 파트너의 프로필을 seekbar의 thumb로 변경
                             Glide.with(requireContext())
-                                .asGif()
-                                .load(R.drawable.ic_shark_animation)
-                                .override(100,100)
-                                .into(object : CustomTarget<GifDrawable>(){
+                                .load(it.partnerInfo.profile)
+                                .apply(
+                                    RequestOptions().transform(
+                                        CenterCrop(),
+                                        RoundedCorners(999)
+                                    )
+                                )
+                                .circleCrop()
+                                .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
+                                .override(100, 100)
+                                .into(object : CustomTarget<Drawable>() {
                                     override fun onResourceReady(
-                                        resource: GifDrawable,
-                                        transition: Transition<in GifDrawable>?
+                                        resource: Drawable,
+                                        transition: Transition<in Drawable>?
                                     ) {
-                                       binding.sbPartnerProgress.thumb = resource
-                                        resource.start()
+                                        binding.sbPartnerProgress.thumb = resource
                                     }
 
                                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -501,6 +491,26 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         }
 
                         is RunningSideEffect.SuccessUserInfo -> {
+
+                            Glide.with(requireContext())
+                                .asGif()
+                                .override(95, 95)
+                                .load(R.drawable.ic_shark_animation)
+                                .into(object : CustomTarget<GifDrawable>() {
+                                    override fun onResourceReady(
+                                        resource: GifDrawable,
+                                        transition: Transition<in GifDrawable>?
+                                    ) {
+                                        Log.d(TAG, "onResourceReady: shark")
+                                        binding.sbSharkProgress.thumb = resource
+                                        resource.start()
+                                    }
+
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                                    }
+                                })
+
                             // 나의 프로필 이미지를 seekbar의 thumb로 변경
                             Glide.with(requireContext())
                                 .load(it.userInfo.profile)
@@ -696,6 +706,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         }
         binding.sbPartnerProgress.max = maxDistance
         binding.sbPartnerProgress.setOnTouchListener { _, _ ->
+            true
+        }
+        binding.sbSharkProgress.max = maxDistance
+        binding.sbSharkProgress.setOnTouchListener { _, _ ->
             true
         }
     }
