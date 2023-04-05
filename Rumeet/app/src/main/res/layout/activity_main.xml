@@ -54,7 +54,7 @@
                 app:maxImageSize="50dp"
                 android:scaleType="center"
                 android:layout_marginEnd="28dp"
-                android:src="@drawable/ic_single_run3"
+                android:src="@drawable/ic_single_run4"
                 app:backgroundTint="#0072C6"
                 android:tintMode="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
