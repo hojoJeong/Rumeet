@@ -14,4 +14,6 @@ public interface GameMapper {
     RaceStateDto getRaceState(int raceId);
 
     int getMode(int raceId);
+
+    RaceDto getRace(int raceId);
 }

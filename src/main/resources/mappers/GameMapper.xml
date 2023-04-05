@@ -8,6 +8,10 @@
         INSERT INTO race (user_id,partner_id,mode,date) VALUES (#{userId},#{partnerId},#{mode},#{date})
     </insert>
 
+    <select id="getRace" parameterType="int" resultMap="RaceDto">
+        SELECT id, user_id userId, partner_id partnerId, mode, date, state FROM race WHERE id=#{raceId};
+    </select>
+
     <update id="denyRace" parameterType="int" >
         UPDATE race SET state = -1 WHERE id = #{raceId};
     </update>

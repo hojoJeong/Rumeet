@@ -55,6 +55,7 @@ public class ChatServiceImpl implements ChatService{
     public void doChat(ChatDto chat, Message message) {
         StringBuilder sb = new StringBuilder();
         sb.append("room.").append(chat.getRoomId()).append(".").append(chat.getToUserId());
+        if(chat.getRoomId() == -1 || chat.getToUserId() ==-1 || chat.getFromUserId() ==-1) return;
         rabbitTemplate.send("chat.exchange",sb.toString(),message);
         List<ChatRoomListDto> fromUserList = this.getChatRoomList(chat.getFromUserId());
         List<ChatRoomListDto> toUserList = this.getChatRoomList(chat.getToUserId());
