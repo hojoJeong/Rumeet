@@ -48,7 +48,7 @@ public class RecordServiceImpl implements RecordService{
     }
 
     @Override
-    public void updateRecord(RaceInfoReqDto raceInfoReqDto)  {
+    public void updateRecord(RaceInfoReqDto raceInfoReqDto) {
 
         int mode = raceInfoReqDto.getMode();
         int userId = raceInfoReqDto.getUserId();
@@ -63,7 +63,6 @@ public class RecordServiceImpl implements RecordService{
         int matchCount = record.getMatchCount();
         int completeSuccess = record.getCompetitionSuccessCount();
         int teamSuccess = record.getTeamSuccessCount();
-        int averagePace;
 
         if (mode >= 4) {
             matchCount++;
@@ -90,19 +89,23 @@ public class RecordServiceImpl implements RecordService{
                 break;
         }
 
-        int newPace = (km == 0 || elapsedTime == 0) ? 0 : elapsedTime / km;
-
-        if (originPace == 0) {
-            averagePace = newPace;
+        int newPace;
+        int averagePace;
+        if (success == 1) {
+            newPace = (km == 0 || elapsedTime == 0) ? 0 : elapsedTime / km;
+            if (originPace == 0) {
+                averagePace = newPace;
+            } else {
+                averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
+            }
         } else {
-            averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
+            averagePace = originPace;
         }
 
-        record = new RecordDto(userId,record.getTotalCount()+1,
-                record.getTotalKm()+km,record.getTotalTime()+elapsedTime,
-                averagePace, matchCount, teamSuccess,completeSuccess);
+        record = new RecordDto(userId, record.getTotalCount() + 1,
+                record.getTotalKm() + km, record.getTotalTime() + elapsedTime,
+                averagePace, matchCount, teamSuccess, completeSuccess);
         recordMapper.updateRecord(record);
-
 
         // 뱃지 추가
         double totalKm = record.getTotalKm();
@@ -113,7 +116,7 @@ public class RecordServiceImpl implements RecordService{
         int[] competitionCounts = {30, 20, 10};
         int[] competitionBadges = {3, 2, 1};
 
-        if (completeSuccess == 1){
+        if (completeSuccess == 1) {
             MyBadgeDto myBadge = new MyBadgeDto(userId, 7, date); //경쟁 첫번째 승리
             badgeMapper.addBadge(myBadge);
         } else {
