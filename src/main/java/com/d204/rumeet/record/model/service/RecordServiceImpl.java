@@ -70,7 +70,7 @@ public class RecordServiceImpl implements RecordService{
             if (success == 1) {
                 if (mode >= 4 && mode <= 7) { // 경쟁모드 승리
                     completeSuccess++;
-                } else if (mode >= 8 && mode <= 11) { // 협동모드 승리
+                } else if (mode >= 8 && mode <= 19) { // 협동모드 승리
                     teamSuccess++;
                 }
             }
@@ -90,7 +90,7 @@ public class RecordServiceImpl implements RecordService{
                 break;
         }
 
-        int newPace = (km == 0 || elapsedTime == 0) ? 0 : (int) elapsedTime / km;
+        int newPace = (km == 0 || elapsedTime == 0) ? 0 : elapsedTime / km;
 
         if (originPace == 0) {
             averagePace = newPace;
