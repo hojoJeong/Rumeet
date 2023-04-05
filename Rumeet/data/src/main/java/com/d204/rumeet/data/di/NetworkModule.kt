@@ -2,8 +2,8 @@ package com.d204.rumeet.data.di
 
 import com.d204.rumeet.data.local.datastore.UserDataStorePreferences
 import com.d204.rumeet.data.remote.api.AuthApiService
-import com.d204.rumeet.data.remote.interceptor.BearerInterceptor
-import com.d204.rumeet.data.remote.interceptor.XAccessTokenInterceptor
+import com.d204.rumeet.data.remote.interceptor.TokenAuthInterceptor
+import com.d204.rumeet.data.remote.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,16 +41,16 @@ internal object NetworkModule {
     @Singleton
     @Named("AuthHttpClient")
     fun provideAuthHttpClient(
-        bearerInterceptor: BearerInterceptor,
-        xAccessTokenInterceptor: XAccessTokenInterceptor
+        tokenAuthInterceptor: TokenAuthInterceptor,
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(5, TimeUnit.SECONDS)
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
-            .addInterceptor(getLoggingInterceptor())
-            .addNetworkInterceptor(bearerInterceptor)
-            .addInterceptor(xAccessTokenInterceptor)
+            .addInterceptor(authInterceptor)
+            .authenticator(tokenAuthInterceptor)
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .build()
     }
 
@@ -59,16 +59,16 @@ internal object NetworkModule {
     fun provideBearerInterceptor(
         authApiService: AuthApiService,
         userDataStorePreferences: UserDataStorePreferences
-    ) : BearerInterceptor{
-        return BearerInterceptor(authApiService, userDataStorePreferences)
+    ) : TokenAuthInterceptor{
+        return TokenAuthInterceptor(authApiService, userDataStorePreferences)
     }
 
     @Provides
     @Singleton
     fun provideXAccessTokenInterceptor(
         userDataStorePreferences: UserDataStorePreferences
-    ) : XAccessTokenInterceptor{
-        return XAccessTokenInterceptor(userDataStorePreferences)
+    ) : AuthInterceptor {
+        return AuthInterceptor(userDataStorePreferences)
     }
 
 

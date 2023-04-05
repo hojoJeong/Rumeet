@@ -115,9 +115,15 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getHomeData(userId: Int): NetworkResult<HomeDataDomainModel> {
-        val response =
-            handleApi { userApiService.getHomeData(userId) }.toDomainResult<HomeDataResponseDto, HomeDataDomainModel> { it.toDomainModel() }
-        return response
+        try {
+            val response =
+                handleApi { userApiService.getHomeData(userId) }.toDomainResult<HomeDataResponseDto, HomeDataDomainModel> { it.toDomainModel() }
+            Log.d(TAG, "getHomeData: $response")
+            return response
+        }catch (e : Exception){
+            Log.e(TAG, "getHomeData: errr $e", )
+            return NetworkResult.Error(e)
+        }
     }
 
     override suspend fun getFriendRequestList(userId: Int): NetworkResult<List<NotificationListDomainModel>> {

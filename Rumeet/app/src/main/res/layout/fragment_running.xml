@@ -229,7 +229,7 @@
             android:id="@+id/btn_running_stop"
             android:layout_width="@dimen/size_btn_running"
             android:layout_height="@dimen/size_btn_running"
-            android:layout_marginTop="78dp"
+            android:layout_marginTop="80dp"
             android:visibility="gone"
             android:background="@drawable/bg_layerlist_stop_oval_darkgray_stroke0"
             app:layout_constraintEnd_toStartOf="@id/btn_running_play"
@@ -264,7 +264,6 @@
             android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_partner_running_progress"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -272,11 +271,10 @@
         <SeekBar
             android:id="@+id/sb_shark_progress"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:progressDrawable="@drawable/bg_partner_running_progress"
             android:enabled="false"
-            android:thumb="@drawable/ic_shark_thumb"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/sb_my_progress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
