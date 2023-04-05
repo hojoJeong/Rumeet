@@ -80,8 +80,10 @@ class HomeViewModel @Inject constructor(
     fun getHomeData() {
         baseViewModelScope.launch {
             showLoading()
+            Log.d(TAG, "getHomeData: start")
             getHomeDataUseCase(userId.value.successOrNull()!!)
                 .onSuccess { response ->
+                    Log.d(TAG, "getHomeData: success")
                     _userName.value = UiState.Success(response.record.nickname.toString())
                     _homeResponse.value = UiState.Success(response)
                     setHomeRecord(response.record)
@@ -89,9 +91,12 @@ class HomeViewModel @Inject constructor(
                     dismissLoading()
                 }
                 .onError {
+                    Log.d(TAG, "getHomeData: error")
                     dismissLoading()
                     catchError(it)
                 }
+            Log.d(TAG, "getHomeData: done")
+            dismissLoading()
         }
     }
 

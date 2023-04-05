@@ -8,7 +8,7 @@ import okhttp3.Response
 import java.io.IOException
 import javax.inject.Inject
 
-internal class XAccessTokenInterceptor @Inject constructor(
+internal class AuthInterceptor @Inject constructor(
     private val userDataStorePreferences: UserDataStorePreferences
 ): Interceptor {
     @Throws(IOException::class)

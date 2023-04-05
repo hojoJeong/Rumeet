@@ -139,6 +139,12 @@ class RunningMatchingViewModel @Inject constructor(
             }
         })
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
+        RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
+    }
 }
 
 private const val TAG = "러밋_RunningMatchingViewModel"
