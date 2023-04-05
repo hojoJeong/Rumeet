@@ -17,10 +17,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.d204.rumeet.R
@@ -40,12 +37,8 @@ import com.d204.rumeet.util.amqp.RunningAMQPManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.*
 import kotlin.collections.ArrayList
 import android.media.MediaRecorder
 import android.os.*
@@ -381,6 +374,26 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         } else { // single
             if (args.partnerId != -1) { // ghost
                 isGhost = true
+
+                Glide.with(requireContext())
+                    .asGif()
+                    .override(100, 100)
+                    .load(R.drawable.ic_ghost_animation)
+                    .into(object : CustomTarget<GifDrawable>() {
+                        override fun onResourceReady(
+                            resource: GifDrawable,
+                            transition: Transition<in GifDrawable>?
+                        ) {
+                            Log.d(TAG, "onResourceReady: shark")
+                            binding.sbPartnerProgress.thumb = resource
+                            resource.start()
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+
+                        }
+                    })
+
                 binding.btnRunningStop.visibility = View.VISIBLE
                 binding.btnRunningPause.visibility = View.GONE
                 ghostPace = IntArray(args.pace.size)
@@ -577,25 +590,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                     ) {
                                         Log.d(TAG, "onResourceReady: shark")
                                         binding.sbSharkProgress.thumb = resource
-                                        resource.start()
-                                    }
-
-                                    override fun onLoadCleared(placeholder: Drawable?) {
-
-                                    }
-                                })
-
-                            Glide.with(requireContext())
-                                .asGif()
-                                .override(100, 100)
-                                .load(R.drawable.ic_ghoat_animation)
-                                .into(object : CustomTarget<GifDrawable>() {
-                                    override fun onResourceReady(
-                                        resource: GifDrawable,
-                                        transition: Transition<in GifDrawable>?
-                                    ) {
-                                        Log.d(TAG, "onResourceReady: shark")
-                                        binding.sbPartnerProgress.thumb = resource
                                         resource.start()
                                     }
 
