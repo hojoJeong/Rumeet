@@ -51,8 +51,10 @@ class RunningViewModel @Inject constructor(
             _userId.emit(getUserIdUseCase()) // userId 가져오기
             runningRepository.startSolo(userId.value, gameType, 0)
                 .onSuccess { response ->
-                    _runningSideEffect.emit(RunningSideEffect.SuccessSoloData(response))
-                    Log.d("러밋_RunningViewModel", "startGetGhost: 고스트 API 요청 결과: $response")
+                    if(response.partnerId == -1){
+                        _runningSideEffect.emit(RunningSideEffect.SuccessSoloData(response))
+                        Log.d("러밋_RunningViewModel", "StartSolo: StartSolo API 요청 결과: $response")
+                    }
                 }
                 .onError { e ->
                     catchError(e)

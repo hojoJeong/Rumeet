@@ -9,8 +9,10 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningOptionBinding
+import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.model.user.RunningSoloDomainModel
 import com.d204.rumeet.domain.repository.RunningRepository
+import com.d204.rumeet.domain.toDomainResult
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.running.RunningSideEffect
 import com.d204.rumeet.ui.running.RunningViewModel
@@ -55,20 +57,32 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
             viewModel.runningSideEffect.collectLatest {
                 when (it) {
                     is RunningSideEffect.SuccessSoloData -> {
-                        navigate(
-                            RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningLoadingFragment(
-                                myId = it.data.userId,
-                                gameType = it.data.mode,
-                                roomId = it.data.id,
-                                partnerId = it.data.partnerId,
-                                pace = it.data.pace.toIntArray()
+                        if(it.data.partnerId == -1) { // 솔로모드일때 로딩화면으로 이동
+                            navigate(
+                                RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningLoadingFragment(
+                                    myId = it.data.userId,
+                                    gameType = it.data.mode,
+                                    roomId = it.data.id,
+                                    partnerId = it.data.partnerId,
+                                    pace = it.data.pace.toIntArray()
+                                )
                             )
-                        )
+                        }
+
                     }
                     else -> {}
                 }
             }
         }
+    }
+
+    fun startSologame() {
+
+//        suspend fun startSolo(userId: Int, mode: Int, ghost: Int): NetworkResult<RunningSoloDomainModel> {
+//            val response = handleApi { runningApiService.startSoloRace(userId, mode, ghost) }.toDomainResult<RunningSoloResponseDto, RunningSoloDomainModel> { it.toDomain()}
+//            Log.d("러밋_TAG", "startSolo: $response")
+//            return response
+//        }
     }
 
     override fun initAfterBinding() {
@@ -77,6 +91,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
                 RunningType.SINGLE -> {  //single
                     Log.d(TAG, "initAfterBinding: 싱글 km mode: ${getRunningType()}")
                     viewModel.startSoloGame(getRunningType())
+//                    startSoloGame()
                 }
                 RunningType.SINGLE_GHOST -> { // ghost
                     Log.d(TAG, "initAfterBinding: 고스트 type: ${getGhostType()}, km mode: ${getRunningType()}")
