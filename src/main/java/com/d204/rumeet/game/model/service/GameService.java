@@ -13,6 +13,8 @@ public interface GameService {
 
     int getRaceState(int raceId);
 
+    RaceDto getRace(int raceId);
+
     void acceptRace(int raceId);
 
     void denyRace(int raceId);

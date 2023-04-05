@@ -71,14 +71,10 @@ public class GameHandler {
                 Criteria.where("raceId").is(raceId)),
                 FriendRaceDto.class
         );
-        RaceDto raceDto = new RaceDto(friendRaceDto.getRaceId(),
-                friendRaceDto.getUserId(),
-                friendRaceDto.getPartnerId(),
-                friendRaceDto.getMode(),
-                friendRaceDto.getDate(),
-                friendRaceDto.getState());
+        //raceId
+        RaceDto raceDto = gameService.getRace(raceId);
         System.out.println("############### 매칭된 게임 정보"+raceDto.toString());
-        if (friendRaceDto.getState() == 0) { // 달리기 시작
+        if (friendRaceDto.getState() != -1) { // 달리기 시작
             friendMatchingTool.doRunning(raceDto);
         }
     }
