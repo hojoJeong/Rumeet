@@ -75,23 +75,21 @@ public class RecordServiceImpl implements RecordService{
             }
         }
 
-
-        int km = 1;
-        switch (mode % 4) {
-            case 1:
-                km = 2;
-                break;
-            case 2:
-                km = 3;
-                break;
-            case 3:
-                km = 5;
-                break;
-        }
-
+        int km=1;
         int newPace;
         int averagePace;
         if (success == 1) {
+            switch (mode % 4) {
+                case 1:
+                    km = 2;
+                    break;
+                case 2:
+                    km = 3;
+                    break;
+                case 3:
+                    km = 5;
+                    break;
+            }
             newPace = (km == 0 || elapsedTime == 0) ? 0 : elapsedTime / km;
             if (originPace == 0) {
                 averagePace = newPace;
@@ -99,6 +97,7 @@ public class RecordServiceImpl implements RecordService{
                 averagePace = ((originPace * originCount) + newPace) / (originCount + 1);
             }
         } else {
+            km = 0;
             averagePace = originPace;
         }
 
