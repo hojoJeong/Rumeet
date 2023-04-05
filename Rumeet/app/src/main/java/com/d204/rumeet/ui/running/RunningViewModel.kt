@@ -128,6 +128,20 @@ class RunningViewModel @Inject constructor(
                     _runningSideEffect.tryEmit(RunningSideEffect.SuccessRunning(distance.toInt()))
                 }
             })
+
+        RunningAMQPManager.receiveAudio(
+            roomId,
+            userId,
+            object : DefaultConsumer(RunningAMQPManager.runningChannel) {
+                override fun handleDelivery(
+                    consumerTag: String?,
+                    envelope: Envelope?,
+                    properties: AMQP.BasicProperties?,
+                    body: ByteArray
+                ) {
+                    _runningSideEffect.tryEmit(RunningSideEffect.SuccessAudio(body))
+                }
+            })
     }
 
     // state = 1 싱글, state = 2 멀티
