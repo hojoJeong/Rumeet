@@ -381,6 +381,26 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         } else { // single
             if (args.partnerId != -1) { // ghost
                 isGhost = true
+
+                Glide.with(requireContext())
+                    .asGif()
+                    .override(100, 100)
+                    .load(R.drawable.ic_ghoat_animation)
+                    .into(object : CustomTarget<GifDrawable>() {
+                        override fun onResourceReady(
+                            resource: GifDrawable,
+                            transition: Transition<in GifDrawable>?
+                        ) {
+                            Log.d(TAG, "onResourceReady: shark")
+                            binding.sbPartnerProgress.thumb = resource
+                            resource.start()
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+
+                        }
+                    })
+
                 binding.btnRunningStop.visibility = View.VISIBLE
                 binding.btnRunningPause.visibility = View.GONE
                 ghostPace = IntArray(args.pace.size)
@@ -577,25 +597,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                     ) {
                                         Log.d(TAG, "onResourceReady: shark")
                                         binding.sbSharkProgress.thumb = resource
-                                        resource.start()
-                                    }
-
-                                    override fun onLoadCleared(placeholder: Drawable?) {
-
-                                    }
-                                })
-
-                            Glide.with(requireContext())
-                                .asGif()
-                                .override(100, 100)
-                                .load(R.drawable.ic_ghoat_animation)
-                                .into(object : CustomTarget<GifDrawable>() {
-                                    override fun onResourceReady(
-                                        resource: GifDrawable,
-                                        transition: Transition<in GifDrawable>?
-                                    ) {
-                                        Log.d(TAG, "onResourceReady: shark")
-                                        binding.sbPartnerProgress.thumb = resource
                                         resource.start()
                                     }
 
