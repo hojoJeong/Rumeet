@@ -25,6 +25,9 @@ import com.d204.rumeet.ui.activities.LoginActivity
 import com.d204.rumeet.ui.components.LoadingDialogFragment
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -174,7 +177,10 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     // 띄워 놓은 로딩 다이얼로그를 없앰.
     private fun dismissLoadingDialog() {
         if (mLoadingDialog.isAdded) {
-            mLoadingDialog.dismiss()
+            CoroutineScope(Dispatchers.Main).launch{
+                delay(500)
+                mLoadingDialog.dismiss()
+            }
         }
     }
 
