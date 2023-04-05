@@ -11,6 +11,7 @@ import com.d204.rumeet.databinding.FragmentRunningMatchingBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.ui.running.matching.model.RunningMatchingUiModel
+import com.d204.rumeet.util.amqp.RunningAMQPManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ class RunningMatchingFragment :
     override fun initStartView() {
         Log.d(TAG, "initStartView: runningMAtchingFragment withfriend: ${args.withFriend}")
         binding.lifecycleOwner = viewLifecycleOwner
+
 
         val random = Random().nextInt(5)
         binding.tvContent.text = randomImgList[random].msg
@@ -77,6 +79,7 @@ class RunningMatchingFragment :
                             navigate(RunningMatchingFragmentDirections.actionRunningMatchingFragmentToRunningMatchingFailFragment())
                         }
                         is RunningMatchingSideEffect.SuccessMatching -> {
+                            Log.d(TAG, "RunningMatchingSideEffect.SuccessMatching: ${viewModel.runningMatchingSideEffect.replayCache}")
                             // 매칭 성공, 달리기 3초 후 시작
                             Log.d(TAG, "runningMatchingSideEffect: navigate ${args.gameType}")
                             navigate(
@@ -88,6 +91,7 @@ class RunningMatchingFragment :
                                     pace = IntArray(3)
                                 )
                             )
+                            Log.d(TAG, "RunningMatchingSideEffect.SuccessMatching after: ${viewModel.runningMatchingSideEffect.replayCache}")
                         }
                         is RunningMatchingSideEffect.SuccessGhostData -> {
                             navigate(

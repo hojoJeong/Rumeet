@@ -29,6 +29,7 @@ import com.d204.rumeet.ui.running.option.multi.RunningOptionCompetitionOrGhostFr
 import com.d204.rumeet.ui.running.option.multi.RunningOptionTeamPlayFragment
 import com.d204.rumeet.ui.running.option.single.RunningGhostSingleFragment
 import com.d204.rumeet.ui.running.option.single.RunningSingleFragment
+import com.d204.rumeet.util.amqp.RunningAMQPManager
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -47,6 +48,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         Log.d(TAG, "onCreate: ")
         if (args.invitedFromFriend) {

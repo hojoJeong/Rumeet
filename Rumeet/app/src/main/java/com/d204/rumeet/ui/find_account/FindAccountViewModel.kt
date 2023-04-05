@@ -19,7 +19,7 @@ class FindAccountViewModel @Inject constructor(
     private val requestAuthenticationCodeUseCase: RequestAuthenticationCodeUseCase
 ) : BaseViewModel() {
     private val _findAccountAction: MutableSharedFlow<FindAccountAction> =
-        MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
+        MutableSharedFlow(replay = 0, extraBufferCapacity = 10)
     val findAccountAction: SharedFlow<FindAccountAction> get() = _findAccountAction.asSharedFlow()
 
     private val _authenticationState: MutableStateFlow<Boolean> = MutableStateFlow(false)

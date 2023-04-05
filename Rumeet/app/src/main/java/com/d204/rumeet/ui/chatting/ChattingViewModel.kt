@@ -27,7 +27,7 @@ class ChattingViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val _chattingSideEffect: MutableSharedFlow<ChattingSideEffect> =
-        MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
+        MutableSharedFlow(replay = 0, extraBufferCapacity = 10)
     val chattingSideEffect: SharedFlow<ChattingSideEffect> get() = _chattingSideEffect.asSharedFlow()
 
     private val _chattingDataList: MutableStateFlow<UiState<List<ChattingMessageUiModel>>> =
