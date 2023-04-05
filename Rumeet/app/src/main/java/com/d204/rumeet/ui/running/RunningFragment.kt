@@ -331,10 +331,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 }
                 binding.btnRunningStop.visibility = View.VISIBLE
             }
-        }  else {
-            isGhost = true
-            binding.btnRunningStop.visibility = View.VISIBLE
-            if(args.partnerId != -1){ // 고스트 모드
+        }  else { // single
+            if(args.partnerId != -1) { // ghost
+                isGhost = true
+                binding.btnRunningStop.visibility = View.VISIBLE
+                binding.btnRunningPause.visibility = View.GONE
                 viewModel.getPartnerInfo(args.partnerId)
                 ghostPace = IntArray(args.pace.size)
                 binding.sbPartnerProgress.visibility = View.VISIBLE
@@ -343,6 +344,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     ghostPace[i] = Math.round((1000.0/args.pace[i])).toInt()// 1 더주는 이유는 올림 처리
                 }
                 Log.d(TAG, "initStartView: ghostPace= ${ghostPace.contentToString()}")
+            }
+            else { // solo
+                binding.btnRunningPause.visibility = View.VISIBLE
             }
         }
 
