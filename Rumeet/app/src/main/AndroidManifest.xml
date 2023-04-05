@@ -61,7 +61,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name=".service.RunningService"/>
+        <service android:name=".service.RunningService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

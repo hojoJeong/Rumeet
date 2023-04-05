@@ -63,28 +63,36 @@ class RunningService : Service(), LocationListener {
         }
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 10.0f, this)
-    }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForeground(1, createNotification())
+            val channel = NotificationChannel(CHANNEL_ID, "test", NotificationManager.IMPORTANCE_HIGH)
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+
+            startForeground(2, createNotification())
         } else {
             // API 레벨이 26 미만인 경우, startForeground() 메서드를 호출할 필요 없음
         }
-        return START_REDELIVER_INTENT
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return START_STICKY
     }
 
     override fun onDestroy() {
         stopForeground(true)
+        Log.d("TAG", "onDestroy: 서비스 종료")
         super.onDestroy()
     }
 
     private fun createNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_toolbar_logo)
-            .setContentTitle("제목1")
-            .setContentText("내용1")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
+        .setSmallIcon(R.drawable.ic_toolbar_logo)
+        .setContentTitle("러밋")
+        .setChannelId(CHANNEL_ID)
+        .setContentText("힘차게 러밋! 지금부터 달려보아요")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .build()
 
 
     override fun onLocationChanged(location: Location) {
