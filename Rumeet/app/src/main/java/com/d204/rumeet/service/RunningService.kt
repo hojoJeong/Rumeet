@@ -99,7 +99,6 @@ class RunningService : Service(), LocationListener {
         lastLocation = location
     }
 
-    fun getDistance() = lastLocation
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
         if (provider?.equals(LocationManager.GPS_PROVIDER) == true) {
