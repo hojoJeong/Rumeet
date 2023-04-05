@@ -47,13 +47,15 @@ class NotificationContainerFragment(private val viewInfo: String) :
                     is NotificationAction.AcceptRunningRequest -> {
                         val info =
                             viewModel.runningRequestList.value.successOrNull()?.get(action.index)
-                        findNavController().navigate(NotificationFragmentDirections.actionNotificationFragmentToNavigationRunning(
-                            invitedFromFriend = true,
-                            myId = viewModel.userId,
-                            roomId = action.raceId,
-                            gameType = info?.mode ?: -1,
-                            partnerId = info?.partnerId ?: -1
-                        ))
+                        findNavController().navigate(
+                            NotificationFragmentDirections.actionNotificationFragmentToNavigationRunning(
+                                invitedFromFriend = true,
+                                myId = viewModel.userId,
+                                roomId = action.raceId,
+                                gameType = info?.mode ?: -1,
+                                partnerId = info?.partnerId ?: -1
+                            )
+                        )
                         Log.d(TAG, "initView: accept!!! ${action.raceId}, $info")
 
                     }
@@ -85,31 +87,38 @@ class NotificationContainerFragment(private val viewInfo: String) :
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.runningRequestList.collect {
-                    if(it.successOrNull()?.size ?: 0 > 0){
+                    if (it.successOrNull()?.size ?: 0 > 0) {
                         binding.contentNotificationNoResult.root.visibility =
                             View.GONE
-                    }
-                    val runningAdapter = NotificationRunningListAdapter().apply {
-                        submitList(it.successOrNull())
-                        handler = object : NotificationHandler {
-                            override fun onClickFriend(friendId: Int, myId: Int, accept: Boolean) {
-                            }
-
-                            override fun onClickRunning(
-                                index: Int,
-                                raceId: Int,
-                                accept: Boolean
-                            ) {
-                                if (accept) {
-                                    viewModel.acceptRequestRunning(raceId, index)
-                                } else {
-                                    viewModel.denyRequestRunning(raceId, index)
+                        val runningAdapter = NotificationRunningListAdapter().apply {
+                            submitList(it.successOrNull() ?: emptyList())
+                            handler = object : NotificationHandler {
+                                override fun onClickFriend(
+                                    friendId: Int,
+                                    myId: Int,
+                                    accept: Boolean
+                                ) {
                                 }
-                            }
 
+                                override fun onClickRunning(
+                                    index: Int,
+                                    raceId: Int,
+                                    accept: Boolean
+                                ) {
+                                    if (accept) {
+                                        viewModel.acceptRequestRunning(raceId, index)
+                                    } else {
+                                        viewModel.denyRequestRunning(raceId, index)
+                                    }
+                                }
+
+                            }
                         }
+                        binding.rvNotification.adapter = runningAdapter
+                    } else {
+                        binding.contentNotificationNoResult.root.visibility =
+                            View.VISIBLE
                     }
-                    binding.rvNotification.adapter = runningAdapter
                 }
             }
         }
@@ -119,26 +128,39 @@ class NotificationContainerFragment(private val viewInfo: String) :
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.friendRequestList.collect {
-                    binding.contentNotificationNoResult.tvContentNoResultMessage.visibility =
-                        View.GONE
-                    val friendAdapter = NotificationFriendListAdapter().apply {
-                        submitList(it.successOrNull())
-                        notificationHandler = object : NotificationHandler {
-                            override fun onClickFriend(friendId: Int, myId: Int, accept: Boolean) {
-                                if (accept) {
-                                    viewModel.acceptRequestFriend(friendId, myId)
-                                } else {
-                                    viewModel.denyRequestFriend(friendId, myId)
+                    if (it.successOrNull()?.size ?: 0 > 0) {
+                        binding.contentNotificationNoResult.root.visibility =
+                            View.GONE
+                        val friendAdapter = NotificationFriendListAdapter().apply {
+                            submitList(it.successOrNull())
+                            notificationHandler = object : NotificationHandler {
+                                override fun onClickFriend(
+                                    friendId: Int,
+                                    myId: Int,
+                                    accept: Boolean
+                                ) {
+                                    if (accept) {
+                                        viewModel.acceptRequestFriend(friendId, myId)
+                                    } else {
+                                        viewModel.denyRequestFriend(friendId, myId)
+                                    }
+                                    viewModel.getNotificationList()
                                 }
-                                viewModel.getNotificationList()
-                            }
 
-                            override fun onClickRunning(raceId: Int, index: Int, accept: Boolean) {
+                                override fun onClickRunning(
+                                    raceId: Int,
+                                    index: Int,
+                                    accept: Boolean
+                                ) {
 
+                                }
                             }
                         }
+                        binding.rvNotification.adapter = friendAdapter
+                    } else {
+                        binding.contentNotificationNoResult.root.visibility = View.GONE
                     }
-                    binding.rvNotification.adapter = friendAdapter
+
                 }
             }
         }

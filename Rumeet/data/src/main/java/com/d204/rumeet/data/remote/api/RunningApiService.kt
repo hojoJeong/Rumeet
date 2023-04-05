@@ -4,6 +4,7 @@ import com.d204.rumeet.data.remote.dto.request.running.RunningInfoRequestDto
 import com.d204.rumeet.data.remote.dto.request.running.RunningMatchingWithFriendRequestDto
 import com.d204.rumeet.data.remote.dto.request.user.SocialJoinRequestDto
 import com.d204.rumeet.data.remote.dto.response.BaseResponse
+import com.d204.rumeet.data.remote.dto.response.running.RunningSoloResponseDto
 import okhttp3.MultipartBody
 import retrofit2.http.*
 

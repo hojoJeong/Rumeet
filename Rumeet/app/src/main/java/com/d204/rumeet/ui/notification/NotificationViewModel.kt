@@ -38,10 +38,6 @@ class NotificationViewModel @Inject constructor(
         MutableStateFlow(UiState.Loading)
     val runningRequestList: StateFlow<UiState<List<RunningRequestDomainModel>>> get() = _runningRequestList
 
-    private val _resultReplyRequest: MutableStateFlow<UiState<Boolean>> =
-        MutableStateFlow(UiState.Loading)
-    val resultReplyRequest: StateFlow<UiState<Boolean>> get() = _resultReplyRequest.asStateFlow()
-
     var userId = -1
     fun getNotificationList() {
         baseViewModelScope.launch {
@@ -49,24 +45,30 @@ class NotificationViewModel @Inject constructor(
             userId = getUserIdUseCase()
             getRunningRequestListUseCase(getUserIdUseCase())
                 .onSuccess {
+                    dismissLoading()
+
                     _notificationAction.emit(NotificationAction.RunningRequest(it))
                     _runningRequestList.value = UiState.Success(it)
                     Log.d(TAG, "getNotificationList 러닝 초대: $it")
                 }
                 .onError {
+                    dismissLoading()
 
                 }
 
             getFriendRequestListUseCase(getUserIdUseCase())
                 .onSuccess {
+                    dismissLoading()
+
                     _notificationAction.emit(NotificationAction.FriendRequest(it))
                     _friendRequestList.value = UiState.Success(it)
-                    Log.d(TAG, "getNotificationList: $it")
+                    Log.d(TAG, "getNotificationList 친구 초대: $it")
                 }
                 .onError {
+                    dismissLoading()
+
                     _friendRequestList.value = UiState.Error(it.cause)
                 }
-            dismissLoading()
         }
     }
 

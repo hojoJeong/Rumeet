@@ -34,7 +34,7 @@ internal class RunningRepositoryImpl @Inject constructor(
         time: Int,
         heartRate: Int,
         success: Int,
-        polyline: String?
+        polyline: String
     ): NetworkResult<Unit?> {
         try {
             val request = RunningInfoRequestDto(userId, raceId, mode, velocity.toDouble(), time, heartRate, success, polyline)

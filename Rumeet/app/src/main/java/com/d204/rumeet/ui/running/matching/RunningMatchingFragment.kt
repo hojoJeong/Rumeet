@@ -6,7 +6,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.d204.rumeet.NavigationRunningArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningMatchingBinding
 import com.d204.rumeet.ui.base.BaseFragment

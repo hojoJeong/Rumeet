@@ -45,7 +45,7 @@ class SelectFriendFragment : BaseFragment<FragmentSelectFriendBinding, RunningMa
                             override fun onClick(userId: Int) {
                                 Log.d(TAG, "onClick: selectFragment 러닝 시작 userId: $userId")
                                 viewModel.setFriendId(userId)
-                                navigate(SelectFriendFragmentDirections.actionSelectFriendFragmentToRunningMatchingFragment(args.gameType, true))
+                                navigate(SelectFriendFragmentDirections.actionSelectFriendFragmentToRunningMatchingFragment(gameType = args.gameType, withFriend = true))
                             }
                         }
                     }

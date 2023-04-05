@@ -1,5 +1,7 @@
 package com.d204.rumeet.ui.notification
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.d204.rumeet.R
@@ -42,6 +44,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding, Notificat
         binding.vpNotification.adapter = NotificationContainerAdapter(this).apply {
             setFragmentList(vpFragmentList)
         }
+        Log.d(TAG, "initView: 타입 : ${args.type}")
         binding.vpNotification.currentItem = args.type
 
         TabLayoutMediator(binding.tblyNotification, binding.vpNotification){ tab, position ->

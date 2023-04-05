@@ -27,7 +27,7 @@ class RunningViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val recordRunningUseCase: RecordRunningUseCase,
-    private val acceptRunningRequestUseCase: AcceptRunningRequestUseCase
+    private val acceptRunningRequestUseCase: AcceptRunningRequestUseCase,
     private val runningRepository: RunningRepository
 ) : BaseViewModel() {
 

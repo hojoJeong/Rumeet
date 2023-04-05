@@ -616,7 +616,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = testDistance
+                maxDistance = 1000
                 checkCount = 1
                 "경쟁 1km"
             }
@@ -675,6 +675,78 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 "협동 3km"
             }
             11 -> {
+                runningEndModel = RunningModel5pace(
+                    user_id = args.myId,
+                    race_id = args.roomId
+                )
+                maxDistance = 5000
+                checkCount = 4
+                "협동 5km"
+            }
+            12 -> {
+                runningEndModel = RunningModel1pace(
+                    user_id = args.myId,
+                    race_id = args.roomId
+                )
+                maxDistance = 1000
+                checkCount = 1
+                "협동 1km"
+            }
+            13 -> {
+                runningEndModel = RunningModel2pace(
+                    user_id = args.myId,
+                    race_id = args.roomId
+                )
+                maxDistance = 2000
+                checkCount = 2
+                "협동 2km"
+            }
+            14 -> {
+                runningEndModel = RunningModel3pace(
+                    user_id = args.myId,
+                    race_id = args.roomId
+                )
+                maxDistance = 3000
+                checkCount = 3
+                "협동 3km"
+            }
+            15 -> {
+                runningEndModel = RunningModel5pace(
+                    user_id = args.myId,
+                    race_id = args.roomId
+                )
+                maxDistance = 5000
+                checkCount = 4
+                "협동 5km"
+            }
+            16 -> {
+                runningEndModel = RunningModel1pace(
+                    user_id = args.myId,
+                    race_id = args.roomId
+                )
+                maxDistance = 1000
+                checkCount = 1
+                "협동 1km"
+            }
+            17 -> {
+                runningEndModel = RunningModel2pace(
+                    user_id = args.myId,
+                    race_id = args.roomId
+                )
+                maxDistance = 2000
+                checkCount = 2
+                "협동 2km"
+            }
+            18 -> {
+                runningEndModel = RunningModel3pace(
+                    user_id = args.myId,
+                    race_id = args.roomId
+                )
+                maxDistance = 3000
+                checkCount = 3
+                "협동 3km"
+            }
+            19 -> {
                 runningEndModel = RunningModel5pace(
                     user_id = args.myId,
                     race_id = args.roomId

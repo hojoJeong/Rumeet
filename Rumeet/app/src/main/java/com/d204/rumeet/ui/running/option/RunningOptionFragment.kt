@@ -3,7 +3,6 @@ package com.d204.rumeet.ui.running.option
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
-import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +21,6 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.running.RunningSideEffect
 import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.ui.running.option.adapter.RunningOptionViewPagerAdapter
-import com.d204.rumeet.ui.running.option.model.RunningDetailType
 import com.d204.rumeet.ui.running.option.model.RunningDifficulty
 import com.d204.rumeet.ui.running.option.model.RunningDetailType
 import com.d204.rumeet.ui.running.option.model.RunningDistance
@@ -71,6 +69,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
         }
         // 멀티
         else {
+            viewModel.setRunningDetailType(RunningDetailType.FRIEND)
             initMultiModeView()
         }
     }

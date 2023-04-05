@@ -143,6 +143,15 @@ fun Int.toMode() : String{
         9 -> mode = "협동 2km"
         10 -> mode = "협동 3km"
         11 -> mode = "협동 5km"
+        12 -> mode = "협동 1km"
+        13 -> mode = "협동 2km"
+        14 -> mode = "협동 3km"
+        15 -> mode = "협동 5km"
+        16 -> mode = "협동 1km"
+        17 -> mode = "협동 2km"
+        18 -> mode = "협동 3km"
+        19 -> mode = "협동 5km"
+
     }
     return mode
 }
