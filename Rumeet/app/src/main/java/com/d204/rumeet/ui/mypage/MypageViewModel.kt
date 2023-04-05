@@ -99,16 +99,16 @@ class MyPageViewModel @Inject constructor(
                 myPageMunuList[3] -> _myPageNavigationEvent.emit(MyPageAction.BadgeList)
                 myPageMunuList[4] -> _myPageNavigationEvent.emit(MyPageAction.EditProfile)
                 myPageMunuList[5] -> _myPageNavigationEvent.emit(MyPageAction.Setting)
-                myPageMunuList[6] -> _myPageNavigationEvent.emit(MyPageAction.LogOut)
 
                 settingOptionList[0] -> _settingNavigationEvent.emit(SettingAction.UserInfo)
                 settingOptionList[1] -> _settingNavigationEvent.emit(SettingAction.SettingNotification)
                 settingOptionList[3] -> _settingNavigationEvent.emit(SettingAction.Privacy)
                 settingOptionList[4] -> _settingNavigationEvent.emit(SettingAction.ServiceTerms)
+                settingOptionList[5] -> _settingNavigationEvent.emit(SettingAction.Logout)
 
                 userInfoOptionList[5] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetDetailInfo)
                 userInfoOptionList[6] -> _userInfoNavigationEvent.emit(UserInfoAction.ResetPassword)
-                userInfoOptionList[7] -> _userInfoNavigationEvent.emit(UserInfoAction.Withdrawal)
+                userInfoOptionList[8] -> _userInfoNavigationEvent.emit(UserInfoAction.Withdrawal)
             }
         }
     }
