@@ -8,7 +8,7 @@
         INSERT INTO race (user_id,partner_id,mode,date) VALUES (#{userId},#{partnerId},#{mode},#{date})
     </insert>
 
-    <select id="getRace" parameterType="int" resultMap="RaceDto">
+    <select id="getRace" parameterType="int" resultType="RaceDto">
         SELECT id, user_id userId, partner_id partnerId, mode, date, state FROM race WHERE id=#{raceId};
     </select>
 
