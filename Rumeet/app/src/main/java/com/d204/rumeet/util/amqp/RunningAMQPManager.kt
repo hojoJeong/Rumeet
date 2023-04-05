@@ -20,13 +20,13 @@ object RunningAMQPManager {
 
     var runningChannel: Channel? = null
     var runningTag : String = ""
+    var recTag : String = ""
 
     fun initChannel() {
         CoroutineScope(Dispatchers.IO).launch {
             runningChannel = factory.newConnection().createChannel()
         }
     }
-
     // 내아이디와, mode를 보냄
     fun startMatching(data: String) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -78,7 +78,22 @@ object RunningAMQPManager {
             )
         }
     }
-
+    fun sendAudioFile(partnerId: Int, roomId: Int, message: ByteArray) {
+        CoroutineScope(Dispatchers.IO).launch {
+            runningChannel?.basicPublish(
+                "",
+                "rec.${roomId}.${partnerId}",
+                null,
+                message
+            )
+        }
+    }
+    fun receiveAudio(roomId: Int, userId: Int, callback: DefaultConsumer) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.d(TAG, "receiveAudio: ${roomId}.${userId}")
+            recTag = runningChannel?.basicConsume("rec.${roomId}.${userId}", callback) ?: ""
+        }
+    }
     // 게임 관련 데이터 받기
     fun receiveRunning(roomId: Int, userId: Int, callback: DefaultConsumer) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -93,6 +108,8 @@ object RunningAMQPManager {
             runningChannel?.basicPublish("", "end.queue", null, message.toByteArray())
             if(runningTag.isNotEmpty())
                 runningChannel?.basicCancel(runningTag)
+            if(recTag.isNotEmpty())
+                runningChannel?.basicCancel(recTag)
         }
     }
 }

@@ -7,11 +7,9 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
-import android.os.Vibrator
+import android.media.MediaPlayer
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -49,6 +47,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
+import android.media.MediaRecorder
+import android.os.*
+import java.io.File
 
 
 private const val TAG = "러밋_RunningFragment"
@@ -59,7 +60,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     override val layoutResourceId: Int get() = R.layout.fragment_running
     override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running) { defaultViewModelProviderFactory }
-
+    private var mediaRecorder: MediaRecorder? = null
     private lateinit var sensorManager: SensorManager
     private lateinit var altitudeSensor: Sensor
     private lateinit var difficulty: RunningDifficulty
@@ -345,6 +346,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
             with(binding) {
                 sbMyProgress.visibility = View.VISIBLE
+                btnMic.visibility = View.VISIBLE
                 if (args.gameType < 8) {
                     sbPartnerProgress.visibility = View.VISIBLE
                     sbSharkProgress.visibility = View.GONE
@@ -492,6 +494,23 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                         is RunningSideEffect.EndRunning -> {
 
+                        }
+                        is RunningSideEffect.SuccessAudio -> {
+                            val tempFile = File.createTempFile("received_audio", ".mp3")
+                            tempFile.writeBytes(it.file)
+
+                            // MediaPlayer를 사용하여 임시 파일을 재생
+                            val mediaPlayer = MediaPlayer().apply {
+                                setDataSource(tempFile.absolutePath)
+                                prepare()
+                                start()
+
+                                setOnCompletionListener {
+                                    // 재생 완료 시 리소스 해제 및 임시 파일 삭제
+                                    release()
+                                    tempFile.delete()
+                                }
+                            }
                         }
 
                         is RunningSideEffect.SuccessPartnerInfo -> {
@@ -824,8 +843,53 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         binding.sbSharkProgress.setOnTouchListener { _, _ ->
             true
         }
+        binding.btnMic.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // 버튼이 눌렸을 때 녹음 시작
+                    startRecording()
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    // 버튼이 놓일 때 녹음 중지 및 오디오 전송
+                    stopRecording()
+
+                    RunningAMQPManager.sendAudioFile(
+                        args.partnerId,
+                        args.roomId,
+                        audioFile.readBytes())
+                    if (audioFile.exists()) {
+                        audioFile.delete()
+                    }
+                    true
+                }
+                else -> {true}
+            }
+        }
     }
 
+
+
+    lateinit var audioFile : File
+    private fun startRecording() {
+        mediaRecorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            val audioDir = context?.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+            audioFile = File(audioDir, "rumeet.mp3")
+            setOutputFile(audioFile.absolutePath)
+            prepare()
+            start()
+        }
+    }
+    private fun stopRecording() {
+        mediaRecorder?.apply {
+            stop()
+            release()
+        }
+        mediaRecorder = null
+    }
     override fun onResume() {
         super.onResume()
         LocalBroadcastManager.getInstance(requireContext())
