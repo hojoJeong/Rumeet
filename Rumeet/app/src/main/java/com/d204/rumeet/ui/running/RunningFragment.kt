@@ -93,7 +93,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var currentCalorie = 0f
     private var printHeight = 0f
     private var currentDistance = 0f
-    private var collaborationDistance = 0f
+    private var collaborationDistance = 0
     private var testDistance = 300
 
     private lateinit var vibrator: Vibrator
@@ -129,7 +129,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
             currentDistance = runningDistance
             if(isShark) {
-                collaborationDistance = ((runningDistance.toInt() + userDistance) / 2).toFloat()
+                collaborationDistance = ((runningDistance.toInt() + userDistance) / 2)
+                binding.sbMyProgress.progress = collaborationDistance
             } else {
                 binding.sbMyProgress.progress = runningDistance.toInt()
             }
@@ -241,10 +242,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 Log.d(TAG, "run: ghostDistance = ${ghostDistance}")
                 successRunningData(ghostDistance)
             }
-            if(isShark) {
+            if(args.gameType >=8) {
                 if(sec == 0) {
                     var shark = arrayOf(0,0,400,300,240)
                     sharkPace = 1000 / shark[args.gameType/4]
+                    binding.sbSharkProgress.visibility = View.VISIBLE
                 }
                 sec++
                 if(sec >= 30) {
@@ -252,6 +254,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         Snackbar.make(binding.tvRunningMode, "상어가 출발합니다!!", Snackbar.LENGTH_SHORT).show()
                         vibrator.vibrate(1000)
                     }
+                    Log.d(TAG, "run: sharkPace ${sharkPace}")
                     sharkDistance += sharkPace
                 }
                 successSharkData(sharkDistance)
@@ -261,6 +264,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     /** end.queue에 보낼 메시지 생성 */
     private fun getMessageForEndQueue() : String{
+        Log.d(TAG, "getMessageForEndQueue: maxDistance ${maxDistance}")
         val message = when (maxDistance) {
             1000 -> {
                 Log.d(TAG, "onReceive: make 1000 response")
@@ -318,16 +322,16 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
             with(binding){
                 sbMyProgress.visibility = View.VISIBLE
-                sbPartnerProgress.visibility = View.VISIBLE
-                sbSharkProgress.visibility = View.GONE
+                if(args.gameType<8) {
+                    sbPartnerProgress.visibility = View.VISIBLE
+                    sbSharkProgress.visibility = View.GONE
+                } else {
+                    sbPartnerProgress.visibility = View.GONE
+                    sbSharkProgress.visibility = View.VISIBLE
+                }
                 binding.btnRunningStop.visibility = View.VISIBLE
             }
-        } else if(args.gameType>=8) {
-            isShark = true
-            var shark = arrayOf(0,0,400,300,240)
-            sharkPace = 1000 / shark[args.gameType/4]
-            binding.sbSharkProgress.visibility = View.VISIBLE
-        } else if(args.partnerId != -1) {
+        }  else {
             isGhost = true
             binding.btnRunningStop.visibility = View.VISIBLE
             if(args.partnerId != -1){ // 고스트 모드
@@ -379,8 +383,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private fun successRunningData(distance : Int){
         Log.d(TAG, "initDataBinding: partner running : ${distance}")
         userDistance = distance
-        if(isShark)  {
-            collaborationDistance = (currentDistance + distance) / 2
+        if(args.gameType>=8)  {
+            collaborationDistance = (currentDistance.toInt() + distance) / 2
+            binding.sbMyProgress.progress = collaborationDistance;
         } else {
             binding.sbMyProgress
             binding.sbPartnerProgress.progress = distance

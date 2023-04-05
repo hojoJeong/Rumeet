@@ -278,6 +278,7 @@
             android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
             android:visibility="gone"
+            android:thumb="@drawable/ic_shark_thumb"
             app:layout_constraintBottom_toTopOf="@id/sb_my_progress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
