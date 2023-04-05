@@ -309,6 +309,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     // 상대방과 나의 profile 이미지로 seekbar의 thumb 이미지 변경
     override fun initStartView() {
         // Todo 싱글, 고스트 설정을 해줘야함
+        Log.d(TAG, "initStartView: ${args.partnerId}")
         viewModel.getUserInfo(args.myId)
 
         if(args.gameType >= 4){ // multi
@@ -326,7 +327,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             var shark = arrayOf(0,0,400,300,240)
             sharkPace = 1000 / shark[args.gameType/4]
             binding.sbSharkProgress.visibility = View.VISIBLE
-        } else {
+        } else if(args.partnerId != -1) {
             isGhost = true
             binding.btnRunningStop.visibility = View.VISIBLE
             if(args.partnerId != -1){ // 고스트 모드
@@ -357,7 +358,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private fun successSharkData(distance : Int) {
         binding.sbSharkProgress.progress = distance
         // 상어한테 먹힘
-        if(collaborationDistance < distance){
+        if(collaborationDistance < distance) {
             RunningAMQPManager.sendEndGame(getMessageForEndQueue())
             navigate(RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
                 locationList.toTypedArray(),
