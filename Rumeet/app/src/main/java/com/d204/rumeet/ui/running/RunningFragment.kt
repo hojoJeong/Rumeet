@@ -663,6 +663,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         binding.sbPartnerProgress.setOnTouchListener { _, _ ->
             true
         }
+        binding.sbSharkProgress.max = maxDistance
+        binding.sbSharkProgress.setOnTouchListener { _, _ ->
+            true
+        }
     }
 
     override fun onResume() {
