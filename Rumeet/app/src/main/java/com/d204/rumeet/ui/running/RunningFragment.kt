@@ -13,6 +13,7 @@ import android.os.Looper
 import android.os.Vibrator
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.navArgs
@@ -109,16 +110,19 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             val binder = service as RunningService.RunningBinder
             runningService = binder.getService()
             bindState = true
+            Log.d(TAG, "onServiceConnected: bindService")
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             bindState = false
+            Log.d(TAG, "onServiceDisconnected: disconnect")
         }
     }
 
     /** BroadCastReceiver로 받은 데이터를 처리(속도) */
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+
             // 10m마다 값을 불러온다. 나오는 값은 10.123123123...
             val runningDistance = intent?.getFloatExtra("distance", 0f) ?: 0f
             val runningLocation = intent?.getParcelableExtra<Location>("location")
@@ -128,6 +132,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 floatTo2f(roundDigit(runningDistance.div(1000f).toDouble(), 2).toFloat())
             // 좌표 기록
             locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
+
+            Log.d(TAG, "onReceive: service receive!! ${runningDistance}")
 
             currentDistance = runningDistance
             if (isShark) {
@@ -148,6 +154,12 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             kmPerHour = runningLocation.speed * 3.6f
             // 칼로리 계산
             currentCalorie += getCalorie(gender, age, weight, time).toFloat()
+
+            if(kmPerHour > 10){
+
+            } else {
+                
+            }
 
             Log.d(TAG, "onReceive: kmPerHour $kmPerHour")
             Log.d(TAG, "onReceive: calorie $currentCalorie")
@@ -228,6 +240,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private val timer = object : Runnable {
         override fun run() {
             time += 1000
+            Log.d(TAG, "run: timer : ${time}")
             binding.tvRunningTime.text = time.toMinute()
             handler.postDelayed(this, 1000)
             // 고스트 모드 처리
@@ -336,7 +349,26 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     sbPartnerProgress.visibility = View.VISIBLE
                     sbSharkProgress.visibility = View.GONE
                 } else {
+                    // 협동
                     sbPartnerProgress.visibility = View.GONE
+                    Glide.with(requireContext())
+                        .asGif()
+                        .override(85, 85)
+                        .load(R.drawable.ic_together_running_animation)
+                        .into(object : CustomTarget<GifDrawable>() {
+                            override fun onResourceReady(
+                                resource: GifDrawable,
+                                transition: Transition<in GifDrawable>?
+                            ) {
+                                resource.setBounds(0,-500,0,0)
+                                binding.sbMyProgress.thumb = resource
+                                resource.start()
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {
+
+                            }
+                        })
                 }
                 binding.btnRunningStop.visibility = View.VISIBLE
             }
@@ -345,7 +377,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 isGhost = true
                 binding.btnRunningStop.visibility = View.VISIBLE
                 binding.btnRunningPause.visibility = View.GONE
-                viewModel.getPartnerInfo(args.partnerId)
                 ghostPace = IntArray(args.pace.size)
                 binding.sbPartnerProgress.visibility = View.VISIBLE
                 for (i in ghostPace.indices) {
@@ -358,6 +389,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 Log.d(TAG, "initStartView: ghostPace= ${ghostPace.contentToString()}")
             } else { // solo
                 binding.btnRunningPause.visibility = View.VISIBLE
+                binding.sbPartnerProgress.visibility = View.GONE
             }
         }
 
@@ -464,24 +496,18 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                         is RunningSideEffect.SuccessPartnerInfo -> {
 
-                            // 파트너의 프로필을 seekbar의 thumb로 변경
                             Glide.with(requireContext())
-                                .load(it.partnerInfo.profile)
-                                .apply(
-                                    RequestOptions().transform(
-                                        CenterCrop(),
-                                        RoundedCorners(999)
-                                    )
-                                )
-                                .circleCrop()
-                                .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
+                                .asGif()
                                 .override(100, 100)
-                                .into(object : CustomTarget<Drawable>() {
+                                .load(R.drawable.ic_partner_running_animation)
+                                .into(object : CustomTarget<GifDrawable>() {
                                     override fun onResourceReady(
-                                        resource: Drawable,
-                                        transition: Transition<in Drawable>?
+                                        resource: GifDrawable,
+                                        transition: Transition<in GifDrawable>?
                                     ) {
+                                        Log.d(TAG, "onResourceReady: shark")
                                         binding.sbPartnerProgress.thumb = resource
+                                        resource.start()
                                     }
 
                                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -492,9 +518,30 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                         is RunningSideEffect.SuccessUserInfo -> {
 
+                            if(args.gameType < 8){
+                                Glide.with(requireContext())
+                                    .asGif()
+                                    .override(100, 100)
+                                    .load(R.drawable.ic_my_running_animation)
+                                    .into(object : CustomTarget<GifDrawable>() {
+                                        override fun onResourceReady(
+                                            resource: GifDrawable,
+                                            transition: Transition<in GifDrawable>?
+                                        ) {
+                                            Log.d(TAG, "onResourceReady: shark")
+                                            binding.sbMyProgress.thumb = resource
+                                            resource.start()
+                                        }
+
+                                        override fun onLoadCleared(placeholder: Drawable?) {
+
+                                        }
+                                    })
+                            }
+
                             Glide.with(requireContext())
                                 .asGif()
-                                .override(95, 95)
+                                .override(100, 100)
                                 .load(R.drawable.ic_shark_animation)
                                 .into(object : CustomTarget<GifDrawable>() {
                                     override fun onResourceReady(
@@ -511,23 +558,18 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                     }
                                 })
 
-                            // 나의 프로필 이미지를 seekbar의 thumb로 변경
                             Glide.with(requireContext())
-                                .load(it.userInfo.profile)
-                                .apply(
-                                    RequestOptions().transform(
-                                        CenterCrop(),
-                                        RoundedCorners(999)
-                                    )
-                                )
-                                .circleCrop()
+                                .asGif()
                                 .override(100, 100)
-                                .into(object : CustomTarget<Drawable>() {
+                                .load(R.drawable.ic_ghoat_animation)
+                                .into(object : CustomTarget<GifDrawable>() {
                                     override fun onResourceReady(
-                                        resource: Drawable,
-                                        transition: Transition<in Drawable>?
+                                        resource: GifDrawable,
+                                        transition: Transition<in GifDrawable>?
                                     ) {
-                                        binding.sbMyProgress.thumb = resource // Thumb 이미지를 설정합니다.
+                                        Log.d(TAG, "onResourceReady: shark")
+                                        binding.sbPartnerProgress.thumb = resource
+                                        resource.start()
                                     }
 
                                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -555,15 +597,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                     serviceConnection,
                                     Context.BIND_AUTO_CREATE
                                 )
+                                ContextCompat.startForegroundService(requireContext(), testIntent)
                             } else {
                                 Log.d("bindState", "initDataBinding: already start")
                             }
                         }
                     }
                 }
-            }
-            launch {
-                viewModel
             }
         }
     }
@@ -793,16 +833,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         sensorManager.registerListener(this, altitudeSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
-    override fun onPause() {
-        super.onPause()
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
-        sensorManager.unregisterListener(this)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         handler.removeCallbacks(timer)
-        activity?.unbindService(serviceConnection)
         sensorManager.unregisterListener(this)
     }
 
