@@ -13,6 +13,7 @@ import android.os.Looper
 import android.os.Vibrator
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.navArgs
@@ -591,11 +592,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                             if (!bindState) {
                                 Log.d("bindState", "SuccessUserInfo: start")
                                 val testIntent = Intent(activity, RunningService::class.java)
-                                requireActivity().bindService(
-                                    testIntent,
-                                    serviceConnection,
-                                    Context.BIND_AUTO_CREATE
-                                )
+                                ContextCompat.startForegroundService(requireContext(), testIntent)
                             } else {
                                 Log.d("bindState", "initDataBinding: already start")
                             }
