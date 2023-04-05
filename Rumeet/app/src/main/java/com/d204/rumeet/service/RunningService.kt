@@ -16,6 +16,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -34,7 +35,7 @@ class RunningService : Service(), LocationListener {
 
     companion object {
         const val NOTIFICATION_ID = 10
-        const val CHANNEL_ID = "primary_notification_channel"
+        const val CHANNEL_ID = "RumeetServiceChannel"
     }
 
     inner class RunningBinder : Binder() {
@@ -60,38 +61,28 @@ class RunningService : Service(), LocationListener {
             Toast.makeText(this, "권환 필요", Toast.LENGTH_SHORT).show()
             return
         }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            createNotificationChannel()
-            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("러밋")
-                .setContentText("내 속도 : ${floatTo2f(lastLocation?.speed?.times(3.6)?.toFloat() ?: 0f)}km/h")
-                .build()
-            startForeground(NOTIFICATION_ID, notification)
-        }
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 10.0f, this)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel() {
-        val notificationChannel = NotificationChannel(
-            CHANNEL_ID,
-            "MyApp notification",
-            NotificationManager.IMPORTANCE_HIGH
-        )
-        notificationChannel.enableLights(true)
-        notificationChannel.lightColor = Color.RED
-        notificationChannel.enableVibration(true)
-        notificationChannel.description = "AppApp Tests"
-
-        val notificationManager = applicationContext.getSystemService(
-            Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(notificationChannel)
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return START_STICKY
+        createNotification()
+        return START_REDELIVER_INTENT
     }
+
+    override fun onDestroy() {
+        stopForeground(true)
+        super.onDestroy()
+    }
+
+    private fun createNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_toolbar_logo)
+            .setContentTitle("제목1")
+            .setContentText("내용1")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
 
     override fun onLocationChanged(location: Location) {
         lastLocation?.let {
@@ -102,10 +93,13 @@ class RunningService : Service(), LocationListener {
             val intent = Intent("custom-event")
             intent.putExtra("distance", totalDistance)
             intent.putExtra("location", it)
+            Log.d("TAG", "onLocationChanged: broadcast")
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
         }
         lastLocation = location
     }
+
+    fun getDistance() = lastLocation
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
         if (provider?.equals(LocationManager.GPS_PROVIDER) == true) {
