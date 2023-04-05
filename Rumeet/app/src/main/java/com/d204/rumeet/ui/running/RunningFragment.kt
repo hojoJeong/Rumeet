@@ -103,6 +103,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var isGhost = false
     private var isShark = false
 
+    private var isFever = false
+
     // 서비스 연결여부 콜백함수
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -148,6 +150,29 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             kmPerHour = runningLocation.speed * 3.6f
             // 칼로리 계산
             currentCalorie += getCalorie(gender, age, weight, time).toFloat()
+
+
+            if(maxDistance - collaborationDistance <= 500 && args.gameType >= 8 && !isFever){
+                isFever = true
+                Glide.with(requireContext())
+                    .asGif()
+                    .override(95, 95)
+                    .load(R.drawable.ic_together_running_fever_animation)
+                    .into(object : CustomTarget<GifDrawable>() {
+                        override fun onResourceReady(
+                            resource: GifDrawable,
+                            transition: Transition<in GifDrawable>?
+                        ) {
+                            Log.d(TAG, "onResourceReady: shark")
+                            binding.sbSharkProgress.thumb = resource
+                            resource.start()
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+
+                        }
+                    })
+            }
 
             Log.d(TAG, "onReceive: kmPerHour $kmPerHour")
             Log.d(TAG, "onReceive: calorie $currentCalorie")
