@@ -8,6 +8,10 @@ import com.d204.rumeet.domain.onError
 import com.d204.rumeet.domain.onSuccess
 import com.d204.rumeet.domain.repository.RunningRepository
 import com.d204.rumeet.domain.successOr
+import com.d204.rumeet.domain.onError
+import com.d204.rumeet.domain.onSuccess
+import com.d204.rumeet.domain.usecase.running.DenyRunningRequestUseCase
+import com.d204.rumeet.domain.usecase.running.InviteRunningUseCase
 import com.d204.rumeet.domain.usecase.user.GetUserIdUseCase
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
@@ -28,7 +32,9 @@ import javax.inject.Inject
 @HiltViewModel
 class RunningMatchingViewModel @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
-    private val runningRepository: RunningRepository
+    private val runningRepository: RunningRepository,
+    private val inviteRunningUseCase: InviteRunningUseCase,
+    private val denyRunningRequestUseCase: DenyRunningRequestUseCase
 ) : BaseViewModel() {
     private val _runningMatchingSideEffect: MutableSharedFlow<RunningMatchingSideEffect> =
         MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
@@ -54,7 +60,66 @@ class RunningMatchingViewModel @Inject constructor(
 
     private lateinit var timer: CountDownTimer
 
-    fun startMatching(gameType: Int) {
+    private var friendId: Int = -1
+    private var roomId: Int = -1
+
+    fun setFriendId(id: Int) {
+        friendId = id
+    }
+
+    fun subscribeFriendQueue(roomId: Int, userId: Int){
+        Log.d(TAG, "subscribeFriendQueue: $roomId")
+        baseViewModelScope.launch {
+            _userId.emit(getUserIdUseCase())
+            startFriendModelTimer(roomId)
+            startFriendMatchingSubscribe()
+        }
+    }
+
+    fun startFriendModeMatching(gameType: Int) {
+        Log.d(TAG, "startWithFriendMatching: matchingViewmodel gameType: $gameType")
+        Log.d(TAG, "startFriendModeMatching: friendId: $friendId")
+        baseViewModelScope.launch {
+            _userId.emit(getUserIdUseCase())
+            _gameType.emit(gameType)
+            inviteRunningUseCase(userId.value, friendId, gameType, System.currentTimeMillis())
+                .onSuccess {
+                    roomId = it
+                    startFriendModelTimer(it)
+                    startFriendMatchingSubscribe()
+                }
+                .onError {
+
+                }
+        }
+    }
+
+    private fun startFriendModelTimer(raceId: Int) {
+        Log.d(TAG, "startFriendModelTimer: $raceId")
+        timer = object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                Log.d(TAG, "onTick friend: ${millisUntilFinished}")
+            }
+
+            override fun onFinish() {
+                denyRaceRequest(raceId)
+                _matchingResult.tryEmit(false)
+                val response =
+                    _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
+                Log.d(TAG, "onFinish: $response")
+            }
+        }.start()
+    }
+
+    fun denyRaceRequest(raceId: Int) {
+        baseViewModelScope.launch {
+            if (denyRunningRequestUseCase(raceId)) {
+                Log.d(TAG, "denyRaceRequest: 러닝 매칭 시간 초과")
+            }
+        }
+    }
+
+    fun startRandomMatching(gameType: Int) {
         baseViewModelScope.launch {
             _userId.emit(getUserIdUseCase())
             _gameType.emit(gameType)
@@ -63,8 +128,8 @@ class RunningMatchingViewModel @Inject constructor(
             val startModel = RunningMatchingRequestModel(userId.value, gameType)
             RunningAMQPManager.startMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
 
-            startMatchingSubscribe()
-            startTimer()
+            startRandomMatchingSubscribe()
+            startRandomModeTimer()
         }
     }
 
@@ -74,14 +139,14 @@ class RunningMatchingViewModel @Inject constructor(
             _gameType.emit(gameType)
             _ghostType.emit(ghostType)
 
-            startTimer()
+            startRandomModeTimer()
         }
     }
 
-    private fun startTimer() {
+    private fun startRandomModeTimer() {
         timer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                Log.d(TAG, "onTick: ${millisUntilFinished}")
+                Log.d(TAG, "onTick random: ${millisUntilFinished}")
             }
 
             override fun onFinish() {
@@ -113,8 +178,47 @@ class RunningMatchingViewModel @Inject constructor(
         }
     }
 
-    private fun startMatchingSubscribe() {
+    private fun startRandomMatchingSubscribe() {
         RunningAMQPManager.subscribeMatching(userId.value, object :
+            DefaultConsumer(RunningAMQPManager.runningChannel) {
+            override fun handleDelivery(
+                consumerTag: String?,
+                envelope: Envelope?,
+                properties: AMQP.BasicProperties?,
+                body: ByteArray
+            ) {
+                try {
+                    Log.d(TAG, "handleDelivery: ${userId.value}")
+                    Log.d(TAG, "handleDelivery: $consumerTag")
+                    Log.d(TAG, "handleDelivery: $envelope")
+                    Log.d(TAG, "handleDelivery: $properties")
+
+                    timer.cancel()
+                    val response = Gson().fromJson(String(body), RunningRaceModel::class.java)
+                    if (response.userId != userId.value) {
+                        _otherPlayerId.tryEmit(response.userId)
+                    } else {
+                        _otherPlayerId.tryEmit(response.partnerId)
+                    }
+                    _matchingResult.tryEmit(true)
+                    val test = _runningMatchingSideEffect.tryEmit(
+                        RunningMatchingSideEffect.SuccessMatching(
+                            _userId.value,
+                            response.id,
+                            _otherPlayerId.value
+                        )
+                    )
+                    Log.d(TAG, "handleDelivery: $test")
+                } catch (e: Exception) {
+                    Log.e(TAG, "handleDelivery: ${e.message}")
+                }
+            }
+        })
+    }
+
+    private fun startFriendMatchingSubscribe() {
+        Log.d(TAG, "startFriendMatchingSubscribe: ${userId.value}")
+        RunningAMQPManager.subscribeFriendMatching(userId.value, object :
             DefaultConsumer(RunningAMQPManager.runningChannel) {
             override fun handleDelivery(
                 consumerTag: String?,
@@ -127,11 +231,18 @@ class RunningMatchingViewModel @Inject constructor(
                     val response = Gson().fromJson(String(body), RunningRaceModel::class.java)
                     if (response.userId != userId.value) {
                         _otherPlayerId.tryEmit(response.userId)
-                    } else{
+                    } else {
                         _otherPlayerId.tryEmit(response.partnerId)
                     }
                     _matchingResult.tryEmit(true)
-                    val test = _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.SuccessMatching(_userId.value, response.id, _otherPlayerId.value))
+                    Log.d(TAG, "handleDelivery: ${response.userId}, ${response.id}, ${response.partnerId}")
+                    val test = _runningMatchingSideEffect.tryEmit(
+                        RunningMatchingSideEffect.SuccessMatching(
+                            response.userId,
+                            response.id,
+                            response.partnerId
+                        )
+                    )
                     Log.d(TAG, "handleDelivery: $test")
                 } catch (e: Exception) {
                     Log.e(TAG, "handleDelivery: ${e.message}")

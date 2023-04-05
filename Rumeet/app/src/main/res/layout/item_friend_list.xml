@@ -7,7 +7,7 @@
 
         <variable
             name="friend"
-            type="com.d204.rumeet.ui.friend.list.model.FriendListUiModel" />
+            type="com.d204.rumeet.domain.model.friend.FriendListDomainModel" />
 
         <variable
             name="clickListener"
@@ -25,7 +25,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:src="@drawable/ic_launcher_background"
-            app:imgByUrl="@{friend.userProfileImg}"
+            app:imgByUrl="@{friend.profileImage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +45,7 @@
                 style="@style/base_font_medium_12_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{friend.userNickname}" />
+                android:text="@{friend.nickname}" />
 
             <TextView
                 android:id="@+id/tv_pace"
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="@{`평균 페이스 ` +  friend.averagePace}" />
+                android:text="@{`평균 페이스 ` +  friend.pace}" />
 
         </LinearLayout>
 

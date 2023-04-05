@@ -1,6 +1,8 @@
 package com.d204.rumeet.domain.repository
 
 import com.d204.rumeet.domain.NetworkResult
+import com.d204.rumeet.domain.model.friend.FriendRecommendDomainModel
+import com.d204.rumeet.domain.model.friend.RequestFriendDomainModel
 import com.d204.rumeet.domain.model.user.*
 
 interface UserRepository {
@@ -23,5 +25,6 @@ interface UserRepository {
     suspend fun getMatchingHistoryList(userId: Int): NetworkResult<MatchingHistoryDomainModel>
     suspend fun searchUsers(nickname : String) : NetworkResult<List<UserModel>>
     suspend fun getAccessToken() : String
+    suspend fun getFriendRecommendList(userId: Int) : NetworkResult<List<FriendRecommendDomainModel>>
 
 }

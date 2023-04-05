@@ -4,5 +4,4 @@ data class RecommendFriendUiModel(
     val id: Int,
     val profile: String,
     val name: String,
-    val pace: Long
 )
