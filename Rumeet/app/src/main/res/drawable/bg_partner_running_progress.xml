@@ -3,21 +3,21 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="6dp"/>
-            <solid android:color="@color/china_ivory"/>
+            <solid android:color="#20FFF4CF"/>
         </shape>
     </item>
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape>
                 <corners android:radius="6dp"/>
-                <solid android:color="@color/fuzzy_wuzzy_brown"/>
+                <solid android:color="#20B95555"/>
             </shape>
         </clip>
     </item>
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <solid android:color="@color/fuzzy_wuzzy_brown"/>
+                <solid android:color="#20B95555"/>
             </shape>
         </clip>
     </item>
