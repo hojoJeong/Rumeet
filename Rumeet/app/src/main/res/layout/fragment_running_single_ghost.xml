@@ -9,6 +9,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:paddingBottom="10dp"
         android:orientation="vertical">
 
@@ -26,6 +27,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/base_horizontal_margin" />
+
+        <include
+            android:id="@+id/content_running_option_distance_2"
+            layout="@layout/content_running_option_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            android:layout_marginTop="48dp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

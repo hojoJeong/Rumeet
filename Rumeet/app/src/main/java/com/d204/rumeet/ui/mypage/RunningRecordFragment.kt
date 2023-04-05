@@ -69,7 +69,7 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
     }
 
     private fun initActivityListAdapter(list: List<RunningActivityUiModel>) {
-        val activityAdapter = RunningActivityListAdapter().apply {
+        val activityAdapter = RunningActivityListAdapter(this.childFragmentManager).apply {
             Log.d(TAG, "initActivityListAdapter: $list")
             submitList(list)
         }
