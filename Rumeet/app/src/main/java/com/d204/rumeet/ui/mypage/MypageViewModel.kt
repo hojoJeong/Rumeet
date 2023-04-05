@@ -218,6 +218,7 @@ class MyPageViewModel @Inject constructor(
 
     fun modifyNotificationState(target: Int, state: Int){
         baseViewModelScope.launch {
+            showLoading()
             val response = modifyNotificationSettingStateUseCase(userId.value.successOrNull()?:-1, target, state)
             if(response) Log.d(TAG, "modifyNotificationState: 알림 변경 완료")
         }
