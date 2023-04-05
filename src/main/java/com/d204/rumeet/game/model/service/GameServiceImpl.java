@@ -321,4 +321,9 @@ public class GameServiceImpl implements GameService {
         }
         return url;
     }
+
+    @Override
+    public RaceDto getRace(int raceId) {
+        return gameMapper.getRace(raceId);
+    }
 }
