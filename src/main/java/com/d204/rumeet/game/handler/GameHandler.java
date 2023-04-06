@@ -43,6 +43,7 @@ public class GameHandler {
         try {
             matchingTool.doCancel(info);
         } catch (Exception e) {
+            System.out.println(msg);
             System.out.println("캔슬 오류");
         }
     }
