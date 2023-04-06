@@ -222,7 +222,16 @@ public class GameServiceImpl implements GameService {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<GamePaceDto>>() {
             }.getType();
-            List<GamePaceDto> gamePaceDtos = gson.fromJson(responseBody, listType);
+            List<GamePaceDto> gamePaceDtos = new ArrayList<>();
+            try {
+                gamePaceDtos = gson.fromJson(responseBody, listType);
+            } catch (Exception e) {
+                for(int i = 0; i <km[mode]; i++ ) {
+                    pace[i] = 300;
+                }
+                gamePaceDtos.add(new GamePaceDto(userId, pace));
+            }
+
             GamePaceDto user = gamePaceDtos.get(0);
             raceDto.setPartnerId(user.getId());
             soloPlayDto.setPartnerId(user.getId());
