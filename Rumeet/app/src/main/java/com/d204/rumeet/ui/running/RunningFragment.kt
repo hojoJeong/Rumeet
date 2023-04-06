@@ -380,7 +380,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                 Glide.with(requireContext())
                     .asGif()
-                    .override(100, 100)
+                    .override(120, 120)
                     .load(R.drawable.ic_ghost_animation)
                     .into(object : CustomTarget<GifDrawable>() {
                         override fun onResourceReady(
@@ -885,6 +885,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         }
         binding.sbSharkProgress.max = maxDistance
         binding.sbSharkProgress.setOnTouchListener { _, _ ->
+            true
+        }
+        binding.sbTotalProgress.setOnTouchListener { _, _ ->
             true
         }
         binding.btnMic.setOnTouchListener { _, event ->

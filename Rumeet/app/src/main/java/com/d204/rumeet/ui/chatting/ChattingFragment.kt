@@ -47,7 +47,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                         }
                         is ChattingSideEffect.SendChatting -> {
                             CoroutineScope(Dispatchers.Main).launch {
-                                delay(400)
                                 if (viewModel.chattingUserId.value == 0 || args.chattingRoomId == 0 || viewModel.userId.value == 0) {
                                     toastMessage("채팅 오류가 발생하였습니다.")
                                 } else {

@@ -2,22 +2,23 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="6dp"/>
-            <solid android:color="@color/china_ivory" />
+            <corners android:radius="6dp" />
+            <solid android:color="@color/transparent" />
         </shape>
     </item>
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape>
-                <corners android:radius="6dp"/>
-                <solid android:color="@color/china_ivory" />
+                <corners android:radius="6dp" />
+                <solid android:color="@color/transparent" />
             </shape>
         </clip>
     </item>
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <solid android:color="@color/navy_blue" />
+                <corners android:radius="6dp" />
+                <solid android:color="@color/transparent" />
             </shape>
         </clip>
     </item>

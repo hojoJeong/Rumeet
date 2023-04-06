@@ -59,7 +59,6 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         chattingListAdapter.submitList(null)
                         chattingListAdapter.submitList(it.chattingRoomInfo.toList())
                         CoroutineScope(Dispatchers.Main).launch {
-                            delay(300)
                             binding.rvChattingRoom.visibility = View.VISIBLE
                         }
                     }
@@ -79,7 +78,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
     override fun initAfterBinding() {
         chattingListAdapter = ChattingListAdapter(viewModel)
         binding.rvChattingRoom.adapter = chattingListAdapter
-        binding.rvChattingRoom.itemAnimator = null
+//        binding.rvChattingRoom.itemAnimator = null
 
         binding.contentNoResultChattingList.tvContentNoResultMessage.text = "채팅내역이 존재하지 않습니다"
     }
