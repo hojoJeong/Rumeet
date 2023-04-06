@@ -63,21 +63,20 @@ dependencies {
     implementation libs.databinding
 
     // rabbitmq
-    implementation "com.rabbitmq:amqp-client:5.12.0"
+    implementation libs.rabbitmq.client
 
     // firebase
     implementation platform(libs.firebase.bom)
     implementation libs.firebase.analytics
     implementation libs.firebase.crashlytics
+    implementation libs.firebase.messaging
 
     // official library
     implementation libs.hilt
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
     kapt libs.hilt.compiler
     implementation libs.glide
     kapt libs.glide.compiler
-    implementation "jp.wasabeef:glide-transformations:4.3.0"
+    implementation libs.glide.transformation
 
     // kakao
     implementation libs.kakao.sdk

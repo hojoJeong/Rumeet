@@ -46,13 +46,13 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
             }
             binding.btnOkay.setContent("러닝 신청")
             binding.btnChatting.setOnClickListener {
-                dismissAllowingStateLoss()
                 chattingClickListener.invoke(userDialogInfo.id)
+                dismissAllowingStateLoss()
             }
             binding.btnOkay.addClickListener {
                 Log.d("TAG", "initAfterBinding: ")
-                dismissAllowingStateLoss()
                 okBtnClickListerner.invoke()
+                dismissAllowingStateLoss()
             }
         }
 
