@@ -91,7 +91,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var printHeight = 0f
     private var currentDistance = 0f
     private var collaborationDistance = 0
-    private var testDistance = 40
+    private var testDistance = 1000
 
     private lateinit var vibrator: Vibrator
 
@@ -540,12 +540,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         is RunningSideEffect.SuccessPartnerInfo -> {
 
                             Glide.with(requireContext())
-                                .load(it.partnerInfo.profile)
-                                .into(binding.ivPartnerProfileImg)
-
-                            binding.tvPartnerNickname.text = it.partnerInfo.nickname
-
-                            Glide.with(requireContext())
                                 .asGif()
                                 .override(100, 100)
                                 .load(R.drawable.ic_partner_running_animation)
@@ -606,12 +600,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                                     }
                                 })
-
-                            Glide.with(requireContext())
-                                .load(it.userInfo.profile)
-                                .into(binding.ivMyProfile)
-
-                            binding.tvMyNickname.text = it.userInfo.nickname
 
                             // Todo 경쟁이면 해당 코드 실행
                             if (args.gameType >= 4) {
@@ -716,7 +704,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = testDistance
                 checkCount = 1
-                binding.lyPartner.visibility = View.VISIBLE
                 binding.tvRunningMode.text = "경쟁 모드"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
             }
@@ -727,7 +714,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 2000
                 checkCount = 2
-                binding.lyPartner.visibility = View.VISIBLE
                 binding.tvRunningMode.text = "경쟁 모드"
                 binding.tvRunningTotalDistance.text = "목표거리 : 2km"
             }
@@ -738,7 +724,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 3000
                 checkCount = 3
-                binding.lyPartner.visibility = View.VISIBLE
                 binding.tvRunningMode.text = "경쟁 모드"
                 binding.tvRunningTotalDistance.text = "목표거리 : 3km"
             }
@@ -749,7 +734,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 5000
                 checkCount = 4
-                binding.lyPartner.visibility = View.VISIBLE
                 binding.tvRunningMode.text = "경쟁 모드"
                 binding.tvRunningTotalDistance.text = "목표거리 : 5km"
             }
@@ -758,7 +742,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = testDistance
+                maxDistance = 1000
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Easy"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
@@ -798,7 +782,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = testDistance
+                maxDistance = 1000
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Normal"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
@@ -838,7 +822,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = testDistance
+                maxDistance = 1000
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Hard"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
