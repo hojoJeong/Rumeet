@@ -1,22 +1,16 @@
 package com.d204.rumeet.ui.running.option
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.d204.rumeet.NavigationRunningArgs
 import com.d204.rumeet.R
 import com.d204.rumeet.databinding.FragmentRunningOptionBinding
-import com.d204.rumeet.domain.NetworkResult
-import com.d204.rumeet.domain.model.user.RunningSoloDomainModel
-import com.d204.rumeet.domain.repository.RunningRepository
-import com.d204.rumeet.domain.toDomainResult
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.running.RunningSideEffect
 import com.d204.rumeet.ui.running.RunningViewModel
@@ -27,7 +21,6 @@ import com.d204.rumeet.ui.running.option.model.RunningDistance
 import com.d204.rumeet.ui.running.option.model.RunningType
 import com.d204.rumeet.ui.running.option.multi.RunningOptionCompetitionOrGhostFragment
 import com.d204.rumeet.ui.running.option.multi.RunningOptionTeamPlayFragment
-import com.d204.rumeet.ui.running.option.single.RunningGhostSingleFragment
 import com.d204.rumeet.ui.running.option.single.RunningSingleFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +58,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
     override fun initStartView() {
         // 싱글
         if (runningType == 1) {
-            initSingleModeView()
+            initSingleMode()
         }
         // 멀티
         else {
@@ -79,7 +72,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
             viewModel.runningSideEffect.collectLatest {
                 when (it) {
                     is RunningSideEffect.SuccessSoloData -> {
-                        if(it.data.partnerId == -1) { // 솔로모드일때 로딩화면으로 이동
+                        if (it.data.partnerId == -1) { // 솔로모드일때 로딩화면으로 이동
                             navigate(
                                 RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningLoadingFragment(
                                     myId = it.data.userId,
@@ -98,15 +91,6 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
         }
     }
 
-    fun startSologame() {
-
-//        suspend fun startSolo(userId: Int, mode: Int, ghost: Int): NetworkResult<RunningSoloDomainModel> {
-//            val response = handleApi { runningApiService.startSoloRace(userId, mode, ghost) }.toDomainResult<RunningSoloResponseDto, RunningSoloDomainModel> { it.toDomain()}
-//            Log.d("러밋_TAG", "startSolo: $response")
-//            return response
-//        }
-    }
-
     override fun initAfterBinding() {
         binding.btnRunningOptionStartRunning.setOnClickListener {
             when (viewModel.runningTypeModel.runningType) {
@@ -116,7 +100,10 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
 //                    startSoloGame()
                 }
                 RunningType.SINGLE_GHOST -> { // ghost
-                    Log.d(TAG, "initAfterBinding: 고스트 type: ${getGhostType()}, km mode: ${getRunningType()}")
+                    Log.d(
+                        TAG,
+                        "initAfterBinding: 고스트 type: ${getGhostType()}, km mode: ${getRunningType()}"
+                    )
                     navigate(
                         RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
                             gameType = getRunningType(),
@@ -145,33 +132,27 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
         }
     }
 
-    private fun initSingleModeView() {
+    private fun initSingleMode() {
+        initSingleModeData()
         tabList = listOf(
-            "싱글 모드", "고스트 모드"
+            "싱글 모드"
         )
-
         vpFragmentList = listOf(
-            RunningSingleFragment(),
-            RunningGhostSingleFragment(),
+            RunningSingleFragment()
         )
-
         val vpAdapter = RunningOptionViewPagerAdapter(this).apply {
             setFragmentList(vpFragmentList)
         }
-
         binding.vpgRunningOption.adapter = vpAdapter
-        binding.vpgRunningOption.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                if (position == 0) viewModel.setGameType(RunningType.SINGLE)
-                else viewModel.setGameType(RunningType.SINGLE_GHOST)
-            }
-        })
+        binding.tblyRunningOption.visibility = View.GONE
+    }
 
-        TabLayoutMediator(binding.tblyRunningOption, binding.vpgRunningOption) { tab, position ->
-            tab.text = tabList[position]
-        }.attach()
+    private fun initSingleModeData(){
+        with(viewModel){
+            setGameType(RunningType.SINGLE)
+            setDistance(RunningDistance.ONE)
+            setRunningDetailType(RunningDetailType.SINGLE)
+        }
     }
 
     private fun initMultiModeView() {
@@ -206,7 +187,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
     private fun getGhostType(): Int {
         var type = -1
         with(viewModel.runningTypeModel) {
-            type = when(this.runningDetailType) {
+            type = when (this.runningDetailType) {
                 RunningDetailType.GHOST_SINGLE -> { // 내 고스트
                     Log.d(TAG, "getGhostType: 내 고스트")
                     2
@@ -215,7 +196,9 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
                     Log.d(TAG, "getGhostType: 랜덤 고스트")
                     1
                 }
-                else -> {0}
+                else -> {
+                    0
+                }
             }
         }
         return type;
@@ -227,7 +210,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
         //멀티
         var collabor = 0
 
-        when(viewModel.getRunningDifficulty()){
+        when (viewModel.getRunningDifficulty()) {
             RunningDifficulty.EASY -> {
                 collabor = 0
             }
