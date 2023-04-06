@@ -49,10 +49,12 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_single"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:maxImageSize="50dp"
+                android:scaleType="center"
                 android:layout_marginEnd="28dp"
-                android:src="@drawable/ic_single_run"
+                android:src="@drawable/ic_single_run4"
                 app:backgroundTint="#0072C6"
                 android:tintMode="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -62,9 +64,11 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_multi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_multi_run"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:maxImageSize="50dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_multi_run2"
                 app:backgroundTint="#FFB200"
                 android:tintMode="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"

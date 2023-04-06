@@ -108,7 +108,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             R.drawable.ic_badge,
             R.drawable.ic_edit_profile,
             R.drawable.ic_setting,
-            R.drawable.ic_logout
         )
 
         val menuList = menuTitleList.mapIndexed { index, title ->
@@ -142,26 +141,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                         )
                     )
                     MyPageAction.FriendList -> navigate(MyPageFragmentDirections.actionMyPageFragmentToFriendListFragment())
-                    MyPageAction.LogOut -> showLogoutDialog()
                     MyPageAction.MatchingHistory -> navigate(MyPageFragmentDirections.actionMyPageFragmentToMatchingHistoryFragment())
                     MyPageAction.RunningRecord -> navigate(MyPageFragmentDirections.actionMyPageFragmentToRunningRecordFragment())
                     MyPageAction.Setting -> navigate(MyPageFragmentDirections.actionMyPageFragmentToSettingFragment())
                 }
             }
         }
-    }
-
-    private fun showLogoutDialog() {
-        val dialog = DefaultAlertDialog(
-            alertModel = AlertModel(
-                title = "알림 메시지",
-                content = "로그아웃 하시겠습니까?",
-                buttonText = "로그아웃"
-            )
-        ).apply {
-            setCancelButtonVisibility(true)
-            setLogoutState(true, viewModel)
-        }
-        dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 }
