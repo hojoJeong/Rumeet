@@ -26,11 +26,8 @@ import com.d204.rumeet.ui.activities.LoginActivity
 import com.d204.rumeet.ui.components.LoadingDialogFragment
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment() {
 
@@ -172,20 +169,17 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     // 로딩 다이얼로그, 즉 로딩창을 띄워줌.
     // 네트워크가 시작될 때 사용자가 무작정 기다리게 하지 않기 위해 작성.
     private fun showLoadingDialog() {
+        Log.d(
+            "베이스 뷰모델",
+            "showLoadingDialog: 로딩 프레그먼트 : ${this.childFragmentManager}, ${this}, ${this.binding}"
+        )
         if (!mLoadingDialog.isAdded) mLoadingDialog.show(childFragmentManager, mLoadingDialog.tag)
     }
 
     // 띄워 놓은 로딩 다이얼로그를 없앰.
     private fun dismissLoadingDialog() {
-        if (mLoadingDialog.isVisible) {
-            CoroutineScope(Dispatchers.Main).launch{
-                try{
-                    mLoadingDialog.dismiss()
-                }catch (e : Exception){
-                    Log.e("TAG", "dismissLoadingDialog: $e", )
-                }
-            }
-        }
+            mLoadingDialog.dismiss()
+
     }
 
     // Toast Message 관련 함수
@@ -234,8 +228,9 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 //            if (result.resultCode == 0) navigateToHomeFragment(null)
         }
 
-    protected fun hideKeyboard(){
-        val ime = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    protected fun hideKeyboard() {
+        val ime =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         ime.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 }

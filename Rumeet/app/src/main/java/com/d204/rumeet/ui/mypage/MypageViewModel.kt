@@ -2,8 +2,6 @@ package com.d204.rumeet.ui.mypage
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import android.util.LogPrinter
-import com.d204.rumeet.domain.NetworkResult
 import com.d204.rumeet.domain.model.user.MatchingHistoryDomainModel
 import com.d204.rumeet.domain.model.user.NotificationStateDomainModel
 import com.d204.rumeet.domain.model.user.RunningRecordDomainModel
@@ -19,7 +17,6 @@ import com.d204.rumeet.ui.mypage.setting.UserInfoAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.lang.Thread.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -130,7 +127,6 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun getUserId() {
-        dismissLoading()
         baseViewModelScope.launch {
             try {
                 val response = getUserIdUseCase()
@@ -154,6 +150,7 @@ class MyPageViewModel @Inject constructor(
                     dismissLoading()
                     catchError(it)
                 }
+            dismissLoading()
         }
     }
 
@@ -192,15 +189,20 @@ class MyPageViewModel @Inject constructor(
             showLoading()
             getRunningRecordUseCase(userId.value.successOrNull()!!, startDate, endDate)
                 .onSuccess {
+                    dismissLoading()
                     Log.d(TAG, "마이페이지 뷰모델 getRunningRecord: ${it.raceList}")
                     _runningRecord.value = UiState.Success(it)
-                    dismissLoading()
-
+                    Log.d(TAG, "getRunningRecord: ")
                 }
                 .onError {
                     dismissLoading()
                 }
+            dismissLoading()
         }
+    }
+
+    fun clearRunningRecord() {
+        _runningRecord.value = UiState.Loading
     }
 
     fun logout() {
@@ -244,7 +246,6 @@ class MyPageViewModel @Inject constructor(
                     _matchingHistoryList.value = UiState.Success(it)
                 }
                 .onError {
-                    dismissLoading()
                     Log.d(TAG, "getMatchingHistoryList: ${it.cause}")
                 }
         }

@@ -123,5 +123,8 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        viewModel.clearRunningRecord()
+    }
 }
