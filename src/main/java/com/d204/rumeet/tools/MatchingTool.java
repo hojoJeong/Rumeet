@@ -107,5 +107,24 @@ public class MatchingTool {
                 .to(new TopicExchange("running.exchange"))
                 .with(sb.toString());
         amqpAdmin.declareBinding(binding);
+
+
+        sb = new StringBuilder();
+        sb.append("rec.").append(gameId).append(".").append(id);
+        queue = QueueBuilder.durable("rec." + gameId+"."+id).build();
+        amqpAdmin.declareQueue(queue);
+        binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("rec.exchange"))
+                .with(sb.toString());
+        amqpAdmin.declareBinding(binding);
+
+        sb = new StringBuilder();
+        sb.append("rec.").append(gameId).append(".").append(id2);
+        queue = QueueBuilder.durable("rec." + gameId+"."+id2).build();
+        amqpAdmin.declareQueue(queue);
+        binding = BindingBuilder.bind(queue)
+                .to(new TopicExchange("rec.exchange"))
+                .with(sb.toString());
+        amqpAdmin.declareBinding(binding);
     }
 }
