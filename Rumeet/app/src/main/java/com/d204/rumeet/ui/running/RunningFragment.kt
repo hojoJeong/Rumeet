@@ -742,7 +742,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = testDistance
+                maxDistance = 1000
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Easy"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
@@ -782,7 +782,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = testDistance
+                maxDistance = 1000
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Normal"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
@@ -822,7 +822,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = testDistance
+                maxDistance = 1000
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Hard"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
