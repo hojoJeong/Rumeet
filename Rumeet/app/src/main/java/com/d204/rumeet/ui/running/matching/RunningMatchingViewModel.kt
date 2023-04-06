@@ -153,8 +153,7 @@ class RunningMatchingViewModel @Inject constructor(
                 val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
                 RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
                 _matchingResult.tryEmit(false)
-                val response =
-                    _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
+                val response = _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
                 Log.d(TAG, "onFinish: $response")
             }
         }.start()
@@ -253,12 +252,14 @@ class RunningMatchingViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
+        // 중간에 꺼졌을 때 중지 메시지 보내기
         if(!_matchingResult.value){
+            if(::timer.isInitialized){
+                timer.cancel()
+            }
             val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
             RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
-            Log.d(TAG, "onCleared: cancel matching")
         }
-
     }
 }
 

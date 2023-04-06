@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="dialog"
+            type="com.d204.rumeet.ui.mypage.MapDialog" />
+
+        <variable
+            name="message"
+            type="String" />
+
+        <variable
+            name="polyline"
+            type="String" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/view_round_white"
+        android:gravity="center"
+        android:minWidth="300dp"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/alert_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="30dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="@{message}" />
+
+            <ImageView
+                android:id="@+id/iv_running_record_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_time_matching"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:src="@drawable/ic_launcher_background"
+                app:setImageByGlide="@{polyline}"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/alert_yes_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:text="확인"
+                android:textSize="14sp"
+                android:onClick="@{dialog.onOkButtonClick}"/>
+
+        </LinearLayout>
+
+</layout>

@@ -7,21 +7,17 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
-import android.os.Vibrator
+import android.media.MediaPlayer
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.d204.rumeet.R
@@ -41,13 +37,12 @@ import com.d204.rumeet.util.amqp.RunningAMQPManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.*
 import kotlin.collections.ArrayList
+import android.media.MediaRecorder
+import android.os.*
+import java.io.File
 
 
 private const val TAG = "러밋_RunningFragment"
@@ -58,7 +53,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     override val layoutResourceId: Int get() = R.layout.fragment_running
     override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running) { defaultViewModelProviderFactory }
-
+    private var mediaRecorder: MediaRecorder? = null
     private lateinit var sensorManager: SensorManager
     private lateinit var altitudeSensor: Sensor
     private lateinit var difficulty: RunningDifficulty
@@ -95,13 +90,15 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var printHeight = 0f
     private var currentDistance = 0f
     private var collaborationDistance = 0
-    private var testDistance = 300
+    private var testDistance = 40
 
     private lateinit var vibrator: Vibrator
 
     private var isMulti = false
     private var isGhost = false
     private var isShark = false
+    private var isGameSet = false
+    private var isLose = false
 
     // 서비스 연결여부 콜백함수
     private val serviceConnection = object : ServiceConnection {
@@ -109,16 +106,19 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             val binder = service as RunningService.RunningBinder
             runningService = binder.getService()
             bindState = true
+            Log.d(TAG, "onServiceConnected: bindService")
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             bindState = false
+            Log.d(TAG, "onServiceDisconnected: disconnect")
         }
     }
 
     /** BroadCastReceiver로 받은 데이터를 처리(속도) */
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+
             // 10m마다 값을 불러온다. 나오는 값은 10.123123123...
             val runningDistance = intent?.getFloatExtra("distance", 0f) ?: 0f
             val runningLocation = intent?.getParcelableExtra<Location>("location")
@@ -128,6 +128,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 floatTo2f(roundDigit(runningDistance.div(1000f).toDouble(), 2).toFloat())
             // 좌표 기록
             locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
+
+            Log.d(TAG, "onReceive: service receive!! ${runningDistance}")
 
             currentDistance = runningDistance
             if (isShark) {
@@ -148,6 +150,12 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             kmPerHour = runningLocation.speed * 3.6f
             // 칼로리 계산
             currentCalorie += getCalorie(gender, age, weight, time).toFloat()
+
+            if(kmPerHour > 10){
+
+            } else {
+                
+            }
 
             Log.d(TAG, "onReceive: kmPerHour $kmPerHour")
             Log.d(TAG, "onReceive: calorie $currentCalorie")
@@ -194,6 +202,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     RunningAMQPManager.sendEndGame(getMessageForEndQueue())
                 }
 
+                isGameSet = true
+
                 Log.d(TAG, "onReceive: send end game -> navigate ${getMessageForEndQueue()}")
 
                 // 게임 결과는 러닝 결과에서 api 호출할 것
@@ -228,6 +238,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private val timer = object : Runnable {
         override fun run() {
             time += 1000
+            Log.d(TAG, "run: timer : ${time}")
             binding.tvRunningTime.text = time.toMinute()
             handler.postDelayed(this, 1000)
             // 고스트 모드 처리
@@ -274,7 +285,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private fun getMessageForEndQueue(): String {
         Log.d(TAG, "getMessageForEndQueue: maxDistance ${maxDistance}")
         val message = when (maxDistance) {
-            1000 -> {
+            testDistance -> {
                 Log.d(TAG, "onReceive: make 1000 response")
                 val response = runningEndModel as RunningModel1pace
                 response.user_id = args.myId
@@ -332,20 +343,59 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
             with(binding) {
                 sbMyProgress.visibility = View.VISIBLE
+                btnMic.visibility = View.VISIBLE
                 if (args.gameType < 8) {
                     sbPartnerProgress.visibility = View.VISIBLE
                     sbSharkProgress.visibility = View.GONE
                 } else {
+                    // 협동
                     sbPartnerProgress.visibility = View.GONE
+                    Glide.with(requireContext())
+                        .asGif()
+                        .override(85, 85)
+                        .load(R.drawable.ic_together_running_animation)
+                        .into(object : CustomTarget<GifDrawable>() {
+                            override fun onResourceReady(
+                                resource: GifDrawable,
+                                transition: Transition<in GifDrawable>?
+                            ) {
+                                resource.setBounds(0,-500,0,0)
+                                binding.sbMyProgress.thumb = resource
+                                resource.start()
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {
+
+                            }
+                        })
                 }
                 binding.btnRunningStop.visibility = View.VISIBLE
             }
         } else { // single
             if (args.partnerId != -1) { // ghost
                 isGhost = true
+
+                Glide.with(requireContext())
+                    .asGif()
+                    .override(100, 100)
+                    .load(R.drawable.ic_ghost_animation)
+                    .into(object : CustomTarget<GifDrawable>() {
+                        override fun onResourceReady(
+                            resource: GifDrawable,
+                            transition: Transition<in GifDrawable>?
+                        ) {
+                            Log.d(TAG, "onResourceReady: shark")
+                            binding.sbPartnerProgress.thumb = resource
+                            resource.start()
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+
+                        }
+                    })
+
                 binding.btnRunningStop.visibility = View.VISIBLE
                 binding.btnRunningPause.visibility = View.GONE
-                viewModel.getPartnerInfo(args.partnerId)
                 ghostPace = IntArray(args.pace.size)
                 binding.sbPartnerProgress.visibility = View.VISIBLE
                 for (i in ghostPace.indices) {
@@ -358,6 +408,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 Log.d(TAG, "initStartView: ghostPace= ${ghostPace.contentToString()}")
             } else { // solo
                 binding.btnRunningPause.visibility = View.VISIBLE
+                binding.sbPartnerProgress.visibility = View.GONE
             }
         }
 
@@ -456,32 +507,47 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         is RunningSideEffect.SuccessRunning -> {
                             // 경쟁할 때 rabbitMQ의 콜백으로 온 데이터 받음
                             successRunningData(it.distance)
+                            // 백그라운드 상태에서 상대방이 먼저 옴을 확인
+                            if(it.distance >= maxDistance){
+                                isLose = true
+                            }
                         }
 
                         is RunningSideEffect.EndRunning -> {
 
                         }
+                        is RunningSideEffect.SuccessAudio -> {
+                            val tempFile = File.createTempFile("received_audio", ".mp3")
+                            tempFile.writeBytes(it.file)
+
+                            // MediaPlayer를 사용하여 임시 파일을 재생
+                            val mediaPlayer = MediaPlayer().apply {
+                                setDataSource(tempFile.absolutePath)
+                                prepare()
+                                start()
+
+                                setOnCompletionListener {
+                                    // 재생 완료 시 리소스 해제 및 임시 파일 삭제
+                                    release()
+                                    tempFile.delete()
+                                }
+                            }
+                        }
 
                         is RunningSideEffect.SuccessPartnerInfo -> {
 
-                            // 파트너의 프로필을 seekbar의 thumb로 변경
                             Glide.with(requireContext())
-                                .load(it.partnerInfo.profile)
-                                .apply(
-                                    RequestOptions().transform(
-                                        CenterCrop(),
-                                        RoundedCorners(999)
-                                    )
-                                )
-                                .circleCrop()
-                                .transform(CenterCrop(), RoundedCornersTransformation(2, 0))
+                                .asGif()
                                 .override(100, 100)
-                                .into(object : CustomTarget<Drawable>() {
+                                .load(R.drawable.ic_partner_running_animation)
+                                .into(object : CustomTarget<GifDrawable>() {
                                     override fun onResourceReady(
-                                        resource: Drawable,
-                                        transition: Transition<in Drawable>?
+                                        resource: GifDrawable,
+                                        transition: Transition<in GifDrawable>?
                                     ) {
+                                        Log.d(TAG, "onResourceReady: shark")
                                         binding.sbPartnerProgress.thumb = resource
+                                        resource.start()
                                     }
 
                                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -492,9 +558,30 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                         is RunningSideEffect.SuccessUserInfo -> {
 
+                            if(args.gameType < 8){
+                                Glide.with(requireContext())
+                                    .asGif()
+                                    .override(100, 100)
+                                    .load(R.drawable.ic_my_running_animation)
+                                    .into(object : CustomTarget<GifDrawable>() {
+                                        override fun onResourceReady(
+                                            resource: GifDrawable,
+                                            transition: Transition<in GifDrawable>?
+                                        ) {
+                                            Log.d(TAG, "onResourceReady: shark")
+                                            binding.sbMyProgress.thumb = resource
+                                            resource.start()
+                                        }
+
+                                        override fun onLoadCleared(placeholder: Drawable?) {
+
+                                        }
+                                    })
+                            }
+
                             Glide.with(requireContext())
                                 .asGif()
-                                .override(95, 95)
+                                .override(100, 100)
                                 .load(R.drawable.ic_shark_animation)
                                 .into(object : CustomTarget<GifDrawable>() {
                                     override fun onResourceReady(
@@ -504,30 +591,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                         Log.d(TAG, "onResourceReady: shark")
                                         binding.sbSharkProgress.thumb = resource
                                         resource.start()
-                                    }
-
-                                    override fun onLoadCleared(placeholder: Drawable?) {
-
-                                    }
-                                })
-
-                            // 나의 프로필 이미지를 seekbar의 thumb로 변경
-                            Glide.with(requireContext())
-                                .load(it.userInfo.profile)
-                                .apply(
-                                    RequestOptions().transform(
-                                        CenterCrop(),
-                                        RoundedCorners(999)
-                                    )
-                                )
-                                .circleCrop()
-                                .override(100, 100)
-                                .into(object : CustomTarget<Drawable>() {
-                                    override fun onResourceReady(
-                                        resource: Drawable,
-                                        transition: Transition<in Drawable>?
-                                    ) {
-                                        binding.sbMyProgress.thumb = resource // Thumb 이미지를 설정합니다.
                                     }
 
                                     override fun onLoadCleared(placeholder: Drawable?) {
@@ -555,15 +618,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                     serviceConnection,
                                     Context.BIND_AUTO_CREATE
                                 )
+                                ContextCompat.startForegroundService(requireContext(), testIntent)
                             } else {
                                 Log.d("bindState", "initDataBinding: already start")
                             }
                         }
                     }
                 }
-            }
-            launch {
-                viewModel
             }
         }
     }
@@ -576,7 +637,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 if (isGhost) "고스트 1km"
                 else "싱글 1km"
@@ -616,7 +677,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "경쟁 1km"
             }
@@ -652,7 +713,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "협동 1km"
             }
@@ -688,7 +749,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "협동 1km"
             }
@@ -724,7 +785,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 "협동 1km"
             }
@@ -784,25 +845,105 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         binding.sbSharkProgress.setOnTouchListener { _, _ ->
             true
         }
+        binding.btnMic.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // 버튼이 눌렸을 때 녹음 시작
+                    startRecording()
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    // 버튼이 놓일 때 녹음 중지 및 오디오 전송
+                    stopRecording()
+
+                    RunningAMQPManager.sendAudioFile(
+                        args.partnerId,
+                        args.roomId,
+                        audioFile.readBytes())
+                    if (audioFile.exists()) {
+                        audioFile.delete()
+                    }
+                    true
+                }
+                else -> {true}
+            }
+        }
     }
 
+
+
+    lateinit var audioFile : File
+    private fun startRecording() {
+        mediaRecorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            val audioDir = context?.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+            audioFile = File(audioDir, "rumeet.mp3")
+            setOutputFile(audioFile.absolutePath)
+            prepare()
+            start()
+        }
+    }
+    private fun stopRecording() {
+        mediaRecorder?.apply {
+            stop()
+            release()
+        }
+        mediaRecorder = null
+    }
     override fun onResume() {
         super.onResume()
+
+        // 백그라운드에서 처리 -> 게임이 끝났으면?
+        if(isGameSet){
+            // 끝났는데 상대가 먼저 끝냈으면?
+            if(isLose){
+                // 졌음
+                navigate(
+                    RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
+                        locationList = locationList.toTypedArray(),
+                        RunningFinishModel(
+                            success = 0,
+                            velocity = kmPerHour,
+                            calorie = currentCalorie,
+                            height = printHeight,
+                            userId = args.myId,
+                            raceId = args.roomId,
+                            mode = args.gameType,
+                            time = time
+                        )
+                    )
+                )
+            } else{
+                // 이겼음
+                navigate(
+                    RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
+                        locationList = locationList.toTypedArray(),
+                        RunningFinishModel(
+                            success = 1,
+                            velocity = kmPerHour,
+                            calorie = currentCalorie,
+                            height = printHeight,
+                            userId = args.myId,
+                            raceId = args.roomId,
+                            mode = args.gameType,
+                            time = time
+                        )
+                    )
+                )
+            }
+        }
+
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(receiver, IntentFilter("custom-event"))
         sensorManager.registerListener(this, altitudeSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
-    override fun onPause() {
-        super.onPause()
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
-        sensorManager.unregisterListener(this)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         handler.removeCallbacks(timer)
-        activity?.unbindService(serviceConnection)
         sensorManager.unregisterListener(this)
     }
 

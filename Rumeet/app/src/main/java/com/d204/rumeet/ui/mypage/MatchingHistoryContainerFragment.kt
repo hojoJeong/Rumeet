@@ -48,7 +48,7 @@ class MatchingHistoryContainerFragment : BaseFragment<FragmentMatchingHistoryCon
         if(matchingList.size > 0){
             binding.contentMatchintHistoryNoResult.root.visibility = View.GONE
         }
-        val matchingAdapter = MatchingHistoryItemAdapter().apply {
+        val matchingAdapter = MatchingHistoryItemAdapter(this.childFragmentManager).apply {
             submitList(matchingList)
         }
 

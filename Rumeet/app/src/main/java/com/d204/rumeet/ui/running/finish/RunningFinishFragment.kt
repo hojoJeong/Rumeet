@@ -1,9 +1,12 @@
 package com.d204.rumeet.ui.running.finish
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.core.view.marginStart
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.bumptech.glide.Glide
@@ -14,18 +17,6 @@ import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.util.bitmapToFile
 import com.d204.rumeet.util.roundDigit
 import com.d204.rumeet.util.toMinute
-import com.d204.rumeet.util.viewToBitmap
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.PolylineOptions
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import okhttp3.*
@@ -65,13 +56,24 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
         }
     }
 
+    @SuppressLint("ResourceAsColor", "UseCompatLoadingForColorStateLists",
+        "UseCompatLoadingForDrawables"
+    )
     override fun initAfterBinding() {
 
         Log.d("running info", "initAfterBinding: ${runningResult}")
         binding.tvRunningCalorie.text = "${roundDigit(runningResult.calorie.toDouble(), 2)}"
         binding.tvRunningHeight.text = "${roundDigit(runningResult.height.toDouble(), 2)}"
         binding.tvRunningPace.text = "${roundDigit(runningResult.velocity.toDouble(), 2)}"
-        binding.tvResult.text = if (runningResult.success == 0) "패배" else "승리"
+        if (runningResult.success == 0) { // 패배
+            binding.ivResult.visibility = View.GONE
+            binding.tvResult.text = "패배"
+            binding.tvResult.setTextColor(this@RunningFinishFragment.resources.getColorStateList(R.color.fuzzy_wuzzy_brown))
+        } else { // 승리
+            binding.ivResult.visibility = View.VISIBLE
+            binding.tvResult.text = "승리 "
+            binding.tvResult.setTextColor(this@RunningFinishFragment.resources.getColorStateList(R.color.navy_blue))
+        }
 
         binding.tvRunningTime.text = runningResult.time.toMinute()
 
