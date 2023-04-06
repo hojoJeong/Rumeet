@@ -373,6 +373,9 @@
             <action
                 android:id="@+id/action_friendListFragment_to_addFriendFragment"
                 app:destination="@id/addFriendFragment" />
+            <action
+                android:id="@+id/action_friendListFragment_to_navigation_running"
+                app:destination="@+id/navigation_running"/>
         </fragment>
         <fragment
             android:id="@+id/badgeListFragment"

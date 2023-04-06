@@ -51,5 +51,4 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding, Notificat
             tab.text = tabList[position]
         }.attach()
     }
-
 }

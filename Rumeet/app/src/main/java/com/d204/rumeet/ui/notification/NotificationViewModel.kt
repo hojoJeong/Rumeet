@@ -11,9 +11,12 @@ import com.d204.rumeet.domain.usecase.running.DenyRunningRequestUseCase
 import com.d204.rumeet.domain.usecase.user.*
 import com.d204.rumeet.ui.base.BaseViewModel
 import com.d204.rumeet.ui.base.UiState
+import com.d204.rumeet.ui.base.successOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,7 +39,8 @@ class NotificationViewModel @Inject constructor(
 
     private val _runningRequestList: MutableStateFlow<UiState<List<RunningRequestDomainModel>>> =
         MutableStateFlow(UiState.Loading)
-    val runningRequestList: StateFlow<UiState<List<RunningRequestDomainModel>>> get() = _runningRequestList
+    val runningRequestList: StateFlow<UiState<List<RunningRequestDomainModel>>> get() = _runningRequestList.asStateFlow()
+
 
     var userId = -1
     fun getNotificationList() {
@@ -47,37 +51,34 @@ class NotificationViewModel @Inject constructor(
                 .onSuccess {
                     dismissLoading()
 
-                    _notificationAction.emit(NotificationAction.RunningRequest(it))
+//                    _notificationAction.emit(NotificationAction.RunningRequest(it))
                     _runningRequestList.value = UiState.Success(it)
                     Log.d(TAG, "getNotificationList 러닝 초대: $it")
                 }
                 .onError {
-                    dismissLoading()
-
                 }
-
+        }
+        baseViewModelScope.launch {
             getFriendRequestListUseCase(getUserIdUseCase())
                 .onSuccess {
                     dismissLoading()
-
-                    _notificationAction.emit(NotificationAction.FriendRequest(it))
                     _friendRequestList.value = UiState.Success(it)
-                    Log.d(TAG, "getNotificationList 친구 초대: $it")
+                    Log.d(
+                        TAG,
+                        "getNotificationList 친구 초대: ${friendRequestList.value.successOrNull()}"
+                    )
                 }
                 .onError {
-                    dismissLoading()
-
                     _friendRequestList.value = UiState.Error(it.cause)
                 }
+            dismissLoading()
         }
     }
 
     fun acceptRequestFriend(friendId: Int, myId: Int) {
         baseViewModelScope.launch {
             if (acceptRequestFriendUseCase(friendId, myId)) {
-                _notificationAction.emit(NotificationAction.AcceptFriendRequest(myId, friendId))
-            } else {
-
+                getNotificationList()
             }
         }
     }
@@ -85,9 +86,7 @@ class NotificationViewModel @Inject constructor(
     fun denyRequestFriend(friendId: Int, myId: Int) {
         baseViewModelScope.launch {
             if (rejectRequestFriendUseCase(friendId, myId)) {
-                _notificationAction.emit(NotificationAction.DenyFriendRequest(myId, friendId))
-            } else {
-
+                getNotificationList()
             }
         }
     }
@@ -95,6 +94,7 @@ class NotificationViewModel @Inject constructor(
     fun acceptRequestRunning(raceId: Int, index: Int) {
         baseViewModelScope.launch {
             _notificationAction.emit(NotificationAction.AcceptRunningRequest(raceId, index))
+            getNotificationList()
         }
     }
 
@@ -102,6 +102,7 @@ class NotificationViewModel @Inject constructor(
         baseViewModelScope.launch {
             if (denyRunningRequestUseCase(raceId)) {
                 _notificationAction.emit(NotificationAction.DenyRunningRequest(raceId, index))
+                getNotificationList()
             }
         }
     }

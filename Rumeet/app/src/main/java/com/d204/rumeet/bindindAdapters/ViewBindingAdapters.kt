@@ -11,6 +11,8 @@ import com.d204.rumeet.ui.base.successOrNull
 import androidx.recyclerview.widget.RecyclerView
 import com.d204.rumeet.domain.model.chatting.ChattingMessageModel
 import com.d204.rumeet.domain.model.friend.FriendListDomainModel
+import com.d204.rumeet.domain.model.user.NotificationListDomainModel
+import com.d204.rumeet.domain.model.user.RunningRequestDomainModel
 import com.d204.rumeet.ui.chatting.adapter.ChattingItemAdapter
 import com.d204.rumeet.ui.chatting.chatting_list.adapter.ChattingListAdapter
 import com.d204.rumeet.ui.chatting.chatting_list.model.ChattingRoomUiModel
@@ -22,6 +24,7 @@ import com.d204.rumeet.ui.friend.list.adapter.FriendListAdapter
 import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
 import com.d204.rumeet.ui.home.model.BestRecordUiModel
 import com.d204.rumeet.ui.home.model.RecommendFriendUiModel
+import com.d204.rumeet.ui.notification.adapter.NotificationFriendListAdapter
 import com.d204.rumeet.util.scrollToBottom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +49,14 @@ fun RecyclerView.bindUserList(uiState: UiState<List<UserListUiModel>>) {
     val bindAdapter = this.adapter
     if (bindAdapter is AddFriendListAdapter) {
         bindAdapter.submitList(uiState.successOrNull())
+    }
+}
+
+@BindingAdapter("friend_list")
+fun RecyclerView.bindNotiList(uiState: UiState<List<NotificationListDomainModel>>){
+    val bindAdapter = this.adapter
+    if(bindAdapter is NotificationFriendListAdapter){
+        bindAdapter.submitList(uiState.successOrNull()?: emptyList<NotificationListDomainModel>())
     }
 }
 
