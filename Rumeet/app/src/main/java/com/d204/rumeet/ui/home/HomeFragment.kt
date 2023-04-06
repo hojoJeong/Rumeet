@@ -2,6 +2,7 @@ package com.d204.rumeet.ui.home
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -75,31 +76,39 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     private fun initFriendRecommendList(list: List<FriendRecommendDomainModel>) {
-        val recommendAdapter = RecommendFriendAdapter().apply {
-            submitList(list)
-            homeHandler = object : HomeHandler {
-                override fun onClick(userId: Int) {
-                    viewModel.getFriendInfo(userId)
-                    lifecycleScope.launchWhenResumed {
-                        launch {
-                            viewModel.friendDetailInfo.collectLatest {
-                                Log.d(TAG, "onClick: ${it.successOrNull()}")
-                                if (viewModel.friendRecommendList.value.successOrNull() != null)
-                                    showFriendInfoDialog(viewModel.friendDetailInfo.value.successOrNull())
+
+        if (list.isEmpty()) {
+            // Todo 비어있을때 확인
+            binding.tvHomeRecommendFriendResultNo.text = "나와 비슷한 페이스를 가진 친구가 없어요\n 다시 한번 뛰어보는 건 어떨까요?"
+            binding.tvHomeRecommendFriendResultNo.visibility = View.VISIBLE
+            binding.rvHomeRecommendFriend.visibility = View.INVISIBLE
+        } else {
+            binding.tvHomeRecommendFriendResultNo.visibility = View.GONE
+            binding.rvHomeRecommendFriend.visibility = View.VISIBLE
+            val recommendAdapter = RecommendFriendAdapter().apply {
+                submitList(list)
+                homeHandler = object : HomeHandler {
+                    override fun onClick(userId: Int) {
+                        viewModel.getFriendInfo(userId)
+                        lifecycleScope.launchWhenResumed {
+                            launch {
+                                viewModel.friendDetailInfo.collectLatest {
+                                    Log.d(TAG, "onClick: ${it.successOrNull()}")
+                                    if (viewModel.friendRecommendList.value.successOrNull() != null)
+                                        showFriendInfoDialog(viewModel.friendDetailInfo.value.successOrNull())
+                                }
                             }
                         }
                     }
-                }
 
+                }
+            }
+            with(binding.rvHomeRecommendFriend) {
+                layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                adapter = recommendAdapter
             }
         }
-        with(binding.rvHomeRecommendFriend) {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            adapter = recommendAdapter
-        }
-
-
     }
 
     private fun initBtnClickListener() {

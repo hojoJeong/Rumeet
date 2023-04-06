@@ -9,7 +9,7 @@ data class ChattingRoomUiModel(
     val profile : String,
     val content : String,
     val date : Long,
-    val otherUserId : Int
+    val userId : Int
 )
 
 fun ChattingRoomModel.toUiModel() = ChattingRoomUiModel(
@@ -19,5 +19,5 @@ fun ChattingRoomModel.toUiModel() = ChattingRoomUiModel(
     profile = this.senderProfileImg,
     content = this.lastContent,
     date = this.lastDate,
-    otherUserId = this.userId
+    userId = this.userId
 )

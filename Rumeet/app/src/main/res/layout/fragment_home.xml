@@ -309,7 +309,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="40dp"
                             android:textAlignment="center"
-                            android:visibility="@{vm.recommendFriendList == null ? View.VISIBLE : View.GONE}"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

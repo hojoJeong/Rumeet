@@ -91,6 +91,7 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
         binding.btnDialogCancel.setOnClickListener {
             dismissAllowingStateLoss()
         }
+        binding.btnDialogCancel
     }
 
 }

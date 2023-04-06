@@ -332,8 +332,15 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         return message
     }
 
+    private var isMute = false
+
     // 상대방과 나의 profile 이미지로 seekbar의 thumb 이미지 변경
     override fun initStartView() {
+
+        binding.btnRunningSound.setOnCheckedChangeListener { _, isChecked ->
+            isMute = !isChecked
+        }
+
         // Todo 싱글, 고스트 설정을 해줘야함
         Log.d(TAG, "initStartView: ${args.partnerId}")
         viewModel.getUserInfo(args.myId)
@@ -527,7 +534,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                             val mediaPlayer = MediaPlayer().apply {
                                 setDataSource(tempFile.absolutePath)
                                 prepare()
-                                start()
+                                if (!isMute) {
+                                    start()
+                                }
 
                                 setOnCompletionListener {
                                     // 재생 완료 시 리소스 해제 및 임시 파일 삭제
@@ -646,8 +655,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 checkCount = 1
                 if (isGhost) {
                     binding.tvRunningMode.text = "고스트 모드"
-                }
-                else {
+                } else {
                     binding.tvRunningMode.text = "싱글 모드"
                 }
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
@@ -661,8 +669,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 checkCount = 2
                 if (isGhost) {
                     binding.tvRunningMode.text = "고스트 모드"
-                }
-                else {
+                } else {
                     binding.tvRunningMode.text = "싱글 모드"
                 }
                 binding.tvRunningTotalDistance.text = "목표거리 : 2km"
@@ -676,8 +683,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 checkCount = 3
                 if (isGhost) {
                     binding.tvRunningMode.text = "고스트 모드"
-                }
-                else {
+                } else {
                     binding.tvRunningMode.text = "싱글 모드"
                 }
                 binding.tvRunningTotalDistance.text = "목표거리 : 3km"
@@ -691,8 +697,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 checkCount = 4
                 if (isGhost) {
                     binding.tvRunningMode.text = "고스트 모드"
-                }
-                else {
+                } else {
                     binding.tvRunningMode.text = "싱글 모드"
                 }
                 binding.tvRunningTotalDistance.text = "목표거리 : 5km"
