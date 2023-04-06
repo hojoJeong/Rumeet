@@ -204,7 +204,7 @@
             style="@style/base_font_medium_12_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_pace"
+            android:text="현재 속력"
             app:layout_constraintEnd_toEndOf="@+id/ly_speed"
             app:layout_constraintStart_toStartOf="@id/ly_speed"
             app:layout_constraintTop_toBottomOf="@+id/ly_speed" />
