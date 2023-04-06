@@ -277,9 +277,16 @@ public class GameServiceImpl implements GameService {
             System.out.println("e = " + e);
         }
         Gson gson = new Gson();
+
         Type listType = new TypeToken<List<GamePaceDto>>() {
         }.getType();
-        List<GamePaceDto> gamePaceDtos = gson.fromJson(responseBody, listType);
+        List<GamePaceDto> gamePaceDtos = new ArrayList<>();
+        try {
+            gamePaceDtos = gson.fromJson(responseBody, listType);
+        } catch (Exception ex) {
+            System.out.println(responseBody);
+        }
+
 
         for(GamePaceDto gamePaceDto : gamePaceDtos) {
             UserDto user = userService.getUserById(gamePaceDto.getId());
