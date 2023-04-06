@@ -46,7 +46,7 @@ class UserInfoFragment : BaseFragment<FragmentSettingUserInfoBinding, MyPageView
                     val settingOptionList = userInfoOptionTitleList.mapIndexed { _, title ->
                         SettingOptionUiMdel(title, "")
                     }.apply {
-                        this[0].content = if(checkEmailValidate(userInfo.email)) userInfo.email else "소셜로그인입니다."
+                        this[0].content = if(checkEmailValidate(userInfo.email) || userInfo.oauth == null) userInfo.email else "소셜로그인입니다."
                         this[1].content = userInfo.nickname
                         this[2].content = "${userInfo.age}세"
                         this[3].content = if(userInfo.gender == 0) "남자" else "여자"
