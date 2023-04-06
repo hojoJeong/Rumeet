@@ -12,12 +12,12 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingVertical="@dimen/base_vertical_margin"
+        android:paddingBottom="40dp"
         tools:context=".ui.chatting.chatting_list.ChattingListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
             android:id="@+id/rv_chatting_room"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
             app:chatting_rooms="@{vm.chattingList}"

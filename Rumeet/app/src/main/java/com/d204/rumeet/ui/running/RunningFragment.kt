@@ -334,8 +334,15 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         return message
     }
 
+    private var isMute = false
+
     // 상대방과 나의 profile 이미지로 seekbar의 thumb 이미지 변경
     override fun initStartView() {
+
+        binding.btnRunningSound.setOnCheckedChangeListener { _, isChecked ->
+            isMute = !isChecked
+        }
+
         // Todo 싱글, 고스트 설정을 해줘야함
         Log.d(TAG, "initStartView: ${args.partnerId}")
         viewModel.getUserInfo(args.myId)
@@ -382,7 +389,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                 Glide.with(requireContext())
                     .asGif()
-                    .override(100, 100)
+                    .override(120, 120)
                     .load(R.drawable.ic_ghost_animation)
                     .into(object : CustomTarget<GifDrawable>() {
                         override fun onResourceReady(
@@ -529,7 +536,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                             val mediaPlayer = MediaPlayer().apply {
                                 setDataSource(tempFile.absolutePath)
                                 prepare()
-                                start()
+                                if (!isMute) {
+                                    start()
+                                }
 
                                 setOnCompletionListener {
                                     // 재생 완료 시 리소스 해제 및 임시 파일 삭제
@@ -648,8 +657,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 checkCount = 1
                 if (isGhost) {
                     binding.tvRunningMode.text = "고스트 모드"
-                }
-                else {
+                } else {
                     binding.tvRunningMode.text = "싱글 모드"
                 }
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
@@ -663,8 +671,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 checkCount = 2
                 if (isGhost) {
                     binding.tvRunningMode.text = "고스트 모드"
-                }
-                else {
+                } else {
                     binding.tvRunningMode.text = "싱글 모드"
                 }
                 binding.tvRunningTotalDistance.text = "목표거리 : 2km"
@@ -678,8 +685,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 checkCount = 3
                 if (isGhost) {
                     binding.tvRunningMode.text = "고스트 모드"
-                }
-                else {
+                } else {
                     binding.tvRunningMode.text = "싱글 모드"
                 }
                 binding.tvRunningTotalDistance.text = "목표거리 : 3km"
@@ -693,8 +699,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 checkCount = 4
                 if (isGhost) {
                     binding.tvRunningMode.text = "고스트 모드"
-                }
-                else {
+                } else {
                     binding.tvRunningMode.text = "싱글 모드"
                 }
                 binding.tvRunningTotalDistance.text = "목표거리 : 5km"
@@ -889,11 +894,14 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         binding.sbSharkProgress.setOnTouchListener { _, _ ->
             true
         }
+        binding.sbTotalProgress.setOnTouchListener { _, _ ->
+            true
+        }
         binding.btnMic.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     // 버튼이 눌렸을 때 녹음 시작
-                    vibrator.vibrate(VibrationEffect.createOneShot(500, 70))
+                    vibrator.vibrate(VibrationEffect.createOneShot(300, 60))
                     startRecording()
                     true
                 }

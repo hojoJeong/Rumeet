@@ -145,7 +145,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     binding.bvnMain.root.visibility = View.GONE
                     with(binding.tbToolbar) {
                         visibility = View.VISIBLE
-                        setToolbarType(RumeetToolbar.ToolbarType.BACK_TEXT, "채팅")
+                        setToolbarType(RumeetToolbar.ToolbarType.BACK_TEXT, "채팅", leftClickListener = {
+                            findNavController().popBackStack()
+                        })
                     }
                 }
 
@@ -168,10 +170,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
 
                 R.id.runningFinishFragment -> {
-                    with(binding.tbToolbar) {
-                        visibility = View.VISIBLE
-                        setToolbarType(RumeetToolbar.ToolbarType.TEXT, "러닝 결과")
-                    }
                     binding.bvnMain.root.visibility = View.GONE
                 }
             }

@@ -69,7 +69,7 @@ class HomeViewModel @Inject constructor(
 
     private val _friendRecommendList: MutableStateFlow<UiState<List<FriendRecommendDomainModel>>> = MutableStateFlow(UiState.Loading)
     val friendRecommendList: StateFlow<UiState<List<FriendRecommendDomainModel>>>
-        get() = _friendRecommendList
+        get() = _friendRecommendList.asStateFlow()
 
     private val _friendDetailInfo: MutableStateFlow<UiState<FriendInfoDomainModel>> = MutableStateFlow(UiState.Loading)
     val friendDetailInfo: StateFlow<UiState<FriendInfoDomainModel>> get() = _friendDetailInfo.asStateFlow()
@@ -152,28 +152,22 @@ class HomeViewModel @Inject constructor(
 
     fun getFriendRecommendList() {
         baseViewModelScope.launch {
-            showLoading()
             getFriendRecommendListUseCase(userId.value.successOrNull() ?: -1)
                 .onSuccess {
-                    dismissLoading()
                     _friendRecommendList.value = UiState.Success(it)
                 }
                 .onError {
-                    dismissLoading()
                 }
         }
     }
 
     fun getFriendInfo(userId: Int){
         baseViewModelScope.launch {
-            showLoading()
             getFriendDetailInfoUseCase(userId)
                 .onSuccess {
-                    dismissLoading()
                     _friendDetailInfo.value = UiState.Success(it)
                 }
                 .onError {
-                    dismissLoading()
                 }
         }
     }

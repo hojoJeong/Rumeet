@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewDebug.ExportedProperty
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -178,7 +179,11 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     private fun dismissLoadingDialog() {
         if (mLoadingDialog.isVisible) {
             CoroutineScope(Dispatchers.Main).launch{
-                mLoadingDialog.dismiss()
+                try{
+                    mLoadingDialog.dismiss()
+                }catch (e : Exception){
+                    Log.e("TAG", "dismissLoadingDialog: $e", )
+                }
             }
         }
     }

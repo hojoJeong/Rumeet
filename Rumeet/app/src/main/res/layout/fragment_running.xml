@@ -46,11 +46,11 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/base_horizontal_margin"
+            android:checked="true"
             android:layout_marginEnd="@dimen/base_horizontal_margin"
-            android:background="@drawable/bg_btn_sound"
+            android:background="@drawable/sc_checked_sound"
             android:button="@null"
             android:buttonTint="@color/white"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -278,14 +278,30 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_running_calorie_title"
             app:layout_constraintVertical_bias="0.3" />
 
+
+        <SeekBar
+            android:id="@+id/sb_total_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:scaleY="2"
+            android:enabled="false"
+            android:layout_marginBottom="@dimen/base_horizontal_margin"
+            android:progressDrawable="@drawable/bg_total_progress"
+            android:thumb="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <SeekBar
             android:id="@+id/sb_my_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_my_running_progress"
-            app:layout_constraintBottom_toBottomOf="@id/sb_partner_progress"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -297,6 +313,7 @@
             android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_partner_running_progress"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -306,10 +323,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_partner_running_progress"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/sb_my_progress"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

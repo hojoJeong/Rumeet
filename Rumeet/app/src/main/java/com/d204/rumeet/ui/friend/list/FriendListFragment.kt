@@ -86,7 +86,6 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
             viewInfo = "friendDetail"
             initFriendInfo(friendData)
             addChattingButtonClickListener { friendId ->
-                //Todo navigate chatting...
                 viewModel.createChatting(friendId)
             }
             addOkBtnClickListener {
