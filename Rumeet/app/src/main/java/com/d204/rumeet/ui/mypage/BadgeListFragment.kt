@@ -168,26 +168,26 @@ class BadgeListFragment : BaseFragment<FragmentBadgeListBinding, MyPageViewModel
                     ),
                 )
             ),
-            BadgeContentListUiModel(
-                getString(R.string.title_badge_relay),
-                listOf(
-                    BadgeDetailUiModel(
-                        resources.getStringArray(R.array.url_badge)[21],
-                        resources.getStringArray(R.array.title_badge)[20],
-                        ""
-                    ),
-                    BadgeDetailUiModel(
-                        resources.getStringArray(R.array.url_badge)[23],
-                        resources.getStringArray(R.array.title_badge)[22],
-                        ""
-                    ),
-                    BadgeDetailUiModel(
-                        resources.getStringArray(R.array.url_badge)[25],
-                        resources.getStringArray(R.array.title_badge)[24],
-                        ""
-                    ),
-                )
-            ),
+//            BadgeContentListUiModel(
+//                getString(R.string.title_badge_relay),
+//                listOf(
+//                    BadgeDetailUiModel(
+//                        resources.getStringArray(R.array.url_badge)[21],
+//                        resources.getStringArray(R.array.title_badge)[20],
+//                        ""
+//                    ),
+//                    BadgeDetailUiModel(
+//                        resources.getStringArray(R.array.url_badge)[23],
+//                        resources.getStringArray(R.array.title_badge)[22],
+//                        ""
+//                    ),
+//                    BadgeDetailUiModel(
+//                        resources.getStringArray(R.array.url_badge)[25],
+//                        resources.getStringArray(R.array.title_badge)[24],
+//                        ""
+//                    ),
+//                )
+//            ),
         )
 
         for (acquiredBadge in acquiredBadgeList) {

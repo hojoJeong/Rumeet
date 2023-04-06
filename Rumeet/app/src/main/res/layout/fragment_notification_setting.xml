@@ -16,7 +16,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="@dimen/base_horizontal_margin"
-            android:text="알림 받기"
+            android:text="친구 요청"
             style="@style/base_font_medium_14_dim_gray"/>
 
         <Switch

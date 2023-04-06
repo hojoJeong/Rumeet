@@ -2,8 +2,10 @@ package com.d204.rumeet.ui.running.loading
 
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -33,20 +35,25 @@ class RunningLoadingFragment : BaseFragment<FragmentRunningLoadingBinding, Runni
     }
 
     override fun initAfterBinding() {
-        object : CountDownTimer(3600, 1000) {
+        object : CountDownTimer(4600, 1000) {
             override fun onTick(p0: Long) {
                 when ((p0 / 1000).toInt()) {
-                    3 -> {
+                    4 -> {
                         binding.tvTime.text = "3"
                         binding.tvTime.animation = animate()
                     }
-                    2 -> {
+                    3 -> {
                         binding.tvTime.text = "2"
                         binding.tvTime.animation = animate()
                     }
-                    1 -> {
+                    2 -> {
                         binding.tvTime.text = "1"
                         binding.tvTime.animation = animate()
+                    }
+                    1 -> {
+                        binding.tvTime.visibility = View.GONE
+                        binding.ivTime.visibility = View.VISIBLE
+                        binding.ivTime.animation = animateImg()
                     }
                 }
             }
@@ -67,6 +74,12 @@ class RunningLoadingFragment : BaseFragment<FragmentRunningLoadingBinding, Runni
 
     private fun animate() = ScaleAnimation(
         1f, 2f, 1f, 2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
+    ).apply {
+        duration = 500
+    }
+
+    private fun animateImg() = ScaleAnimation(
+        0.6f, 1f, 0.6f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
     ).apply {
         duration = 500
     }

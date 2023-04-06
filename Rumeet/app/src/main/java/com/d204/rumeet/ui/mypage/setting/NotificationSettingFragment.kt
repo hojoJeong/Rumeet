@@ -20,6 +20,7 @@ class NotificationSettingFragment :
     override val viewModel: MyPageViewModel by navGraphViewModels<MyPageViewModel>(R.id.navigation_mypage) { defaultViewModelProviderFactory }
 
     override fun initStartView() {
+        viewModel.getNotificationSettingState()
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.notificationSettingState.collectLatest {

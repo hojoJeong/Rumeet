@@ -38,7 +38,7 @@ class RunningOptionCompetitionOrGhostFragment :
             }
 
             binding.contentRunningOptionWith.btnRunningOptionCompetitionRandom.setOnClickListener {
-                text = getString(R.string.content_message_selected_random)
+                text = ""
             }
         }
 
