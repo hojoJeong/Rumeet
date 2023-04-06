@@ -125,6 +125,7 @@
         <item>버전 정보</item>
         <item>개인정보 수집 및 이용 설정</item>
         <item>서비스 이용 약관</item>
+        <item>로그아웃</item>
     </string-array>
 
     <string-array name="title_user_info_content">
@@ -169,7 +170,6 @@
         <item>뱃지</item>
         <item>프로필 수정</item>
         <item>설정</item>
-        <item>로그아웃</item>
     </string-array>
 
     <string name="content_running_record_option_week">이번 주</string>

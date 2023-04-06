@@ -15,21 +15,21 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/pg_loading"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
+            app:trackThickness="8dp"
             android:indeterminate="true"
-            android:indeterminateDrawable="@drawable/bg_loading_progress"
+            app:trackColor="@color/dandelion"
+            app:indicatorColor="@color/navy_blue"
             android:max="1000"
-            android:progress="500"
-            android:scaleY="0.6" />
+            android:progress="500"/>
 
         <TextView
             android:id="@+id/tv_loading"
-            style="@style/base_font_bold_14_navy_blue"
+            style="@style/base_font_bold_14"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"

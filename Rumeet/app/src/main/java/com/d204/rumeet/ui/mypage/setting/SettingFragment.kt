@@ -52,6 +52,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
                         }
                         SettingAction.ServiceTerms -> {
                         }
+                        SettingAction.Logout -> showLogoutDialog()
                     }
                 }
             }
@@ -95,5 +96,19 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, BaseViewModel>() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = settingContentAdapter
         }
+    }
+
+    private fun showLogoutDialog() {
+        val dialog = DefaultAlertDialog(
+            alertModel = AlertModel(
+                title = "알림 메시지",
+                content = "로그아웃 하시겠습니까?",
+                buttonText = "로그아웃"
+            )
+        ).apply {
+            setCancelButtonVisibility(true)
+            setLogoutState(true, viewModel)
+        }
+        dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 }

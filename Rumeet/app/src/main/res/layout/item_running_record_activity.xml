@@ -32,7 +32,7 @@
 
                 <TextView
                     android:id="@+id/tv_item_running_record_date"
-                    style="@style/base_font_medium_14_dim_gray"
+                    style="@style/base_font_bold_16_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
@@ -52,15 +52,6 @@
                     app:setMode="@{activity.mode}"
                     android:layout_marginStart="10dp"/>
 
-                <TextView
-                    android:id="@+id/tv_item_running_record_title"
-                    style="@style/base_font_bold_16_black"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_item_running_record_date"
-                    tools:text="나의 1번째 러닝"
-                    app:setActivityTitle="@{index}"/>
 
                 <TextView
                     android:id="@+id/tv_item_running_record_distance_title"
@@ -70,7 +61,7 @@
                     android:layout_marginTop="@dimen/base_vertical_contents_to_contents"
                     android:text="거리"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_item_running_record_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_item_running_record_date" />
 
                 <TextView
                     android:id="@+id/tv_item_running_record_distance"
