@@ -41,8 +41,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         }
         exception = viewModel.errorEvent
         initMenu()
-
-
     }
 
     override fun initDataBinding() {
@@ -51,7 +49,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         lifecycleScope.launchWhenResumed {
             launch {
                 viewModel.userId.collect {
-
                     viewModel.getUserInfo()
                 }
             }

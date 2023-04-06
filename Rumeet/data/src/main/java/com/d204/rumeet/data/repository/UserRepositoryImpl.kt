@@ -47,7 +47,6 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserId(): Int {
-        Log.d(TAG, "getUserId repo: ${userDataStorePreferences.getUserId()}")
         return userDataStorePreferences.getUserId()
     }
 

@@ -57,8 +57,8 @@ internal fun RunningRecordSummaryResponseDto.toDomainModel() = RunningRecordSumm
 )
 
 internal fun RunningRecordResponseDto.toDomainModel() = RunningRecordDomainModel(
-    raceList = raceList.map { it.toDomainModel() },
-    summaryData = summaryData.toDomainModel()
+    raceList = raceList?.map { it.toDomainModel() } ?: emptyList(),
+    summaryData = summaryData?.toDomainModel()
 )
 
 internal fun HomeBadgeResponseDto.toDomainModel() = HomeBadgeDomainModel(

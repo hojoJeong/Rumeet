@@ -57,7 +57,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_setting_profile"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

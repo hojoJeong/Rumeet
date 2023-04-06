@@ -29,7 +29,6 @@ internal class UserDataStorePreferences(val context: Context) {
 
     suspend fun getUserId() : Int{
         return context.datastore.data.first().let {
-            Log.d("TAG", "getUserId: ${it[userId]}")
             it[userId] ?: -1
         }
     }

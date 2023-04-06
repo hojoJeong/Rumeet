@@ -123,6 +123,7 @@
                     android:layout_height="86dp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_time"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="4dp"
                     tools:src="@drawable/ic_launcher_background"
                     app:setImageByGlide="@{activity.polyLine}"/>
 

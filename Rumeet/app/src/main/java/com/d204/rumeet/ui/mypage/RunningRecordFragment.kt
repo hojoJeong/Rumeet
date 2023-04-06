@@ -16,6 +16,8 @@ import com.d204.rumeet.ui.mypage.adapter.RunningActivityListAdapter
 import com.d204.rumeet.ui.mypage.model.RunningActivityUiModel
 import com.d204.rumeet.ui.mypage.model.toUiModel
 import com.d204.rumeet.util.toDate
+import com.d204.rumeet.util.toDistance
+import com.d204.rumeet.util.toMinute
 import com.d204.rumeet.util.toRecord
 import kotlinx.coroutines.launch
 
@@ -36,7 +38,7 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.runningRecord.collect {
-                    Log.d(TAG, "initDataBinding: ${it.successOrNull()}")
+                    Log.d(TAG, "마이페이지 러닝 레코드 initDataBinding: ${it.successOrNull()}")
                     val summaryData = it.successOrNull()?.summaryData
                     binding.tvRunningRecordAverageDistance.text ="--"
                     binding.tvRunningRecordAverageTime.text =  "--"
@@ -51,15 +53,18 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
 
                     if(binding.tvRunningRecordStartDate.text != "시작 날짜"){
                         binding.tvRunningRecordAverageDistance.text =
-                            summaryData?.totalDistance?.toString() ?: "--"
-                        binding.tvRunningRecordAverageTime.text = summaryData?.totalTime?.toString() ?: "--"
+                            summaryData?.totalDistance?.toDistance() ?: "--"
+                        binding.tvRunningRecordAverageTime.text = summaryData?.totalTime?.toMinute() ?: "--"
                         binding.tvRunningRecordAveragePace.text = summaryData?.averagePace?.toRecord() ?: "--"
                     }
 
-                    if (activityList.isNotEmpty()) binding.contentRunningRecordNoResult.root.visibility =
-                        View.GONE
+                    if (activityList.isNotEmpty()){
+                        binding.contentRunningRecordNoResult.root.visibility =
+                            View.GONE
+                    }
                     else binding.contentRunningRecordNoResult.root.visibility = View.VISIBLE
                     initActivityListAdapter(activityList)
+
                 }
             }
         }
@@ -117,4 +122,6 @@ class RunningRecordFragment : BaseFragment<FragmentRunningRecordBinding, MyPageV
         }
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
+
+
 }

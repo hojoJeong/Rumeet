@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 
 data class RunningRecordResponseDto(
     @SerializedName("raceList")
-    val raceList: List<RunningRecordRaceListResponseDto>,
+    val raceList: List<RunningRecordRaceListResponseDto>?,
 
     @SerializedName("summaryData")
-    val summaryData: RunningRecordSummaryResponseDto
+    val summaryData: RunningRecordSummaryResponseDto?
 )

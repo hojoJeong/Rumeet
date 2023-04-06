@@ -78,15 +78,18 @@ class MyPageViewModel @Inject constructor(
     val acquiredBadgeList: StateFlow<UiState<List<AcquiredBadgeUiModel>>>
         get() = _acquiredBadgeList.asStateFlow()
 
-    private val _runningRecord: MutableStateFlow<UiState<RunningRecordDomainModel>> = MutableStateFlow(UiState.Loading)
+    private val _runningRecord: MutableStateFlow<UiState<RunningRecordDomainModel>> =
+        MutableStateFlow(UiState.Loading)
     val runningRecord: StateFlow<UiState<RunningRecordDomainModel>>
         get() = _runningRecord
 
-    private val _notificationSettingState: MutableStateFlow<UiState<NotificationStateDomainModel>> = MutableStateFlow(UiState.Loading)
+    private val _notificationSettingState: MutableStateFlow<UiState<NotificationStateDomainModel>> =
+        MutableStateFlow(UiState.Loading)
     val notificationSettingState: StateFlow<UiState<NotificationStateDomainModel>>
         get() = _notificationSettingState.asStateFlow()
 
-    private val _matchingHistoryList: MutableStateFlow<UiState<MatchingHistoryDomainModel>> = MutableStateFlow(UiState.Loading)
+    private val _matchingHistoryList: MutableStateFlow<UiState<MatchingHistoryDomainModel>> =
+        MutableStateFlow(UiState.Loading)
     val matchingHistoryList: StateFlow<UiState<MatchingHistoryDomainModel>>
         get() = _matchingHistoryList.asStateFlow()
 
@@ -127,6 +130,7 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun getUserId() {
+        dismissLoading()
         baseViewModelScope.launch {
             try {
                 val response = getUserIdUseCase()
@@ -161,6 +165,7 @@ class MyPageViewModel @Inject constructor(
                 _resultWithdrawal.value =
                     UiState.Success(withdrawalUseCase.invoke(userId.value.successOrNull()!!))
             } catch (e: Exception) {
+                dismissLoading()
                 _resultWithdrawal.value = UiState.Error(e.cause)
             }
         }
@@ -172,7 +177,8 @@ class MyPageViewModel @Inject constructor(
             getAcquiredBadgeListUseCase(userId.value.successOrNull()!!)
                 .onSuccess {
                     dismissLoading()
-                    _acquiredBadgeList.value = UiState.Success(it.map { model -> model.toUiModel() })
+                    _acquiredBadgeList.value =
+                        UiState.Success(it.map { model -> model.toUiModel() })
                 }
                 .onError {
                     dismissLoading()
@@ -181,13 +187,15 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun getRunningRecord(startDate: Long, endDate: Long){
+    fun getRunningRecord(startDate: Long, endDate: Long) {
         baseViewModelScope.launch {
             showLoading()
             getRunningRecordUseCase(userId.value.successOrNull()!!, startDate, endDate)
                 .onSuccess {
-                    dismissLoading()
+                    Log.d(TAG, "마이페이지 뷰모델 getRunningRecord: ${it.raceList}")
                     _runningRecord.value = UiState.Success(it)
+                    dismissLoading()
+
                 }
                 .onError {
                     dismissLoading()
@@ -195,35 +203,39 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun logout(){
+    fun logout() {
         baseViewModelScope.launch {
             logoutUseCase.invoke()
         }
     }
 
-    fun getNotificationSettingState(){
+    fun getNotificationSettingState() {
         baseViewModelScope.launch {
             showLoading()
-            getNotificationSettingStateUseCase(userId.value.successOrNull()?:-1)
+            getNotificationSettingStateUseCase(userId.value.successOrNull() ?: -1)
                 .onSuccess {
-                    _notificationSettingState.value = UiState.Success(it)
                     dismissLoading()
+                    _notificationSettingState.value = UiState.Success(it)
                 }
                 .onError {
-                    _notificationSettingState.value = UiState.Error(it.cause)
                     dismissLoading()
+                    _notificationSettingState.value = UiState.Error(it.cause)
                 }
         }
     }
 
-    fun modifyNotificationState(target: Int, state: Int){
+    fun modifyNotificationState(target: Int, state: Int) {
         baseViewModelScope.launch {
-            val response = modifyNotificationSettingStateUseCase(userId.value.successOrNull()?:-1, target, state)
-            if(response) Log.d(TAG, "modifyNotificationState: 알림 변경 완료")
+            val response = modifyNotificationSettingStateUseCase(
+                userId.value.successOrNull() ?: -1,
+                target,
+                state
+            )
+            if (response) Log.d(TAG, "modifyNotificationState: 알림 변경 완료")
         }
     }
 
-    fun getMatchingHistoryList(){
+    fun getMatchingHistoryList() {
         baseViewModelScope.launch {
             showLoading()
             getMatchingHistoryUseCase(userId.value.successOrNull()!!)
