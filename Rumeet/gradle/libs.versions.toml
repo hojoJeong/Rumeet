@@ -49,61 +49,99 @@ firebase_version = "31.2.3"
 firebase_cloud_storage_version = "20.1.0"
 firebase_crashlytics_version = "18.3.5"
 firebase_crashlytics_gradle_version = "2.9.4"
+
+# glide
 glide_version = "4.13.0"
+glide_transformation_version = "4.3.0"
 
 # rabbitmq
 rabbitmq_version = "5.13.1"
 
 
 [libraries]
+
+# Firebase (Firebase cloud message & Ananlytics & Crashlytics)
 google_firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_version" }
 google_firebase_analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 google_firebase_storage = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebase_cloud_storage_version" }
-firebase_messaging = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebase_version" }
+firebase_messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_version" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebase_crashlytics_version" }
+
+# android core (안드로이드 기본 제공 라이브러리)
 androidx_core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx_appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 android_material = { module = "com.google.android.material:material", version.ref = "android-material" }
+
+# junit (테스트 도구)
 junit = { module = "junit:junit", version.ref = "junit" }
 android_test_junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
 android_test_espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
+
+# hilt (DI)
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt_compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+
+# Kakao (카카오 로그인)
 kakao-sdk = { module = "com.kakao.sdk:v2-all", version.ref = "kakao_sdk_version" }
+
+# Jetpack Databinding (모델과 뷰 사이의 데이터 바인딩)
 databinding = { module = "androidx.databinding:databinding-runtime", version.ref = "databinding" }
 databinding_compiler = { module = "com.android.databinding:compiler", version.ref = "databinding" }
+
+# Jetpack Navigation (프래그먼트의 유연함을 더욱 편리하게 적용)
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx_navigation_version" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidx_navigation_version" }
 androidx-navigation-common = { module = "androidx.navigation:navigation-common", version.ref = "androidx_navigation_version" }
 androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "androidx_navigation_version" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx_navigation_version" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx_fragment_version" }
+
+# Jetpack ViewModel (생명주기에 따른 관리)
 androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "androidx_lifecycle_extension_version" }
+
+# Splash Screen (안드로이드 버전 상승에 따른 스플래시 스크린 API)
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splash" }
-circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
+
+# Retrofit (Http 통신 라이브러리)
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-scalars-converter = {module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit"}
 retrofit-gson-converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 retrofit-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
+
+# OkHttp3 (인터셉터, 로깅 등 네트워크 통신간 유틸 기능)
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 okhttp3-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp3" }
 okhttp3-urlconnection = { module = "com.squareup.okhttp3:okhttp-urlconnection", version.ref = "okhttp3" }
 okhttp3-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp3" }
+
+# Circleindicator (ViewPager의 인디케이터)
+circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
+
+# NumberPicker (커스텀 Number Picker 라이브러리)
 shawnlin013-numberpicker = { module = "io.github.ShawnLin013:number-picker", version.ref = "shawnlin013_number_picker_version" }
-skydoves-balloon = { module = "com.github.skydoves:balloon", version.ref = "skydoves_balloon_version" }
+
+# CircleImageView (원형 이미지)
+circleimageview = {module = "de.hdodenhof:circleimageview", version.ref="circle_image_view_version"}
+
+# Gson (String을 객체로 변환)
 google-gson = { module = "com.google.code.gson:gson", version.ref = "gson_version" }
-google_auth = { module = "com.google.android.gms:play-services-auth", version.ref = "google_auth_version" }
-circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circle_image_view_version" }
+
+# Glide (이미지 프로세스 라이브러리)
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide_version" }
 glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide_version" }
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_version" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebase_crashlytics_version" }
+glide-transformation = {module = "jp.wasabeef:glide-transformations", version.ref = "glide_transformation_version"}
+
+# Datastore (Flow 기반 비동기 로컬 저장소)
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-version" }
 datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore-version" }
-rabbitmq_client = { module = "com.rabbitmq:amqp-client", version = "rabbitmq_version" }
+
+# RabbitMQ (메세지 브로커)
+rabbitmq_client = { module = "com.rabbitmq:amqp-client", version.ref = "rabbitmq_version" }
 
 
-
+# bundles는 여러 라이브러리를 한가지로 묶기 위함
 [bundles]
 androidx = ["androidx_core", "androidx_appcompat", "androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", "androidx-navigation-common", "androidx-navigation-dynamic-features-fragment", "androidx-navigation-testing",
     "androidx-fragment-ktx", "androidx-lifecycle-extensions", "androidx-core-splashscreen", "datastore-preferences", "datastore-preferences-core"]
@@ -111,6 +149,8 @@ navigation = ["androidx-navigation-fragment-ktx", "androidx-navigation-ui-ktx", 
 retrofit-bundles = ["retrofit", "retrofit-gson-converter", "retrofit-rxjava", "retrofit-scalars-converter"]
 okhttp3-bundles = ["okhttp3", "okhttp3-interceptor", "okhttp3-urlconnection", "okhttp3-logging"]
 
+
+# 안드로이드 플러그인 (프로젝트 단위의 gradle에 적용)
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android_library = { id = "com.android.library", version.ref = "android-library" }
