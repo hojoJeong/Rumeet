@@ -46,11 +46,11 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/base_horizontal_margin"
+            android:checked="true"
             android:layout_marginEnd="@dimen/base_horizontal_margin"
-            android:background="@drawable/bg_btn_sound"
+            android:background="@drawable/sc_checked_sound"
             android:button="@null"
             android:buttonTint="@color/white"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
