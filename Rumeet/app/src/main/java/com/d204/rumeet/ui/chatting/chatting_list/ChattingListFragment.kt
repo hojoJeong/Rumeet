@@ -36,15 +36,14 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
     }
 
     override fun initDataBinding() {
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenStarted {
             viewModel.chattingListSideEffect.collectLatest {
                 when (it) {
                     is ChattingListSideEffect.SuccessGetChattingList -> {
                         setNoResult(it.isEmpty)
                     }
                     is ChattingListSideEffect.NavigateChattingRoom -> {
-                        Log.d(TAG, "initDataBinding: $flag")
-
+                        Log.d(TAG, "chatting: ${it.otherUserId}")
                         navigate(
                             ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(
                                 profile = it.profile,
@@ -58,6 +57,7 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         binding.rvChattingRoom.visibility = View.INVISIBLE
                         chattingListAdapter.submitList(null)
                         chattingListAdapter.submitList(it.chattingRoomInfo.toList())
+                        
                         CoroutineScope(Dispatchers.Main).launch {
                             binding.rvChattingRoom.visibility = View.VISIBLE
                         }
