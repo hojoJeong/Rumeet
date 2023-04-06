@@ -39,7 +39,7 @@
             style="@style/base_font_medium_12_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/base_horizontal_margin"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="18dp"
             android:textSize="26sp"
             app:layout_constraintStart_toStartOf="parent"

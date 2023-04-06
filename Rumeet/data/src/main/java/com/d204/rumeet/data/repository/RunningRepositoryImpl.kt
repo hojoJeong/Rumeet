@@ -38,8 +38,6 @@ internal class RunningRepositoryImpl @Inject constructor(
     ): NetworkResult<Unit?> {
         try {
             val request = RunningInfoRequestDto(userId, raceId, mode, velocity.toDouble(), time, heartRate, success, polyline)
-
-            val response1 = runningApiService.putRace(request)
             val response2 = runningApiService.recordRace(request)
         }catch (e : Exception){
             Log.e("record error", "recordRunning: ${e.message}", )
