@@ -25,6 +25,7 @@ import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.DefaultConsumer
 import com.rabbitmq.client.Envelope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,7 +38,7 @@ class RunningMatchingViewModel @Inject constructor(
     private val denyRunningRequestUseCase: DenyRunningRequestUseCase
 ) : BaseViewModel() {
     private val _runningMatchingSideEffect: MutableSharedFlow<RunningMatchingSideEffect> =
-        MutableSharedFlow(replay = 1, extraBufferCapacity = 10)
+        MutableSharedFlow(replay = 0, extraBufferCapacity = 10)
     val runningMatchingSideEffect: SharedFlow<RunningMatchingSideEffect> get() = _runningMatchingSideEffect.asSharedFlow()
 
     private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
@@ -103,7 +104,7 @@ class RunningMatchingViewModel @Inject constructor(
 
             override fun onFinish() {
                 denyRaceRequest(raceId)
-                _matchingResult.tryEmit(false)
+                _matchingResult.tryEmit(true)
                 val response =
                     _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
                 Log.d(TAG, "onFinish: $response")
@@ -152,7 +153,7 @@ class RunningMatchingViewModel @Inject constructor(
             override fun onFinish() {
                 val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
                 RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
-                _matchingResult.tryEmit(false)
+                _matchingResult.tryEmit(true)
                 val response = _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
                 Log.d(TAG, "onFinish: $response")
             }
@@ -252,11 +253,12 @@ class RunningMatchingViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        // 중간에 꺼졌을 때 중지 메시지 보내기
+        // 중간에 꺼졌을 때 중지 메시지 보내기(false면 아에 매칭이 안된 상태)
         if(!_matchingResult.value){
             if(::timer.isInitialized){
                 timer.cancel()
             }
+            Log.d(TAG, "onCleared: no matching, but clear")
             val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
             RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
         }

@@ -32,7 +32,7 @@ class RunningViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val _runningSideEffect: MutableSharedFlow<RunningSideEffect> =
-        MutableSharedFlow(replay = 1, extraBufferCapacity = 100)
+        MutableSharedFlow(replay = 0, extraBufferCapacity = 100)
     val runningSideEffect: SharedFlow<RunningSideEffect> get() = _runningSideEffect.asSharedFlow()
 
     private val _runningRecordState : MutableStateFlow<Boolean> = MutableStateFlow(false)

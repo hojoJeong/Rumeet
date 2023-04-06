@@ -16,12 +16,9 @@
             style="@style/base_font_bold_32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
             android:layout_marginTop="28dp"
             android:textColor="@color/black"
-            android:textSize="50sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iv_result"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -29,24 +26,22 @@
 
         <ImageView
             android:id="@+id/iv_result"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/ic_win"
             app:layout_constraintBottom_toBottomOf="@+id/tv_result"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tv_result"
             app:layout_constraintTop_toTopOf="@+id/tv_result" />
-
 
         <TextView
             android:id="@+id/tv_running_time"
             style="@style/base_font_medium_12_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_horizontal_margin"
             android:layout_marginTop="18dp"
-            android:textSize="34sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="26sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_result" />
 
@@ -64,7 +59,7 @@
         <ImageView
             android:id="@+id/iv_map"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_margin="@dimen/base_horizontal_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +69,7 @@
             android:id="@+id/ly_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="@dimen/base_horizontal_margin"
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@id/ly_calorie"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,10 +86,10 @@
             <TextView
                 android:id="@+id/tv_pace_speed"
                 style="@style/base_font_medium_10_white"
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="km/h" />
+                android:text="km/h"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -111,19 +106,19 @@
             <TextView
                 android:id="@+id/tv_running_calorie"
                 style="@style/base_font_bold_16_white"
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_calorie"
-                android:textColor="@color/black"
                 style="@style/base_font_medium_10_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="kcal" />
+                android:text="kcal"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -141,18 +136,18 @@
             <TextView
                 android:id="@+id/tv_running_height"
                 style="@style/base_font_bold_16_white"
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
 
             <TextView
                 style="@style/base_font_medium_10_white"
                 android:layout_width="wrap_content"
-                android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                android:text="m" />
+                android:text="m"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -161,8 +156,8 @@
             style="@style/base_font_medium_12_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:text="@string/title_pace"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@+id/ly_speed"
             app:layout_constraintStart_toStartOf="@id/ly_speed"
             app:layout_constraintTop_toBottomOf="@+id/ly_speed" />
@@ -197,7 +192,9 @@
             android:layout_margin="@dimen/base_horizontal_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_running_pace_title"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

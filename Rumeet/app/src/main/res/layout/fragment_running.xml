@@ -229,6 +229,43 @@
             app:layout_constraintStart_toStartOf="@+id/ly_height"
             app:layout_constraintTop_toBottomOf="@+id/ly_height" />
 
+
+        <LinearLayout
+            android:id="@+id/ly_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/sb_my_progress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_running_calorie_title"
+            app:layout_constraintVertical_bias="0.3">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_running_stop"
+                android:layout_width="@dimen/size_btn_running"
+                android:layout_height="@dimen/size_btn_running"
+                android:background="@drawable/bg_layerlist_stop_oval_darkgray_stroke0"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_running_play"
+                android:layout_width="@dimen/size_btn_running"
+                android:layout_height="@dimen/size_btn_running"
+                android:layout_marginStart="@dimen/base_horizontal_margin"
+                android:background="@drawable/bg_layerlist_play_oval_dandelion_stroke0"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_mic"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="@dimen/base_horizontal_margin"
+                android:background="@drawable/bg_btn_mic"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_running_pause"
             android:layout_width="@dimen/size_btn_running"
@@ -237,50 +274,15 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/sb_my_progress"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_mic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_running_calorie_title"
             app:layout_constraintVertical_bias="0.3" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_running_stop"
-            android:layout_width="@dimen/size_btn_running"
-            android:layout_height="@dimen/size_btn_running"
-            android:background="@drawable/bg_layerlist_stop_oval_darkgray_stroke0"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/sb_my_progress"
-            app:layout_constraintEnd_toStartOf="@id/btn_running_play"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_calorie_title"
-            app:layout_constraintVertical_bias="0.3" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_running_play"
-            android:layout_width="@dimen/size_btn_running"
-            android:layout_height="@dimen/size_btn_running"
-            android:background="@drawable/bg_layerlist_play_oval_dandelion_stroke0"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/sb_my_progress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_running_stop"
-            app:layout_constraintTop_toBottomOf="@+id/tv_running_calorie_title"
-            app:layout_constraintVertical_bias="0.3" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_mic"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/bg_btn_mic"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_running_pause"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_running_pause"
-            app:layout_constraintTop_toTopOf="@id/btn_running_pause" />
 
         <SeekBar
             android:id="@+id/sb_my_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_my_running_progress"
             app:layout_constraintBottom_toBottomOf="@id/sb_partner_progress"
@@ -291,6 +293,7 @@
             android:id="@+id/sb_partner_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_partner_running_progress"
@@ -302,6 +305,7 @@
             android:id="@+id/sb_shark_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_partner_running_progress"
             android:visibility="gone"
