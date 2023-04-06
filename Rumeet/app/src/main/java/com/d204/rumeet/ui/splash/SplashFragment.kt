@@ -49,7 +49,6 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
         )
     }
 
-
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { isGranted ->
             val allCheck = isGranted.all { it.value }

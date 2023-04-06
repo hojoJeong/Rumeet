@@ -123,9 +123,10 @@
                     android:layout_height="86dp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_item_running_record_time"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginStart="4dp"
-                    tools:src="@drawable/ic_launcher_background"
-                    app:setImageByGlide="@{activity.polyLine}"/>
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@id/tv_item_running_record_time"
+                    app:setImageByGlide="@{activity.polyLine}"
+                    tools:src="@drawable/ic_launcher_background" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
