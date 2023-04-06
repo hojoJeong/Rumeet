@@ -178,8 +178,7 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
     // 띄워 놓은 로딩 다이얼로그를 없앰.
     private fun dismissLoadingDialog() {
-            mLoadingDialog.dismiss()
-
+        if(mLoadingDialog.isAdded) mLoadingDialog.dismiss()
     }
 
     // Toast Message 관련 함수

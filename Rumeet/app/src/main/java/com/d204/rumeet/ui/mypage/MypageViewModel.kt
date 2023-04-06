@@ -142,12 +142,11 @@ class MyPageViewModel @Inject constructor(
             showLoading()
             getUserInfoUseCase(userId.value.successOrNull() ?: -1)
                 .onSuccess {
-                    dismissLoading()
                     _userInfo.value = UiState.Success(it.toUiModel())
                     Log.d(TAG, "getUserInfo: ${userInfo.value.successOrNull()}")
                 }
                 .onError {
-                    dismissLoading()
+
                     catchError(it)
                 }
             dismissLoading()
@@ -158,13 +157,13 @@ class MyPageViewModel @Inject constructor(
         baseViewModelScope.launch {
             showLoading()
             try {
-                dismissLoading()
                 _resultWithdrawal.value =
                     UiState.Success(withdrawalUseCase.invoke(userId.value.successOrNull()!!))
             } catch (e: Exception) {
-                dismissLoading()
                 _resultWithdrawal.value = UiState.Error(e.cause)
             }
+            dismissLoading()
+
         }
     }
 
@@ -173,14 +172,13 @@ class MyPageViewModel @Inject constructor(
             showLoading()
             getAcquiredBadgeListUseCase(userId.value.successOrNull()!!)
                 .onSuccess {
-                    dismissLoading()
                     _acquiredBadgeList.value =
                         UiState.Success(it.map { model -> model.toUiModel() })
                 }
                 .onError {
-                    dismissLoading()
                     catchError(it)
                 }
+            dismissLoading()
         }
     }
 
@@ -189,13 +187,11 @@ class MyPageViewModel @Inject constructor(
             showLoading()
             getRunningRecordUseCase(userId.value.successOrNull()!!, startDate, endDate)
                 .onSuccess {
-                    dismissLoading()
                     Log.d(TAG, "마이페이지 뷰모델 getRunningRecord: ${it.raceList}")
                     _runningRecord.value = UiState.Success(it)
                     Log.d(TAG, "getRunningRecord: ")
                 }
                 .onError {
-                    dismissLoading()
                 }
             dismissLoading()
         }
@@ -216,13 +212,13 @@ class MyPageViewModel @Inject constructor(
             showLoading()
             getNotificationSettingStateUseCase(userId.value.successOrNull() ?: -1)
                 .onSuccess {
-                    dismissLoading()
                     _notificationSettingState.value = UiState.Success(it)
                 }
                 .onError {
-                    dismissLoading()
                     _notificationSettingState.value = UiState.Error(it.cause)
                 }
+            dismissLoading()
+
         }
     }
 
@@ -242,12 +238,12 @@ class MyPageViewModel @Inject constructor(
             showLoading()
             getMatchingHistoryUseCase(userId.value.successOrNull()!!)
                 .onSuccess {
-                    dismissLoading()
                     _matchingHistoryList.value = UiState.Success(it)
                 }
                 .onError {
                     Log.d(TAG, "getMatchingHistoryList: ${it.cause}")
                 }
+            dismissLoading()
         }
     }
 

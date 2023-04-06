@@ -71,7 +71,7 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
             binding.tvResult.setTextColor(this@RunningFinishFragment.resources.getColorStateList(R.color.fuzzy_wuzzy_brown))
         } else { // 승리
             binding.ivResult.visibility = View.VISIBLE
-            binding.tvResult.text = "승리 "
+            binding.tvResult.text = "승리"
             binding.tvResult.setTextColor(this@RunningFinishFragment.resources.getColorStateList(R.color.navy_blue))
         }
 
