@@ -270,85 +270,19 @@
             android:id="@+id/btn_running_pause"
             android:layout_width="@dimen/size_btn_running"
             android:layout_height="@dimen/size_btn_running"
-            android:visibility="gone"
             android:background="@drawable/bg_layerlist_pause_oval_dandelion_stroke0"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/sb_my_progress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_running_calorie_title"
             app:layout_constraintVertical_bias="0.3" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ly_partner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/sb_my_progress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ly_button">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_my_profile"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_launcher_background"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tv_vs"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_my_nickname"
-                style="@style/base_font_medium_12_white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                app:layout_constraintEnd_toEndOf="@id/iv_my_profile"
-                app:layout_constraintStart_toStartOf="@id/iv_my_profile"
-                app:layout_constraintTop_toBottomOf="@id/iv_my_profile"
-                tools:text="123" />
-
-            <TextView
-                android:id="@+id/tv_vs"
-                style="@style/base_font_bold_20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="vs"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/iv_partner_profile_img"
-                app:layout_constraintStart_toEndOf="@id/iv_my_profile"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_partner_profile_img"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_vs"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_launcher_background" />
-
-            <TextView
-                android:id="@+id/tv_partner_nickname"
-                style="@style/base_font_medium_12_white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                app:layout_constraintEnd_toEndOf="@id/iv_partner_profile_img"
-                app:layout_constraintStart_toStartOf="@id/iv_partner_profile_img"
-                app:layout_constraintTop_toBottomOf="@id/iv_partner_profile_img"
-                tools:text="123" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <SeekBar
             android:id="@+id/sb_my_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_my_running_progress"
             app:layout_constraintBottom_toBottomOf="@id/sb_partner_progress"
@@ -359,6 +293,7 @@
             android:id="@+id/sb_partner_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="@dimen/base_horizontal_margin"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_partner_running_progress"
@@ -370,6 +305,7 @@
             android:id="@+id/sb_shark_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:enabled="false"
             android:progressDrawable="@drawable/bg_partner_running_progress"
             android:visibility="gone"
