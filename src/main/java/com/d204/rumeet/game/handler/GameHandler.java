@@ -44,6 +44,7 @@ public class GameHandler {
             matchingTool.doCancel(info);
         } catch (Exception e) {
             System.out.println(msg);
+
             System.out.println("캔슬 오류");
         }
     }
