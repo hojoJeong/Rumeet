@@ -999,10 +999,11 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     override fun onDestroyView() {
         super.onDestroyView()
+        requireActivity().stopService(runningIntent)
+        requireActivity().unbindService(serviceConnection)
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         handler.removeCallbacks(timer)
         sensorManager.unregisterListener(this)
-        requireActivity().stopService(runningIntent)
     }
 
     /** 고도센서 변경 */
