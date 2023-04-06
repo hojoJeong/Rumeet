@@ -1,19 +1,18 @@
 package com.d204.rumeet.ui.splash
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.splashscreen.SplashScreen
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.d204.rumeet.R
@@ -25,20 +24,31 @@ import com.d204.rumeet.util.startActivityAfterClearBackStack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
+
 @AndroidEntryPoint
 class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
 
     override val layoutResourceId: Int = R.layout.fragment_splash
     override val viewModel: SplashViewModel by viewModels()
 
-    private val permissionList = arrayOf(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.RECORD_AUDIO,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
+
+    private val permissionList = if(Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.FOREGROUND_SERVICE
+        )
+    }else{
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.RECORD_AUDIO,
+        )
+    }
+
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { isGranted ->
@@ -47,7 +57,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
                 viewModel.checkAppState()
             } else {
                 toastMessage("권한을 설정해주세요")
-//                requireActivity().finishAffinity()
+                requireActivity().finishAffinity()
             }
         }
 
@@ -57,20 +67,33 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             initSplashScreen()
         }
-        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            viewModel.checkAppState()
-        } else {
-            permissionLauncher.launch(permissionList)
+
+        // R버전 아래부터는 구버전으로 권한요청
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+            if(ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                &&ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                viewModel.checkAppState()
+            } else{
+                permissionLauncher.launch(permissionList)
+            }
+        }
+        // 구버전으로 권한 요청
+        else{
+            if(ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                viewModel.checkAppState()
+            } else{
+                permissionLauncher.launch(permissionList)
+            }
         }
     }
 
     override fun initStartView() {
-        viewModel.checkAppState()
+
     }
 
     override fun initDataBinding() {
@@ -84,7 +107,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
                         LoginActivity::class.java
                     )
                     is SplashNavigationAction.StartMainActivity -> {
-                        if(requireActivity().intent.extras?.getString("type")!= null){
+                        if (requireActivity().intent.extras?.getString("type") != null) {
                             receiveFcmMessageOnBackGround()
                         } else {
                             requireContext().startActivityAfterClearBackStack(
@@ -121,7 +144,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
         )
     }
 
-    private fun receiveFcmMessageOnBackGround(){
+    private fun receiveFcmMessageOnBackGround() {
         val type = requireActivity().intent.extras?.getString("type")
         val startActivityIntent = Intent(requireContext(), MainActivity::class.java).apply {
             putExtra("type", type)

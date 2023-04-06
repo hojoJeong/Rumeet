@@ -899,7 +899,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     // 버튼이 눌렸을 때 녹음 시작
-                    vibrator.vibrate(VibrationEffect.createOneShot(500, 70))
+                    vibrator.vibrate(VibrationEffect.createOneShot(300, 60))
                     startRecording()
                     true
                 }
