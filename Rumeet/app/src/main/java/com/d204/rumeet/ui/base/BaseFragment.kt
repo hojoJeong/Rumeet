@@ -176,9 +176,8 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
     // 띄워 놓은 로딩 다이얼로그를 없앰.
     private fun dismissLoadingDialog() {
-        if (mLoadingDialog.isAdded) {
+        if (mLoadingDialog.isVisible) {
             CoroutineScope(Dispatchers.Main).launch{
-                delay(500)
                 mLoadingDialog.dismiss()
             }
         }

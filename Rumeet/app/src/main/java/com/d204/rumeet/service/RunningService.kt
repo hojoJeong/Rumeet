@@ -81,16 +81,16 @@ class RunningService : Service(), LocationListener {
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         stopForeground(true)
         Log.d("TAG", "onDestroy: 서비스 종료")
-        super.onDestroy()
     }
 
     private fun createNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_toolbar_logo)
-        .setContentTitle("러밋")
+        .setContentTitle("Rumeet")
         .setChannelId(CHANNEL_ID)
-        .setContentText("힘차게 러밋! 지금부터 달려보아요")
+        .setContentText("러밋과 함께 달리는 중이에요!")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .build()
 
