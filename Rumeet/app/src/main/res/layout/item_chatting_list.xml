@@ -21,7 +21,7 @@
         android:paddingVertical="@dimen/base_vertical_title_to_content"
         android:focusable="true"
         android:clickable="true"
-        app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId, chattingRoomData.profile, chattingRoomData.otherUserId, chattingRoomData.noReadCnt)}">
+        app:onSingleClick="@{() -> clickListener.onChattingRoomClick(chattingRoomData.roomId, chattingRoomData.profile, chattingRoomData.userId, chattingRoomData.noReadCnt)}">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_item_chatting_list_profile"

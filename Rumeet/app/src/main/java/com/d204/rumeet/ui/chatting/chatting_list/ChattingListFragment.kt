@@ -36,15 +36,14 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
     }
 
     override fun initDataBinding() {
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenStarted {
             viewModel.chattingListSideEffect.collectLatest {
                 when (it) {
                     is ChattingListSideEffect.SuccessGetChattingList -> {
                         setNoResult(it.isEmpty)
                     }
                     is ChattingListSideEffect.NavigateChattingRoom -> {
-                        Log.d(TAG, "initDataBinding: $flag")
-
+                        Log.d(TAG, "chatting: ${it.otherUserId}")
                         navigate(
                             ChattingListFragmentDirections.actionChattingListFragmentToChattingFragment(
                                 profile = it.profile,
@@ -55,11 +54,16 @@ class ChattingListFragment : BaseFragment<FragmentChattingListBinding, ChattingL
                         )
                     }
                     is ChattingListSideEffect.SuccessNewChattingList -> {
-                        binding.rvChattingRoom.visibility = View.INVISIBLE
-                        chattingListAdapter.submitList(null)
-                        chattingListAdapter.submitList(it.chattingRoomInfo.toList())
-                        CoroutineScope(Dispatchers.Main).launch {
-                            binding.rvChattingRoom.visibility = View.VISIBLE
+                        if (it.chattingRoomInfo.isEmpty()) {
+                            binding.contentNoResultChattingList.root.visibility = View.VISIBLE
+                        } else {
+                            binding.contentNoResultChattingList.root.visibility = View.GONE
+                            binding.rvChattingRoom.visibility = View.INVISIBLE
+                            chattingListAdapter.submitList(null)
+                            chattingListAdapter.submitList(it.chattingRoomInfo.toList())
+                            CoroutineScope(Dispatchers.Main).launch {
+                                binding.rvChattingRoom.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }

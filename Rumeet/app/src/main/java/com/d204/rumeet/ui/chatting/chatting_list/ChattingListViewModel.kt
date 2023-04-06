@@ -86,8 +86,7 @@ class ChattingListViewModel @Inject constructor(
                 body: ByteArray
             ) {
                 try {
-                    val message =
-                        Gson().fromJson(String(body), Array<ChattingRoomUiModel>::class.java).toList()
+                    val message = Gson().fromJson(String(body), Array<ChattingRoomUiModel>::class.java).toList()
                     baseViewModelScope.launch {
                         _chattingListSideEffect.emit(ChattingListSideEffect.SuccessNewChattingList(message))
                     }
