@@ -151,7 +151,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
         with(viewModel){
             setGameType(RunningType.SINGLE)
             setDistance(RunningDistance.ONE)
-            setRunningDetailType(RunningDetailType.SINGLE)
+            setRunningDetailType(RunningDetailType.GHOST_SINGLE)
         }
     }
 
