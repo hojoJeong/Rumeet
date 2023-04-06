@@ -114,7 +114,7 @@
 
             <action
                 android:id="@+id/action_runningFinishFragment_to_homeFragment"
-                app:destination="@id/navigation_main" />
+                app:destination="@id/navigation_main"/>
 
         </fragment>
 
