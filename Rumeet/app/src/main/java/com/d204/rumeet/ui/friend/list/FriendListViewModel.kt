@@ -18,6 +18,7 @@ import com.d204.rumeet.ui.base.UiState
 import com.d204.rumeet.ui.friend.list.model.FriendListUiModel
 import com.d204.rumeet.ui.friend.list.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,66 +33,61 @@ class FriendListViewModel @Inject constructor(
     private val createChattingRoomUseCase: CreateChattingRoomUseCase
 
 ) : BaseViewModel(), FriendListClickListener {
-    private val _friendListAction: MutableSharedFlow<FriendListAction> = MutableSharedFlow()
+    private val _friendListAction: MutableSharedFlow<FriendListAction> = MutableSharedFlow(replay = 0)
     val friendListAction: SharedFlow<FriendListAction> get() = _friendListAction.asSharedFlow()
 
     private val _friendList: MutableStateFlow<UiState<List<FriendListDomainModel>>> =
         MutableStateFlow(UiState.Loading)
     val friendList: StateFlow<UiState<List<FriendListDomainModel>>> get() = _friendList.asStateFlow()
 
-    private val _chattingRoom: MutableStateFlow<UiState<ChattingCreateModel>> = MutableStateFlow(UiState.Loading)
+    private val _chattingRoom: MutableStateFlow<UiState<ChattingCreateModel>> =
+        MutableStateFlow(UiState.Loading)
     val chattingRoom: StateFlow<UiState<ChattingCreateModel>> get() = _chattingRoom.asStateFlow()
 
     fun requestFriendList(type: Int) {
         baseViewModelScope.launch {
-            showLoading()
             getFriendListUseCase(type)
                 .onSuccess { response ->
                     _friendListAction.emit(FriendListAction.SuccessFriendList(response.size))
                     _friendList.value = UiState.Success(response)
                 }
                 .onError { e -> catchError(e) }
-            dismissLoading()
         }
     }
 
-    fun searchFriendList(searchNickname : String){
+    fun searchFriendList(searchNickname: String) {
         baseViewModelScope.launch {
-            showLoading()
-            searchFriendUseCase(getUserIdUseCase(),  searchNickname)
+            searchFriendUseCase(getUserIdUseCase(), searchNickname)
                 .onSuccess { response ->
                     Log.d(TAG, "searchFriendList: $response")
                     _friendListAction.emit(FriendListAction.SuccessSearchFriend)
                     _friendList.value = UiState.Success(response)
                 }
                 .onError { e -> catchError(e) }
-            dismissLoading()
         }
     }
 
     fun getFriendInfo(userId: Int) {
         baseViewModelScope.launch {
-            showLoading()
             getFriendDetailInfoUseCase(userId)
                 .onSuccess { _friendListAction.emit(FriendListAction.SuccessFriendInfo(it)) }
                 .onError { e -> catchError(e) }
-            dismissLoading()
         }
     }
 
-    fun sortRecentlyRunFriend(){
+    fun sortRecentlyRunFriend() {
         baseViewModelScope.launch {
             _friendListAction.emit(FriendListAction.SortRecentlyRunFriend)
         }
     }
 
-    fun sortRunTogetherFriend(){
+    fun sortRunTogetherFriend() {
         baseViewModelScope.launch {
             _friendListAction.emit(FriendListAction.SortRunTogetherFriend)
         }
     }
 
-    fun navigateAddFriend(){
+    fun navigateAddFriend() {
         baseViewModelScope.launch {
             _friendListAction.emit(FriendListAction.NavigateAddFriend)
         }
@@ -103,23 +99,22 @@ class FriendListViewModel @Inject constructor(
         }
     }
 
-    fun startRunningOption(){
+    fun startRunningOption() {
         baseViewModelScope.launch {
-             _friendListAction.emit(FriendListAction.StartRunningOption)
+            _friendListAction.emit(FriendListAction.StartRunningOption)
         }
     }
-    fun createChatting( friendId: Int){
+
+    fun createChatting(friendId: Int) {
         baseViewModelScope.launch {
-            showLoading()
             createChattingRoomUseCase(getUserIdUseCase(), friendId)
                 .onSuccess {
                     _friendListAction.emit(FriendListAction.CreateChatting(friendId, it))
                     Log.d(TAG, "createChatting: $it")
                 }
                 .onError {
-
+                    catchError(it)
                 }
-            dismissLoading()
         }
     }
 
