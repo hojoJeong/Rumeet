@@ -47,6 +47,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
                 viewModel.checkAppState()
             } else {
                 toastMessage("권한을 설정해주세요")
+                requireActivity().finishAffinity()
             }
         }
 

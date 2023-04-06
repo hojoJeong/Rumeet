@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 import android.media.MediaRecorder
 import android.os.*
+import androidx.annotation.RequiresApi
 import java.io.File
 
 
@@ -100,6 +101,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var isGameSet = false
     private var isLose = false
 
+    private val runningIntent by lazy { Intent(activity, RunningService::class.java) }
+
     // 서비스 연결여부 콜백함수
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -151,10 +154,10 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             // 칼로리 계산
             currentCalorie += getCalorie(gender, age, weight, time).toFloat()
 
-            if(kmPerHour > 10){
+            if (kmPerHour > 10) {
 
             } else {
-                
+
             }
 
             Log.d(TAG, "onReceive: kmPerHour $kmPerHour")
@@ -359,7 +362,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                 resource: GifDrawable,
                                 transition: Transition<in GifDrawable>?
                             ) {
-                                resource.setBounds(0,-500,0,0)
+                                resource.setBounds(0, -500, 0, 0)
                                 binding.sbMyProgress.thumb = resource
                                 resource.start()
                             }
@@ -508,7 +511,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                             // 경쟁할 때 rabbitMQ의 콜백으로 온 데이터 받음
                             successRunningData(it.distance)
                             // 백그라운드 상태에서 상대방이 먼저 옴을 확인
-                            if(it.distance >= maxDistance){
+                            if (it.distance >= maxDistance) {
                                 isLose = true
                             }
                         }
@@ -537,6 +540,12 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         is RunningSideEffect.SuccessPartnerInfo -> {
 
                             Glide.with(requireContext())
+                                .load(it.partnerInfo.profile)
+                                .into(binding.ivPartnerProfileImg)
+
+                            binding.tvPartnerNickname.text = it.partnerInfo.nickname
+
+                            Glide.with(requireContext())
                                 .asGif()
                                 .override(100, 100)
                                 .load(R.drawable.ic_partner_running_animation)
@@ -558,7 +567,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                         is RunningSideEffect.SuccessUserInfo -> {
 
-                            if(args.gameType < 8){
+                            if (args.gameType < 8) {
                                 Glide.with(requireContext())
                                     .asGif()
                                     .override(100, 100)
@@ -598,6 +607,12 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                                     }
                                 })
 
+                            Glide.with(requireContext())
+                                .load(it.userInfo.profile)
+                                .into(binding.ivMyProfile)
+
+                            binding.tvMyNickname.text = it.userInfo.nickname
+
                             // Todo 경쟁이면 해당 코드 실행
                             if (args.gameType >= 4) {
                                 viewModel.startRun(args.myId, args.roomId)
@@ -612,13 +627,15 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                             // 서비스 실행
                             if (!bindState) {
                                 Log.d("bindState", "SuccessUserInfo: start")
-                                val testIntent = Intent(activity, RunningService::class.java)
                                 requireActivity().bindService(
-                                    testIntent,
+                                    runningIntent,
                                     serviceConnection,
                                     Context.BIND_AUTO_CREATE
                                 )
-                                ContextCompat.startForegroundService(requireContext(), testIntent)
+                                ContextCompat.startForegroundService(
+                                    requireContext(),
+                                    runningIntent
+                                )
                             } else {
                                 Log.d("bindState", "initDataBinding: already start")
                             }
@@ -631,7 +648,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
     /** 러닝 기본 데이터 생성 */
     private fun initRunningMode() {
-        binding.tvRunningMode.text = when (args.gameType) {
+        when (args.gameType) {
             0 -> {
                 runningEndModel = RunningModel1pace(
                     user_id = args.myId,
@@ -639,8 +656,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = testDistance
                 checkCount = 1
-                if (isGhost) "고스트 1km"
-                else "싱글 1km"
+                if (isGhost) {
+                    binding.tvRunningMode.text = "고스트 모드"
+                }
+                else {
+                    binding.tvRunningMode.text = "싱글 모드"
+                }
+                binding.tvRunningTotalDistance.text = "목표거리 : 1km"
             }
             1 -> {
                 runningEndModel = RunningModel2pace(
@@ -649,8 +671,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 2000
                 checkCount = 2
-                if (isGhost) "고스트 2km"
-                else "싱글 2km"
+                if (isGhost) {
+                    binding.tvRunningMode.text = "고스트 모드"
+                }
+                else {
+                    binding.tvRunningMode.text = "싱글 모드"
+                }
+                binding.tvRunningTotalDistance.text = "목표거리 : 2km"
             }
             2 -> {
                 runningEndModel = RunningModel3pace(
@@ -659,8 +686,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 3000
                 checkCount = 3
-                if (isGhost) "고스트 3km"
-                else "싱글 3km"
+                if (isGhost) {
+                    binding.tvRunningMode.text = "고스트 모드"
+                }
+                else {
+                    binding.tvRunningMode.text = "싱글 모드"
+                }
+                binding.tvRunningTotalDistance.text = "목표거리 : 3km"
             }
             3 -> {
                 runningEndModel = RunningModel5pace(
@@ -669,8 +701,13 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 5000
                 checkCount = 4
-                if (isGhost) "고스트 5km"
-                else "싱글 5km"
+                if (isGhost) {
+                    binding.tvRunningMode.text = "고스트 모드"
+                }
+                else {
+                    binding.tvRunningMode.text = "싱글 모드"
+                }
+                binding.tvRunningTotalDistance.text = "목표거리 : 5km"
             }
             4 -> {
                 runningEndModel = RunningModel1pace(
@@ -679,7 +716,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = testDistance
                 checkCount = 1
-                "경쟁 1km"
+                binding.lyPartner.visibility = View.VISIBLE
+                binding.tvRunningMode.text = "경쟁 모드"
+                binding.tvRunningTotalDistance.text = "목표거리 : 1km"
             }
             5 -> {
                 runningEndModel = RunningModel2pace(
@@ -688,7 +727,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 2000
                 checkCount = 2
-                "경쟁 2km"
+                binding.lyPartner.visibility = View.VISIBLE
+                binding.tvRunningMode.text = "경쟁 모드"
+                binding.tvRunningTotalDistance.text = "목표거리 : 2km"
             }
             6 -> {
                 runningEndModel = RunningModel3pace(
@@ -697,7 +738,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 3000
                 checkCount = 3
-                "경쟁 3km"
+                binding.lyPartner.visibility = View.VISIBLE
+                binding.tvRunningMode.text = "경쟁 모드"
+                binding.tvRunningTotalDistance.text = "목표거리 : 3km"
             }
             7 -> {
                 runningEndModel = RunningModel5pace(
@@ -706,7 +749,9 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 5000
                 checkCount = 4
-                "경쟁 5km"
+                binding.lyPartner.visibility = View.VISIBLE
+                binding.tvRunningMode.text = "경쟁 모드"
+                binding.tvRunningTotalDistance.text = "목표거리 : 5km"
             }
             8 -> {
                 runningEndModel = RunningModel1pace(
@@ -715,7 +760,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = testDistance
                 checkCount = 1
-                "협동 1km"
+                binding.tvRunningMode.text = "협동 모드 - Easy"
+                binding.tvRunningTotalDistance.text = "목표거리 : 1km"
             }
             9 -> {
                 runningEndModel = RunningModel2pace(
@@ -724,7 +770,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 2000
                 checkCount = 2
-                "협동 2km"
+                binding.tvRunningMode.text = "협동 모드 - Easy"
+                binding.tvRunningTotalDistance.text = "목표거리 : 2km"
             }
             10 -> {
                 runningEndModel = RunningModel3pace(
@@ -733,7 +780,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 3000
                 checkCount = 3
-                "협동 3km"
+                binding.tvRunningMode.text = "협동 모드 - Easy"
+                binding.tvRunningTotalDistance.text = "목표거리 : 3km"
             }
             11 -> {
                 runningEndModel = RunningModel5pace(
@@ -742,7 +790,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 5000
                 checkCount = 4
-                "협동 5km"
+                binding.tvRunningMode.text = "협동 모드 - Easy"
+                binding.tvRunningTotalDistance.text = "목표거리 : 5km"
             }
             12 -> {
                 runningEndModel = RunningModel1pace(
@@ -751,7 +800,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = testDistance
                 checkCount = 1
-                "협동 1km"
+                binding.tvRunningMode.text = "협동 모드 - Normal"
+                binding.tvRunningTotalDistance.text = "목표거리 : 1km"
             }
             13 -> {
                 runningEndModel = RunningModel2pace(
@@ -760,7 +810,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 2000
                 checkCount = 2
-                "협동 2km"
+                binding.tvRunningMode.text = "협동 모드 - Normal"
+                binding.tvRunningTotalDistance.text = "목표거리 : 2km"
             }
             14 -> {
                 runningEndModel = RunningModel3pace(
@@ -769,7 +820,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 3000
                 checkCount = 3
-                "협동 3km"
+                binding.tvRunningMode.text = "협동 모드 - Normal"
+                binding.tvRunningTotalDistance.text = "목표거리 : 3km"
             }
             15 -> {
                 runningEndModel = RunningModel5pace(
@@ -778,7 +830,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 5000
                 checkCount = 4
-                "협동 5km"
+                binding.tvRunningMode.text = "협동 모드 - Normal"
+                binding.tvRunningTotalDistance.text = "목표거리 : 5km"
             }
             16 -> {
                 runningEndModel = RunningModel1pace(
@@ -787,7 +840,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = testDistance
                 checkCount = 1
-                "협동 1km"
+                binding.tvRunningMode.text = "협동 모드 - Hard"
+                binding.tvRunningTotalDistance.text = "목표거리 : 1km"
             }
             17 -> {
                 runningEndModel = RunningModel2pace(
@@ -796,7 +850,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 2000
                 checkCount = 2
-                "협동 2km"
+                binding.tvRunningMode.text = "협동 모드 - Hard"
+                binding.tvRunningTotalDistance.text = "목표거리 : 2km"
             }
             18 -> {
                 runningEndModel = RunningModel3pace(
@@ -805,7 +860,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 3000
                 checkCount = 3
-                "협동 3km"
+                binding.tvRunningMode.text = "협동 모드 - Hard"
+                binding.tvRunningTotalDistance.text = "목표거리 : 3km"
             }
             19 -> {
                 runningEndModel = RunningModel5pace(
@@ -814,13 +870,15 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 )
                 maxDistance = 5000
                 checkCount = 4
-                "협동 5km"
+                binding.tvRunningMode.text = "협동 모드 - Hard"
+                binding.tvRunningTotalDistance.text = "목표거리 : 3km"
             }
-            else -> "오류입니다"
+            else -> toastMessage("러닝 종류가 없음")
         }
     }
 
     /** 타이머 실행 및 버튼 이벤트, SeekBar의 이벤트 막기 */
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun initAfterBinding() {
 
         handler.postDelayed(timer, 1000)
@@ -849,6 +907,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     // 버튼이 눌렸을 때 녹음 시작
+                    vibrator.vibrate(VibrationEffect.createOneShot(500, 70))
                     startRecording()
                     true
                 }
@@ -859,20 +918,22 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     RunningAMQPManager.sendAudioFile(
                         args.partnerId,
                         args.roomId,
-                        audioFile.readBytes())
+                        audioFile.readBytes()
+                    )
                     if (audioFile.exists()) {
                         audioFile.delete()
                     }
                     true
                 }
-                else -> {true}
+                else -> {
+                    true
+                }
             }
         }
     }
 
 
-
-    lateinit var audioFile : File
+    lateinit var audioFile: File
     private fun startRecording() {
         mediaRecorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -885,6 +946,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             start()
         }
     }
+
     private fun stopRecording() {
         mediaRecorder?.apply {
             stop()
@@ -892,13 +954,14 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         }
         mediaRecorder = null
     }
+
     override fun onResume() {
         super.onResume()
 
         // 백그라운드에서 처리 -> 게임이 끝났으면?
-        if(isGameSet){
+        if (isGameSet) {
             // 끝났는데 상대가 먼저 끝냈으면?
-            if(isLose){
+            if (isLose) {
                 // 졌음
                 navigate(
                     RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
@@ -915,7 +978,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         )
                     )
                 )
-            } else{
+            } else {
                 // 이겼음
                 navigate(
                     RunningFragmentDirections.actionRunningFragmentToRunningFinishFragment(
@@ -945,6 +1008,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         handler.removeCallbacks(timer)
         sensorManager.unregisterListener(this)
+        requireActivity().stopService(runningIntent)
     }
 
     /** 고도센서 변경 */
