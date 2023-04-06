@@ -42,7 +42,9 @@ import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 import android.media.MediaRecorder
 import android.os.*
+import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import java.io.File
 
 

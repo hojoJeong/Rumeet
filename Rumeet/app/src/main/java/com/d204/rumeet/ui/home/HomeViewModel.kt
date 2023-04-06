@@ -107,7 +107,7 @@ class HomeViewModel @Inject constructor(
         try {
             val totalCount = "${record.totalCount}회"
             val totalDistance = "${record.totalKm}km"
-            var pace = record.averagePace.toString()
+            var pace = record.averagePace?.toRecord() ?: "00"
 
             val myRecord = listOf(
                 BestRecordUiModel(totalCount, "누적 횟수"),

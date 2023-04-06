@@ -1,5 +1,6 @@
 package com.d204.rumeet.ui.activities
 
+import android.app.ProgressDialog.show
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -178,14 +179,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onBackPressed() {
         if (findNavController(R.id.fcv_main).currentDestination?.id == R.id.runningMatchingFailFragment) {
             findNavController(R.id.fcv_main).popBackStack(R.id.runningOptionFragment, false)
-        } else if(findNavController(R.id.fcv_main).currentDestination?.id == R.id.homeFragment) {
-            if(exitFlag){
+        } else if (findNavController(R.id.fcv_main).currentDestination?.id == R.id.homeFragment) {
+            if (exitFlag) {
                 super.onBackPressed()
-            } else{
+            } else {
                 // 처음 백버튼
                 exitFlag = true
                 Toast.makeText(this, "한번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
             }
+        } else if (findNavController(R.id.fcv_main).currentDestination?.id == R.id.runningFragment) {
+            Toast.makeText(this, "운동을 정지하시려면\n상단의 정지 버튼을 눌러주세요.", Toast.LENGTH_SHORT).show()
+        } else if (findNavController(R.id.fcv_main).currentDestination?.id == R.id.runningFinishFragment) {
+
         } else {
             // 기본 back 버튼이면 패스
             super.onBackPressed()

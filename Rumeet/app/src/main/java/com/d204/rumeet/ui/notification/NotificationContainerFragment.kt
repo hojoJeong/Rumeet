@@ -24,7 +24,6 @@ class NotificationContainerFragment(private val viewInfo: String) :
     override val layoutResourceId: Int
         get() = R.layout.fragment_notification_container
     override val viewModel: NotificationViewModel by activityViewModels()
-    private val runningViewModel by activityViewModels<RunningViewModel>()
 
     override fun initStartView() {
         binding.lifecycleOwner = viewLifecycleOwner
@@ -40,6 +39,22 @@ class NotificationContainerFragment(private val viewInfo: String) :
     }
 
     private fun initView() {
+        initRunningAction()
+        binding.rvNotification.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        when (viewInfo) {
+            getString(R.string.title_request_running) -> {
+                initRunningAdapter()
+            }
+
+            getString(R.string.title_request_friend) -> {
+                initFriendListAdapter()
+            }
+        }
+    }
+
+    private fun initRunningAction() {
         lifecycleScope.launchWhenResumed {
             viewModel.notificationAction.collectLatest { action ->
                 when (action) {
@@ -62,6 +77,7 @@ class NotificationContainerFragment(private val viewInfo: String) :
                     is NotificationAction.DenyFriendRequest -> {}
                     is NotificationAction.DenyRunningRequest -> {
                         Log.d(TAG, "initView: deny ${action.raceId}")
+                        toastMessage("러닝 요청을 거절하였습니다.")
                     }
                     is NotificationAction.FriendRequest -> {}
                     is NotificationAction.RunningRequest -> {}
@@ -69,62 +85,58 @@ class NotificationContainerFragment(private val viewInfo: String) :
 
             }
         }
-        binding.rvNotification.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        when (viewInfo) {
-            getString(R.string.title_request_running) -> {
-                initRunningRequestView()
-            }
-
-            getString(R.string.title_request_friend) -> {
-                initFriendRequestView()
-            }
-        }
     }
 
-    private fun initRunningRequestView() {
+    private fun initRunningAdapter() {
+        val runningAdapter = NotificationRunningListAdapter().apply {
+            handler = object : NotificationHandler {
+                override fun onClickFriend(
+                    friendId: Int,
+                    myId: Int,
+                    accept: Boolean
+                ) {
+                }
+
+                override fun onClickRunning(
+                    index: Int,
+                    raceId: Int,
+                    accept: Boolean
+                ) {
+                    if (accept) {
+                        viewModel.acceptRequestRunning(raceId, index)
+                    } else {
+                        viewModel.denyRequestRunning(raceId, index)
+                    }
+                }
+
+            }
+        }
+
+        initRunningRequestView(runningAdapter)
+    }
+
+    private fun initRunningRequestView(runningAdapter: NotificationRunningListAdapter) {
+        binding.rvNotification.adapter = runningAdapter
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.runningRequestList.collect {
-                    if (it.successOrNull()?.size ?: 0 > 0) {
+                    viewModel.dismissLoading()
+                    val runningRequestList = it.successOrNull() ?: emptyList()
+                    if (runningRequestList.isNotEmpty()) {
                         binding.contentNotificationNoResult.root.visibility =
                             View.GONE
-                        val runningAdapter = NotificationRunningListAdapter().apply {
-                            submitList(it.successOrNull() ?: emptyList())
-                            handler = object : NotificationHandler {
-                                override fun onClickFriend(
-                                    friendId: Int,
-                                    myId: Int,
-                                    accept: Boolean
-                                ) {
-                                }
-
-                                override fun onClickRunning(
-                                    index: Int,
-                                    raceId: Int,
-                                    accept: Boolean
-                                ) {
-                                    if (accept) {
-                                        viewModel.acceptRequestRunning(raceId, index)
-                                    } else {
-                                        viewModel.denyRequestRunning(raceId, index)
-                                    }
-                                }
-
-                            }
-                        }
-                        binding.rvNotification.adapter = runningAdapter
+                        runningAdapter.submitList(runningRequestList)
                     } else {
                         binding.contentNotificationNoResult.root.visibility =
                             View.VISIBLE
+                        runningAdapter.submitList(emptyList())
                     }
                 }
             }
         }
     }
 
-    private fun initFriendRequestView() {
+    private fun initFriendListAdapter() {
         val friendAdapter = NotificationFriendListAdapter().apply {
             notificationHandler = object : NotificationHandler {
                 override fun onClickFriend(
@@ -134,10 +146,11 @@ class NotificationContainerFragment(private val viewInfo: String) :
                 ) {
                     if (accept) {
                         viewModel.acceptRequestFriend(friendId, myId)
+                        toastMessage("친구 요청을 수락하였습니다.\n이제 함께 러밋해봐요!")
                     } else {
                         viewModel.denyRequestFriend(friendId, myId)
+                        toastMessage("친구 요청을 거절하였습니다.")
                     }
-                    viewModel.getNotificationList()
                 }
 
                 override fun onClickRunning(
@@ -149,19 +162,25 @@ class NotificationContainerFragment(private val viewInfo: String) :
                 }
             }
         }
+        initFriendRequestView(friendAdapter)
+    }
+
+    private fun initFriendRequestView(friendAdapter: NotificationFriendListAdapter) {
+        binding.rvNotification.adapter = friendAdapter
+
         lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.friendRequestList.collect {
-                    if (it.successOrNull()?.size ?: 0 > 0) {
+                    viewModel.dismissLoading()
+                    val friendRequestList = it.successOrNull() ?: emptyList()
+                    if (friendRequestList.isNotEmpty()) {
                         binding.contentNotificationNoResult.root.visibility =
                             View.GONE
-                        friendAdapter.submitList(it.successOrNull())
-                        binding.rvNotification.adapter = friendAdapter
+                        friendAdapter.submitList(friendRequestList)
                     } else {
-                        binding.contentNotificationNoResult.root.visibility = View.GONE
+                        binding.contentNotificationNoResult.root.visibility = View.VISIBLE
                         friendAdapter.submitList(emptyList())
                     }
-
                 }
             }
         }

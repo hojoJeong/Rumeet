@@ -65,6 +65,7 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
                             navigate(FriendListFragmentDirections.actionFriendListFragmentToChattingFragment(response.profile, response.roomId, response.noReadCnt, it.friendId))
                         }
                         is FriendListAction.StartRunningOption -> {
+                            navigate(FriendListFragmentDirections.actionFriendListFragmentToNavigationRunning())
                         }
                     }
                 }
