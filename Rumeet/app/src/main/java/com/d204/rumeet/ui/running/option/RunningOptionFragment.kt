@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -14,6 +15,7 @@ import com.d204.rumeet.databinding.FragmentRunningOptionBinding
 import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.running.RunningSideEffect
 import com.d204.rumeet.ui.running.RunningViewModel
+import com.d204.rumeet.ui.running.matching.RunningMatchingViewModel
 import com.d204.rumeet.ui.running.option.adapter.RunningOptionViewPagerAdapter
 import com.d204.rumeet.ui.running.option.model.RunningDifficulty
 import com.d204.rumeet.ui.running.option.model.RunningDetailType
@@ -36,12 +38,12 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
 
     override val layoutResourceId: Int get() = R.layout.fragment_running_option
     override val viewModel: RunningViewModel by navGraphViewModels(R.id.navigation_running) { defaultViewModelProviderFactory }
+    private val matchingViewModel: RunningMatchingViewModel by activityViewModels<RunningMatchingViewModel>()
     private val args by navArgs<NavigationRunningArgs>()
     private val runningType by lazy { arguments?.getInt("type") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         Log.d(TAG, "onCreate: ")
         if (args.invitedFromFriend) {
@@ -85,7 +87,6 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
                                 )
                             )
                         }
-
                     }
                     else -> {}
                 }
@@ -116,11 +117,18 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
                 else -> { // multi
                     if (viewModel.runningTypeModel.runningDetailType == RunningDetailType.FRIEND) {
                         Log.d("TAG", "initAfterBinding: 친구 모드")
-                        navigate(
-                            RunningOptionFragmentDirections.actionRunningOptionFragmentToSelectFriendFragment(
-                                gameType = getRunningType()
+                        if (args.friendNameWhenStartFriendList != -1) { //친구 목록에서 친구를 선택하여 넘어왔을 때
+                            matchingViewModel.setFriendId(args.friendNameWhenStartFriendList)
+                            navigate(RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(
+                                withFriend = true, gameType = getRunningType()
+                            ))
+                        } else {
+                            navigate(
+                                RunningOptionFragmentDirections.actionRunningOptionFragmentToSelectFriendFragment(
+                                    gameType = getRunningType()
+                                )
                             )
-                        )
+                        }
                     } else {
                         Log.d("TAG", "initAfterBinding: 랜덤 모드")
                         navigate(
@@ -149,8 +157,8 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
         binding.tblyRunningOption.visibility = View.GONE
     }
 
-    private fun initSingleModeData(){
-        with(viewModel){
+    private fun initSingleModeData() {
+        with(viewModel) {
             setGameType(RunningType.SINGLE)
             setDistance(RunningDistance.ONE)
             setRunningDetailType(RunningDetailType.GHOST_SINGLE)

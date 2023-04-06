@@ -25,8 +25,6 @@ class AddFriendDialog : BaseDialogFragment<DialogFriendAddBinding>(R.layout.dial
 
     override fun initAfterBinding() {
         binding.contentUserInfo.tvBestRecord.text = "누적 기록"
-        binding.contentUserInfo.tvAveragePace.visibility = View.GONE
-        binding.contentUserInfo.tvCalorieTitle.visibility = View.GONE
         with(binding.contentUserInfo) {
             userDialogModel = userData
             tvDistance.text = userData.totalKm

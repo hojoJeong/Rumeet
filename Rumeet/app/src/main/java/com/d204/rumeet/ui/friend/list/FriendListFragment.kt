@@ -65,7 +65,7 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
                             navigate(FriendListFragmentDirections.actionFriendListFragmentToChattingFragment(response.profile, response.roomId, response.noReadCnt, it.friendId))
                         }
                         is FriendListAction.StartRunningOption -> {
-                            navigate(FriendListFragmentDirections.actionFriendListFragmentToNavigationRunning())
+                            navigate(FriendListFragmentDirections.actionFriendListFragmentToNavigationRunning(friendNameWhenStartFriendList = it.friendId))
                         }
                     }
                 }
@@ -89,7 +89,7 @@ class FriendListFragment : BaseFragment<FragmentFriendListBinding, FriendListVie
                 viewModel.createChatting(friendId)
             }
             addOkBtnClickListener {
-                viewModel.startRunningOption()
+                viewModel.startRunningOption(friendData.id)
                 Log.d("TAG", "showFriendInfoDialog: ")
             }
         }

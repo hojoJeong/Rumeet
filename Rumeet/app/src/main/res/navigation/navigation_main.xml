@@ -64,6 +64,11 @@
             android:defaultValue="-1"
             app:argType="integer"/>
 
+        <argument
+            android:name="friend_name_when_start_friend_list"
+            android:defaultValue="-1"
+            app:argType="integer"/>
+
         <fragment
             android:id="@+id/runningOptionFragment"
             android:name="com.d204.rumeet.ui.running.option.RunningOptionFragment"

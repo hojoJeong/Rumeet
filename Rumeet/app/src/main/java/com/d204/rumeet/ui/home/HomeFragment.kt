@@ -1,11 +1,9 @@
 package com.d204.rumeet.ui.home
 
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.d204.rumeet.R
@@ -129,8 +127,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         if (info != null) {
             val addFriendViewModel by activityViewModels<AddFriendViewModel>()
             val dialog = FriendInfoDialog().apply {
-                viewInfo = "friend"
-                friendInfo = info
+                viewInfo = "random_friend"
+                randomFriendInfo = info
                 friendViewModel = addFriendViewModel
             }
             dialog.show(requireActivity().supportFragmentManager, dialog.tag)

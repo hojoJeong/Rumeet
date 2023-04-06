@@ -1,6 +1,5 @@
 package com.d204.rumeet.ui.friend.list
 
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.Log
 import android.view.View
 import com.d204.rumeet.R
@@ -23,7 +22,7 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
     private lateinit var okBtnClickListerner: () -> Unit
     private lateinit var userDialogInfo: UserDialogModel
     lateinit var viewInfo: String
-    lateinit var friendInfo: FriendInfoDomainModel
+    lateinit var randomFriendInfo: FriendInfoDomainModel
     lateinit var friendViewModel: AddFriendViewModel
     override fun initStartView() {
 
@@ -34,12 +33,11 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
     }
 
     override fun initAfterBinding() {
-        if (viewInfo == "friend") {
-            setFriendInfoDetail()
+        if (viewInfo == "random_friend") {
+            setRandomFriendInfoDetail()
         } else {
             with(binding.contentUserInfo) {
                 userDialogModel = userDialogInfo
-                tvAveragePace.visibility = View.GONE
                 tvDistance.text = userDialogInfo.totalKm
                 tvTime.text = userDialogInfo.totalTime
                 tvPace.text = userDialogInfo.pace
@@ -71,27 +69,24 @@ class FriendInfoDialog : BaseDialogFragment<DialogFriendInfoBinding>(R.layout.di
         userDialogInfo = data.toUserDialogModel()
     }
 
-    fun setFriendInfoDetail() {
+    private fun setRandomFriendInfoDetail() {
         with(binding.contentUserInfo) {
-            url = friendInfo.profileImg
+            url = randomFriendInfo.profileImg
             ivProfileImg.visibility = View.VISIBLE
-            tvAveragePaceTitle.visibility = View.GONE
-            tvCalorieTitle.visibility = View.GONE
-            tvPace.text = friendInfo.pace.toRecord()
-            tvDistance.text = friendInfo.totalKm.toDistance()
-            tvTime.text = friendInfo.totalTime.toRecord()
+            tvPace.text = randomFriendInfo.pace.toRecord()
+            tvTime.text = randomFriendInfo.totalTime.toRecord()
+            tvDistance.text = randomFriendInfo.totalKm.toDistance()
         }
         binding.btnChatting.visibility = View.GONE
 
         binding.btnOkay.setContent("친구 요청")
         binding.btnOkay.addClickListener {
-            friendViewModel.requestFriend(friendInfo.id)
+            friendViewModel.requestFriend(randomFriendInfo.id)
             dismissAllowingStateLoss()
         }
         binding.btnDialogCancel.setOnClickListener {
             dismissAllowingStateLoss()
         }
-        binding.btnDialogCancel
     }
 
 }

@@ -25,27 +25,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_horizontal_margin"
-            android:layout_marginTop="32dp"
             android:background="@drawable/bg_rect_navyblue_tranparent_round8_stroke1"
             android:padding="10dp"
-            android:layout_marginBottom="@dimen/base_horizontal_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/ic_friend_chatting"
             app:layout_constraintEnd_toStartOf="@id/btn_okay"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content_user_info" />
+            app:layout_constraintTop_toTopOf="@+id/btn_okay"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_okay"/>
 
         <com.d204.rumeet.ui.components.SingleButton
             android:id="@+id/btn_okay"
-            android:layout_marginStart="12dp"
             android:layout_width="0dp"
-            android:layout_marginEnd="@dimen/base_horizontal_margin"
+            android:layout_marginHorizontal="@dimen/base_horizontal_margin"
             android:layout_marginVertical="@dimen/base_vertical_margin"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/btn_chatting"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_chatting"
-            app:layout_constraintTop_toTopOf="@id/btn_chatting" />
+            app:layout_constraintTop_toBottomOf="@+id/content_user_info"
+            />
 
         <TextView
             android:id="@+id/btn_dialog_cancel"

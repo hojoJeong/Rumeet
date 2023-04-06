@@ -99,9 +99,9 @@ class FriendListViewModel @Inject constructor(
         }
     }
 
-    fun startRunningOption() {
+    fun startRunningOption(friendId: Int) {
         baseViewModelScope.launch {
-            _friendListAction.emit(FriendListAction.StartRunningOption)
+            _friendListAction.emit(FriendListAction.StartRunningOption(friendId))
         }
     }
 
