@@ -54,7 +54,6 @@ class ChattingViewModel @Inject constructor(
                     repeatDelete = noReadCnt
                     ChattingAMQPMananer.chattingQueueName = "chat.queue.${roomId}.${userId.value}"
                     startSubscribe()
-
                 }
                 .onError { e -> catchError(e) }
         }

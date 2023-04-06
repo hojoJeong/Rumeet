@@ -86,7 +86,6 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
                                 )
                                 chattingAdapter.submitList(list)
                                 CoroutineScope(Dispatchers.Main).launch {
-                                    delay(300)
                                     binding.rvChattingContent.scrollToBottom()
                                 }
                             }
