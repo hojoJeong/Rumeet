@@ -269,6 +269,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             }
             if (args.gameType >= 8) {
                 if (sec == 0) {
+                    isShark = true
                     var shark = arrayOf(0, 0, 400, 300, 240)
                     sharkPace = 1000 / shark[args.gameType / 4]
                     Log.d(TAG, "run: shark visibility visible")
