@@ -45,7 +45,7 @@ class RunningOptionFragment : BaseFragment<FragmentRunningOptionBinding, Running
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d(TAG, "onCreate: ")
+        Log.d(TAG, "onCreate: ${viewModel.runningSideEffect}")
         if (args.invitedFromFriend) {
             navigate(
                 RunningOptionFragmentDirections.actionRunningOptionFragmentToRunningMatchingFragment(

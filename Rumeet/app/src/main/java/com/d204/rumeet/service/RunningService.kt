@@ -81,9 +81,14 @@ class RunningService : Service(), LocationListener, SensorEventListener {
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100L, 0f, this)
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100L, 0f, this)
-        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
-        sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL)
+        try {
+            sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+            stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+            sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL)
+        } catch (e : java.lang.Exception) {
+            Log.d("s", "onCreate: ")
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_ID, "test", NotificationManager.IMPORTANCE_LOW)
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
