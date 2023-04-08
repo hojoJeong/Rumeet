@@ -8,6 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.*
 import android.os.Binder
 import android.os.Build
@@ -23,12 +27,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.d204.rumeet.R
 import com.d204.rumeet.util.floatTo2f
 
-class RunningService : Service(), LocationListener {
+class RunningService : Service(), LocationListener, SensorEventListener {
 
     private lateinit var locationManager: LocationManager
     private var lastLocation: Location? = null
     private var totalDistance = 0f
     private val binder = RunningBinder()
+    private var currentStepCount = 0;
+    private lateinit var sensorManager: SensorManager
+    private lateinit var stepCounter: Sensor
 
     companion object {
         const val NOTIFICATION_ID = 10
@@ -69,10 +76,14 @@ class RunningService : Service(), LocationListener {
         }
         Log.d("TAG", "실행은됨 @@@@@@@@@ onCreate: ")
         createCriteria()
+//        initKalmanFilter()
+
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100L, 0f, this)
-        initKalmanFilter()
-
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100L, 0f, this)
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+        sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_ID, "test", NotificationManager.IMPORTANCE_LOW)
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -112,31 +123,44 @@ class RunningService : Service(), LocationListener {
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .build()
 
-    var times = -1
+    var times = 0
+    var mvLat = 0f
+    var mvLng = 0f
+    var mvSpeed = 0f
+    var init = true
+    var prevStep = 0
     override fun onLocationChanged(location: Location) {
-        times++
+        var mvLocation = location
+        Log.d("TAG", "onLocationChanged: @@@@@@@@@@@@@")
         if(times < 2) {
-            latitudeFilter.filter(location.latitude.toFloat())
-            latitudeFilter.filter(location.latitude.toFloat())
-            latitudeFilter.filter(location.latitude.toFloat())
-            longitudeFilter.filter(location.longitude.toFloat())
-            longitudeFilter.filter(location.longitude.toFloat())
-            longitudeFilter.filter(location.longitude.toFloat())
-            latitudeFilter.filter(location.latitude.toFloat())
-            latitudeFilter.filter(location.latitude.toFloat())
-            latitudeFilter.filter(location.latitude.toFloat())
-            longitudeFilter.filter(location.longitude.toFloat())
-            longitudeFilter.filter(location.longitude.toFloat())
-            longitudeFilter.filter(location.longitude.toFloat())
-            location.latitude = latitudeFilter.filter(location.latitude.toFloat()).toDouble()
-            location.longitude =longitudeFilter.filter(location.longitude.toFloat()).toDouble()
+            mvLat += location.latitude.toFloat()
+            mvLng += location.longitude.toFloat()
+            mvSpeed += location.speed
+            times++
             return
         }
-        location.latitude = latitudeFilter.filter(location.latitude.toFloat()).toDouble()
-        location.longitude = longitudeFilter.filter(location.longitude.toFloat()).toDouble()
+        if(init) {
+            latitudeFilter = KalmanFilter(mvLat/2,1f, 1f)
+            longitudeFilter = KalmanFilter(mvLng/2,1f, 1f)
+            speedFilter = KalmanFilter(mvSpeed/2,1f, 1f)
+            init = false
+        }
+        times = 0
+        location.latitude = latitudeFilter.filter(mvLat/2).toDouble()
+        location.longitude = longitudeFilter.filter(mvLng/2).toDouble()
+        location.speed = speedFilter.filter(mvSpeed/2)
+        mvLat = 0f
+        mvLng = 0f
+        mvSpeed = 0f
         Log.d("TAG", "Change!!!!!!!!: ${times}")
+        Log.d("TAG", "Change!!!!!!!!: ${location.latitude} , ${location.longitude} , Speed : ${location.speed}")
+
 //        if(times == 0) {
 //            times = -1
+        if(prevStep == currentStepCount) {
+            return
+        }
+        prevStep = currentStepCount
         lastLocation?.let {
             val distance = it.distanceTo(location)
             Log.d("TAG", "distance: ${distance}")
@@ -159,7 +183,8 @@ class RunningService : Service(), LocationListener {
 
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        if (provider?.equals(LocationManager.GPS_PROVIDER) == true) {
+        Log.d("TAG", "onStatusChanged: @@@@@@@@@@@@@@@@@@@")
+        /*if (provider?.equals(LocationManager.GPS_PROVIDER) == true) {
             when (status) {
                 LocationProvider.AVAILABLE -> {
                     if (ActivityCompat.checkSelfPermission(
@@ -174,8 +199,8 @@ class RunningService : Service(), LocationListener {
                     }
                     locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
-                        1000L,
-                        10.0f,
+                        100L,
+                        0f,
                         this
                     )
                 }
@@ -186,21 +211,23 @@ class RunningService : Service(), LocationListener {
                     locationManager.removeUpdates(this)
                 }
             }
-        }
+        }*/
     }
     private lateinit var latitudeFilter: KalmanFilter
     private lateinit var longitudeFilter: KalmanFilter
+    private lateinit var speedFilter: KalmanFilter
 
-    private fun initKalmanFilter() {
-        // 칼만 필터를 초기화하고 적절한 노이즈 값을 설정합니다.
-        val measurementNoise = 1f
-        val processNoise = 1f
-        latitudeFilter = KalmanFilter(measurementNoise, processNoise)
-        longitudeFilter = KalmanFilter(measurementNoise, processNoise)
-    }
+//    private fun initKalmanFilter(v) {
+//        // 칼만 필터를 초기화하고 적절한 노이즈 값을 설정합니다.
+//        val measurementNoise = 1f
+//        val processNoise = 1f
+//        latitudeFilter = KalmanFilter(measurementNoise, processNoise)
+//        longitudeFilter = KalmanFilter(measurementNoise, processNoise)
+//        speedFilter = KalmanFilter(measurementNoise, processNoise)
+//    }
 
-    class KalmanFilter(private val r: Float, private val q: Float) {
-        private var x = 0f
+    class KalmanFilter(private val xx: Float,private val r: Float, private val q: Float) {
+        private var x = xx
         private var p = 1f
 
         fun filter(z: Float): Float {
@@ -210,5 +237,13 @@ class RunningService : Service(), LocationListener {
             p *= (1 - k)
             return x
         }
+    }
+
+    override fun onSensorChanged(p0: SensorEvent?) {
+        currentStepCount = p0!!.values[0].toInt()
+    }
+
+    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+
     }
 }

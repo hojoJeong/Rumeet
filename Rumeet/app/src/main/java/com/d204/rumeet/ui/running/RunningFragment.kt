@@ -92,7 +92,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var currentCalorie = 0f
     private var printHeight = 0f
     private var currentDistance = 0f
-    private var collaborationDistance = 0
+    private var collaborationDistance = 0f
     private var testDistance = 1000
 
     private lateinit var vibrator: Vibrator
@@ -119,7 +119,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             Log.d(TAG, "onServiceDisconnected: disconnect")
         }
     }
-
+    var xy = BooleanArray(600)
     /** BroadCastReceiver로 받은 데이터를 처리(속도) */
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -132,16 +132,19 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             binding.tvRunningDistance.text =
                 floatTo2f(roundDigit(runningDistance.div(1000f).toDouble(), 2).toFloat())
             // 좌표 기록
-            locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
 
             Log.d(TAG, "onReceive: service receive!! ${runningDistance}")
 
             currentDistance = runningDistance
             if (isShark) {
-                collaborationDistance = ((runningDistance.toInt() + userDistance) / 2)
-                binding.sbSharkProgress.progress = collaborationDistance
+                collaborationDistance = ((runningDistance + userDistance) / 2)
+                binding.sbMyProgress.progress = collaborationDistance.toInt()
             } else {
                 binding.sbMyProgress.progress = runningDistance.toInt()
+            }
+            if(!xy[currentDistance.toInt()/10]){
+                xy[currentDistance.toInt()/10] = true
+                locationList.add(runningLocation ?: throw IllegalAccessException("NO LOCATION"))
             }
             // 나의 seekbar 진행률을 올린다
             Log.d(TAG, "onReceive: my max progress : ${binding.sbMyProgress.max}")
@@ -152,7 +155,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             )
 
             // km를 시간으로 나눔 (3.6은 3600/1000)
-            kmPerHour = runningLocation.speed * 3.6f
+            kmPerHour = runningLocation!!.speed * 3.6f
             // 칼로리 계산
             currentCalorie += getCalorie(gender, age, weight, time).toFloat()
 
@@ -463,8 +466,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         Log.d(TAG, "initDataBinding: partner running : ${distance}")
         userDistance = distance
         if (args.gameType >= 8) {
-            collaborationDistance = (currentDistance.toInt() + distance) / 2
-            binding.sbMyProgress.progress = collaborationDistance
+            collaborationDistance = (currentDistance + distance) / 2
+            binding.sbMyProgress.progress = collaborationDistance.toInt()
         } else {
             binding.sbMyProgress
             binding.sbPartnerProgress.progress = distance
