@@ -44,6 +44,7 @@ class ChattingViewModel @Inject constructor(
 
     fun requestChattingData(roomId: Int, otherUserId : Int, noReadCnt : Int) {
         baseViewModelScope.launch {
+            showLoading()
             getChattingDataUseCase(roomId)
                 .onSuccess {
                     _userId.emit(getUserIdUseCase())
@@ -56,6 +57,7 @@ class ChattingViewModel @Inject constructor(
                     startSubscribe()
                 }
                 .onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 

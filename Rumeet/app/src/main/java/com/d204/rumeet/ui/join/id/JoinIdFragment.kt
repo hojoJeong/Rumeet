@@ -10,6 +10,7 @@ import com.d204.rumeet.ui.components.SingleLineEditText
 import com.d204.rumeet.ui.join.JoinViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinViewModel>() {
@@ -32,16 +33,18 @@ class JoinIdFragment : BaseFragment<FragmentJoinIdBinding, JoinViewModel>() {
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            viewModel.joinIdAction.collectLatest {
-                when (it) {
-                    is JoinIdAction.IdDuplicate -> {
-                        binding.editId.setStateMessage(getString(R.string.content_duplicated_id), false)
-                    }
-                    is JoinIdAction.CheckIdDuplicate -> {
-                        if(binding.editId.idValidate) viewModel.idValidation(binding.editId.keyword)
-                    }
-                    is JoinIdAction.NavigateNicknameFragment -> {
-                        navigate(JoinIdFragmentDirections.actionJoinIdFragmentToJoinNickNameFragment())
+            launch {
+                viewModel.joinIdAction.collectLatest {
+                    when (it) {
+                        is JoinIdAction.IdDuplicate -> {
+                            binding.editId.setStateMessage(getString(R.string.content_duplicated_id), false)
+                        }
+                        is JoinIdAction.CheckIdDuplicate -> {
+                            if(binding.editId.idValidate) viewModel.idValidation(binding.editId.keyword)
+                        }
+                        is JoinIdAction.NavigateNicknameFragment -> {
+                            navigate(JoinIdFragmentDirections.actionJoinIdFragmentToJoinNickNameFragment())
+                        }
                     }
                 }
             }
