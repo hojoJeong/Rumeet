@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 import android.media.MediaRecorder
 import android.os.*
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.findNavController
@@ -240,7 +241,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var sharkDistance = 0
     private var userDistance = 0
     private var sharkPace = 0
-
+    private var mictime = -5000L
     /** 시간초 타이머 */
     private val handler = Handler(Looper.getMainLooper())
     private val timer = object : Runnable {
@@ -871,7 +872,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             else -> toastMessage("러닝 종류가 없음")
         }
     }
-
+    var prevToast: Toast? = null
+    var recTime = 0L
     /** 타이머 실행 및 버튼 이벤트, SeekBar의 이벤트 막기 */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initAfterBinding() {
@@ -904,23 +906,40 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         binding.btnMic.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    // 버튼이 눌렸을 때 녹음 시작
-                    vibrator.vibrate(VibrationEffect.createOneShot(300, 60))
-                    startRecording()
+                    var tmp = System.currentTimeMillis()
+                    if(mictime + 3000 > tmp) {
+                        prevToast?.cancel()
+                        val newToast = Toast.makeText(context,"${(3000+mictime-tmp)/1000}초 뒤 사용가능",Toast.LENGTH_SHORT)
+                        newToast.show()
+                        prevToast = newToast
+                    }else {
+                        // 버튼이 눌렸을 때 녹음 시작
+                        vibrator.vibrate(VibrationEffect.createOneShot(300, 60))
+                        startRecording()
+                    }
+                    recTime = tmp
+
                     true
                 }
                 MotionEvent.ACTION_UP -> {
-                    // 버튼이 놓일 때 녹음 중지 및 오디오 전송
-                    stopRecording()
-
-                    RunningAMQPManager.sendAudioFile(
-                        args.partnerId,
-                        args.roomId,
-                        audioFile.readBytes()
-                    )
-                    if (audioFile.exists()) {
-                        audioFile.delete()
+                    var tmp = System.currentTimeMillis()
+                    if(recTime + 1000 <= tmp ) {
+                        stopRecording()
+                        RunningAMQPManager.sendAudioFile(
+                            args.partnerId,
+                            args.roomId,
+                            audioFile.readBytes()
+                        )
+                        if (audioFile.exists()) {
+                            audioFile.delete()
+                        }
+                    } else {
+                        prevToast?.cancel()
+                        val newToast = Toast.makeText(context,"꾹 눌러서 사용하세요",Toast.LENGTH_SHORT)
+                        newToast.show()
+                        prevToast = newToast
                     }
+                    mictime = tmp
                     true
                 }
                 else -> {
@@ -929,7 +948,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             }
         }
     }
-
+    var recCheck = false
 
     lateinit var audioFile: File
     private fun startRecording() {
@@ -942,6 +961,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             setOutputFile(audioFile.absolutePath)
             prepare()
             start()
+            recCheck = true
         }
     }
 

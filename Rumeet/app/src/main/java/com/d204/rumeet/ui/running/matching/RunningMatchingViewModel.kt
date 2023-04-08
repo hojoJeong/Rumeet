@@ -63,7 +63,7 @@ class RunningMatchingViewModel @Inject constructor(
 
     private var friendId: Int = -1
     private var roomId: Int = -1
-
+    private var finish = false
     fun setFriendId(id: Int) {
         friendId = id
     }
@@ -80,6 +80,7 @@ class RunningMatchingViewModel @Inject constructor(
     fun startFriendModeMatching(gameType: Int) {
         Log.d(TAG, "startWithFriendMatching: matchingViewmodel gameType: $gameType")
         Log.d(TAG, "startFriendModeMatching: friendId: $friendId")
+        finish = false
         baseViewModelScope.launch {
             _userId.emit(getUserIdUseCase())
             _gameType.emit(gameType)
@@ -103,6 +104,8 @@ class RunningMatchingViewModel @Inject constructor(
             }
 
             override fun onFinish() {
+                if(finish) return
+                finish = true
                 denyRaceRequest(raceId)
                 _matchingResult.tryEmit(true)
                 val response =
@@ -121,6 +124,7 @@ class RunningMatchingViewModel @Inject constructor(
     }
 
     fun startRandomMatching(gameType: Int) {
+        finish = false
         baseViewModelScope.launch {
             _userId.emit(getUserIdUseCase())
             _gameType.emit(gameType)
@@ -151,9 +155,12 @@ class RunningMatchingViewModel @Inject constructor(
             }
 
             override fun onFinish() {
+                if(finish) return
+                finish = true
                 val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
                 RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
                 _matchingResult.tryEmit(true)
+                Log.d(TAG, "onFinish: @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                 val response = _runningMatchingSideEffect.tryEmit(RunningMatchingSideEffect.FailMatching)
                 Log.d(TAG, "onFinish: $response")
             }
@@ -259,6 +266,8 @@ class RunningMatchingViewModel @Inject constructor(
                 timer.cancel()
             }
             Log.d(TAG, "onCleared: no matching, but clear")
+            if(userId.value == -1 || gameType.value == -1)
+                return
             val startModel = RunningMatchingRequestModel(userId.value, gameType.value)
             RunningAMQPManager.failMatching(jsonToString(startModel) ?: throw Exception("NO TYPE"))
         }
