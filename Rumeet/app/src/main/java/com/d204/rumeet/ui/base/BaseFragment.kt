@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewDebug.ExportedProperty
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -24,6 +23,7 @@ import com.d204.rumeet.data.remote.dto.InternalServerErrorException
 import com.d204.rumeet.data.remote.dto.ServerNotFoundException
 import com.d204.rumeet.ui.activities.LoginActivity
 import com.d204.rumeet.ui.components.LoadingDialogFragment
+import com.d204.rumeet.util.extension.repeatOnStarted
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.*
@@ -84,31 +84,33 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     protected var analytics: FirebaseAnalytics? = null
 
     init {
-        lifecycleScope.launchWhenStarted {
-            launch {
-                exception?.collectLatest { exception ->
-                    sendException(exception)
-                    showToastMessage(exception)
+        lifecycleScope.launch {
+            repeatOnStarted {
+                launch {
+                    exception?.collectLatest { exception ->
+                        sendException(exception)
+                        showToastMessage(exception)
+                    }
                 }
-            }
 
-            launch {
-                viewModel.errorEvent.collectLatest { e ->
-                    sendException(e)
-                    dismissLoadingDialog()
-                    showToastMessage(e)
+                launch {
+                    viewModel.errorEvent.collectLatest { e ->
+                        sendException(e)
+                        dismissLoadingDialog()
+                        showToastMessage(e)
+                    }
                 }
-            }
 
-            launch {
-                viewModel.loadingEvent.collectLatest {
-                    if (it) showLoadingDialog()
-                    else dismissLoadingDialog()
+                launch {
+                    viewModel.loadingEvent.collectLatest {
+                        if(it) showLoadingDialog()
+                        else dismissLoadingDialog()
+                    }
                 }
-            }
 
-            launch {
-                viewModel.needLoginEvent.collectLatest { loginCheck() }
+                launch {
+                    viewModel.needLoginEvent.collectLatest { loginCheck() }
+                }
             }
         }
     }
@@ -179,6 +181,14 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     // 띄워 놓은 로딩 다이얼로그를 없앰.
     private fun dismissLoadingDialog() {
         if(mLoadingDialog.isAdded) mLoadingDialog.dismiss()
+    }
+
+    private fun setLoadingDialog(state : Boolean){
+        if(state){
+           mLoadingDialog.show(childFragmentManager, mLoadingDialog.tag)
+        } else{
+           mLoadingDialog.dismiss()
+        }
     }
 
     // Toast Message 관련 함수

@@ -16,7 +16,7 @@ abstract class BaseViewModel : ViewModel() {
     private val _errorEvent: MutableSharedFlow<Throwable> = MutableSharedFlow()
     val errorEvent: SharedFlow<Throwable> = _errorEvent.asSharedFlow()
 
-    private val _loadingEvent: MutableSharedFlow<Boolean> = MutableSharedFlow(replay = 0, extraBufferCapacity = 10)
+    private val _loadingEvent: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val loadingEvent: SharedFlow<Boolean> = _loadingEvent.asSharedFlow()
 
     private val errorHandler = CoroutineExceptionHandler { CoroutineContext, throwable ->

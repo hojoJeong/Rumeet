@@ -9,6 +9,7 @@ import com.d204.rumeet.ui.components.SingleLineEditText
 import com.d204.rumeet.ui.join.JoinViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class JoinPasswordFragment : BaseFragment<FragmentJoinPasswordBinding, JoinViewModel>() {
@@ -27,12 +28,14 @@ class JoinPasswordFragment : BaseFragment<FragmentJoinPasswordBinding, JoinViewM
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            viewModel.joinPasswordAction.collectLatest {
-                when (it) {
-                    is JoinPasswordAction.CheckPasswordValidation -> {
-                        if (binding.editPassword.passwordValidate && binding.editPasswordCheck.checkPasswordMatch(binding.editPassword.keyword)) {
-                            viewModel.joinInfo.password = binding.editPassword.keyword
-                            navigate(JoinPasswordFragmentDirections.actionJoinPasswordFragmentToAdditionalInfoFragment())
+            launch {
+                viewModel.joinPasswordAction.collectLatest {
+                    when (it) {
+                        is JoinPasswordAction.CheckPasswordValidation -> {
+                            if (binding.editPassword.passwordValidate && binding.editPasswordCheck.checkPasswordMatch(binding.editPassword.keyword)) {
+                                viewModel.joinInfo.password = binding.editPassword.keyword
+                                navigate(JoinPasswordFragmentDirections.actionJoinPasswordFragmentToAdditionalInfoFragment())
+                            }
                         }
                     }
                 }

@@ -12,7 +12,10 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
-        <!-- Customize your theme here. -->
+
+        <!-- Set default night mode to not set (remove dark mode) -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="colorScheme">light</item>
     </style>
 
     <style name="Theme.Rumeet.Splash" parent="Theme.Rumeet"/>

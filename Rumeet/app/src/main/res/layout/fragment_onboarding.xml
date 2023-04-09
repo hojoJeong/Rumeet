@@ -26,6 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="58dp"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_constraintBottom_toTopOf="@id/btn_onboarding_continue"
             app:ci_animator="@animator/animator_onboarding_indicator"
             app:ci_drawable="@drawable/ic_indicator_selected"
             app:ci_drawable_unselected="@drawable/ic_indicator_unselected"
