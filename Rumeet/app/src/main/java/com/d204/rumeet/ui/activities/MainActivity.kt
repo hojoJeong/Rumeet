@@ -140,16 +140,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     binding.bvnMain.root.visibility = View.VISIBLE
                     with(binding.tbToolbar) {
                         visibility = View.VISIBLE
-                        setToolbarType(RumeetToolbar.ToolbarType.TEXT, "채팅 목록")
+                        setToolbarType(RumeetToolbar.ToolbarType.BACK_TEXT, "채팅 목록", leftClickListener = {
+                            findNavController().popBackStack()
+                        })
                     }
                 }
                 R.id.chattingFragment -> {
                     binding.bvnMain.root.visibility = View.GONE
                     with(binding.tbToolbar) {
                         visibility = View.VISIBLE
-                        setToolbarType(RumeetToolbar.ToolbarType.BACK_TEXT, "채팅", leftClickListener = {
-                            findNavController().popBackStack()
-                        })
+                        setToolbarType(
+                            RumeetToolbar.ToolbarType.BACK_TEXT,
+                            "채팅",
+                            leftClickListener = {
+                                findNavController().popBackStack()
+                            })
                     }
                 }
 
@@ -170,9 +175,86 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 R.id.runningMatchingFailFragment -> {
                     binding.bvnMain.root.visibility = View.GONE
                 }
-
                 R.id.runningFinishFragment -> {
                     binding.bvnMain.root.visibility = View.GONE
+                }
+                R.id.joinNicknameFragment_tes -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(
+                            RumeetToolbar.ToolbarType.BACK_TEXT,
+                            "프로필 수정",
+                            leftClickListener = {
+                                findNavController().popBackStack()
+                            })
+                    }
+                }
+                R.id.matchingHistoryFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(
+                            RumeetToolbar.ToolbarType.BACK_TEXT,
+                            "매칭기록",
+                            leftClickListener = {
+                                findNavController().popBackStack()
+                            })
+                    }
+                }
+                R.id.runningRecordFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(
+                            RumeetToolbar.ToolbarType.BACK_TEXT,
+                            "운동기록",
+                            leftClickListener = {
+                                findNavController().popBackStack()
+                            })
+                    }
+                }
+                R.id.badgeListFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(
+                            RumeetToolbar.ToolbarType.BACK_TEXT,
+                            "뱃지",
+                            leftClickListener = {
+                                findNavController().popBackStack()
+                            })
+                    }
+                }
+                R.id.settingFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(
+                            RumeetToolbar.ToolbarType.BACK_TEXT,
+                            "설정",
+                            leftClickListener = {
+                                findNavController().popBackStack()
+                            })
+                    }
+                }
+                R.id.notificationSettingFragment -> {
+                    binding.bvnMain.root.visibility = View.GONE
+                    with(binding.tbToolbar) {
+                        visibility = View.VISIBLE
+                        setToolbarType(
+                            RumeetToolbar.ToolbarType.BACK_TEXT,
+                            "알람 설정",
+                            leftClickListener = {
+                                findNavController().popBackStack()
+                            })
+                    }
+                }
+                R.id.myPageFragment -> {
+                    binding.bvnMain.root.visibility = View.VISIBLE
+                    with(binding.tbToolbar) {
+                        visibility = View.GONE
+                    }
                 }
             }
         }

@@ -311,6 +311,7 @@
                 app:destination="@id/friendListFragment"
                 app:enterAnim="@animator/animator_enter_from_right"
                 app:popExitAnim="@animator/animator_exit_to_right" />
+
             <action
                 android:id="@+id/action_myPageFragment_to_badgeListFragment"
                 app:destination="@id/badgeListFragment"

@@ -88,13 +88,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
                     error.toString() == AuthErrorCause.Misconfigured.toString() -> toastMessage("관리자에게 문의하십시오(해시키 오류)")
                     error.toString() == AuthErrorCause.ServerError.toString() -> toastMessage("관리자에게 문의하십시오(서버 내부 오류)")
                     error.toString() == AuthErrorCause.Unauthorized.toString() -> toastMessage("관리자에게 문의하십시오(권환 없음)")
+                    else -> {
+                        Log.e("TAG", "kakaoLogin: ${error.toString()}", )
+                        toastMessage("관리자에게 문의하십시오")
+                    }
                 }
             }
             //로그인 성공
             else if (token != null) {
                 viewModel.doKakaoLogin(token.accessToken)
             } else {
-                Log.d("TAG", "kakaoLogin: error")
+                Log.e("TAG", "kakaoLogin: error")
             }
         }
 
