@@ -32,7 +32,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
     override val viewModel: SplashViewModel by viewModels()
 
 
-    private val permissionList = if(Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+    private val permissionList = if(SDK_INT > Build.VERSION_CODES.R) {
         arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -63,12 +63,12 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Android 12 부터 SplashScreen으로 대체
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (SDK_INT <= Build.VERSION_CODES.S) {
             initSplashScreen()
         }
 
         // R버전 아래부터는 구버전으로 권한요청
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+        if(SDK_INT < Build.VERSION_CODES.R){
             if(ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 &&ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED

@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -24,6 +25,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     private lateinit var navController: NavController
 
     override fun initStartView() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         Log.d(TAG, "initStartView: login")
     }
 

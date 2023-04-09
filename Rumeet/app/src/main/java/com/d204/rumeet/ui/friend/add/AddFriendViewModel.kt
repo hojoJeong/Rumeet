@@ -31,17 +31,20 @@ class AddFriendViewModel @Inject constructor(
 
     fun requestSearchFriend(nickname: String) {
         baseViewModelScope.launch {
+            showLoading()
             searchUsersUseCase(nickname)
                 .onSuccess { result ->
                     _addFriendAction.emit(AddFriendAction.SuccessRequestFriendList(result.size))
                     _searchUserListState.emit(UiState.Success(result.map { it.toUiModel() }))
                 }
                 .onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 
     fun requestFriend(fromUserId : Int) {
         baseViewModelScope.launch {
+            showLoading()
             val userId = getUserIdUseCase()
             requestFriendUseCase(userId, fromUserId)
                 .onSuccess { _addFriendAction.emit(AddFriendAction.SuccessRequestFriend) }
@@ -56,7 +59,7 @@ class AddFriendViewModel @Inject constructor(
                         else -> {catchError(e)}
                     }
                 }
-
+            dismissLoading()
         }
     }
 

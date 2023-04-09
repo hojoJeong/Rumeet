@@ -80,22 +80,25 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
             // 로그인 실패
             if (error != null) {
                 when {
-                    error.toString() == AuthErrorCause.AccessDenied.toString() -> toastMessage("접근이 거부 됨(동의 취소)")
-                    error.toString() == AuthErrorCause.InvalidClient.toString() -> toastMessage("유효하지 않은 앱")
-                    error.toString() == AuthErrorCause.InvalidGrant.toString() -> toastMessage("인증 수단이 유효하지 않아 인증할 수 없는 상태")
-                    error.toString() == AuthErrorCause.InvalidRequest.toString() -> toastMessage("요청 파라미터 오류")
-                    error.toString() == AuthErrorCause.InvalidScope.toString() -> toastMessage("유효하지 않은 scope ID")
-                    error.toString() == AuthErrorCause.Misconfigured.toString() -> toastMessage("설정이 올바르지 않음(android key hash)")
-                    error.toString() == AuthErrorCause.ServerError.toString() -> toastMessage("서버 내부 에러")
-                    error.toString() == AuthErrorCause.Unauthorized.toString() -> toastMessage("앱이 요청 권한이 없음")
-                    else -> toastMessage("카카오톡의 미로그인")
+                    error.toString() == AuthErrorCause.AccessDenied.toString() -> toastMessage("카카오톡 동의를 확인해주세요")
+                    error.toString() == AuthErrorCause.InvalidClient.toString() -> toastMessage("관리자에게 문의하십시오(유효하지 않는 클라이언트)")
+                    error.toString() == AuthErrorCause.InvalidGrant.toString() -> toastMessage("관리자에게 문의하십시오(인증 수단 유효하지 않음)")
+                    error.toString() == AuthErrorCause.InvalidRequest.toString() -> toastMessage("관리자에게 문의하십시오(요청 파라미터 오류)")
+                    error.toString() == AuthErrorCause.InvalidScope.toString() -> toastMessage("관리자에게 문의하십시오(유효하지 않는 Scope ID)")
+                    error.toString() == AuthErrorCause.Misconfigured.toString() -> toastMessage("관리자에게 문의하십시오(해시키 오류)")
+                    error.toString() == AuthErrorCause.ServerError.toString() -> toastMessage("관리자에게 문의하십시오(서버 내부 오류)")
+                    error.toString() == AuthErrorCause.Unauthorized.toString() -> toastMessage("관리자에게 문의하십시오(권환 없음)")
+                    else -> {
+                        Log.e("TAG", "kakaoLogin: ${error.toString()}", )
+                        toastMessage("관리자에게 문의하십시오")
+                    }
                 }
             }
             //로그인 성공
             else if (token != null) {
                 viewModel.doKakaoLogin(token.accessToken)
             } else {
-                Log.d("TAG", "kakaoLogin: error")
+                Log.e("TAG", "kakaoLogin: error")
             }
         }
 

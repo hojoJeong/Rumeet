@@ -39,6 +39,7 @@ class ChattingListViewModel @Inject constructor(
 
     fun requestChattingRoom() {
         baseViewModelScope.launch {
+            showLoading()
             _userId.emit(getUserIdUseCase())
             getChattingRoomUseCase(userId.value)
                 .onSuccess { result ->
@@ -55,6 +56,7 @@ class ChattingListViewModel @Inject constructor(
                 .onError { e ->
                     catchError(e)
                 }
+            dismissLoading()
         }
     }
 
@@ -65,7 +67,6 @@ class ChattingListViewModel @Inject constructor(
         noReadCnt: Int
     ) {
         baseViewModelScope.launch {
-            Log.d(TAG, "onChattingRoomClick: navigate chatting room")
             _chattingListSideEffect.emit(
                 ChattingListSideEffect.NavigateChattingRoom(
                     roomId,

@@ -12,13 +12,19 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_joinIdFragment"
-            app:destination="@id/joinIdFragment" />
+            app:destination="@id/joinIdFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
         <action
             android:id="@+id/action_loginFragment_to_joinNickNameFragment"
-            app:destination="@id/joinNickNameFragment" />
+            app:destination="@id/joinNickNameFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
         <action
             android:id="@+id/action_loginFragment_to_findAccountFragment"
-            app:destination="@id/findAccountFragment" />
+            app:destination="@id/findAccountFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
     </fragment>
 
     <fragment
@@ -28,7 +34,9 @@
         tools:layout="@layout/fragment_join_id">
         <action
             android:id="@+id/action_joinIdFragment_to_joinNickNameFragment"
-            app:destination="@id/joinNickNameFragment" />
+            app:destination="@id/joinNickNameFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
     </fragment>
 
     <fragment
@@ -39,7 +47,9 @@
 
         <action
             android:id="@+id/action_joinNickNameFragment_to_joinPasswordFragment"
-            app:destination="@id/joinPasswordFragment" />
+            app:destination="@id/joinPasswordFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
 
         <argument
             android:name="oauth"
@@ -52,7 +62,9 @@
             app:argType="string" />
         <action
             android:id="@+id/action_joinNickNameFragment_to_additionalInfoFragment"
-            app:destination="@id/additionalInfoFragment" />
+            app:destination="@id/additionalInfoFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
 
     </fragment>
 
@@ -63,17 +75,21 @@
         tools:layout="@layout/fragment_join_password">
         <action
             android:id="@+id/action_joinPasswordFragment_to_additionalInfoFragment"
-            app:destination="@id/additionalInfoFragment" />
+            app:destination="@id/additionalInfoFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
     </fragment>
 
     <fragment
         android:id="@+id/findAccountFragment"
         android:name="com.d204.rumeet.ui.find_account.FindAccountFragment"
         android:label="FindAccountFragment"
-        tools:layout="@layout/fragment_find_account" >
+        tools:layout="@layout/fragment_find_account">
         <action
             android:id="@+id/action_findAccountFragment_to_resetPasswordFragment"
-            app:destination="@id/resetPasswordFragment" />
+            app:destination="@id/resetPasswordFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
     </fragment>
 
 
@@ -86,20 +102,24 @@
         <action
             android:id="@+id/action_additionalInfoFragment_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
-        tools:layout="@layout/fragment_reset_password"
         android:name="com.d204.rumeet.ui.reset_password.ResetPasswordFragment"
-        android:label="ResetPasswordFragment" >
+        android:label="ResetPasswordFragment"
+        tools:layout="@layout/fragment_reset_password">
         <argument
             android:name="email"
             app:argType="string"
-            app:nullable="false"/>
+            app:nullable="false" />
         <action
             android:id="@+id/action_resetPasswordFragment_to_loginFragment"
-            app:destination="@id/loginFragment"/>
+            app:destination="@id/loginFragment"
+            app:enterAnim="@animator/animator_enter_from_right"
+            app:popExitAnim="@animator/animator_exit_to_right" />
     </fragment>
 </navigation>

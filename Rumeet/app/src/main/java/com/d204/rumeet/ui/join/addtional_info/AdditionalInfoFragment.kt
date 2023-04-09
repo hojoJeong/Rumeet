@@ -18,6 +18,7 @@ import com.d204.rumeet.ui.join.JoinViewModel
 import com.d204.rumeet.ui.mypage.MyPageViewModel
 
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinViewModel>() {
     override val layoutResourceId: Int
@@ -40,36 +41,38 @@ class AdditionalInfoFragment : BaseFragment<FragmentAddtionalInfoBinding, JoinVi
 
     override fun initDataBinding() {
         lifecycleScope.launchWhenResumed {
-            viewModel.additionalInfoAction.collectLatest {
-                when (it) {
-                    is AdditionalInfoAction.SocialSignUp -> {
-                        if (checkEmptyValue()) {
+            launch {
+                viewModel.additionalInfoAction.collectLatest {
+                    when (it) {
+                        is AdditionalInfoAction.SocialSignUp -> {
+                            if (checkEmptyValue()) {
+                                if (!args.reset) {
+                                    viewModel.socialSignUp()
+                                } else {
+                                    viewModel.editUserInfo.id = myPageViewModel.userId.value.successOrNull()!!
+                                    viewModel.editUserInfo()
+                                }
+                            } else showSignUpFailedDialog()
+                        }
+                        is AdditionalInfoAction.EmailSignUp -> {
+                            if (checkEmptyValue()) {
+                                if (!args.reset) {
+                                    viewModel.emailSignUp()
+                                } else {
+                                    viewModel.editUserInfo.id = myPageViewModel.userId.value.successOrNull()!!
+                                    viewModel.editUserInfo()
+                                }
+                            } else showSignUpFailedDialog()
+                        }
+                        is AdditionalInfoAction.SignUpSuccess -> {
                             if (!args.reset) {
-                                viewModel.socialSignUp()
+                                toastMessage("회원가입이 성공했습니다.")
+                                navigate(AdditionalInfoFragmentDirections.actionAdditionalInfoFragmentToLoginFragment())
                             } else {
-                                viewModel.editUserInfo.id = myPageViewModel.userId.value.successOrNull()!!
-                                viewModel.editUserInfo()
+                                toastMessage("정보 수정이 완료되었습니다.")
+                                myPageViewModel.getUserInfo()
+                                findNavController().popBackStack()
                             }
-                        } else showSignUpFailedDialog()
-                    }
-                    is AdditionalInfoAction.EmailSignUp -> {
-                        if (checkEmptyValue()) {
-                            if (!args.reset) {
-                                viewModel.emailSignUp()
-                            } else {
-                                viewModel.editUserInfo.id = myPageViewModel.userId.value.successOrNull()!!
-                                viewModel.editUserInfo()
-                            }
-                        } else showSignUpFailedDialog()
-                    }
-                    is AdditionalInfoAction.SignUpSuccess -> {
-                        if (!args.reset) {
-                            toastMessage("회원가입이 성공했습니다.")
-                            navigate(AdditionalInfoFragmentDirections.actionAdditionalInfoFragmentToLoginFragment())
-                        } else {
-                            toastMessage("정보 수정이 완료되었습니다.")
-                            myPageViewModel.getUserInfo()
-                            findNavController().popBackStack()
                         }
                     }
                 }

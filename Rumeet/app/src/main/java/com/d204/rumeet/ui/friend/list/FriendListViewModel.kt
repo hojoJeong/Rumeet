@@ -46,17 +46,20 @@ class FriendListViewModel @Inject constructor(
 
     fun requestFriendList(type: Int) {
         baseViewModelScope.launch {
+            showLoading()
             getFriendListUseCase(type)
                 .onSuccess { response ->
                     _friendListAction.emit(FriendListAction.SuccessFriendList(response.size))
                     _friendList.value = UiState.Success(response)
                 }
                 .onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 
     fun searchFriendList(searchNickname: String) {
         baseViewModelScope.launch {
+            showLoading()
             searchFriendUseCase(getUserIdUseCase(), searchNickname)
                 .onSuccess { response ->
                     Log.d(TAG, "searchFriendList: $response")
@@ -64,14 +67,17 @@ class FriendListViewModel @Inject constructor(
                     _friendList.value = UiState.Success(response)
                 }
                 .onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 
     fun getFriendInfo(userId: Int) {
         baseViewModelScope.launch {
+            showLoading()
             getFriendDetailInfoUseCase(userId)
                 .onSuccess { _friendListAction.emit(FriendListAction.SuccessFriendInfo(it)) }
                 .onError { e -> catchError(e) }
+            dismissLoading()
         }
     }
 
