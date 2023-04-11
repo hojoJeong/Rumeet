@@ -13,6 +13,7 @@ import com.d204.rumeet.ui.chatting.adapter.ChattingItemAdapter
 import com.d204.rumeet.ui.chatting.model.ChattingMessageUiModel
 import com.d204.rumeet.ui.chatting.model.toUiModel
 import com.d204.rumeet.util.amqp.ChattingAMQPMananer
+import com.d204.rumeet.util.extension.repeatOnCreated
 import com.d204.rumeet.util.scrollToBottom
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,8 +38,8 @@ class ChattingFragment : BaseFragment<FragmentChattingBinding, ChattingViewModel
     }
 
     override fun initDataBinding() {
-        lifecycleScope.launchWhenResumed {
-            launch {
+        lifecycleScope.launch {
+            repeatOnCreated {
                 viewModel.chattingSideEffect.collectLatest {
                     when (it) {
                         is ChattingSideEffect.SuccessChattingData -> {
