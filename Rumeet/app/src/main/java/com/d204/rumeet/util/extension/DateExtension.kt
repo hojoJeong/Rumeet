@@ -17,7 +17,7 @@ import java.util.Locale
 
 fun Long.toMinute() : String{
     val simpleDateFormat = SimpleDateFormat("mm:ss",Locale.KOREA)
-    return simpleDateFormat.format(this)
+    return simpleDateFormat.format(this * 1000)
 }
 
 fun Context.getLocation(): Location? {

@@ -1,0 +1,44 @@
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31_오전_9_04_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31_오전_9_04_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31_오전_9_04_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31_오전_9_04_[Changes]/shelved.patch	(revision 2706c072d065de03202c3a3f10472857a4b22a66)
++++ /dev/null	(revision 2706c072d065de03202c3a3f10472857a4b22a66)
+@@ -1,25 +0,0 @@
+-Index: .idea/deploymentTargetDropDown.xml
+-===================================================================
+-diff --git a/.idea/deploymentTargetDropDown.xml b/.idea/deploymentTargetDropDown.xml
+-deleted file mode 100644
+---- a/.idea/deploymentTargetDropDown.xml	(revision 5824d55db97e85b26b42d4cdda2c516636b778f5)
+-+++ /dev/null	(revision 5824d55db97e85b26b42d4cdda2c516636b778f5)
+-@@ -1,17 +0,0 @@
+--<?xml version="1.0" encoding="UTF-8"?>
+--<project version="4">
+--  <component name="deploymentTargetDropDown">
+--    <runningDeviceTargetSelectedWithDropDown>
+--      <Target>
+--        <type value="RUNNING_DEVICE_TARGET" />
+--        <deviceKey>
+--          <Key>
+--            <type value="SERIAL_NUMBER" />
+--            <value value="ce08171879896c720b" />
+--          </Key>
+--        </deviceKey>
+--      </Target>
+--    </runningDeviceTargetSelectedWithDropDown>
+--    <timeTargetWasSelectedWithDropDown value="2023-03-30T02:04:50.638853Z" />
+--  </component>
+--</project>
+-\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31__9_04__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31__9_04__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31__9_04__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31__9_04__Changes_.xml	(revision 2706c072d065de03202c3a3f10472857a4b22a66)
++++ /dev/null	(revision 2706c072d065de03202c3a3f10472857a4b22a66)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_2023-03-31_오전_9_04_[Changes]" date="1680221098410" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023-03-31_오전_9_04_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2023-03-31 오전 9:04 [Changes]" />
+-</changelist>
+\ No newline at end of file

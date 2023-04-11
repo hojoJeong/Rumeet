@@ -243,4 +243,3 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         ime.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 }
-
