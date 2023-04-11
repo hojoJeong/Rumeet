@@ -92,7 +92,7 @@ class RunningViewModel @Inject constructor(
         baseViewModelScope.launch {
             try {
                 getUserInfoUseCase(userId)
-                    .onSuccess { _runningSideEffect.emit(RunningSideEffect.SuccessUserInfo(it)) }
+                    .onSuccess { _runningSideEffect.emit(RunningSideEffect.SuccessUserInfo(it))}
                     .onError { e -> catchError(e) }
             } catch (e: Exception) {
                 Log.e("TAG", "getUserInfo: catch ${e.message}")

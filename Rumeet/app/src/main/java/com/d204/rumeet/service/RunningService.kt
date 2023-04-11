@@ -134,6 +134,8 @@ class RunningService : Service(), LocationListener, SensorEventListener {
     var mvSpeed = 0f
     var init = true
     var prevStep = 0
+
+
     override fun onLocationChanged(location: Location) {
         var mvLocation = location
         Log.d("TAG", "onLocationChanged: @@@@@@@@@@@@@")
@@ -147,7 +149,7 @@ class RunningService : Service(), LocationListener, SensorEventListener {
         if(init) {
             latitudeFilter = KalmanFilter(mvLat/2,1f, 1f)
             longitudeFilter = KalmanFilter(mvLng/2,1f, 1f)
-            speedFilter = KalmanFilter(mvSpeed/2,1f, 1f)
+            speedFilter = KalmanFilter(4f,1f, 1f)
             init = false
         }
         times = 0
@@ -162,9 +164,11 @@ class RunningService : Service(), LocationListener, SensorEventListener {
 
 //        if(times == 0) {
 //            times = -1
-        if(prevStep == currentStepCount) {
-            return
-        }
+//        if(prevStep == currentStepCount) {
+//            Toast.makeText(this, "걸음센서 없음", Toast.LENGTH_SHORT).show()
+//            Log.d("TAG", "onLocationChanged: 걸음센서 없음!")
+//            return
+//        }
         prevStep = currentStepCount
         lastLocation?.let {
             val distance = it.distanceTo(location)

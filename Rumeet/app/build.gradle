@@ -16,7 +16,7 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 android {
     signingConfigs {
         debug {
-            storeFile file('C:\\Users\\rsw14\\Desktop\\RyuSw\\Project\\Rumeet_Project\\rumeet.jks')
+            storeFile file('./rumeet.jks')
             storePassword 'rumeet204'
             keyAlias 'key0'
             keyPassword 'rumeet204'

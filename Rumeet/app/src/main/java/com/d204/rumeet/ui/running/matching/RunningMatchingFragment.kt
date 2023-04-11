@@ -12,6 +12,7 @@ import com.d204.rumeet.ui.base.BaseFragment
 import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.ui.running.matching.model.RunningMatchingUiModel
 import com.d204.rumeet.util.amqp.RunningAMQPManager
+import com.d204.rumeet.util.extension.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -70,8 +71,8 @@ class RunningMatchingFragment :
 
 
     override fun initDataBinding() {
-        lifecycleScope.launchWhenResumed {
-            launch {
+        lifecycleScope.launch {
+            repeatOnStarted {
                 viewModel.runningMatchingSideEffect.collectLatest {
                     when (it) {
                         is RunningMatchingSideEffect.FailMatching -> {

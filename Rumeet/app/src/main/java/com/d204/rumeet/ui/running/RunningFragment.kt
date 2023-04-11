@@ -46,6 +46,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.findNavController
+import com.d204.rumeet.util.extension.repeatOnStarted
 import java.io.File
 
 
@@ -94,7 +95,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var printHeight = 0f
     private var currentDistance = 0f
     private var collaborationDistance = 0f
-    private var testDistance = 1000
+    private var testDistance = 200
 
     private lateinit var vibrator: Vibrator
 
@@ -133,7 +134,6 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             binding.tvRunningDistance.text =
                 floatTo2f(roundDigit(runningDistance.div(1000f).toDouble(), 2).toFloat())
             // 좌표 기록
-
             Log.d(TAG, "onReceive: service receive!! ${runningDistance}")
 
             currentDistance = runningDistance
@@ -158,7 +158,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
             // km를 시간으로 나눔 (3.6은 3600/1000)
             kmPerHour = runningLocation!!.speed * 3.6f
             // 칼로리 계산
-            currentCalorie += getCalorie(gender, age, weight, time).toFloat()
+            currentCalorie = getCalorie(gender, age, weight, time).toFloat()
 
             if (kmPerHour > 10) {
 
@@ -190,7 +190,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                 Log.d(TAG, "onReceive: running 3000 finish")
                 vibrator.vibrate(500)
             }
-
+            Log.d(TAG, "onReceive: args.gameType ${args.gameType }")
             // 싱글이면 메세지 보낼 필요 없음
             if (args.gameType >= 4) {
                 RunningAMQPManager.sendRunning(
@@ -513,7 +513,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     }
 
     override fun initDataBinding() {
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.runningSideEffect.collectLatest {
                     when (it) {
@@ -523,6 +523,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
 
                         is RunningSideEffect.SuccessRunning -> {
                             // 경쟁할 때 rabbitMQ의 콜백으로 온 데이터 받음
+                            Log.d(TAG, "initDataBinding: ")
                             successRunningData(it.distance)
                             // 백그라운드 상태에서 상대방이 먼저 옴을 확인
                             if (it.distance >= maxDistance) {
@@ -576,7 +577,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                         }
 
                         is RunningSideEffect.SuccessUserInfo -> {
-
+                            Log.d(TAG, "SuccessUserInfo: SuccessUserInfo")
                             if (args.gameType < 8) {
                                 Glide.with(requireContext())
                                     .asGif()
@@ -754,7 +755,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Easy"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
@@ -794,7 +795,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Normal"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"
@@ -834,7 +835,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     user_id = args.myId,
                     race_id = args.roomId
                 )
-                maxDistance = 1000
+                maxDistance = testDistance
                 checkCount = 1
                 binding.tvRunningMode.text = "협동 모드 - Hard"
                 binding.tvRunningTotalDistance.text = "목표거리 : 1km"

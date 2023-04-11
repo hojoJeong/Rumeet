@@ -106,7 +106,7 @@ fun getCalorie(gender : Int, age : Int, weight : Float, time : Long) : String{
     val calcHeart = roundDigit(120.times(0.6309), 2)
 
     val firstCalc : Double = roundDigit((calcAge + calcWeight + calcHeart - 55.0969) * minute.toDouble(), 2)
-    return floatTo2f(roundDigit(firstCalc.div(4.184) ,2).div(10).toFloat())
+    return floatTo2f(roundDigit(firstCalc.div(4.184) ,2).toFloat())
 }
 
 fun roundDigit(number : Double, digits : Int): Double {
