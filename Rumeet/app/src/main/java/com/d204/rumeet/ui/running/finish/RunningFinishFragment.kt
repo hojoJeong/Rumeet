@@ -17,6 +17,7 @@ import com.d204.rumeet.ui.running.RunningViewModel
 import com.d204.rumeet.util.bitmapToFile
 import com.d204.rumeet.util.roundDigit
 import com.d204.rumeet.util.toMinute
+import com.d204.rumeet.util.toMinuteTime
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import okhttp3.*
@@ -75,7 +76,7 @@ class RunningFinishFragment : BaseFragment<FragmentRunningFinishBinding, Running
             binding.tvResult.setTextColor(this@RunningFinishFragment.resources.getColorStateList(R.color.navy_blue))
         }
 
-        binding.tvRunningTime.text = runningResult.time.toMinute()
+        binding.tvRunningTime.text = runningResult.time.toMinuteTime()
 
         binding.btnOkay.setContent("확인")
         binding.btnOkay.addClickListener {

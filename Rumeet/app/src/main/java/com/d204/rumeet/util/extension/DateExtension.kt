@@ -20,6 +20,11 @@ fun Long.toMinute() : String{
     return simpleDateFormat.format(this * 1000)
 }
 
+fun Long.toMinuteTime() : String{
+    val simpleDateFormat = SimpleDateFormat("mm:ss",Locale.KOREA)
+    return simpleDateFormat.format(this)
+}
+
 fun Context.getLocation(): Location? {
     val locationManager = getSystemService(Service.LOCATION_SERVICE) as LocationManager
     if (ActivityCompat.checkSelfPermission(

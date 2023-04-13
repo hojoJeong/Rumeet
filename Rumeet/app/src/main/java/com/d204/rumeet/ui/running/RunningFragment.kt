@@ -95,7 +95,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
     private var printHeight = 0f
     private var currentDistance = 0f
     private var collaborationDistance = 0f
-    private var testDistance = 200
+    private var testDistance = 50
 
     private lateinit var vibrator: Vibrator
 
@@ -248,7 +248,7 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
         override fun run() {
             time += 1000
             Log.d(TAG, "run: timer : ${time}")
-            binding.tvRunningTime.text = time.toMinute()
+            binding.tvRunningTime.text = time.toMinuteTime()
             handler.postDelayed(this, 1000)
             // 고스트 모드 처리
             // 상어도 여기서 처리하면 될듯?
@@ -276,8 +276,8 @@ class RunningFragment : BaseFragment<FragmentRunningBinding, RunningViewModel>()
                     Log.d(TAG, "run: shark visibility visible")
                 }
                 sec++
-                if (sec >= 30) {
-                    if (sec == 30) {
+                if (sec >= 10) {
+                    if (sec == 10) {
                         binding.sbSharkProgress.visibility = View.VISIBLE
                         Snackbar.make(binding.tvRunningMode, "상어가 출발합니다!!", Snackbar.LENGTH_SHORT)
                             .show()
