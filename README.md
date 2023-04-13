@@ -52,15 +52,15 @@
 
 ### 전체 기술 스택
 
-<img src="https://user-images.githubusercontent.com/43957736/231689824-e6ce764e-574e-4c38-8ded-9c7ceffc5cc5.png" width="20%">
+<img src="https://user-images.githubusercontent.com/43957736/231689824-e6ce764e-574e-4c38-8ded-9c7ceffc5cc5.png" width="50%">
 
 ### 시스템 구조도
 
-<img src="https://user-images.githubusercontent.com/43957736/231689815-f84020fa-6d68-4055-adc7-23219392d1c5.png" width="20%">
+<img src="https://user-images.githubusercontent.com/43957736/231689815-f84020fa-6d68-4055-adc7-23219392d1c5.png" width="50%">
 
 ### 기능 명세서
 
-<img src="https://user-images.githubusercontent.com/43957736/231690268-48d717f7-816b-45e5-841c-eb6f7656a3f4.png" width="20%">
+<img src="https://user-images.githubusercontent.com/43957736/231690268-48d717f7-816b-45e5-841c-eb6f7656a3f4.png" width="50%">
 
 ## 📱Android
 
